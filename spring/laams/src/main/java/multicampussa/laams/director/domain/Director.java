@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
+import multicampussa.laams.home.member.dto.MemberDto;
 import multicampussa.laams.home.member.dto.MemberSignUpDto;
 
 import javax.persistence.*;
@@ -45,5 +46,23 @@ public class Director extends BaseTimeEntity {
 
     public void updateVerified(boolean isVerified) {
         this.isVerified = isVerified;
+    }
+
+    public static MemberDto toAdminDto(Director director) {
+        return MemberDto.builder()
+                .memberId(director.getNo())
+                .memberName(director.getMemberName())
+                .email(director.getEmail())
+                .phoneNumber(director.getPhoneNumber())
+                .createdAt(director.getCreatedAt())
+                .isDelete(director.getIsDelete())
+                .updatedAt(director.getUpdatedAt())
+                .build();
+    }
+
+    // 리프레시 토큰 업데이트
+    // 이미 리프레시 토큰이 있어도 업데이트 됨.
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

@@ -2,6 +2,8 @@ package multicampussa.laams.home.member.service;
 
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.director.domain.Director;
+import multicampussa.laams.home.member.dto.LoginRequestDto;
+import multicampussa.laams.home.member.dto.MemberDto;
 import multicampussa.laams.home.member.dto.MemberSignUpDto;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.member.repository.MemberRepository;
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -115,5 +120,37 @@ public class MemberService {
 
         director.updateVerified(true); // 이메일이 인증되었음을 표시
         memberRepository.save(director);
+    }
+
+    // 관리자가 회원의 정보를 조회하는 서비스(Email)
+    public MemberDto AdminInfo(String email) {
+        return Director.toAdminDto(memberRepository.findByEmail(email).get());
+    }
+
+    // 로그인 및 토큰 발급
+    public ResponseEntity<Map<String, Object>> signIn(LoginRequestDto loginRequestDto, String refreshToken) {
+        Map<String, Object> response = new HashMap<>();
+        Optional<Director> memberOptional = memberRepository.findByEmail(loginRequestDto.getEmail());
+        memberOptional.get().updateRefreshToken(refreshToken);
+        memberRepository.save(memberOptional.get());
+
+        if (!memberOptional.get().getIsDelete()) {
+            if (memberOptional.isPresent()) {
+                Director director = memberOptional.get();
+                if (passwordEncoder.matches(loginRequestDto.getPassword(), director.getPassword())) {
+                    response.put("message", "로그인에 성공하였습니다.");
+                    return ResponseEntity.status(HttpStatus.OK).body(response);
+                } else {
+                    response.put("message", "비밀번호가 일치하지 않습니다.");
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+                }
+            } else {
+                response.put("message", "사용자를 찾을 수 없습니다.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+        } else {
+            response.put("message", "탈퇴한 유저입니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 }

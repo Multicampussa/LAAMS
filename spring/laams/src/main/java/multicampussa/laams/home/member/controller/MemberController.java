@@ -1,13 +1,14 @@
 package multicampussa.laams.home.member.controller;
 
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.home.member.dto.EmailVerificationConfirmationDto;
-import multicampussa.laams.home.member.dto.EmailVerificationDto;
-import multicampussa.laams.home.member.dto.MemberSignUpDto;
+import multicampussa.laams.home.member.dto.*;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +23,10 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
-//    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
+    // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<Map<String, Object>> signUp(@RequestBody MemberSignUpDto memberSignUpDto) {
         ResponseEntity<String> result = memberService.signUp(memberSignUpDto);
@@ -34,6 +36,40 @@ public class MemberController {
         return new ResponseEntity<Map<String, Object>>(resultMap, result.getStatusCode());
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequestDto loginRequestDto) {
+        try {
+            String email = loginRequestDto.getEmail();
+            // 이메일과 비밀번호 인증
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, loginRequestDto.getPassword()));
+
+            // 권한 설정
+            MemberDto userInfo = memberService.AdminInfo(loginRequestDto.getEmail());
+            String authority = "ROLE_ADMIN";
+
+            // 토큰 발급
+            Long memberId = userInfo.getMemberId();
+            String accessToken = jwtTokenProvider.createAccessToken(email, authority, memberId);
+            String refreshToken = jwtTokenProvider.createRefreshToken(email);
+            ResponseEntity<Map<String, Object>> signInResponse = memberService.signIn(loginRequestDto, refreshToken);
+
+            Map<String, Object> response = signInResponse.getBody();
+            if (signInResponse.getStatusCodeValue() == 200) {
+                response.put("accessToken", accessToken);
+                response.put("refreshToken", refreshToken);
+            }
+            response.put("status", signInResponse.getStatusCodeValue());
+
+            return new ResponseEntity<>(response, signInResponse.getStatusCode());
+        } catch (AuthenticationException e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "이메일 또는 비밀번호가 일치하지 않습니다.");
+            response.put("status", HttpStatus.UNAUTHORIZED.value());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
+
+    // 이메일 인증 코드 보내기
     @PostMapping("/email-verification")
     public ResponseEntity<Map<String, Object>> requestEmailVerification(@RequestBody EmailVerificationDto requestDto) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -49,6 +85,7 @@ public class MemberController {
         }
     }
 
+    // 이메일 인증 코드 확인
     @PostMapping("/email-verification/confirm")
     public ResponseEntity<Map<String, Object>> confirmEmailVerification(@RequestBody EmailVerificationConfirmationDto confirmationDto) {
         Map<String, Object> resultMap = new HashMap<>();
