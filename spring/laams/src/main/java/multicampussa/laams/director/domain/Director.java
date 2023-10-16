@@ -36,4 +36,14 @@ public class Director extends BaseTimeEntity {
         this.password = encodedPassword;
         this.isDelete = false;
     }
+
+    public void updateVerificationCode(String email, String code) {
+        this.email = email;
+        this.verificationCode = code;
+        this.isDelete = true;
+    }
+
+    public void updateVerified(boolean isVerified) {
+        this.isVerified = isVerified;
+    }
 }
