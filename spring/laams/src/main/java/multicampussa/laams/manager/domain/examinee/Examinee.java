@@ -13,7 +13,7 @@ public class Examinee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id = null;
+    private Long no = null;
 
     // 모든 칼럼은 null false로 함
 
