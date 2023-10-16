@@ -26,9 +26,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     // 유저의 정보를 가져오는 함수
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Director director = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(email + "이라는 이메일을 찾을 수 없습니다."));
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        Director director = memberRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException(id + "이라는 이메일을 찾을 수 없습니다."));
 
         // 권한 설정
         String authority = "ROLE_ADMIN";

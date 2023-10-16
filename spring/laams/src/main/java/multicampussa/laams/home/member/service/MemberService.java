@@ -34,18 +34,18 @@ public class MemberService {
 
     // 회원가입
     public ResponseEntity<String> signUp(MemberSignUpDto memberSignUpDto) {
-        if (memberRepository.existsByEmail(memberSignUpDto.getEmail()) && !memberRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsDelete()) {
+        if (memberRepository.existsByEmail(memberSignUpDto.getEmail()) && !memberRepository.findById(memberSignUpDto.getId()).get().getIsDelete()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이메일입니다.");
         } else {
             // 비밀번호 암호화
             String encodedPassword = passwordEncoder.encode(memberSignUpDto.getPw());
 
             Director director;
-            if (!memberRepository.existsByEmail(memberSignUpDto.getEmail()) || !memberRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsVerified()) {
+            if (!memberRepository.existsByEmail(memberSignUpDto.getEmail()) || !memberRepository.findById(memberSignUpDto.getId()).get().getIsVerified()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이메일 인증을 진행해주세요.");
             } else {
                 // 삭제한 이메일로 다시 한 번 회원가입 할 때
-                director = memberRepository.findByEmail(memberSignUpDto.getEmail()).get();
+                director = memberRepository.findById(memberSignUpDto.getId()).get();
 
                 director.update(memberSignUpDto, encodedPassword);
 
@@ -89,8 +89,7 @@ public class MemberService {
             String message = "다음 코드를 입력하여 이메일을 확인해주세요: " + code;
             sendEmail(email, "이메일 확인 코드", message);
         } catch (Exception e) {
-//            throw new IllegalArgumentException("400: 이메일 형식이 잘못되었습니다.");
-            throw new IllegalArgumentException("400: " + e.getMessage());
+            throw new IllegalArgumentException("400: 이메일 형식이 잘못되었습니다.");
         }
     }
 
@@ -123,14 +122,14 @@ public class MemberService {
     }
 
     // 관리자가 회원의 정보를 조회하는 서비스(Email)
-    public MemberDto AdminInfo(String email) {
-        return Director.toAdminDto(memberRepository.findByEmail(email).get());
+    public MemberDto AdminInfo(String id) {
+        return Director.toAdminDto(memberRepository.findById(id).get());
     }
 
     // 로그인 및 토큰 발급
     public ResponseEntity<Map<String, Object>> signIn(LoginRequestDto loginRequestDto, String refreshToken) {
         Map<String, Object> response = new HashMap<>();
-        Optional<Director> memberOptional = memberRepository.findByEmail(loginRequestDto.getEmail());
+        Optional<Director> memberOptional = memberRepository.findById(loginRequestDto.getId());
         memberOptional.get().updateRefreshToken(refreshToken);
         memberRepository.save(memberOptional.get());
 

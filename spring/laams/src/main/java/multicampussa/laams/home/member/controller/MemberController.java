@@ -40,18 +40,18 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequestDto loginRequestDto) {
         try {
-            String email = loginRequestDto.getEmail();
-            // 이메일과 비밀번호 인증
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, loginRequestDto.getPassword()));
+            String id = loginRequestDto.getId();
+            // 아이디와 비밀번호 인증
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, loginRequestDto.getPassword()));
 
             // 권한 설정
-            MemberDto userInfo = memberService.AdminInfo(loginRequestDto.getEmail());
+            MemberDto userInfo = memberService.AdminInfo(loginRequestDto.getId());
             String authority = "ROLE_ADMIN";
 
             // 토큰 발급
             Long memberId = userInfo.getMemberId();
-            String accessToken = jwtTokenProvider.createAccessToken(email, authority, memberId);
-            String refreshToken = jwtTokenProvider.createRefreshToken(email);
+            String accessToken = jwtTokenProvider.createAccessToken(id, authority, memberId);
+            String refreshToken = jwtTokenProvider.createRefreshToken(id);
             ResponseEntity<Map<String, Object>> signInResponse = memberService.signIn(loginRequestDto, refreshToken);
 
             Map<String, Object> response = signInResponse.getBody();
@@ -64,7 +64,7 @@ public class MemberController {
             return new ResponseEntity<>(response, signInResponse.getStatusCode());
         } catch (AuthenticationException e) {
             Map<String, Object> response = new HashMap<>();
-            response.put("message", "이메일 또는 비밀번호가 일치하지 않습니다.");
+            response.put("message", "아이디 또는 비밀번호가 일치하지 않습니다.");
             response.put("status", HttpStatus.UNAUTHORIZED.value());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
