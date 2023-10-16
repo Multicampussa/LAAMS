@@ -38,7 +38,7 @@ public class MemberService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이메일입니다.");
         } else {
             // 비밀번호 암호화
-            String encodedPassword = passwordEncoder.encode(memberSignUpDto.getPassword());
+            String encodedPassword = passwordEncoder.encode(memberSignUpDto.getPw());
 
             Director director;
             if (!memberRepository.existsByEmail(memberSignUpDto.getEmail()) || !memberRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsVerified()) {

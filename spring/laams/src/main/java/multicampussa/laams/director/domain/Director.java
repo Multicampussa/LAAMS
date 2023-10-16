@@ -29,13 +29,15 @@ public class Director extends BaseTimeEntity {
     private String refreshToken;
     private String verificationCode;
     private Boolean isVerified;
+    private String address;
 
     public void update(MemberSignUpDto memberSignUpDto, String encodedPassword) {
-        this.memberName = memberSignUpDto.getMemberName();
+        this.memberName = memberSignUpDto.getName();
         this.email = memberSignUpDto.getEmail();
-        this.phoneNumber = memberSignUpDto.getPhoneNumber();
+        this.phoneNumber = memberSignUpDto.getPhone();
         this.password = encodedPassword;
         this.isDelete = false;
+        this.address = memberSignUpDto.getAddress();
     }
 
     public void updateVerificationCode(String email, String code) {
