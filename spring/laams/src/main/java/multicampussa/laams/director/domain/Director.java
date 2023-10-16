@@ -28,6 +28,7 @@ public class Director extends BaseTimeEntity {
     private String refreshToken;
     private String verificationCode;
     private Boolean isVerified;
+    private String address;
 
     public void update(MemberSignUpDto memberSignUpDto, String encodedPassword) {
         this.memberName = memberSignUpDto.getMemberName();
