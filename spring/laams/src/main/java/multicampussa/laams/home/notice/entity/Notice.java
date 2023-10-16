@@ -1,4 +1,4 @@
 package multicampussa.laams.home.notice.entity;
 
-public class NoticeEntity {
+public class Notice {
 }
