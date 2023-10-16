@@ -36,6 +36,7 @@ public class MemberController {
         return new ResponseEntity<Map<String, Object>>(resultMap, result.getStatusCode());
     }
 
+    // 로그인 및 토큰 발급
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequestDto loginRequestDto) {
         try {

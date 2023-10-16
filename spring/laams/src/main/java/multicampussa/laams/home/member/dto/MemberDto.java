@@ -29,8 +29,8 @@ public class MemberDto {
     public MemberDto(Director director) {
         this.memberId = director.getNo();
         this.email = director.getEmail();
-        this.memberName = director.getMemberName();
-        this.phoneNumber = director.getPhoneNumber();
+        this.memberName = director.getName();
+        this.phoneNumber = director.getPhone();
         this.isDelete = director.getIsDelete();
         this.createdAt = director.getCreatedAt();
         this.updatedAt = director.getUpdatedAt();

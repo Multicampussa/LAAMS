@@ -137,7 +137,7 @@ public class MemberService {
         if (!memberOptional.get().getIsDelete()) {
             if (memberOptional.isPresent()) {
                 Director director = memberOptional.get();
-                if (passwordEncoder.matches(loginRequestDto.getPassword(), director.getPassword())) {
+                if (passwordEncoder.matches(loginRequestDto.getPassword(), director.getPw())) {
                     response.put("message", "로그인에 성공하였습니다.");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
                 } else {
