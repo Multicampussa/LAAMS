@@ -23,11 +23,8 @@ public class Exam {
     @JoinColumn(name = "center_id")
     private Center center;
 
-    @Temporal(TemporalType.DATE)
-    private Date examDate;
-
-    @Temporal(TemporalType.TIME)
-    private Date examTime;
+    @Column
+    private LocalDateTime examDate;
 
 }
 
