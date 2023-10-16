@@ -1,14 +1,14 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://localhost/laams"
-    username: "root"
-    password: "1234"
+    url: jdbc:mysql://localhost/laams
+    username: root
+    password: 1234
     hikari:
       maximumPoolSize: 3
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
