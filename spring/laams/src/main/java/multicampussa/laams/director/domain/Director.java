@@ -8,6 +8,7 @@ import multicampussa.laams.home.member.dto.MemberDto;
 import multicampussa.laams.home.member.dto.MemberSignUpDto;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
