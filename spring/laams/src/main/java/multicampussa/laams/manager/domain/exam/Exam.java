@@ -20,6 +20,7 @@ public class Exam {
     // 모든 칼럼은 null false
 
     @ManyToOne
+    @JoinColumn(name = "center_id")
     private Center center;
 
     @Temporal(TemporalType.DATE)
