@@ -29,4 +29,3 @@ public class Exam extends BaseTimeEntity {
     private LocalDateTime examDate;
 
 }
-
