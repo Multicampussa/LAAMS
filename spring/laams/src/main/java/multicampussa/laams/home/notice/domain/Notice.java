@@ -4,8 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
-import multicampussa.laams.manager.domain.examinee.Examinee;
-import org.apache.catalina.User;
+import multicampussa.laams.manager.domain.Manager;
 
 import javax.persistence.*;
 
@@ -23,8 +22,8 @@ public class Notice extends BaseTimeEntity {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="examinee_no")
-    private Examinee user;
+    @JoinColumn(name="manager_no")
+    private Manager manager;
 
 
 
