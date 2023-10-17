@@ -6,7 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.home.member.exception.JwtAuthenticationException;
-import multicampussa.laams.home.member.repository.MemberRepository;
+import multicampussa.laams.home.member.repository.DirectorRepository;
 import multicampussa.laams.home.member.service.UserDetailsServiceImpl;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 //import org.springframework.security.core.Authentication;
@@ -24,7 +24,7 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private final UserDetailsServiceImpl userDetailsService;
-    private final MemberRepository memberRepository;
+    private final DirectorRepository directorRepository;
     private String secretKey = "s1s2a3f4y@"; // 비밀키
     private long validityInMilliseconds = 3600000; // 1 hour
 
@@ -116,7 +116,7 @@ public class JwtTokenProvider {
         String id = getId(refreshToken);
 
         // 발급된 리프레시 토큰에 담겨있는 ID로 DB에 저장된 리프레시 토큰 받아오기.
-        String storedRefreshToken = memberRepository.findById(id).get().getRefreshToken();
+        String storedRefreshToken = directorRepository.findById(id).get().getRefreshToken();
 
         // 권한 정보 (액세스 토큰을 발급받기 위함)
         String authority = "ROLE_ADMIN";
@@ -129,7 +129,7 @@ public class JwtTokenProvider {
             throw new JwtAuthenticationException("리프레시 토큰이 만료되었습니다.");
         }
 
-        Long memberNo = memberRepository.findById(id).get().getNo();
+        Long memberNo = directorRepository.findById(id).get().getNo();
 
         return createAccessToken(id, authority, memberNo);
     }

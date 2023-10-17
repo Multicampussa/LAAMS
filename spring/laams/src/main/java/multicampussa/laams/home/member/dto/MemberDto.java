@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MemberDto {
-    private Long memberId;
+    private Long memberNo;
 
     private String email;
-    private String memberName;
-    private String phoneNumber;
+    private String name;
+    private String phone;
     private Boolean isDelete;
     private String verificationCode;
     private Boolean isVerified;
@@ -27,10 +27,10 @@ public class MemberDto {
 
     @Builder
     public MemberDto(Director director) {
-        this.memberId = director.getNo();
+        this.memberNo = director.getNo();
         this.email = director.getEmail();
-        this.memberName = director.getName();
-        this.phoneNumber = director.getPhone();
+        this.name = director.getName();
+        this.phone = director.getPhone();
         this.isDelete = director.getIsDelete();
         this.createdAt = director.getCreatedAt();
         this.updatedAt = director.getUpdatedAt();

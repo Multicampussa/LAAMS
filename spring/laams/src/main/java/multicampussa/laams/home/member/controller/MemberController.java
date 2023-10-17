@@ -1,6 +1,7 @@
 package multicampussa.laams.home.member.controller;
 
 import lombok.RequiredArgsConstructor;
+import multicampussa.laams.home.member.dto.MemberDto;
 import multicampussa.laams.home.member.dto.*;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.member.service.MemberService;
@@ -45,14 +46,20 @@ public class MemberController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, loginRequestDto.getPassword()));
 
             // 권한 설정
-            MemberDto userInfo = memberService.AdminInfo(loginRequestDto.getId());
-            String authority = "ROLE_ADMIN";
+            String authority;
+            MemberDto userInfo = memberService.DirectorInfo(loginRequestDto.getId());
+            if (userInfo == null) {
+                authority = "ROLE_MANAGER";
+                userInfo = memberService.ManagerInfo(loginRequestDto.getId());
+            } else {
+                authority = "ROLE_DIRECTOR";
+            }
 
             // 토큰 발급
-            Long memberId = userInfo.getMemberId();
+            Long memberId = userInfo.getMemberNo();
             String accessToken = jwtTokenProvider.createAccessToken(id, authority, memberId);
             String refreshToken = jwtTokenProvider.createRefreshToken(id);
-            ResponseEntity<Map<String, Object>> signInResponse = memberService.signIn(loginRequestDto, refreshToken);
+            ResponseEntity<Map<String, Object>> signInResponse = memberService.signIn(loginRequestDto, refreshToken, authority);
 
             Map<String, Object> response = signInResponse.getBody();
             if (signInResponse.getStatusCodeValue() == 200) {

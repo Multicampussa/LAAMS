@@ -8,7 +8,6 @@ import multicampussa.laams.home.member.dto.MemberDto;
 import multicampussa.laams.home.member.dto.MemberSignUpDto;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -55,12 +54,12 @@ public class Director extends BaseTimeEntity {
         this.isVerified = isVerified;
     }
 
-    public static MemberDto toAdminDto(Director director) {
+    public static MemberDto toMemberDto(Director director) {
         return MemberDto.builder()
-                .memberId(director.getNo())
-                .memberName(director.getName())
+                .memberNo(director.getNo())
+                .name(director.getName())
                 .email(director.getEmail())
-                .phoneNumber(director.getPhone())
+                .phone(director.getPhone())
                 .createdAt(director.getCreatedAt())
                 .isDelete(director.getIsDelete())
                 .updatedAt(director.getUpdatedAt())

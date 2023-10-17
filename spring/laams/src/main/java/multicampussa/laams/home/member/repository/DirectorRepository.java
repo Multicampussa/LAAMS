@@ -1,13 +1,14 @@
 package multicampussa.laams.home.member.repository;
 
 import multicampussa.laams.director.domain.Director;
+import multicampussa.laams.manager.domain.Manager;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Director, Long> {
+public interface DirectorRepository extends JpaRepository<Director, Long> {
     boolean existsByEmail(String email);
     boolean existsById(String id);
     Optional<Director> findById(String id);
