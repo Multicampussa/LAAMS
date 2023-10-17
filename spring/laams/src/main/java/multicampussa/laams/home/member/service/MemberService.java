@@ -39,24 +39,30 @@ public class MemberService {
     public ResponseEntity<String> signUp(MemberSignUpDto memberSignUpDto) {
         if (directorRepository.existsByEmail(memberSignUpDto.getEmail()) && !directorRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsDelete()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이메일입니다.");
-        } else {
-            // 비밀번호 암호화
-            String encodedPassword = passwordEncoder.encode(memberSignUpDto.getPw());
-
-            Director director;
-            if (!directorRepository.existsByEmail(memberSignUpDto.getEmail()) || !directorRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsVerified()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이메일 인증을 진행해주세요.");
-            } else {
-                // 삭제한 이메일로 다시 한 번 회원가입 할 때
-                director = directorRepository.findByEmail(memberSignUpDto.getEmail()).get();
-
-                director.update(memberSignUpDto, encodedPassword);
-
-                Director savedMember = directorRepository.save(director);
-            }
-
-            return ResponseEntity.status(HttpStatus.OK).body("회원 가입에 성공하였습니다.");
         }
+
+        if (directorRepository.existsById(memberSignUpDto.getId())
+                && !directorRepository.findById(memberSignUpDto.getId()).get().getIsDelete()
+                || managerRepository.existsById(memberSignUpDto.getId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 아이디입니다.");
+        }
+
+        // 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(memberSignUpDto.getPw());
+
+        Director director;
+        if (!directorRepository.existsByEmail(memberSignUpDto.getEmail()) || !directorRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsVerified()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이메일 인증을 진행해주세요.");
+        } else {
+            // 삭제한 이메일로 다시 한 번 회원가입 할 때
+            director = directorRepository.findByEmail(memberSignUpDto.getEmail()).get();
+
+            director.update(memberSignUpDto, encodedPassword);
+
+            Director savedMember = directorRepository.save(director);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("회원 가입에 성공하였습니다.");
     }
 
     // 이메일 인증
