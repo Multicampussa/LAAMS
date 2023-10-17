@@ -1,5 +1,6 @@
 package multicampussa.laams.manager.controller.exam;
 
+import multicampussa.laams.manager.dto.exam.request.ExamCreateRequest;
 import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
 import multicampussa.laams.manager.dto.exam.response.ExamResponse;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeCreateRequest;
@@ -20,7 +21,7 @@ public class ExamController {
     }
 
     @PostMapping("/manager/exam")  //POST examinee
-    public void saveExam(@RequestBody ExamineeCreateRequest request) {
+    public void saveExam(@RequestBody ExamCreateRequest request) {
         examService.saveExam(request);
     }
 
