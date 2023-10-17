@@ -3,6 +3,7 @@ package multicampussa.laams.home.member.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import multicampussa.laams.director.domain.Director;
+import multicampussa.laams.manager.domain.Manager;
 
 import java.time.LocalDateTime;
 
@@ -36,6 +37,21 @@ public class MemberDto {
         this.updatedAt = director.getUpdatedAt();
         this.verificationCode = director.getVerificationCode();
         this.isVerified = director.getIsVerified();
+    }
+
+    public static MemberDto fromEntityByDirector(Director director) {
+        MemberDto memberDto = new MemberDto();
+        memberDto.setEmail(director.getEmail());
+        memberDto.setName(director.getName());
+        memberDto.setPhone(director.getPhone());
+        return memberDto;
+    }
+
+    public static MemberDto fromEntityByManager(Manager manager) {
+        MemberDto memberDto = new MemberDto();
+        memberDto.setName(manager.getName());
+        memberDto.setPhone(manager.getPhone());
+        return memberDto;
     }
 }
 

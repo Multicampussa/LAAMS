@@ -2,10 +2,7 @@ package multicampussa.laams.home.member.service;
 
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.director.domain.Director;
-import multicampussa.laams.home.member.dto.LoginRequestDto;
-import multicampussa.laams.home.member.dto.MemberDto;
-import multicampussa.laams.home.member.dto.MemberSignUpDto;
-import multicampussa.laams.home.member.dto.MemberUserDto;
+import multicampussa.laams.home.member.dto.*;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.member.repository.DirectorRepository;
 import multicampussa.laams.home.member.repository.ManagerRepository;
@@ -200,6 +197,61 @@ public class MemberService {
             return Director.toMemberDto(directorRepository.findById(memberId).get());
         } else {
             return Manager.toMemberDto(managerRepository.findById(memberId).get());
+        }
+    }
+
+    // 사용자가 자신의 정보를 수정하는 서비스
+    public ResponseEntity<Map<String, Object>> updateMemberByUser(String id, String authority, MemberUpdateDto memberUpdateDto) {
+        Map<String, Object> response = new HashMap<>();
+        Director director;
+        Manager manager;
+
+        // DB에 없는 ID를 검색하려고 하면 IllegalArgumentException
+        try {
+            if (authority.equals("ROLE_DIRECTOR")) {
+                if (id.equals(memberUpdateDto.getId())) {
+                    director = directorRepository.findById(id).get();
+                    director.update(memberUpdateDto);
+                    directorRepository.save(director);
+                    MemberDto updatedMemberDto = MemberDto.fromEntityByDirector(director);
+
+                    response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
+                    response.put("status", HttpStatus.OK.value());
+
+                    return ResponseEntity.ok(response);
+                } else {
+                    response.put("message", "접근 권한이 없습니다.");
+                    response.put("status", HttpStatus.UNAUTHORIZED.value());
+
+                    return ResponseEntity.ok(response);
+                }
+            } else {
+                if (managerRepository.existsById(memberUpdateDto.getId())) {
+                    manager = managerRepository.findById(id).get();
+                    manager.update(memberUpdateDto);
+                    managerRepository.save(manager);
+                    MemberDto updatedMemberDto = MemberDto.fromEntityByManager(manager);
+
+                    response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
+                    response.put("status", HttpStatus.OK.value());
+
+                    return ResponseEntity.ok(response);
+                } else {
+                    director = directorRepository.findById(memberUpdateDto.getId()).get();
+                    director.update(memberUpdateDto);
+                    directorRepository.save(director);
+                    MemberDto updatedMemberDto = MemberDto.fromEntityByDirector(director);
+
+                    response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
+                    response.put("status", HttpStatus.OK.value());
+
+                    return ResponseEntity.ok(response);
+                }
+            }
+        } catch (Exception e) {
+            response.put("message", memberUpdateDto.getId() + "은 존재하지 않습니다.");
+            response.put("status", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
 }

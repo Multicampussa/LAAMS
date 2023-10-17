@@ -130,7 +130,7 @@ public class MemberController {
         }
     }
 
-    // 감독관 또는 운영자 정보 조회(Header에 토큰 넣어야함)
+    // 감독관 또는 운영자 정보 조회
     @GetMapping("/info")
     public ResponseEntity<Map<String, Object>> memberInfo(@RequestBody MemberInfoDto memberInfoDto) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -138,5 +138,16 @@ public class MemberController {
         resultMap.put("message", "성공적으로 조회하였습니다.");
         resultMap.put("status", 200);
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+    }
+
+    @PutMapping("/info/update")
+    public ResponseEntity<Map<String, Object>> update(@RequestBody MemberUpdateDto memberUpdateByUserDto, @RequestHeader String authorization) {
+        String token = authorization.replace("Bearer ", "");
+        String id = jwtTokenProvider.getId(token);
+        String authority = jwtTokenProvider.getAuthority(token);
+        Map<String, Object> resultMap = new HashMap<>();
+        ResponseEntity<Map<String, Object>> updateResponse = memberService.updateMemberByUser(id, authority, memberUpdateByUserDto);
+
+        return updateResponse;
     }
 }
