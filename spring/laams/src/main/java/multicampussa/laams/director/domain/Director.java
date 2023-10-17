@@ -18,7 +18,7 @@ public class Director extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_no")
+    @Column(name = "director_no")
     private Long no;
 
     @Column(unique = true)
