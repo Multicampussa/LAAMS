@@ -62,7 +62,7 @@ public class JwtTokenProvider {
 
     // 토큰으로 MemberNo 추출
     public Long getMemberNo(String token) {
-        return Long.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("memberNo").toString());
+        return Long.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("memberId").toString());
     }
 
     // 토큰으로 ID 추출
@@ -72,7 +72,7 @@ public class JwtTokenProvider {
     }
 
     public String getAuthority(String token) {
-        return "ROLE_MANAGER";
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("authority").toString();
     }
 
     // 토큰 유효성 검사
