@@ -22,7 +22,7 @@ public class Exam extends BaseTimeEntity {
     // 모든 칼럼은 null false
 
     @ManyToOne
-    @JoinColumn(name = "center_id")
+    @JoinColumn(name = "center_no")
     private Center center;
 
     @Column
