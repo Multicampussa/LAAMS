@@ -70,40 +70,8 @@ public class MemberController {
         }
     }
 
-    // 이메일 인증 코드 보내기
-    @PostMapping("/email-verification")
-    public ResponseEntity<Map<String, Object>> requestEmailVerification(@RequestBody EmailVerificationDto requestDto) {
-        Map<String, Object> resultMap = new HashMap<>();
-        try {
-            memberService.requestEmailVerification(requestDto.getEmail());
-            resultMap.put("message", "이메일 인증 코드가 발송되었습니다.");
-            resultMap.put("status", HttpStatus.OK.value());
-            return new ResponseEntity<>(resultMap, HttpStatus.OK);
-        } catch (Exception e) {
-            resultMap.put("message", e.getMessage().split(": ")[1]);
-            resultMap.put("status", Integer.parseInt(e.getMessage().split(": ")[0]));
-            return new ResponseEntity<>(resultMap, HttpStatus.valueOf(Integer.parseInt(e.getMessage().split(": ")[0])));
-        }
-    }
-
-    // 이메일 인증 코드 확인
-    @PostMapping("/email-verification/confirm")
-    public ResponseEntity<Map<String, Object>> confirmEmailVerification(@RequestBody EmailVerificationConfirmationDto confirmationDto) {
-        Map<String, Object> resultMap = new HashMap<>();
-        try {
-            memberService.confirmEmailVerification(confirmationDto.getEmail(), confirmationDto.getCode());
-            resultMap.put("message", "이메일이 성공적으로 인증되었습니다.");
-            resultMap.put("status", HttpStatus.OK.value());
-            return new ResponseEntity<>(resultMap, HttpStatus.OK);
-        } catch (Exception e) {
-            resultMap.put("message", e.getMessage());
-            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
-            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
-        }
-    }
-
     // 액세스 토큰 만료시 리프레시 토큰으로 액세스 토큰 재발급
-    @PostMapping("/token/refresh")
+    @PostMapping("/refresh")
     public ResponseEntity<Map<String, Object>> refresh(@RequestBody MemberRefreshTokenDto tokenDto) {
         Map<String, Object> response = new HashMap<>();
 
@@ -124,5 +92,37 @@ public class MemberController {
         response.put("status", HttpStatus.OK.value());
 
         return ResponseEntity.ok(response);
+    }
+
+    // 이메일 인증 코드 보내기
+    @PostMapping("/sendemail")
+    public ResponseEntity<Map<String, Object>> requestEmailVerification(@RequestBody EmailVerificationDto requestDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            memberService.requestEmailVerification(requestDto.getEmail());
+            resultMap.put("message", "이메일 인증 코드가 발송되었습니다.");
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            resultMap.put("message", e.getMessage().split(": ")[1]);
+            resultMap.put("status", Integer.parseInt(e.getMessage().split(": ")[0]));
+            return new ResponseEntity<>(resultMap, HttpStatus.valueOf(Integer.parseInt(e.getMessage().split(": ")[0])));
+        }
+    }
+
+    // 이메일 인증 코드 확인
+    @PostMapping("/sendemail/verify")
+    public ResponseEntity<Map<String, Object>> confirmEmailVerification(@RequestBody EmailVerificationConfirmationDto confirmationDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            memberService.confirmEmailVerification(confirmationDto.getEmail(), confirmationDto.getCode());
+            resultMap.put("message", "이메일이 성공적으로 인증되었습니다.");
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
     }
 }

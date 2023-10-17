@@ -49,26 +49,29 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         // 토큰을 통해 유저 정보 가져오기
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getEmail(token));
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getId(token));
         // JWT에서는 비밀번호 정보가 필요없기 때문에 빈 문자열 넣음
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     // 토큰을 복호화하여 claims를 뽑아내는 과정
-    // 리프레시 토큰의 claims에는 이메일만 있음
+    // 리프레시 토큰의 claims에는 아이디만 있음
     public String getEmail(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
+    // 토큰으로 MemberNo 추출
     public Long getMemberNo(String token) {
         return Long.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("memberNo").toString());
     }
 
+    // 토큰으로 ID 추출
     public String getId(String token) {
-        // token의 claims 안에 id는 sub 필드로 저장되어 있다.
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("sub").toString();
+        // token의 claims 안에 id는 sub 필드로 저장되어 있다. 따라서 getSubject()로 아이디 추출.
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject().toString();
     }
 
+    // 토큰 유효성 검사
     public boolean validateToken(String token) {
         try {
             // parseClaimsJws : 파싱된 서명이 유효한지, 만료되진 않았는지
@@ -90,6 +93,7 @@ public class JwtTokenProvider {
         return null;
     }
 
+    // 리프레시 토큰 발급
     public String createRefreshToken(String id) {
         // 리프레시 토큰의 claims에는 권한 정보를 담지 않는다.
         // 이유는 유효기간이 길어서, 탈취당할 경우 관리자 권한이 악용될 가능성이 높기 때문
@@ -130,6 +134,7 @@ public class JwtTokenProvider {
         return createAccessToken(id, authority, memberNo);
     }
 
+    // 토큰 만료 여부
     public boolean isTokenExpired(String token) {
         Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         return claims.getExpiration().before(new Date());
