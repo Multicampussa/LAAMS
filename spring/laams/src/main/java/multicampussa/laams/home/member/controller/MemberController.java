@@ -101,4 +101,28 @@ public class MemberController {
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
+
+    // 액세스 토큰 만료시 리프레시 토큰으로 액세스 토큰 재발급
+    @PostMapping("/token/refresh")
+    public ResponseEntity<Map<String, Object>> refresh(@RequestBody MemberRefreshTokenDto tokenDto) {
+        Map<String, Object> response = new HashMap<>();
+
+        // 현재 리프레시 토큰과 새로운 액세스 토큰
+        String refreshToken = tokenDto.getRefreshToken();
+        String newAccessToken;
+        try {
+            newAccessToken = jwtTokenProvider.refreshAccessToken(refreshToken);
+        } catch (Exception e) {
+            response.put("message", "리프레시 토큰이 올바르지 않습니다.");
+            response.put("status", HttpStatus.UNAUTHORIZED.value());
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        response.put("accessToken", newAccessToken);
+        response.put("message", "액세스 토큰을 성공적으로 발급하였습니다.");
+        response.put("status", HttpStatus.OK.value());
+
+        return ResponseEntity.ok(response);
+    }
 }

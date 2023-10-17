@@ -65,7 +65,8 @@ public class JwtTokenProvider {
     }
 
     public String getId(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("id").toString();
+        // token의 claims 안에 id는 sub 필드로 저장되어 있다.
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("sub").toString();
     }
 
     public boolean validateToken(String token) {
@@ -89,10 +90,10 @@ public class JwtTokenProvider {
         return null;
     }
 
-    public String createRefreshToken(String email) {
+    public String createRefreshToken(String id) {
         // 리프레시 토큰의 claims에는 권한 정보를 담지 않는다.
         // 이유는 유효기간이 길어서, 탈취당할 경우 관리자 권한이 악용될 가능성이 높기 때문
-        Claims claims = Jwts.claims().setSubject(email);
+        Claims claims = Jwts.claims().setSubject(id);
         Date now = new Date();
 
         // 리프레시 토큰 유효기간 (우선 일주일 잡음)
@@ -110,7 +111,7 @@ public class JwtTokenProvider {
     public String refreshAccessToken(String refreshToken) {
         String id = getId(refreshToken);
 
-        // 발급된 리프레시 토큰에 담겨있는 이메일로 DB에 저장된 리프레시 토큰.
+        // 발급된 리프레시 토큰에 담겨있는 ID로 DB에 저장된 리프레시 토큰 받아오기.
         String storedRefreshToken = memberRepository.findById(id).get().getRefreshToken();
 
         // 권한 정보 (액세스 토큰을 발급받기 위함)
