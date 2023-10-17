@@ -8,10 +8,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MemberSignUpDto {
+    private String id;
     private String email;
-    private String memberName;
-    private String password;
-    private String phoneNumber;
+    private String name;
+    private String pw;
+    private String phone;
+    private String address;
 
 //    public MemberSignUpDto(Member member) {
 //        this.email = member.getEmail();

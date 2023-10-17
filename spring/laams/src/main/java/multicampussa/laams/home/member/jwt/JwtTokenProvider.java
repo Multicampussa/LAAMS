@@ -28,10 +28,10 @@ public class JwtTokenProvider {
     private String secretKey = "s1s2a3f4y@"; // 비밀키
     private long validityInMilliseconds = 3600000; // 1 hour
 
-    public String createAccessToken(String email, String authority, Long memberId) {
+    public String createAccessToken(String id, String authority, Long memberId) {
 
         // email과 권한 정보 claims에 담기
-        Claims claims = Jwts.claims().setSubject(email);
+        Claims claims = Jwts.claims().setSubject(id);
         claims.put("memberId", memberId);
         claims.put("authority", authority);
 
@@ -60,18 +60,12 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public Long getMemberId(String token) {
-        return Long.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("memberId").toString());
+    public Long getMemberNo(String token) {
+        return Long.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("memberNo").toString());
     }
 
-    public Boolean getIsManager(String token) {
-        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        String string = claims.get("authorities").toString();
-        if (string.equals("ROLE_ADMIN")) {
-            return true;
-        } else {
-            return false;
-        }
+    public String getId(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("id").toString();
     }
 
     public boolean validateToken(String token) {
@@ -114,10 +108,10 @@ public class JwtTokenProvider {
 
     // 리프레시 토큰을 가지고 액세스 토큰 재발급
     public String refreshAccessToken(String refreshToken) {
-        String email = getEmail(refreshToken);
+        String id = getId(refreshToken);
 
         // 발급된 리프레시 토큰에 담겨있는 이메일로 DB에 저장된 리프레시 토큰.
-        String storedRefreshToken = memberRepository.findByEmail(email).get().getRefreshToken();
+        String storedRefreshToken = memberRepository.findById(id).get().getRefreshToken();
 
         // 권한 정보 (액세스 토큰을 발급받기 위함)
         String authority = "ROLE_ADMIN";
@@ -130,9 +124,9 @@ public class JwtTokenProvider {
             throw new JwtAuthenticationException("리프레시 토큰이 만료되었습니다.");
         }
 
-        Long memberId = memberRepository.findByEmail(email).get().getNo();
+        Long memberNo = memberRepository.findById(id).get().getNo();
 
-        return createAccessToken(email, authority, memberId);
+        return createAccessToken(id, authority, memberNo);
     }
 
     public boolean isTokenExpired(String token) {
