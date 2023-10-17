@@ -5,6 +5,7 @@ import multicampussa.laams.director.domain.Director;
 import multicampussa.laams.home.member.dto.LoginRequestDto;
 import multicampussa.laams.home.member.dto.MemberDto;
 import multicampussa.laams.home.member.dto.MemberSignUpDto;
+import multicampussa.laams.home.member.dto.MemberUserDto;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.member.repository.DirectorRepository;
 import multicampussa.laams.home.member.repository.ManagerRepository;
@@ -190,6 +191,15 @@ public class MemberService {
                 response.put("message", "사용자를 찾을 수 없습니다.");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
+        }
+    }
+
+    // 사용자가 자신의 정보를 조회하는 서비스
+    public MemberDto UserInfo(String memberId) {
+        if (directorRepository.existsById(memberId)) {
+            return Director.toMemberDto(directorRepository.findById(memberId).get());
+        } else {
+            return Manager.toMemberDto(managerRepository.findById(memberId).get());
         }
     }
 }

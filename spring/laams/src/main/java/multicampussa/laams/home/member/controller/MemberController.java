@@ -10,10 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -131,5 +128,17 @@ public class MemberController {
             resultMap.put("status", HttpStatus.BAD_REQUEST.value());
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    // 감독관 또는 운영자 정보 조회(Header에 토큰 넣어야함)
+    @GetMapping("/info")
+    public ResponseEntity<Map<String, Object>> memberInfo(@RequestHeader String authorization) {
+        String token = authorization.replace("Bearer ", "");
+        String memberId = jwtTokenProvider.getId(token);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("member", memberService.UserInfo(memberId));
+        resultMap.put("message", "성공적으로 조회하였습니다.");
+        resultMap.put("status", 200);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 }

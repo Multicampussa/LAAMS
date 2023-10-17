@@ -71,6 +71,10 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject().toString();
     }
 
+    public String getAuthority(String token) {
+        return "ROLE_MANAGER";
+    }
+
     // 토큰 유효성 검사
     public boolean validateToken(String token) {
         try {
