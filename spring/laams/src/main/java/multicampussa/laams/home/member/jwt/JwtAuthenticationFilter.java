@@ -36,6 +36,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         if (!path.startsWith("/member/login") &&
                 !path.startsWith("/member/signup") &&
+                !path.startsWith("/member/findid") &&
+                !path.startsWith("/member/findpassword") &&
                 !path.startsWith("/")) {
 
 
