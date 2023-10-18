@@ -6,6 +6,5 @@ import java.util.Optional;
 
 public interface CenterRepository extends JpaRepository<Center, Long> {
 
-    @Override
-    Optional<Center> findById(Long no);
+    Optional<Center> findByName(String name);
 }

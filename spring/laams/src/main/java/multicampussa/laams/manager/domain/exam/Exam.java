@@ -28,4 +28,14 @@ public class Exam extends BaseTimeEntity {
     @Column
     private LocalDateTime examDate;
 
+    public Exam(Center center, LocalDateTime examDate) {
+        this.center = center;
+        this.examDate = examDate;
+    }
+
+    public void updateExamInfo(Center center, LocalDateTime examDate) {
+
+        this.center = center;
+        this.examDate = examDate;
+    }
 }
