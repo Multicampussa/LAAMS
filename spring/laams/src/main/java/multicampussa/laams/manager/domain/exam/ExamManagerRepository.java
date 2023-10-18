@@ -9,6 +9,10 @@ import java.util.List;
 
 @Repository
 public interface ExamManagerRepository extends JpaRepository<ExamManager, Long> {
-    @Query("select em.no from ExamManager em where em.director = :directorNo")
-    List<ExamManager> findAllByDirectorNo(@Param("directorNo") Long directorNo);
+
+    @Query("SELECT ee.exam.no, ee.exam.examDate, ee.exam.center.address FROM ExamExaminee ee " +
+            "WHERE ee.examManager IN (SELECT em.no FROM ExamManager em " +
+            "WHERE em.director = :directorNo)")
+    List<Exam> findAllByDirectorNo(@Param("directorNo") Long directorNo);
+
 }

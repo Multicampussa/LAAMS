@@ -13,17 +13,18 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/director")
+@RequestMapping("/director")
+
 public class DirectorController {
 
     private final DirectorService directorService;
 
     // 시험 목록 조회
-    @GetMapping("{directorNo}/exams")
+
+    @GetMapping("/{directorNo}/exams")
+
     public List<ExamListDto> getExams(@PathVariable Long directorNo){
         return directorService.getExamList(directorNo);
     }
-
-
 
 }

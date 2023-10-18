@@ -15,21 +15,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExamListDto {
-//    private Long examNo;
-//    private LocalDateTime examDate;
-//    private String address;
-//
-//    public ExamListDto(Exam exam){
-//        this.examNo = exam.getNo();
-//        this.examDate = exam.getExamDate();
-//        this.address = exam.getCenter().getAddress();
-//    }
 
-    private Long examManagerNo;
+    private Long examNo;
+    private LocalDateTime examDate;
+    private String address;
 
-    public ExamListDto(ExamManager examManager){
-        this.examManagerNo = examManager.getManager().getNo();
+    public ExamListDto(Exam exam){
+        this.examNo = exam.getNo();
+        this.examDate = exam.getExamDate();
+        this.address = exam.getCenter().getAddress();
     }
-
 }
 
