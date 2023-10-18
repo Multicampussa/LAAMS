@@ -80,4 +80,9 @@ public class Director extends BaseTimeEntity {
         this.email = memberUpdateDto.getEmail();
         this.phone = memberUpdateDto.getPhone();
     }
+
+    // 비밀번호 변경
+    public void updatePassword(String encode) {
+        this.pw = encode;
+    }
 }

@@ -49,4 +49,9 @@ public class Manager extends BaseTimeEntity {
         this.name = memberUpdateDto.getName();
         this.phone = memberUpdateDto.getPhone();
     }
+
+    // 비밀번호 변경
+    public void updatePassword(String encode) {
+        this.pw = encode;
+    }
 }

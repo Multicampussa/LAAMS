@@ -14,6 +14,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.security.SecureRandom;
 import java.util.HashMap;
@@ -252,6 +254,33 @@ public class MemberService {
             response.put("message", memberUpdateDto.getId() + "은 존재하지 않습니다.");
             response.put("status", HttpStatus.NOT_FOUND);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // 비밀번호 변경
+    public void changePassword(MemberUpdatePasswordDto requestDto) {
+        if (directorRepository.existsById(requestDto.getId())) {
+            Director director = directorRepository.findById(requestDto.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
+
+            // 기존 비밀번호 안맞으면 Exception
+            if (!passwordEncoder.matches(requestDto.getOldPassword(), director.getPw())) {
+                throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
+            }
+
+            director.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
+            directorRepository.save(director);
+        } else {
+            Manager manager = managerRepository.findById(requestDto.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
+
+            // 기존 비밀번호 안맞으면 Exception
+            if (!passwordEncoder.matches(requestDto.getOldPassword(), manager.getPw())) {
+                throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
+            }
+
+            manager.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
+            managerRepository.save(manager);
         }
     }
 }

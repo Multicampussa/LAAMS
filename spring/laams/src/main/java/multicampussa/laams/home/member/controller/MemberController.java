@@ -150,4 +150,19 @@ public class MemberController {
 
         return updateResponse;
     }
+
+    @PutMapping("/info/updatepassword")
+    public ResponseEntity<Map<String, Object>> updatePassword(@RequestBody MemberUpdatePasswordDto requestDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            memberService.changePassword(requestDto);
+            resultMap.put("message", "비밀번호가 성공적으로 변경되었습니다.");
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
