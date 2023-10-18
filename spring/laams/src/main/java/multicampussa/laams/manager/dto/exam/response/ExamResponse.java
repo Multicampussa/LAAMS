@@ -11,12 +11,13 @@ import java.time.LocalDateTime;
 public class ExamResponse {
 
     private Long no;
-    private Center center;
+    private String centerName;
     private LocalDateTime examDate;
 
     public ExamResponse(Exam exam) {
         this.no = exam.getNo();
-        this.center = exam.getCenter();
+        this.centerName = exam.getCenter().getName();
         this.examDate = exam.getExamDate();
     }
+
 }

@@ -44,11 +44,12 @@ public class ExamService {
     // 시험 수정
     @Transactional
     public void updateExam(ExamUpdateRequest request) {
+        Center existingCenter = centerRepository.findByName(request.getCenter().getName())
+                .orElseThrow(IllegalArgumentException::new);
         Exam exam = examRepository.findById(request.getNo())
                 .orElseThrow(IllegalArgumentException::new);
-        exam.updateExamInfo(request.getCenter(), request.getExamDate());
+        exam.updateExamInfo(existingCenter, request.getExamDate());
     }
-
 
     // 시험 삭제
     @Transactional

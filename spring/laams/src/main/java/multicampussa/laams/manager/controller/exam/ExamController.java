@@ -1,11 +1,9 @@
 package multicampussa.laams.manager.controller.exam;
 
+import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.manager.dto.exam.request.ExamCreateRequest;
 import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
 import multicampussa.laams.manager.dto.exam.response.ExamResponse;
-import multicampussa.laams.manager.dto.examinee.request.ExamineeCreateRequest;
-import multicampussa.laams.manager.dto.examinee.request.ExamineeUpdateRequest;
-import multicampussa.laams.manager.dto.examinee.response.ExamineeResponse;
 import multicampussa.laams.manager.service.exam.ExamService;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,12 +13,14 @@ import java.util.List;
 public class ExamController {
 
     private final ExamService examService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public ExamController(ExamService examService) {
+    public ExamController(ExamService examService, JwtTokenProvider jwtTokenProvider) {
         this.examService = examService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @PostMapping("/manager/exam")  //POST examinee
+    @PostMapping("/manager/exam")
     public void saveExam(@RequestBody ExamCreateRequest request) {
         examService.saveExam(request);
     }
