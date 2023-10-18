@@ -23,6 +23,7 @@ public class Manager extends BaseTimeEntity {
     @Column(unique = true)
     private String id;
     private String name;
+    private String email;
     private String pw;
     private String phone;
     private String refreshToken;
@@ -34,6 +35,7 @@ public class Manager extends BaseTimeEntity {
                 .phone(manager.getPhone())
                 .createdAt(manager.getCreatedAt())
                 .updatedAt(manager.getUpdatedAt())
+                .email(manager.getEmail())
                 .build();
     }
 
@@ -48,6 +50,7 @@ public class Manager extends BaseTimeEntity {
         this.id = memberUpdateDto.getId();
         this.name = memberUpdateDto.getName();
         this.phone = memberUpdateDto.getPhone();
+        this.email = memberUpdateDto.getEmail();
     }
 
     // 비밀번호 변경
