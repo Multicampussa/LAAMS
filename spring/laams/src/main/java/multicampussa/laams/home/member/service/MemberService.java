@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @Transactional
@@ -308,6 +305,39 @@ public class MemberService {
                 throw new IllegalArgumentException("이름과 이메일이 일치하지 않습니다.");
             }
             return responseDto.fromEntityByManager(manager);
+        }
+    }
+
+    public void findPassword(FindPasswordDto findPasswordDto) {
+        String tempPassword = UUID.randomUUID().toString().split("-")[0];
+        Director director;
+        Manager manager;
+
+        if (memberDirectorRepository.existsById(findPasswordDto.getId())) {
+            director = memberDirectorRepository.findById(findPasswordDto.getId()).get();
+            if (!director.getEmail().equals(findPasswordDto.getEmail())) {
+                throw new IllegalArgumentException("아이디와 이메일이 일치하지 않습니다.");
+            }
+
+            director.updatePassword(passwordEncoder.encode(tempPassword));
+            memberDirectorRepository.save(director);
+        } else if (memberManagerRepository.existsById(findPasswordDto.getId())) {
+            manager = memberManagerRepository.findById(findPasswordDto.getId()).get();
+            if (!manager.getEmail().equals(findPasswordDto.getEmail())) {
+                throw new IllegalArgumentException("아이디와 이메일이 일치하지 않습니다.");
+            }
+
+            manager.updatePassword(passwordEncoder.encode(tempPassword));
+            memberManagerRepository.save(manager);
+        } else {
+            throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
+        }
+
+        try {
+            String message = "새로 등록된 임시 비밀번호로 로그인해주세요: " + tempPassword;
+            sendEmail(findPasswordDto.getEmail(), "비밀번호 찾기", message);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("이메일 형식이 잘못되었습니다.");
         }
     }
 }
