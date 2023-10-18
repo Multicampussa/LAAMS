@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -183,5 +184,35 @@ public class MemberController {
         resultMap.put("message", "성공적으로 삭제되었습니다.");
         resultMap.put("status", HttpStatus.OK.value());
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/findid")
+    public ResponseEntity<Map<String, Object>> findId(@RequestBody FindIdDto findIdDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("message", "성공적으로 조회하였습니다.");
+            resultMap.put("data", memberService.findId(findIdDto));
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/findpassword")
+    public ResponseEntity<Map<String, Object>> findPassword(@RequestBody FindPasswordDto findPasswordDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            memberService.findPassword(findPasswordDto);
+            resultMap.put("message", "등록하신 이메일로 임시 비밀번호를 전송하였습니다.");
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
     }
 }
