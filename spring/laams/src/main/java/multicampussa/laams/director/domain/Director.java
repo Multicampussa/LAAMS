@@ -85,4 +85,10 @@ public class Director extends BaseTimeEntity {
     public void updatePassword(String encode) {
         this.pw = encode;
     }
+
+    // isDelete를 true로 변경, 리프레시 토큰 초기화
+    public void delete() {
+        this.isDelete = true;
+        this.refreshToken = null;
+    }
 }

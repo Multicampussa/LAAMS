@@ -283,4 +283,12 @@ public class MemberService {
             managerRepository.save(manager);
         }
     }
+
+    // 회원 탈퇴
+    public void deleteMember(String id) {
+        Director director = directorRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(id + "인 ID는 존재하지 않습니다."));
+        director.delete();
+        directorRepository.save(director);
+    }
 }

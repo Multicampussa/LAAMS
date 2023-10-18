@@ -10,5 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberInfoDto {
-    public String memberId;
+    public String id;
 }

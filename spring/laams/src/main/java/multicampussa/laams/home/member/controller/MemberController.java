@@ -134,7 +134,7 @@ public class MemberController {
     @GetMapping("/info")
     public ResponseEntity<Map<String, Object>> memberInfo(@RequestBody MemberInfoDto memberInfoDto) {
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("member", memberService.UserInfo(memberInfoDto.getMemberId()));
+        resultMap.put("member", memberService.UserInfo(memberInfoDto.getId()));
         resultMap.put("message", "성공적으로 조회하였습니다.");
         resultMap.put("status", 200);
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
@@ -164,5 +164,24 @@ public class MemberController {
             resultMap.put("status", HttpStatus.BAD_REQUEST.value());
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PutMapping("/delete")
+    public ResponseEntity<Map<String, Object>> delete(@RequestBody MemberInfoDto memberInfoDto, @RequestHeader String authorization) {
+        Map<String, Object> resultMap = new HashMap<>();
+        String token = authorization.replace("Bearer ", "");
+        String id = memberInfoDto.getId();
+        String authority = jwtTokenProvider.getAuthority(token);
+        if (authority.equals("ROLE_DIRECTOR")) {
+            if (!id.equals(jwtTokenProvider.getId(token))) {
+                resultMap.put("message", "접근 권한이 없습니다.");
+                resultMap.put("status", HttpStatus.UNAUTHORIZED.value());
+                return new ResponseEntity<>(resultMap, HttpStatus.UNAUTHORIZED);
+            }
+        }
+        memberService.deleteMember(id);
+        resultMap.put("message", "성공적으로 삭제되었습니다.");
+        resultMap.put("status", HttpStatus.OK.value());
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 }
