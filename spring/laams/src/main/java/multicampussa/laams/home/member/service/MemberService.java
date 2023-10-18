@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import multicampussa.laams.director.domain.Director;
 import multicampussa.laams.home.member.dto.*;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
-import multicampussa.laams.home.member.repository.DirectorRepository;
-import multicampussa.laams.home.member.repository.ManagerRepository;
+import multicampussa.laams.home.member.repository.MemberDirectorRepository;
+import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import multicampussa.laams.manager.domain.Manager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +14,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.security.SecureRandom;
 import java.util.HashMap;
@@ -28,22 +26,22 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final DirectorRepository directorRepository;
+    private final MemberDirectorRepository memberDirectorRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final JavaMailSender javaMailSender;
-    private final ManagerRepository managerRepository;
+    private final MemberManagerRepository memberManagerRepository;
     private final Random random = new SecureRandom();
 
     // 회원가입
     public ResponseEntity<String> signUp(MemberSignUpDto memberSignUpDto) {
-        if (directorRepository.existsByEmail(memberSignUpDto.getEmail()) && !directorRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsDelete()) {
+        if (memberDirectorRepository.existsByEmail(memberSignUpDto.getEmail()) && !memberDirectorRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsDelete()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이메일입니다.");
         }
 
-        if (directorRepository.existsById(memberSignUpDto.getId())
-                && !directorRepository.findById(memberSignUpDto.getId()).get().getIsDelete()
-                || managerRepository.existsById(memberSignUpDto.getId())) {
+        if (memberDirectorRepository.existsById(memberSignUpDto.getId())
+                && !memberDirectorRepository.findById(memberSignUpDto.getId()).get().getIsDelete()
+                || memberManagerRepository.existsById(memberSignUpDto.getId())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 아이디입니다.");
         }
 
@@ -51,15 +49,15 @@ public class MemberService {
         String encodedPassword = passwordEncoder.encode(memberSignUpDto.getPw());
 
         Director director;
-        if (!directorRepository.existsByEmail(memberSignUpDto.getEmail()) || !directorRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsVerified()) {
+        if (!memberDirectorRepository.existsByEmail(memberSignUpDto.getEmail()) || !memberDirectorRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsVerified()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이메일 인증을 진행해주세요.");
         } else {
             // 삭제한 이메일로 다시 한 번 회원가입 할 때
-            director = directorRepository.findByEmail(memberSignUpDto.getEmail()).get();
+            director = memberDirectorRepository.findByEmail(memberSignUpDto.getEmail()).get();
 
             director.update(memberSignUpDto, encodedPassword);
 
-            Director savedMember = directorRepository.save(director);
+            Director savedMember = memberDirectorRepository.save(director);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("회원 가입에 성공하였습니다.");
@@ -75,8 +73,8 @@ public class MemberService {
         }
 
         // 이메일이 이미 DB에 존재하는 경우
-        if (directorRepository.existsByEmail(email)) {
-            Director existingMember = directorRepository.findByEmail(email)
+        if (memberDirectorRepository.existsByEmail(email)) {
+            Director existingMember = memberDirectorRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("404: 유저를 찾을 수 없습니다."));
 
             // 해당 이메일에 대한 사용자 계정이 삭제 상태가 아니라면 에러 메시지 반환
@@ -85,13 +83,13 @@ public class MemberService {
             } else {
                 // 삭제된 사용자라면 인증 코드를 업데이트
                 existingMember.updateVerificationCode(email, code);
-                directorRepository.save(existingMember);
+                memberDirectorRepository.save(existingMember);
             }
         } else {
             // 이메일이 DB에 없는 경우 새로운 Director 객체 생성 및 저장
             Director newMember = new Director();
             newMember.updateVerificationCode(email, code);
-            directorRepository.save(newMember);
+            memberDirectorRepository.save(newMember);
         }
 
         try {
@@ -119,7 +117,7 @@ public class MemberService {
 
     // 이메일 인증코드 확인
     public void confirmEmailVerification(String email, String code) {
-        Director director = directorRepository.findByEmail(email)
+        Director director = memberDirectorRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 이메일입니다."));
 
         if (!director.getVerificationCode().equals(code)) {
@@ -127,13 +125,13 @@ public class MemberService {
         }
 
         director.updateVerified(true); // 이메일이 인증되었음을 표시
-        directorRepository.save(director);
+        memberDirectorRepository.save(director);
     }
 
     // 감독관 정보 불러오기
     public MemberDto DirectorInfo(String id) {
-        if (directorRepository.existsById(id)) {
-            return Director.toMemberDto(directorRepository.findById(id).get());
+        if (memberDirectorRepository.existsById(id)) {
+            return Director.toMemberDto(memberDirectorRepository.findById(id).get());
         } else {
             return null;
         }
@@ -141,7 +139,7 @@ public class MemberService {
 
     // 운영자 정보 불러오기
     public MemberDto ManagerInfo(String id) {
-        return Manager.toMemberDto(managerRepository.findById(id).get());
+        return Manager.toMemberDto(memberManagerRepository.findById(id).get());
     }
 
     // 로그인 및 토큰 발급
@@ -151,9 +149,9 @@ public class MemberService {
         Optional<Manager> managerOptional;
 
         if (authority.equals("ROLE_DIRECTOR")) {
-            directorOptional = directorRepository.findById(loginRequestDto.getId());
+            directorOptional = memberDirectorRepository.findById(loginRequestDto.getId());
             directorOptional.get().updateRefreshToken(refreshToken);
-            directorRepository.save(directorOptional.get());
+            memberDirectorRepository.save(directorOptional.get());
 
             if (!directorOptional.get().getIsDelete()) {
                 if (directorOptional.isPresent()) {
@@ -174,9 +172,9 @@ public class MemberService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
         } else {
-            managerOptional = managerRepository.findById(loginRequestDto.getId());
+            managerOptional = memberManagerRepository.findById(loginRequestDto.getId());
             managerOptional.get().updateRefreshToken(refreshToken);
-            managerRepository.save(managerOptional.get());
+            memberManagerRepository.save(managerOptional.get());
             if (managerOptional.isPresent()) {
                 Manager manager = managerOptional.get();
                 if (passwordEncoder.matches(loginRequestDto.getPassword(), manager.getPw())) {
@@ -195,10 +193,10 @@ public class MemberService {
 
     // 사용자가 자신의 정보를 조회하는 서비스
     public MemberDto UserInfo(String memberId) {
-        if (directorRepository.existsById(memberId)) {
-            return Director.toMemberDto(directorRepository.findById(memberId).get());
+        if (memberDirectorRepository.existsById(memberId)) {
+            return Director.toMemberDto(memberDirectorRepository.findById(memberId).get());
         } else {
-            return Manager.toMemberDto(managerRepository.findById(memberId).get());
+            return Manager.toMemberDto(memberManagerRepository.findById(memberId).get());
         }
     }
 
@@ -212,9 +210,9 @@ public class MemberService {
         try {
             if (authority.equals("ROLE_DIRECTOR")) {
                 if (id.equals(memberUpdateDto.getId())) {
-                    director = directorRepository.findById(id).get();
+                    director = memberDirectorRepository.findById(id).get();
                     director.update(memberUpdateDto);
-                    directorRepository.save(director);
+                    memberDirectorRepository.save(director);
                     MemberDto updatedMemberDto = MemberDto.fromEntityByDirector(director);
 
                     response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
@@ -228,10 +226,10 @@ public class MemberService {
                     return ResponseEntity.ok(response);
                 }
             } else {
-                if (managerRepository.existsById(memberUpdateDto.getId())) {
-                    manager = managerRepository.findById(id).get();
+                if (memberManagerRepository.existsById(memberUpdateDto.getId())) {
+                    manager = memberManagerRepository.findById(id).get();
                     manager.update(memberUpdateDto);
-                    managerRepository.save(manager);
+                    memberManagerRepository.save(manager);
                     MemberDto updatedMemberDto = MemberDto.fromEntityByManager(manager);
 
                     response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
@@ -239,9 +237,9 @@ public class MemberService {
 
                     return ResponseEntity.ok(response);
                 } else {
-                    director = directorRepository.findById(memberUpdateDto.getId()).get();
+                    director = memberDirectorRepository.findById(memberUpdateDto.getId()).get();
                     director.update(memberUpdateDto);
-                    directorRepository.save(director);
+                    memberDirectorRepository.save(director);
                     MemberDto updatedMemberDto = MemberDto.fromEntityByDirector(director);
 
                     response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
@@ -259,8 +257,8 @@ public class MemberService {
 
     // 비밀번호 변경
     public void changePassword(MemberUpdatePasswordDto requestDto) {
-        if (directorRepository.existsById(requestDto.getId())) {
-            Director director = directorRepository.findById(requestDto.getId())
+        if (memberDirectorRepository.existsById(requestDto.getId())) {
+            Director director = memberDirectorRepository.findById(requestDto.getId())
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
 
             // 기존 비밀번호 안맞으면 Exception
@@ -269,9 +267,9 @@ public class MemberService {
             }
 
             director.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
-            directorRepository.save(director);
+            memberDirectorRepository.save(director);
         } else {
-            Manager manager = managerRepository.findById(requestDto.getId())
+            Manager manager = memberManagerRepository.findById(requestDto.getId())
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
 
             // 기존 비밀번호 안맞으면 Exception
@@ -280,15 +278,15 @@ public class MemberService {
             }
 
             manager.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
-            managerRepository.save(manager);
+            memberManagerRepository.save(manager);
         }
     }
 
     // 회원 탈퇴
     public void deleteMember(String id) {
-        Director director = directorRepository.findById(id)
+        Director director = memberDirectorRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(id + "인 ID는 존재하지 않습니다."));
         director.delete();
-        directorRepository.save(director);
+        memberDirectorRepository.save(director);
     }
 }
