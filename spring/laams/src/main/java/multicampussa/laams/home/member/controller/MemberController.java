@@ -184,4 +184,19 @@ public class MemberController {
         resultMap.put("status", HttpStatus.OK.value());
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
+
+    @GetMapping("/findid")
+    public ResponseEntity<Map<String, Object>> findId(@RequestBody FindIdDto findIdDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("message", "성공적으로 조회하였습니다.");
+            resultMap.put("data", memberService.findId(findIdDto));
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
 }

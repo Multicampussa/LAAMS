@@ -289,4 +289,25 @@ public class MemberService {
         director.delete();
         memberDirectorRepository.save(director);
     }
+
+    // 아이디 찾기
+    public MemberInfoDto findId(FindIdDto findIdDto) {
+        MemberInfoDto responseDto = new MemberInfoDto();
+        Director director;
+        Manager manager;
+
+        if (memberDirectorRepository.existsByEmail(findIdDto.getEmail())) {
+            director = memberDirectorRepository.findByEmail(findIdDto.getEmail()).get();
+            if (!director.getName().equals(findIdDto.getName())) {
+                throw new IllegalArgumentException("이름과 이메일이 일치하지 않습니다.");
+            }
+            return responseDto.fromEntityByDirector(director);
+        } else {
+            manager = memberManagerRepository.findByEmail(findIdDto.getEmail()).get();
+            if (!manager.getName().equals(findIdDto.getName())) {
+                throw new IllegalArgumentException("이름과 이메일이 일치하지 않습니다.");
+            }
+            return responseDto.fromEntityByManager(manager);
+        }
+    }
 }
