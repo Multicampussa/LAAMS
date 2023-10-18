@@ -35,4 +35,5 @@ public class ExamExaminee extends BaseTimeEntity {
     private Boolean document;
     private Double percent;
 
+
 }

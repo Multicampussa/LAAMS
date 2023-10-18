@@ -6,11 +6,14 @@ import multicampussa.laams.manager.domain.exam.center.Center;
 import multicampussa.laams.manager.domain.exam.center.CenterRepository;
 import multicampussa.laams.manager.dto.exam.request.ExamCreateRequest;
 import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
+import multicampussa.laams.manager.dto.exam.response.ExamDetailResponse;
 import multicampussa.laams.manager.dto.exam.response.ExamResponse;
+import multicampussa.laams.manager.exception.ExamNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +42,14 @@ public class ExamService {
         return examRepository.findAll().stream()
                 .map(ExamResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    // 시험 상세 조회
+    @Transactional(readOnly = true)
+    public ExamDetailResponse getExam(Long no) {
+        Exam exam = examRepository.findById(no)
+                .orElseThrow(() -> new ExamNotFoundException(no + "번 시험 없음"));
+        return new ExamDetailResponse();
     }
 
     // 시험 수정
