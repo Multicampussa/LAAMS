@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/api/v1/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -63,6 +62,9 @@ public class MemberController {
             if (signInResponse.getStatusCodeValue() == 200) {
                 response.put("accessToken", accessToken);
                 response.put("refreshToken", refreshToken);
+                response.put("accessTokenExpireTime", jwtTokenProvider.getTokenExpireTime(accessToken));
+                response.put("refreshTokenExpireTime", jwtTokenProvider.getTokenExpireTime(refreshToken));
+                response.put("authority", jwtTokenProvider.getAuthority(accessToken));
             }
             response.put("status", signInResponse.getStatusCodeValue());
 
@@ -77,14 +79,14 @@ public class MemberController {
 
     // 액세스 토큰 만료시 리프레시 토큰으로 액세스 토큰 재발급
     @PostMapping("/refresh")
-    public ResponseEntity<Map<String, Object>> refresh(@RequestBody MemberRefreshTokenDto tokenDto) {
+    public ResponseEntity<Map<String, Object>> refresh(@RequestHeader String authorization) {
+        String token = authorization.replace("Bearer ", "");
         Map<String, Object> response = new HashMap<>();
 
         // 현재 리프레시 토큰과 새로운 액세스 토큰
-        String refreshToken = tokenDto.getRefreshToken();
         String newAccessToken;
         try {
-            newAccessToken = jwtTokenProvider.refreshAccessToken(refreshToken);
+            newAccessToken = jwtTokenProvider.refreshAccessToken(token);
         } catch (Exception e) {
             response.put("message", "리프레시 토큰이 올바르지 않습니다.");
             response.put("status", HttpStatus.UNAUTHORIZED.value());
@@ -132,10 +134,10 @@ public class MemberController {
     }
 
     // 감독관 또는 운영자 정보 조회
-    @GetMapping("/info")
-    public ResponseEntity<Map<String, Object>> memberInfo(@RequestBody MemberInfoDto memberInfoDto) {
+    @GetMapping("/info/{memberId}")
+    public ResponseEntity<Map<String, Object>> memberInfo(@PathVariable String memberId) {
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("member", memberService.UserInfo(memberInfoDto.getId()));
+        resultMap.put("member", memberService.UserInfo(memberId));
         resultMap.put("message", "성공적으로 조회하였습니다.");
         resultMap.put("status", 200);
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
@@ -146,7 +148,6 @@ public class MemberController {
         String token = authorization.replace("Bearer ", "");
         String id = jwtTokenProvider.getId(token);
         String authority = jwtTokenProvider.getAuthority(token);
-        Map<String, Object> resultMap = new HashMap<>();
         ResponseEntity<Map<String, Object>> updateResponse = memberService.updateMemberByUser(id, authority, memberUpdateByUserDto);
 
         return updateResponse;
@@ -207,6 +208,21 @@ public class MemberController {
         try {
             memberService.findPassword(findPasswordDto);
             resultMap.put("message", "등록하신 이메일로 임시 비밀번호를 전송하였습니다.");
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/encodedpassword")
+    public ResponseEntity<Map<String, Object>> encodedPassword(@RequestBody EncodedPasswordDto encodedPasswordDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("message", "성공적으로 암호화하였습니다.");
+            resultMap.put("data", memberService.encodedPassword(encodedPasswordDto));
             resultMap.put("status", HttpStatus.OK.value());
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         } catch (IllegalArgumentException e) {

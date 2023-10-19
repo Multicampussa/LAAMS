@@ -6,7 +6,7 @@ import multicampussa.laams.home.member.dto.*;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
-import multicampussa.laams.manager.domain.Manager;
+import multicampussa.laams.manager.domain.manager.Manager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -339,5 +339,11 @@ public class MemberService {
         } catch (Exception e) {
             throw new IllegalArgumentException("이메일 형식이 잘못되었습니다.");
         }
+    }
+
+    // 운영자 회원가입을 위한 비밀번호 암호화
+    public EncodedPasswordDto encodedPassword(EncodedPasswordDto encodedPasswordDto) {
+        encodedPasswordDto.setPw(passwordEncoder.encode(encodedPasswordDto.getPw()));
+        return encodedPasswordDto;
     }
 }

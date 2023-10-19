@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.home.notice.dto.NoticeCreateDto;
-import multicampussa.laams.manager.domain.Manager;
+import multicampussa.laams.manager.domain.manager.Manager;
 
 import javax.persistence.*;
 

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.director.domain.Director;
 import multicampussa.laams.global.BaseTimeEntity;
-import multicampussa.laams.manager.domain.Manager;
+import multicampussa.laams.manager.domain.manager.Manager;
 import javax.persistence.*;
 
 @Entity
@@ -24,5 +24,4 @@ public class ExamManager extends BaseTimeEntity {
     @JoinColumn(name = "director_no")
     private Director director;
 
-    private Boolean directorLate;
 }
