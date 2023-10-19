@@ -6,7 +6,7 @@ import multicampussa.laams.home.member.dto.*;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
-import multicampussa.laams.manager.domain.Manager;
+import multicampussa.laams.manager.domain.manager.Manager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
