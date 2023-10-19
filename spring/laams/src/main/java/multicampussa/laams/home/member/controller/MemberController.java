@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/api/v1/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -209,6 +208,21 @@ public class MemberController {
         try {
             memberService.findPassword(findPasswordDto);
             resultMap.put("message", "등록하신 이메일로 임시 비밀번호를 전송하였습니다.");
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/encodedpassword")
+    public ResponseEntity<Map<String, Object>> encodedPassword(@RequestBody EncodedPasswordDto encodedPasswordDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("message", "성공적으로 암호화하였습니다.");
+            resultMap.put("data", memberService.encodedPassword(encodedPasswordDto));
             resultMap.put("status", HttpStatus.OK.value());
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
