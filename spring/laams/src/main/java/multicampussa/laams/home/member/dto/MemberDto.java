@@ -3,6 +3,7 @@ package multicampussa.laams.home.member.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import multicampussa.laams.director.domain.Director;
+import multicampussa.laams.manager.domain.Manager;
 
 import java.time.LocalDateTime;
 
@@ -12,11 +13,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MemberDto {
-    private Long memberId;
+    private Long memberNo;
 
     private String email;
-    private String memberName;
-    private String phoneNumber;
+    private String name;
+    private String phone;
     private Boolean isDelete;
     private String verificationCode;
     private Boolean isVerified;
@@ -27,15 +28,30 @@ public class MemberDto {
 
     @Builder
     public MemberDto(Director director) {
-        this.memberId = director.getNo();
+        this.memberNo = director.getNo();
         this.email = director.getEmail();
-        this.memberName = director.getName();
-        this.phoneNumber = director.getPhone();
+        this.name = director.getName();
+        this.phone = director.getPhone();
         this.isDelete = director.getIsDelete();
         this.createdAt = director.getCreatedAt();
         this.updatedAt = director.getUpdatedAt();
         this.verificationCode = director.getVerificationCode();
         this.isVerified = director.getIsVerified();
+    }
+
+    public static MemberDto fromEntityByDirector(Director director) {
+        MemberDto memberDto = new MemberDto();
+        memberDto.setEmail(director.getEmail());
+        memberDto.setName(director.getName());
+        memberDto.setPhone(director.getPhone());
+        return memberDto;
+    }
+
+    public static MemberDto fromEntityByManager(Manager manager) {
+        MemberDto memberDto = new MemberDto();
+        memberDto.setName(manager.getName());
+        memberDto.setPhone(manager.getPhone());
+        return memberDto;
     }
 }
 

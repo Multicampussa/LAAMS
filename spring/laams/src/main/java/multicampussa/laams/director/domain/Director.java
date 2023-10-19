@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.home.member.dto.MemberDto;
 import multicampussa.laams.home.member.dto.MemberSignUpDto;
+import multicampussa.laams.home.member.dto.MemberUpdateDto;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -55,12 +55,12 @@ public class Director extends BaseTimeEntity {
         this.isVerified = isVerified;
     }
 
-    public static MemberDto toAdminDto(Director director) {
+    public static MemberDto toMemberDto(Director director) {
         return MemberDto.builder()
-                .memberId(director.getNo())
-                .memberName(director.getName())
+                .memberNo(director.getNo())
+                .name(director.getName())
                 .email(director.getEmail())
-                .phoneNumber(director.getPhone())
+                .phone(director.getPhone())
                 .createdAt(director.getCreatedAt())
                 .isDelete(director.getIsDelete())
                 .updatedAt(director.getUpdatedAt())
@@ -71,5 +71,24 @@ public class Director extends BaseTimeEntity {
     // 이미 리프레시 토큰이 있어도 업데이트 됨.
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    // 사용자가 자신의 정보 변경
+    public void update(MemberUpdateDto memberUpdateDto) {
+        this.id = memberUpdateDto.getId();
+        this.name = memberUpdateDto.getName();
+        this.email = memberUpdateDto.getEmail();
+        this.phone = memberUpdateDto.getPhone();
+    }
+
+    // 비밀번호 변경
+    public void updatePassword(String encode) {
+        this.pw = encode;
+    }
+
+    // isDelete를 true로 변경, 리프레시 토큰 초기화
+    public void delete() {
+        this.isDelete = true;
+        this.refreshToken = null;
     }
 }

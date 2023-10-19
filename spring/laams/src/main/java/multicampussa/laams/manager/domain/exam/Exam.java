@@ -3,9 +3,8 @@ package multicampussa.laams.manager.domain.exam;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
-import multicampussa.laams.manager.domain.manager.Manager;
 import multicampussa.laams.manager.domain.exam.center.Center;
-
+import multicampussa.laams.manager.domain.manager.Manager;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
