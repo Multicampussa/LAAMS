@@ -1,7 +1,6 @@
 package multicampussa.laams.home.notice.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
@@ -28,7 +27,7 @@ public class Notice extends BaseTimeEntity {
     @JoinColumn(name="manager_no")
     private Manager manager;
 
-    public void update(NoticeCreateDto noticeCreateDto, Manager manager) {
+    public void toEntity(NoticeCreateDto noticeCreateDto, Manager manager) {
         this.title = noticeCreateDto.getTitle();
         this.content = noticeCreateDto.getContent();
         this.manager = manager;

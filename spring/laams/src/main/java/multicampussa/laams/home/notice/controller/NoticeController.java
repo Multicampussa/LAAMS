@@ -22,14 +22,21 @@ public class NoticeController {
 
     @PostMapping("/notice/create")
     public ResponseEntity<Map<String, Object>> createNotice(@RequestHeader String authorization,  @RequestBody NoticeCreateDto noticeCreateDto) {
-        String token  = authorization.replace("Bearer ", "");
-        Long memberId = jwtTokenProvider.getMemberNo(token);
-
-        noticeService.createNotice(noticeCreateDto, memberId);
-
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("message", "성공적으로 작성하였습니다.");
-        resultMap.put("status", HttpStatus.OK.value());
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+        try{
+            String token  = authorization.replace("Bearer ", "");
+            Long memberId = jwtTokenProvider.getMemberNo(token);
+            String authority = jwtTokenProvider.getAuthority(token);
+
+            boolean result = noticeService.createNotice(noticeCreateDto, memberId, authority);
+
+            resultMap.put("message", "성공적으로 작성하였습니다.");
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
     }
 }
