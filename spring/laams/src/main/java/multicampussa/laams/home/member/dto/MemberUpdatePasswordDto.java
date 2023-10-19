@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginRequestDto {
+public class MemberUpdatePasswordDto {
     private String id;
-    private String pw;
+    private String oldPassword;
+    private String newPassword;
 }

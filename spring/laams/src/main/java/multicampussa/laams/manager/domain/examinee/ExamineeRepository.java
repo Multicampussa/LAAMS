@@ -6,6 +6,4 @@ import java.util.Optional;
 
 public interface ExamineeRepository extends JpaRepository<Examinee, Long> {
 
-    @Override
-    Optional<Examinee> findById(Long no);
 }

@@ -29,6 +29,7 @@ public class Examinee {
     private String gender;
 
     public Examinee(String name, Integer age, String phoneNum, String gender) {
+
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException(String.format("잘못된 name(%s)이 들어왔습니다", name));
         }
@@ -38,4 +39,11 @@ public class Examinee {
         this.gender = gender;
     }
 
+    public void updateExamineeInfo(String name, Integer age, String phoneNum, String gender) {
+
+        this.name = name;
+        this.age = age;
+        this.phoneNum = phoneNum;
+        this.gender = gender;
+    }
 }

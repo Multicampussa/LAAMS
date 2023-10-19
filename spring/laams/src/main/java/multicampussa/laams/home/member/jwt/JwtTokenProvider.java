@@ -6,7 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.home.member.exception.JwtAuthenticationException;
-import multicampussa.laams.home.member.repository.MemberRepository;
+import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 import multicampussa.laams.home.member.service.UserDetailsServiceImpl;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 //import org.springframework.security.core.Authentication;
@@ -24,7 +24,7 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private final UserDetailsServiceImpl userDetailsService;
-    private final MemberRepository memberRepository;
+    private final MemberDirectorRepository memberDirectorRepository;
     private String secretKey = "s1s2a3f4y@"; // 비밀키
     private long validityInMilliseconds = 3600000; // 1 hour
 
@@ -49,25 +49,33 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         // 토큰을 통해 유저 정보 가져오기
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getEmail(token));
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getId(token));
         // JWT에서는 비밀번호 정보가 필요없기 때문에 빈 문자열 넣음
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     // 토큰을 복호화하여 claims를 뽑아내는 과정
-    // 리프레시 토큰의 claims에는 이메일만 있음
+    // 리프레시 토큰의 claims에는 아이디만 있음
     public String getEmail(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
+    // 토큰으로 MemberNo 추출
     public Long getMemberNo(String token) {
-        return Long.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("memberNo").toString());
+        return Long.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("memberId").toString());
     }
 
+    // 토큰으로 ID 추출
     public String getId(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("id").toString();
+        // token의 claims 안에 id는 sub 필드로 저장되어 있다. 따라서 getSubject()로 아이디 추출.
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject().toString();
     }
 
+    public String getAuthority(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("authority").toString();
+    }
+
+    // 토큰 유효성 검사
     public boolean validateToken(String token) {
         try {
             // parseClaimsJws : 파싱된 서명이 유효한지, 만료되진 않았는지
@@ -89,10 +97,11 @@ public class JwtTokenProvider {
         return null;
     }
 
-    public String createRefreshToken(String email) {
+    // 리프레시 토큰 발급
+    public String createRefreshToken(String id) {
         // 리프레시 토큰의 claims에는 권한 정보를 담지 않는다.
         // 이유는 유효기간이 길어서, 탈취당할 경우 관리자 권한이 악용될 가능성이 높기 때문
-        Claims claims = Jwts.claims().setSubject(email);
+        Claims claims = Jwts.claims().setSubject(id);
         Date now = new Date();
 
         // 리프레시 토큰 유효기간 (우선 일주일 잡음)
@@ -110,8 +119,8 @@ public class JwtTokenProvider {
     public String refreshAccessToken(String refreshToken) {
         String id = getId(refreshToken);
 
-        // 발급된 리프레시 토큰에 담겨있는 이메일로 DB에 저장된 리프레시 토큰.
-        String storedRefreshToken = memberRepository.findById(id).get().getRefreshToken();
+        // 발급된 리프레시 토큰에 담겨있는 ID로 DB에 저장된 리프레시 토큰 받아오기.
+        String storedRefreshToken = memberDirectorRepository.findById(id).get().getRefreshToken();
 
         // 권한 정보 (액세스 토큰을 발급받기 위함)
         String authority = "ROLE_ADMIN";
@@ -124,11 +133,12 @@ public class JwtTokenProvider {
             throw new JwtAuthenticationException("리프레시 토큰이 만료되었습니다.");
         }
 
-        Long memberNo = memberRepository.findById(id).get().getNo();
+        Long memberNo = memberDirectorRepository.findById(id).get().getNo();
 
         return createAccessToken(id, authority, memberNo);
     }
 
+    // 토큰 만료 여부
     public boolean isTokenExpired(String token) {
         Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         return claims.getExpiration().before(new Date());
