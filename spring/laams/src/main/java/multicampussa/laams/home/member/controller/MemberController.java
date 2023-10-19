@@ -41,7 +41,7 @@ public class MemberController {
         try {
             String id = loginRequestDto.getId();
             // 아이디와 비밀번호 인증
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, loginRequestDto.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, loginRequestDto.getPw()));
 
             // 권한 설정
             String authority;

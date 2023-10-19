@@ -153,7 +153,7 @@ public class MemberService {
             if (!directorOptional.get().getIsDelete()) {
                 if (directorOptional.isPresent()) {
                     Director director = directorOptional.get();
-                    if (passwordEncoder.matches(loginRequestDto.getPassword(), director.getPw())) {
+                    if (passwordEncoder.matches(loginRequestDto.getPw(), director.getPw())) {
                         response.put("message", "로그인에 성공하였습니다.");
                         return ResponseEntity.status(HttpStatus.OK).body(response);
                     } else {
@@ -174,7 +174,7 @@ public class MemberService {
             memberManagerRepository.save(managerOptional.get());
             if (managerOptional.isPresent()) {
                 Manager manager = managerOptional.get();
-                if (passwordEncoder.matches(loginRequestDto.getPassword(), manager.getPw())) {
+                if (passwordEncoder.matches(loginRequestDto.getPw(), manager.getPw())) {
                     response.put("message", "로그인에 성공하였습니다.");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
                 } else {
