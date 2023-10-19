@@ -1,16 +1,12 @@
 package multicampussa.laams.manager.domain.exam;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.manager.domain.exam.center.Center;
-import multicampussa.laams.manager.domain.examinee.Examinee;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import multicampussa.laams.manager.domain.manager.Manager;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -30,14 +26,20 @@ public class Exam extends BaseTimeEntity {
     @Column
     private LocalDateTime examDate;
 
-    public Exam(Center center, LocalDateTime examDate) {
+    @ManyToOne
+    @JoinColumn(name = "manager_no")
+    private Manager manager;
+
+    public Exam(Center center, LocalDateTime examDate, Manager manager) {
         this.center = center;
         this.examDate = examDate;
+        this.manager = manager;
     }
 
-    public void updateExamInfo(Center center, LocalDateTime examDate) {
+    public void updateExamInfo(Center center, LocalDateTime examDate, Manager manager) {
 
         this.center = center;
         this.examDate = examDate;
+        this.manager = manager;
     }
 }

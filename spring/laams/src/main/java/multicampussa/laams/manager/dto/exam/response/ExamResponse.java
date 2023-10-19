@@ -13,11 +13,15 @@ public class ExamResponse {
     private Long no;
     private String centerName;
     private LocalDateTime examDate;
+    private Long managerNo;
+    private String managerName;
 
     public ExamResponse(Exam exam) {
         this.no = exam.getNo();
         this.centerName = exam.getCenter().getName();
         this.examDate = exam.getExamDate();
+        this.managerNo = exam.getManager().getNo();
+        this.managerName = exam.getManager().getName();
     }
 
 }
