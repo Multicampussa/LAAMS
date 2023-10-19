@@ -1,13 +1,14 @@
 package multicampussa.laams.home.notice.dto;
 
 import lombok.*;
-import org.springframework.stereotype.Service;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoticeDto {
+public class NoticeUpdateDto {
+    private Long managerNo;
+    private Long noticeNo;
     private String title;
     private String content;
 

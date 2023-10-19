@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.home.notice.dto.NoticeCreateDto;
+import multicampussa.laams.home.notice.dto.NoticeUpdateDto;
 import multicampussa.laams.manager.domain.manager.Manager;
 
 import javax.persistence.*;
@@ -31,6 +32,11 @@ public class Notice extends BaseTimeEntity {
         this.title = noticeCreateDto.getTitle();
         this.content = noticeCreateDto.getContent();
         this.manager = manager;
+    }
+
+    public void update(NoticeUpdateDto noticeUpdateDto) {
+        this.title = noticeUpdateDto.getTitle();
+        this.content = noticeUpdateDto.getContent();
     }
 
 }

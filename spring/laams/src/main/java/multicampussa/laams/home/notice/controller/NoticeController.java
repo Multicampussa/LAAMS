@@ -3,6 +3,7 @@ package multicampussa.laams.home.notice.controller;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.notice.dto.NoticeCreateDto;
+import multicampussa.laams.home.notice.dto.NoticeUpdateDto;
 import multicampussa.laams.home.notice.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,29 @@ public class NoticeController {
             boolean result = noticeService.createNotice(noticeCreateDto, memberId, authority);
 
             resultMap.put("message", "성공적으로 작성하였습니다.");
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/notice/update")
+    public ResponseEntity<Map<String, Object>> updateNotice(@RequestHeader String authorization, @RequestBody NoticeUpdateDto noticeUpdateDto) {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try{
+            String token  = authorization.replace("Bearer ", "");
+            Long memberId = jwtTokenProvider.getMemberNo(token);
+            if (memberId != noticeUpdateDto.getManagerNo()) {
+                resultMap.put("message", "내가 쓴 글이 아닙니다.");
+                resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+            }
+            boolean result = noticeService.updateNotice(noticeUpdateDto, memberId);
+
+            resultMap.put("message", "성공적으로 수정하였습니다.");
             resultMap.put("status", HttpStatus.OK.value());
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
