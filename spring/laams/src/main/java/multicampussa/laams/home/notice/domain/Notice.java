@@ -1,10 +1,9 @@
 package multicampussa.laams.home.notice.domain;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
-import multicampussa.laams.manager.domain.Manager;
+import multicampussa.laams.manager.domain.manager.Manager;
 
 import javax.persistence.*;
 

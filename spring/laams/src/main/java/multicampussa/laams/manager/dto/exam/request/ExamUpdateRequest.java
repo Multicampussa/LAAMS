@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 @Getter
 public class ExamUpdateRequest {
 
-    private Long no;
-    private Center center;
+    private String centerName;
     private LocalDateTime examDate;
+    private Long managerNo;
+    private Long examNo;
 }
