@@ -79,14 +79,14 @@ public class MemberController {
 
     // 액세스 토큰 만료시 리프레시 토큰으로 액세스 토큰 재발급
     @PostMapping("/refresh")
-    public ResponseEntity<Map<String, Object>> refresh(@RequestBody MemberRefreshTokenDto tokenDto) {
+    public ResponseEntity<Map<String, Object>> refresh(@RequestHeader String authorization) {
+        String token = authorization.replace("Bearer ", "");
         Map<String, Object> response = new HashMap<>();
 
         // 현재 리프레시 토큰과 새로운 액세스 토큰
-        String refreshToken = tokenDto.getRefreshToken();
         String newAccessToken;
         try {
-            newAccessToken = jwtTokenProvider.refreshAccessToken(refreshToken);
+            newAccessToken = jwtTokenProvider.refreshAccessToken(token);
         } catch (Exception e) {
             response.put("message", "리프레시 토큰이 올바르지 않습니다.");
             response.put("status", HttpStatus.UNAUTHORIZED.value());
