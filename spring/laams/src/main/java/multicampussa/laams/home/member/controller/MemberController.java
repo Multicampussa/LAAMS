@@ -133,14 +133,36 @@ public class MemberController {
         }
     }
 
-    // 감독관 또는 운영자 정보 조회
+    // 운영자가 특정 감독관 또는 자신의 정보 조회
     @GetMapping("/info/{memberId}")
-    public ResponseEntity<Map<String, Object>> memberInfo(@PathVariable String memberId) {
+    public ResponseEntity<Map<String, Object>> directorInfo(@RequestHeader String authorization, @PathVariable String memberId) {
+        String token = authorization.replace("Bearer ", "");
+        String authority = jwtTokenProvider.getAuthority(token);
+        String directorId = jwtTokenProvider.getId(token);
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("member", memberService.UserInfo(memberId));
-        resultMap.put("message", "성공적으로 조회하였습니다.");
-        resultMap.put("status", 200);
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+
+        if (authority.equals("ROLE_DIRECTOR")) {
+            if (!directorId.equals(memberId)) {
+                resultMap.put("message", "다른 유저는 열람할 수 없습니다.");
+                resultMap.put("status", HttpStatus.UNAUTHORIZED.value());
+                return new ResponseEntity<>(resultMap, HttpStatus.UNAUTHORIZED);
+            }
+            resultMap.put("data", memberService.DirectorInfo(directorId));
+            resultMap.put("message", "성공적으로 조회하였습니다.");
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+        }
+
+        try {
+            resultMap.put("data", memberService.UserInfo(memberId));
+            resultMap.put("message", "성공적으로 조회하였습니다.");
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/info/update")

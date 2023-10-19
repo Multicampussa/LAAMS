@@ -192,8 +192,10 @@ public class MemberService {
     public MemberDto UserInfo(String memberId) {
         if (memberDirectorRepository.existsById(memberId)) {
             return Director.toMemberDto(memberDirectorRepository.findById(memberId).get());
-        } else {
+        } else if (memberManagerRepository.existsById(memberId)) {
             return Manager.toMemberDto(memberManagerRepository.findById(memberId).get());
+        } else {
+            throw new IllegalArgumentException("해당 아이디는 존재하지 않습니다.");
         }
     }
 
