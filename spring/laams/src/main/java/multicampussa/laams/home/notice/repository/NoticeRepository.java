@@ -1,4 +1,7 @@
 package multicampussa.laams.home.notice.repository;
 
-public class NoticeRepository {
+import multicampussa.laams.home.notice.domain.Notice;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface NoticeRepository extends JpaRepository<Notice, Long> {
 }
