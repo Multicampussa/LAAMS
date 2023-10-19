@@ -13,4 +13,10 @@ public class CustomExceptions {
             super(message);
         }
     }
+
+    public static class CenterNotFundException extends RuntimeException {
+        public CenterNotFundException(String message) {
+            super(message);
+        }
+    }
 }

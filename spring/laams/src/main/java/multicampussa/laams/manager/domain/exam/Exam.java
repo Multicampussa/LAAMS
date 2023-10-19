@@ -28,7 +28,7 @@ public class Exam extends BaseTimeEntity {
     private LocalDateTime examDate;
 
     @ManyToOne
-    @Column(name = "manager_no")
+    @JoinColumn(name = "manager_no")
     private Manager manager;
 
     public Exam(Center center, LocalDateTime examDate, Manager manager) {

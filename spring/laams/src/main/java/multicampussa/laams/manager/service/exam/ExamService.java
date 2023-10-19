@@ -35,7 +35,7 @@ public class ExamService {
     public void saveExam(ExamCreateRequest request) {
         // 입력 받은 센터 이름으로 기존 센터 데이터를 불러와서 시험 정보 저장
         Center existingCenter = centerRepository.findByName(request.getCenterName())
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new CustomExceptions.CenterNotFundException(request.getCenterName() + " 이름의 센터는 존재하지 않습니다."));
         // 입력 받은 매니저 번호로 시험 담당 매니저 호출
         Manager responsibleManager = managerRepository.findById(request.getManagerNo())
                 .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getManagerNo() + "번 매니저는 존재하지 않습니다."));
@@ -61,11 +61,15 @@ public class ExamService {
     // 시험 수정
     @Transactional
     public void updateExam(ExamUpdateRequest request) {
-        Center existingCenter = centerRepository.findByName(request.getCenter().getName())
-                .orElseThrow(IllegalArgumentException::new);
-        Exam exam = examRepository.findById(request.getNo())
-                .orElseThrow(IllegalArgumentException::new);
-        exam.updateExamInfo(existingCenter, request.getExamDate());
+        // 기존 시험 찾기
+        Exam existingExam = examRepository.findById(request.getExamNo())
+                .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(request.getExamNo() + "번 시험은 존재하지 않습니다."));
+        Center existingCenter = centerRepository.findByName(request.getCenterName())
+                .orElseThrow(() -> new CustomExceptions.CenterNotFundException(request.getCenterName() + " 이름의 센터는 존재하지 않습니다."));
+        Manager manager = managerRepository.findById(request.getManagerNo())
+                .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getManagerNo() + "번 매니저는 존재하지 않습니다."));
+
+        existingExam.updateExamInfo(existingCenter, request.getExamDate(), manager);
     }
 
     // 시험 삭제
