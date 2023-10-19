@@ -22,11 +22,9 @@ public class DirectorService {
     public List<ExamListDto> getExamList(Long directorNo) {
         List<ExamListDto> examListDtos = new ArrayList<>();
         List<Exam> exams = examManagerRepository.findAllByDirectorNo(directorNo);
-
         for(Exam exam : exams){
             examListDtos.add(new ExamListDto(exam));
         }
         return examListDtos;
-
     }
 }

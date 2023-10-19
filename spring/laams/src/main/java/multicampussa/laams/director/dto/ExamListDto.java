@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExamListDto {
+
     private Long examNo;
     private LocalDateTime examDate;
     private String address;
@@ -24,6 +25,5 @@ public class ExamListDto {
         this.examDate = exam.getExamDate();
         this.address = exam.getCenter().getAddress();
     }
-
 }
 
