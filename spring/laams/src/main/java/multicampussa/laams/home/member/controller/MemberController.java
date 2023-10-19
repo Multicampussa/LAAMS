@@ -41,7 +41,7 @@ public class MemberController {
         try {
             String id = loginRequestDto.getId();
             // 아이디와 비밀번호 인증
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, loginRequestDto.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, loginRequestDto.getPw()));
 
             // 권한 설정
             String authority;
@@ -63,6 +63,8 @@ public class MemberController {
             if (signInResponse.getStatusCodeValue() == 200) {
                 response.put("accessToken", accessToken);
                 response.put("refreshToken", refreshToken);
+                response.put("accessTokenExpireTime", jwtTokenProvider.getTokenExpireTime(accessToken));
+                response.put("refreshTokenExpireTime", jwtTokenProvider.getTokenExpireTime(refreshToken));
             }
             response.put("status", signInResponse.getStatusCodeValue());
 
@@ -77,14 +79,14 @@ public class MemberController {
 
     // 액세스 토큰 만료시 리프레시 토큰으로 액세스 토큰 재발급
     @PostMapping("/refresh")
-    public ResponseEntity<Map<String, Object>> refresh(@RequestBody MemberRefreshTokenDto tokenDto) {
+    public ResponseEntity<Map<String, Object>> refresh(@RequestHeader String authorization) {
+        String token = authorization.replace("Bearer ", "");
         Map<String, Object> response = new HashMap<>();
 
         // 현재 리프레시 토큰과 새로운 액세스 토큰
-        String refreshToken = tokenDto.getRefreshToken();
         String newAccessToken;
         try {
-            newAccessToken = jwtTokenProvider.refreshAccessToken(refreshToken);
+            newAccessToken = jwtTokenProvider.refreshAccessToken(token);
         } catch (Exception e) {
             response.put("message", "리프레시 토큰이 올바르지 않습니다.");
             response.put("status", HttpStatus.UNAUTHORIZED.value());
