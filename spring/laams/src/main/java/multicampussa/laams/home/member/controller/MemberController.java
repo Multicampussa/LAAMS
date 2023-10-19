@@ -64,6 +64,7 @@ public class MemberController {
                 response.put("refreshToken", refreshToken);
                 response.put("accessTokenExpireTime", jwtTokenProvider.getTokenExpireTime(accessToken));
                 response.put("refreshTokenExpireTime", jwtTokenProvider.getTokenExpireTime(refreshToken));
+                response.put("authority", jwtTokenProvider.getAuthority(accessToken));
             }
             response.put("status", signInResponse.getStatusCodeValue());
 
@@ -133,10 +134,10 @@ public class MemberController {
     }
 
     // 감독관 또는 운영자 정보 조회
-    @GetMapping("/info")
-    public ResponseEntity<Map<String, Object>> memberInfo(@RequestBody MemberInfoDto memberInfoDto) {
+    @GetMapping("/info/{memberId}")
+    public ResponseEntity<Map<String, Object>> memberInfo(@PathVariable String memberId) {
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("member", memberService.UserInfo(memberInfoDto.getId()));
+        resultMap.put("member", memberService.UserInfo(memberId));
         resultMap.put("message", "성공적으로 조회하였습니다.");
         resultMap.put("status", 200);
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
@@ -147,7 +148,6 @@ public class MemberController {
         String token = authorization.replace("Bearer ", "");
         String id = jwtTokenProvider.getId(token);
         String authority = jwtTokenProvider.getAuthority(token);
-        Map<String, Object> resultMap = new HashMap<>();
         ResponseEntity<Map<String, Object>> updateResponse = memberService.updateMemberByUser(id, authority, memberUpdateByUserDto);
 
         return updateResponse;
