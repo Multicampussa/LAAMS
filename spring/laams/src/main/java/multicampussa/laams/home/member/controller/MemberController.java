@@ -63,6 +63,8 @@ public class MemberController {
             if (signInResponse.getStatusCodeValue() == 200) {
                 response.put("accessToken", accessToken);
                 response.put("refreshToken", refreshToken);
+                response.put("accessTokenExpireTime", jwtTokenProvider.getTokenExpireTime(accessToken));
+                response.put("refreshTokenExpireTime", jwtTokenProvider.getTokenExpireTime(refreshToken));
             }
             response.put("status", signInResponse.getStatusCodeValue());
 

@@ -143,4 +143,8 @@ public class JwtTokenProvider {
         Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         return claims.getExpiration().before(new Date());
     }
+
+    public Date getTokenExpireTime(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getExpiration();
+    }
 }
