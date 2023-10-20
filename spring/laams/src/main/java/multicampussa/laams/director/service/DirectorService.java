@@ -15,16 +15,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DirectorService {
 
-    private final ExamRepository examRepository;
-    private final ExamManagerRepository examManagerRepository;
-
-    @Transactional
-    public List<ExamListDto> getExamList(Long directorNo) {
-        List<ExamListDto> examListDtos = new ArrayList<>();
-        List<Exam> exams = examManagerRepository.findAllByDirectorNo(directorNo);
-        for(Exam exam : exams){
-            examListDtos.add(new ExamListDto(exam));
-        }
-        return examListDtos;
-    }
+//    private final ExamRepository examRepository;
+//    private final ExamManagerRepository examManagerRepository;
+//
+//    @Transactional
+//    public List<ExamListDto> getExamList(Long directorNo) {
+//        List<ExamListDto> examListDtos = new ArrayList<>();
+//        List<Exam> exams = examManagerRepository.findAllByDirectorNo(directorNo);
+//        for(Exam exam : exams){
+//            examListDtos.add(new ExamListDto(exam));
+//        }
+//        return examListDtos;
+//    }
 }
