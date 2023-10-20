@@ -33,7 +33,6 @@ public class Director extends BaseTimeEntity {
     private String refreshToken;
     private String verificationCode;
     private Boolean isVerified;
-    private String address;
 
     public void update(MemberSignUpDto memberSignUpDto, String encodedPassword) {
         this.name = memberSignUpDto.getName();
@@ -41,7 +40,6 @@ public class Director extends BaseTimeEntity {
         this.phone = memberSignUpDto.getPhone();
         this.pw = encodedPassword;
         this.isDelete = false;
-        this.address = memberSignUpDto.getAddress();
         this.id = memberSignUpDto.getId();
     }
 
