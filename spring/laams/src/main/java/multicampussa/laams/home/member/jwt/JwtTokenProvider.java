@@ -107,7 +107,7 @@ public class JwtTokenProvider {
 
         // 리프레시 토큰 유효기간 (우선 일주일 잡음)
 //        Date validity = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-        Date validity = new Date(now.getTime() + 10 * 1000);
+        Date validity = new Date(now.getTime() + 60 * 60 * 1000);
 
         return Jwts.builder()
                 .setClaims(claims)
