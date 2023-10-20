@@ -1,29 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import useLogin from '../../Hook/useLogin'
 
 const Home = () => {
-  const [loginData,] = useState({id:"", password:""});
+  const [loginData,] = useState({id:localStorage.getItem("id")? localStorage.getItem("id") : "", password:""});
   const [isChecked, setChecked] = useState(localStorage.getItem("id")? true : false); 
   const [isLogin, login] = useLogin();
 
 
-  //UseCallback으로 변경
-  const loginButtonClick = () => {
+  // TODO: id, password 확인 및 로그인
+  const loginButtonClick = useCallback(() => {
     if(loginData["id"] === ""){
       alert("아이디를 입력해 주세요");
       return
     }
-    if(loginData["password"]){
+    if(loginData["password"] === ""){
       alert("비밀번호를 입력해 주세요");
       return
     }
     login(loginData["id"], loginData["password"]);
-  };
+  },[loginData,login]);
 
-  const handleSaveId = () =>{
-    setChecked(!isChecked);
-  }
-
+  // FIXME: 로그인 후 권한에 따라 홈화면 변경
+  // TODO : 로그인 후처리 
   useEffect(()=>{
     if(isLogin){
       if(isChecked){
@@ -45,14 +43,15 @@ const Home = () => {
             <input 
               className='login-input'
               placeholder='ID'
+              defaultValue={loginData['id']}
               onChange={e=>{
-                console.log(loginData)
                 loginData['id'] = e.target.value
               }}
             />
             <input 
               className='login-input'
               placeholder='비밀번호'
+              type='password'
               onChange={e=>{
                 loginData['password'] = e.target.value
               }}
@@ -63,7 +62,8 @@ const Home = () => {
               <input
                 type="checkbox" 
                 defaultChecked={isChecked}
-                onChange={handleSaveId}
+                onChange={() =>{
+                  setChecked(!isChecked);}}
                 className='login-checkbox-input'
               />
               <span className='login-checkbox-label'>
