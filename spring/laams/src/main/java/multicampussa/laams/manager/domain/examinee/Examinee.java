@@ -15,8 +15,6 @@ public class Examinee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long no = null;
 
-    // 모든 칼럼은 null false로 함
-
     @Column(nullable = false, length = 10)
     private String name;
 
@@ -28,7 +26,13 @@ public class Examinee {
     @Column(nullable = false, length = 5)
     private String gender;
 
-    public Examinee(String name, Integer age, String phoneNum, String gender) {
+    private String id;
+
+    private String pw;
+
+    public Examinee(String name, Integer age, String phoneNum, String gender, String id, String pw) {
+        this.id = id;
+        this.pw = pw;
 
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException(String.format("잘못된 name(%s)이 들어왔습니다", name));
@@ -39,8 +43,10 @@ public class Examinee {
         this.gender = gender;
     }
 
-    public void updateExamineeInfo(String name, Integer age, String phoneNum, String gender) {
+    public void updateExamineeInfo(String name, Integer age, String phoneNum, String gender, String id, String pw) {
 
+        this.id = id;
+        this.pw = pw;
         this.name = name;
         this.age = age;
         this.phoneNum = phoneNum;

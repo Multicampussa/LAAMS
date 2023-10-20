@@ -3,8 +3,8 @@ package multicampussa.laams.manager.service.exam;
 import multicampussa.laams.manager.domain.manager.Manager;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamRepository;
-import multicampussa.laams.manager.domain.exam.center.Center;
-import multicampussa.laams.manager.domain.exam.center.CenterRepository;
+import multicampussa.laams.manager.domain.center.Center;
+import multicampussa.laams.manager.domain.center.CenterRepository;
 import multicampussa.laams.manager.domain.manager.ManagerRepository;
 import multicampussa.laams.manager.dto.exam.request.ExamCreateRequest;
 import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
@@ -39,7 +39,7 @@ public class ExamService {
         // 입력 받은 매니저 번호로 시험 담당 매니저 호출
         Manager responsibleManager = managerRepository.findById(request.getManagerNo())
                 .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getManagerNo() + "번 매니저는 존재하지 않습니다."));
-        examRepository.save(new Exam(existingCenter, request.getExamDate(), responsibleManager));
+        examRepository.save(new Exam(existingCenter, request.getExamDate(), responsibleManager, request.getRunningTime(), request.getExamType()));
     }
 
     // 시험 목록 조회
@@ -69,7 +69,7 @@ public class ExamService {
         Manager manager = managerRepository.findById(request.getManagerNo())
                 .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getManagerNo() + "번 매니저는 존재하지 않습니다."));
 
-        existingExam.updateExamInfo(existingCenter, request.getExamDate(), manager);
+        existingExam.updateExamInfo(existingCenter, request.getExamDate(), manager, request.getRunningTime(), request.getExamType());
     }
 
     // 시험 삭제
