@@ -34,11 +34,22 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 //            }
 //        }
 
-        if (!path.startsWith("/member/login") &&
-                !path.startsWith("/member/signup") &&
-                !path.startsWith("/member/findid") &&
-                !path.startsWith("/member/findpassword") &&
-                !path.startsWith("/")) {
+        if (!path.startsWith("/api/v1/member/login") &&
+                !path.startsWith("/api/v1/member/signup") &&
+                !path.startsWith("/api/v1/member/findid") &&
+                !path.startsWith("/api/v1/member/findpassword") &&
+                !path.startsWith("/api/v1/member/sendemail")){
+//                !path.startsWith("/")) {
+
+            if (path.startsWith("/api/v1/member/refresh")) {
+                try {
+                    jwtTokenProvider.validateToken(token);
+                } catch (Exception e) {
+                    // 토큰이 유효하지 않을 때
+                    sendErrorResponse((HttpServletResponse) res, "로그인이 필요한 서비스입니다.", "l001");
+                    return; // 추가 처리 중지
+                }
+            }
 
 
             if (token != null) {
@@ -46,7 +57,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                     jwtTokenProvider.validateToken(token);
                 } catch (Exception e) {
                     // 토큰이 유효하지 않을 때
-                    sendErrorResponse((HttpServletResponse) res, "토큰이 만료되었거나 유효하지 않습니다.", HttpServletResponse.SC_UNAUTHORIZED);
+                    sendErrorResponse((HttpServletResponse) res, "액세스 토큰이 만료되었거나 유효하지 않습니다.", "l002");
                     return; // 추가 처리 중지
                 }
 
@@ -56,19 +67,19 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 }
             } else {
                 // 토큰이 유효하지 않을 때
-                sendErrorResponse((HttpServletResponse) res, "로그인이 필요한 서비스입니다.", HttpServletResponse.SC_UNAUTHORIZED);
+                sendErrorResponse((HttpServletResponse) res, "로그인이 필요한 서비스입니다.", "l001");
                 return; // 추가 처리 중지
             }
         }
         filterChain.doFilter(req, res);
     }
 
-    private void sendErrorResponse(HttpServletResponse response, String message, int status) throws IOException {
+    private void sendErrorResponse(HttpServletResponse response, String message, String code) throws IOException {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("message", message);
-        errorResponse.put("status", status);
+        errorResponse.put("code", code);
 
-        response.setStatus(status);
+//        response.setStatus(code);
         response.setContentType("application/json; charset=utf8");
 
         ObjectMapper objectMapper = new ObjectMapper();
