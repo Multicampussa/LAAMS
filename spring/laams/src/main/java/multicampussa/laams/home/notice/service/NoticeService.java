@@ -82,4 +82,24 @@ public class NoticeService {
 
         return result;
     }
+
+    public boolean deleteNotice(Long noticeNo, String authority) {
+
+        boolean result = true;
+
+        // 감독관은 공지사항 삭제할 수 없으니깐
+        if (authority.equals("ROLE_DIRECTOR")) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+
+        Optional<Notice> findNotice = noticeRepository.findById(noticeNo);
+
+        if (findNotice.isEmpty()) {
+            // 공지사항이 존재하지 않는 경우
+            throw new IllegalArgumentException("존재하지 않는 공지사항입니다.");
+        }
+        noticeRepository.deleteById(noticeNo);
+
+        return result;
+    }
 }

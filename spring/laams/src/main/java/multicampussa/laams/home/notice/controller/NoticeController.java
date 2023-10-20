@@ -63,4 +63,25 @@ public class NoticeController {
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/notice/delete/{noticeNo}")
+    public ResponseEntity<Map<String, Object>> deleteNotice(@RequestHeader String authorization, @PathVariable Long noticeNo) {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try{
+            String token  = authorization.replace("Bearer ", "");
+            String authority = jwtTokenProvider.getAuthority(token);
+            boolean result = noticeService.deleteNotice(noticeNo, authority);
+
+            resultMap.put("message", "성공적으로 삭제하였습니다.");
+            resultMap.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+
 }
