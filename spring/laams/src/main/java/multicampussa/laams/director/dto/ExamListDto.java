@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.manager.domain.exam.Exam;
-import multicampussa.laams.manager.domain.exam.ExamManager;
-import multicampussa.laams.manager.domain.exam.center.Center;
 
 import java.time.LocalDateTime;
 

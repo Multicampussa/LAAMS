@@ -10,4 +10,6 @@ public class ExamCreateRequest {
     private String centerName;
     private LocalDateTime examDate;
     private Long managerNo;
+    private int runningTime;
+    private String examType;
 }
