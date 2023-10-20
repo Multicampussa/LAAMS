@@ -36,4 +36,6 @@ public class ExamExaminee extends BaseTimeEntity {
 
     private String imageReason;
 
+    private String compensationReason;
+
 }
