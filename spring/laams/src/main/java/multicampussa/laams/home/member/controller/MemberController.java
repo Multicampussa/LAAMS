@@ -88,7 +88,7 @@ public class MemberController {
         try {
             newAccessToken = jwtTokenProvider.refreshAccessToken(token);
         } catch (Exception e) {
-            response.put("message", "리프레시 토큰이 올바르지 않습니다.");
+            response.put("message", e.getMessage());
             response.put("status", HttpStatus.UNAUTHORIZED.value());
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -97,6 +97,8 @@ public class MemberController {
         response.put("accessToken", newAccessToken);
         response.put("message", "액세스 토큰을 성공적으로 발급하였습니다.");
         response.put("status", HttpStatus.OK.value());
+        response.put("accessTokenExpireTime", jwtTokenProvider.getTokenExpireTime(newAccessToken));
+        response.put("authority", jwtTokenProvider.getAuthority(newAccessToken));
 
         return ResponseEntity.ok(response);
     }
@@ -108,7 +110,8 @@ public class MemberController {
         try {
             memberService.requestEmailVerification(requestDto.getEmail());
             resultMap.put("message", "이메일 인증 코드가 발송되었습니다.");
-            resultMap.put("status", HttpStatus.OK.value());
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         } catch (Exception e) {
             resultMap.put("message", e.getMessage().split(": ")[1]);
