@@ -11,17 +11,17 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 public class ExamListDto {
 
-    private Long examNo;
-    private LocalDateTime examDate;
-    private String address;
-
-    public ExamListDto(Exam exam){
-        this.examNo = exam.getNo();
-        this.examDate = exam.getExamDate();
-        this.address = exam.getCenter().getAddress();
-    }
+//    private Long examNo;
+//    private LocalDateTime examDate;
+//    private String address;
+//
+//    public ExamListDto(Exam exam){
+//        this.examNo = exam.getNo();
+//        this.examDate = exam.getExamDate();
+//        this.address = exam.getCenter().getAddress();
+//    }
 }
 
