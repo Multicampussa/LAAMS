@@ -53,9 +53,11 @@ public class ExamService {
     // 시험 상세 조회
     @Transactional(readOnly = true)
     public ExamDetailResponse getExam(Long no) {
+        // 전달 받은 시험 no로 조회
         Exam exam = examRepository.findById(no)
                 .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(no + "번 시험 없음"));
-        return new ExamDetailResponse();
+//        return new ExamDetailResponse();
+        return null;
     }
 
     // 시험 수정
