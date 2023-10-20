@@ -10,11 +10,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 const store = createStore(rootReducer);
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <App />
+  </Provider>
 );
 
 reportWebVitals();

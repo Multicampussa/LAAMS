@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import {setAccessTokenExpireTime} from "../redux/actions/userAction.js";
+import {setAccessToken,setAccessTokenExpireTime,setAuthority} from "../redux/actions/userAction.js";
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 
@@ -8,9 +8,10 @@ const useLogin = ()=> {
   const dispatch = useDispatch();
 
   const login = useCallback((id,password)=>{
-    axios.post("http://localhost:8080/member/login",{id,pw :password})
+    axios.post("http://localhost:8080/api/v1/member/login",{id,pw :password})
       .then(({data})=>{
-        axios.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
+        dispatch(setAccessToken(data.accessToken));
+        dispatch(setAuthority(data.authority));
         dispatch(setAccessTokenExpireTime(new Date(data.accessTokenExpireTime).toString()));
         localStorage.setItem("refreshTokenExpireTime",new Date(data.refreshTokenExpireTime).toString());
         localStorage.setItem("refreshToken",data.refreshToken);
