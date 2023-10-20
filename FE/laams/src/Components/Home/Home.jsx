@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react'
 import useLogin from '../../Hook/useLogin'
 
 const Home = () => {
-  const [loginData, setLoginData] = useState({});
-  const [isChecked, setChecked] = useState(false); 
+  const [loginData,] = useState({id:"", password:""});
+  const [isChecked, setChecked] = useState(localStorage.getItem("id")? true : false); 
   const [isLogin, login] = useLogin();
 
 
   //UseCallback으로 변경
   const loginButtonClick = () => {
-    console.log(loginData["id"], loginData["passwords"])
     if(loginData["id"] === ""){
       alert("아이디를 입력해 주세요");
       return
@@ -22,7 +21,6 @@ const Home = () => {
   };
 
   const handleSaveId = () =>{
-    localStorage.setItem("isChecked",!isChecked);
     setChecked(!isChecked);
   }
 
@@ -33,20 +31,6 @@ const Home = () => {
       }
     }
   },[isLogin,isChecked,loginData])
- //지금 isChecked 정보까지 로컬스토리지에 저장할 필요 x
-  useEffect(()=>{
-    let idFlag = JSON.parse(localStorage.getItem("isChecked"));
-    if (idFlag !== null){
-      setChecked(idFlag);
-    }
-    if(idFlag === false){
-      localStorage.setItem("id","");
-    }
-    let idData = localStorage.getItem("id");
-    if (idData !== null){
-      setLoginData("id", idData)
-    }
-  },[])
 
 
   return (
@@ -62,28 +46,30 @@ const Home = () => {
               className='login-input'
               placeholder='ID'
               onChange={e=>{
-                loginData["id"] = e.target.value
+                console.log(loginData)
+                loginData['id'] = e.target.value
               }}
             />
             <input 
               className='login-input'
               placeholder='비밀번호'
               onChange={e=>{
-                loginData["password"] = e.target.value
+                loginData['password'] = e.target.value
               }}
             />
           </div>          
           <div className='login-checkbox'>
-              <input 
+            <label>
+              <input
                 type="checkbox" 
-                name="saveId" 
-                value="save-on"
-                id='login-checkbox-box'
-                onClick={handleSaveId}
-                checked={isChecked}/> 
-              <label className='login-checkbox-label'
-                for="login-checkbox-box">아이디 저장</label>
-                {/* 라벨에 input을 감싸고 텍스트를 div로 감싸기 */}
+                defaultChecked={isChecked}
+                onChange={handleSaveId}
+                className='login-checkbox-input'
+              />
+              <span className='login-checkbox-label'>
+                아이디 저장
+              </span>
+            </label>
           </div>
           <button 
             className='login-btn' 
@@ -91,11 +77,10 @@ const Home = () => {
             로그인
           </button>
           <div className='login-text'>
-            {/* 클래스 변수명 변경 */}
-            <div className="left">
+            <div>
               <div>회원가입</div>
             </div>
-            <div className="right">
+            <div className="login-text-right">
               <div>아이디 찾기</div>
               <div>비밀번호 찾기</div>
             </div>

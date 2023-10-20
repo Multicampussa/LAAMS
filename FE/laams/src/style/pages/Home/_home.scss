@@ -64,13 +64,13 @@
     align-items: center;
     padding: 1rem 0rem 2rem 2rem;
     &-label{
-      padding-left: 0.5rem;
+      padding-left: 1rem;
+      vertical-align: top;
     }
-    #login-checkbox-box{
+    &-input{
       appearance: auto;
       margin: 0rem;
     }
-
   }
   &-text{
     box-sizing: border-box;
@@ -79,7 +79,7 @@
     display:flex; 
     padding: 1rem 2rem 0rem 2rem;
     justify-content:space-between; 
-    .right { 
+    &-right { 
       display: flex;
       gap: 1rem;
      }
