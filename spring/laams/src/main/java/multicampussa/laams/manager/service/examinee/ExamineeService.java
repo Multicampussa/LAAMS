@@ -24,7 +24,7 @@ public class ExamineeService {
     @Transactional
     public void saveExaminee(ExamineeCreateRequest request) {
         Examinee examinee = examineeRepository.save(new Examinee(request.getName(), request.getAge(),
-                request.getPhoneNum(), request.getGender()));
+                request.getPhoneNum(), request.getGender(), request.getId(), request.getPw()));
     }
 
     // 응시자 목록 조회
@@ -41,7 +41,7 @@ public class ExamineeService {
     public void updateExaminee(ExamineeUpdateRequest request) {
         Examinee examinee = examineeRepository.findById(request.getNo())
                 .orElseThrow(IllegalArgumentException::new);  // id로 검색해서 없으면 오류발생 시킴
-        examinee.updateExamineeInfo(request.getName(), request.getAge(), request.getPhoneNum(), request.getGender());
+        examinee.updateExamineeInfo(request.getName(), request.getAge(), request.getPhoneNum(), request.getGender(), request.getId(), request.getPw());
 //        examineeRepository.save(examinee); 영속성 컨텍스트로 생략
     }
 

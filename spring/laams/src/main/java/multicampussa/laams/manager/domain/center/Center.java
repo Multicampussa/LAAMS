@@ -1,9 +1,10 @@
-package multicampussa.laams.manager.domain.exam.center;
+package multicampussa.laams.manager.domain.center;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
+import multicampussa.laams.manager.domain.centerManager.CenterManager;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,6 +18,10 @@ public class Center extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long no = null;
 
+    @OneToOne
+    @JoinColumn(name = "center_manager_no")
+    private CenterManager centerManager;
+
     private String name;
 
     private Double latitude;
@@ -24,6 +29,6 @@ public class Center extends BaseTimeEntity {
     private Double longitude;
 
     @Column(length = 200)
-    private String address;
+    private String region;
 
 }

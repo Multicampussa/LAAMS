@@ -12,5 +12,7 @@ public class ExamineeUpdateRequest {
     private int age;
     private String phoneNum;
     private String gender;
+    private String id;
+    private String pw;
 
 }
