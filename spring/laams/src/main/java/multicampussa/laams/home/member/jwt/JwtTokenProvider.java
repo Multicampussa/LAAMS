@@ -26,8 +26,7 @@ public class JwtTokenProvider {
     private final UserDetailsServiceImpl userDetailsService;
     private final MemberDirectorRepository memberDirectorRepository;
     private String secretKey = "s1s2a3f4y@"; // 비밀키
-//    private long validityInMilliseconds = 3600000; // 1 hour
-    private long validityInMilliseconds = 5000; // 1 hour
+    private long validityInMilliseconds = 3600000; // 1 hour
 
     public String createAccessToken(String id, String authority, Long memberId) {
 
@@ -106,8 +105,7 @@ public class JwtTokenProvider {
         Date now = new Date();
 
         // 리프레시 토큰 유효기간 (우선 일주일 잡음)
-//        Date validity = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-        Date validity = new Date(now.getTime() + 60 * 60 * 1000);
+        Date validity = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
         return Jwts.builder()
                 .setClaims(claims)
