@@ -4,7 +4,7 @@ import axios from "axios";
 import {useNavigate} from "react-router-dom";
 const useApi = () => {
   const user = useSelector(state=>state.User);
-  const api = axios.create({baseURL:"http://localhost:8080/api/v1",headers: { "Content-type": "application/json" }});
+  const api = axios.create({baseURL:`${process.env.REACT_APP_SPRING_URL}`,headers: { "Content-type": "application/json" }});
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ const useApi = () => {
         }else{
           const refreshTokenExpireTime = new Date(localStorage.getItem("refreshTokenExpireTime"));
           if(refreshTokenExpireTime && refreshTokenExpireTime > new Date()){
-            await axios.post('http://localhost:8080/api/v1/member/refresh',{},
+            await axios.post(`${process.env.REACT_APP_SPRING_URL}/member/refresh`,{},
               {
                 headers: {Authorization: "Bearer "+localStorage.getItem("refreshToken"),},
               }
@@ -55,7 +55,7 @@ const useApi = () => {
             navigate("/");
             window.alert("토큰이 만료되어 자동으로 로그아웃 되었습니다");
           }else{
-            await axios.post('http://localhost:8080/api/v1/member/refresh',{},
+            await axios.post(`${process.env.REACT_APP_SPRING_URL}/member/refresh`,{},
               {
                 headers: {Authorization: "Bearer "+localStorage.getItem("refreshToken"),},
               }
