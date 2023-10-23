@@ -1,9 +1,9 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost/laams
-    username: root
-    password: 1234
+    driver-class-name: ENC(sjlqxCVFpyNWKD/vjlhrtpateI8ptocSVOba6EJtiqYf/C6V1vRwOw==)
+    url: ENC(QhZoF+5/4nRzDpCPQWIHdXnkA4vcgaRu1gtDGvTQi/a7ZPaF25XCTw==)
+    username: ENC(cYB2Olb6VXWi5jHFUIsl4w==)
+    password: ENC(9cdu1LZgayPrMOBofUI9yg==)
     hikari:
       maximumPoolSize: 3
   jpa:
@@ -17,8 +17,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ssafylaams@gmail.com
-    password: tazdbpeslkbsbhuj
+    username: ENC(rL5BS6PCrTZ5IAJqBlXEEKI1HmjeXEoIiiyG56bix18=)
+    password: ENC(+FD8zxyH8mWCMPdtQOLqL7P6TFhDqjSLlPI//XQelNo=)
     properties:
       mail:
         smtp:
