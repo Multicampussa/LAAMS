@@ -8,7 +8,7 @@ const useLogin = ()=> {
   const dispatch = useDispatch();
 
   const login = useCallback((id,password)=>{
-    axios.post("http://localhost:8080/api/v1/member/login",{id,pw :password})
+    axios.post(`${process.env.REACT_APP_SPRING_URL}/member/login`,{id,pw :password})
       .then(({data})=>{
         dispatch(setAccessToken(data.accessToken));
         dispatch(setAuthority(data.authority));
