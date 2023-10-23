@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.manager.domain.exam.Exam;
-import multicampussa.laams.manager.domain.exam.ExamManager;
 
 import javax.persistence.*;
 

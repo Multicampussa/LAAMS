@@ -1,9 +1,8 @@
 package multicampussa.laams.director.controller;
 
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.director.dto.ExamListDto;
+import multicampussa.laams.director.dto.ExamMonthListDto;
 import multicampussa.laams.director.service.DirectorService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/director")
+@RequestMapping("/api/v1/director")
 
 public class DirectorController {
 
@@ -25,4 +24,9 @@ public class DirectorController {
 //        return directorService.getExamList(directorNo);
 //    }
 
+    // 시험 월별 조회
+    @GetMapping("/{directorNo}/exams/{year}/{month}")
+    public List<ExamMonthListDto> getExamMonthList(@PathVariable Long directorNo, @PathVariable Integer year, @PathVariable Integer month){
+        return directorService.getExamMonthList(directorNo, year, month);
+    }
 }

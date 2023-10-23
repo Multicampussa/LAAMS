@@ -31,6 +31,8 @@ public class Exam extends BaseTimeEntity {
 
     private String examType;
 
+    private String examLanguage;
+
     public Exam(Center center, LocalDateTime examDate, Manager manager, int runningTime, String examType) {
         this.center = center;
         this.examDate = examDate;
