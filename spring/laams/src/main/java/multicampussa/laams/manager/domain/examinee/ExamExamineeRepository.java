@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long> {
 
-    List<ExamExaminee> findByExamExamNo(Long exaNo);
-    @Query("SELECT COUNT(e) FROM ExamExaminee e WHERE e.exam.examNo = :examNo AND e.attendance = true")
-    int countByExamNoAndAttendanceTrue(@Param("examNo") Long examNo);
+    // 시험_응시자 엔티티에서 시험 no에 해당하는 응시자 전체 조회
+    List<ExamExaminee> findByExamNo(Long examNo);
 
-    @Query("SELECT COUNT(DISTINCT e.examinee.examineeNo) FROM ExamExaminee e WHERE e.exam.examNo = :examNo AND e.attendance = true")
-    int countDistinctExamineeByExamNoAndAttendanceTrue(@Param("examNo") Long examNo);
+    // 출석이 true인 응시자 전체 조회
+    List<ExamExaminee> findByAttendance(Boolean attendance);
 
-    @Query("SELECT COUNT(e) FROM ExamExaminee e WHERE e.exam.examNo = :examNo AND e.compensation = true")
-    int countByExamNoAndCompensationTrue(@Param("examNo") Long examNo);
+    // 보상대상 여부가 true인 응시자 전체 조회
+    List<ExamExaminee> findByCompensation(Boolean compensation);
 }
+

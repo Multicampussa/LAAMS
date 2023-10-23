@@ -2,6 +2,7 @@ package multicampussa.laams.manager.service.exam;
 
 import multicampussa.laams.director.domain.Director;
 import multicampussa.laams.manager.domain.exam.ExamDirectorRepository;
+import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
 import multicampussa.laams.manager.domain.manager.Manager;
 import multicampussa.laams.manager.domain.exam.Exam;
@@ -68,11 +69,21 @@ public class ExamService {
         Long centerNo = exam.getCenter().getNo();
         Center center = centerRepository.findById(centerNo)
                 .orElseThrow(() -> new CustomExceptions.CenterNotFundException(centerNo + "번 센터 없음"));
-        int examineeNum = examExamineeRepository.countByExamNo(examNo);
-        int attendanceNum = examExamineeRepository.countByExamNoAndAttendanceIsTrue(examNo);
-        int compensationNum = examExamineeRepository.countByExamNoAndCompensationIsTrue(examNo);
+
+        // 시험 아이디로 응시자 전체 조회
+        List<ExamExaminee> examExamineeList = examExamineeRepository.findByExamNo(examNo);
+        int examineeNum = examExamineeList.size();
+
+        // 출석한 응시자 전체 조회
+        List<ExamExaminee> attendeeList = examExamineeRepository.findByAttendance(true);
+        int attendanceNum = attendeeList.size();
+
+        // 보상 대상자 전체 조회
+        List<ExamExaminee> compensationList = examExamineeRepository.findByCompensation(true);
+        int compensationNum = compensationList.size();
         List<Director> directors = examDirectorRepository.findByExamNo(examNo);
 
+        // 감독관 리스트 생성
         List<DirectorListResponse> directorListResponse = directors.stream()
                 .map(director -> new DirectorListResponse(director))
                 .collect(Collectors.toList());
