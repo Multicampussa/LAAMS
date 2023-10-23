@@ -1,11 +1,16 @@
 package multicampussa.laams.manager.service.exam;
 
+import multicampussa.laams.director.domain.Director;
+import multicampussa.laams.manager.domain.exam.ExamDirectorRepository;
+import multicampussa.laams.manager.domain.examinee.ExamExaminee;
+import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
 import multicampussa.laams.manager.domain.manager.Manager;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamRepository;
 import multicampussa.laams.manager.domain.center.Center;
 import multicampussa.laams.manager.domain.center.CenterRepository;
 import multicampussa.laams.manager.domain.manager.ManagerRepository;
+import multicampussa.laams.manager.dto.director.response.DirectorListResponse;
 import multicampussa.laams.manager.dto.exam.request.ExamCreateRequest;
 import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
 import multicampussa.laams.manager.dto.exam.response.ExamDetailResponse;
@@ -23,11 +28,15 @@ public class ExamService {
     private final ExamRepository examRepository;
     private final CenterRepository centerRepository;
     private final ManagerRepository managerRepository;
+    private final ExamExamineeRepository examExamineeRepository;
+    private final ExamDirectorRepository examDirectorRepository;
 
-    public ExamService(ExamRepository examRepository, CenterRepository centerRepository, ManagerRepository managerRepository) {
+    public ExamService(ExamRepository examRepository, CenterRepository centerRepository, ManagerRepository managerRepository, ExamExamineeRepository examExamineeRepository, ExamDirectorRepository examDirectorRepository) {
         this.examRepository = examRepository;
         this.centerRepository = centerRepository;
         this.managerRepository = managerRepository;
+        this.examExamineeRepository = examExamineeRepository;
+        this.examDirectorRepository = examDirectorRepository;
     }
 
     // 시험 생성
@@ -56,8 +65,31 @@ public class ExamService {
         // 전달 받은 시험 no로 조회
         Exam exam = examRepository.findById(no)
                 .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(no + "번 시험 없음"));
-//        return new ExamDetailResponse();
-        return null;
+        Long examNo = exam.getNo();
+        Long centerNo = exam.getCenter().getNo();
+        Center center = centerRepository.findById(centerNo)
+                .orElseThrow(() -> new CustomExceptions.CenterNotFundException(centerNo + "번 센터 없음"));
+
+        // 시험 아이디로 응시자 전체 조회
+        List<ExamExaminee> examExamineeList = examExamineeRepository.findByExamNo(examNo);
+        int examineeNum = examExamineeList.size();
+
+        // 출석한 응시자 전체 조회
+        List<ExamExaminee> attendeeList = examExamineeRepository.findByAttendance(true);
+        int attendanceNum = attendeeList.size();
+
+        // 보상 대상자 전체 조회
+        List<ExamExaminee> compensationList = examExamineeRepository.findByCompensation(true);
+        int compensationNum = compensationList.size();
+        List<Director> directors = examDirectorRepository.findByExamNo(examNo);
+
+        // 감독관 리스트 생성
+        List<DirectorListResponse> directorListResponse = directors.stream()
+                .map(director -> new DirectorListResponse(director))
+                .collect(Collectors.toList());
+
+        return new ExamDetailResponse(center, exam, examineeNum, attendanceNum, compensationNum, directorListResponse);
+
     }
 
     // 시험 수정
