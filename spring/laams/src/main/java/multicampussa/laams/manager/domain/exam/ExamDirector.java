@@ -3,6 +3,7 @@ package multicampussa.laams.manager.domain.exam;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.director.domain.Director;
+import multicampussa.laams.global.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,7 +11,7 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor
-public class ExamDirector {
+public class ExamDirector extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
