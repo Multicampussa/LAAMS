@@ -36,12 +36,10 @@
   &-menu-box{
     &-close{
       position: fixed;
-      top: 5rem;
-      right: 5rem;
-      width: 19rem;
       border: 0.1rem solid $color-gray-light;
       border-radius: 0 0 1rem 1rem;
       overflow: hidden;
+      top: 5rem;
 
       will-change: transform;
       transition-property: transform;
@@ -51,12 +49,10 @@
     }
     &-open{
       position: fixed;
-      top: 5rem;
-      right: 5rem;
-      width: 19rem;
       border: 0.1rem solid $color-gray-light;
       border-radius: 0 0 1rem 1rem;
       overflow: hidden;
+      top: 5rem;
 
       will-change: transform;
       transition-property: transform;
@@ -66,7 +62,6 @@
     }
     &-item{
       display: block;
-      width: 19rem;
       height: 9rem;
       font-size: 2rem;
       text-align: center;
@@ -151,6 +146,59 @@
     }
     & span{
       width: 0;
+    }
+  }
+}
+
+@include mobile {
+  .header{
+    &-menu-box{
+      width: 100%;
+      &-item{
+        width: 100%;
+      }
+      &-open{
+        width: 100%;
+      }
+      &-close{
+        width: 100%;
+      }
+    }
+  }
+}
+
+@include tablet {
+  .header{
+    &-menu-box{
+      width: 100%;
+      &-item{
+        width: 100%;
+      }
+      &-open{
+        width: 100%;
+      }
+      &-close{
+        width: 100%;
+      }
+    }
+  }
+}
+
+@include desktop {
+  .header{
+    &-menu-box{
+      width: 19rem;
+      &-item{
+        width: 100%;
+      }
+      &-close{
+        right: 5rem;
+        width: 19rem;
+      }
+      &-open{
+        right: 5rem;
+        width: 19rem;
+      }
     }
   }
 }
