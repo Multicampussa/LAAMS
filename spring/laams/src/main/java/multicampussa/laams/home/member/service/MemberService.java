@@ -128,7 +128,13 @@ public class MemberService {
     // 감독관 정보 불러오기
     public MemberDto DirectorInfo(String id) {
         if (memberDirectorRepository.existsById(id)) {
-            return Director.toMemberDto(memberDirectorRepository.findById(id).get());
+            Director director = memberDirectorRepository.findById(id).get();
+
+            if (director.getIsDelete()) {
+                throw new IllegalArgumentException("해당 아이디는 삭제되었습니다.");
+            }
+
+            return Director.toMemberDto(director);
         } else {
             return null;
         }
@@ -188,10 +194,16 @@ public class MemberService {
         }
     }
 
-    // 사용자가 자신의 정보를 조회하는 서비스
+    // 운영자가 감독관 또는 운영자의 정보를 조회하는 서비스
     public MemberDto UserInfo(String memberId) {
         if (memberDirectorRepository.existsById(memberId)) {
-            return Director.toMemberDto(memberDirectorRepository.findById(memberId).get());
+            Director director = memberDirectorRepository.findById(memberId).get();
+
+            if (director.getIsDelete()) {
+                throw new IllegalArgumentException("해당 아이디는 삭제되었습니다.");
+            }
+
+            return Director.toMemberDto(director);
         } else if (memberManagerRepository.existsById(memberId)) {
             return Manager.toMemberDto(memberManagerRepository.findById(memberId).get());
         } else {
@@ -210,12 +222,20 @@ public class MemberService {
             if (authority.equals("ROLE_DIRECTOR")) {
                 if (id.equals(memberUpdateDto.getId())) {
                     director = memberDirectorRepository.findById(id).get();
+
+                    if (director.getIsDelete()) {
+                        response.put("message", "해당 유저는 삭제되었습니다.");
+                        response.put("code", HttpStatus.NOT_FOUND.value());
+                        return ResponseEntity.ok(response);
+                    }
+
                     director.update(memberUpdateDto);
                     memberDirectorRepository.save(director);
                     MemberDto updatedMemberDto = MemberDto.fromEntityByDirector(director);
 
                     response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
-                    response.put("status", HttpStatus.OK.value());
+                    response.put("code", HttpStatus.OK.value());
+                    response.put("status", "success");
 
                     return ResponseEntity.ok(response);
                 } else {
@@ -232,17 +252,27 @@ public class MemberService {
                     MemberDto updatedMemberDto = MemberDto.fromEntityByManager(manager);
 
                     response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
-                    response.put("status", HttpStatus.OK.value());
+                    response.put("code", HttpStatus.OK.value());
+                    response.put("status", "success");
 
                     return ResponseEntity.ok(response);
                 } else {
                     director = memberDirectorRepository.findById(memberUpdateDto.getId()).get();
+
+                    if (director.getIsDelete()) {
+                        response.put("message", "해당 계정은 삭제되었습니다.");
+                        response.put("status", HttpStatus.NOT_FOUND.value());
+
+                        return ResponseEntity.ok(response);
+                    }
+
                     director.update(memberUpdateDto);
                     memberDirectorRepository.save(director);
                     MemberDto updatedMemberDto = MemberDto.fromEntityByDirector(director);
 
                     response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
-                    response.put("status", HttpStatus.OK.value());
+                    response.put("code", HttpStatus.OK.value());
+                    response.put("status", "success");
 
                     return ResponseEntity.ok(response);
                 }
@@ -259,6 +289,10 @@ public class MemberService {
         if (memberDirectorRepository.existsById(requestDto.getId())) {
             Director director = memberDirectorRepository.findById(requestDto.getId())
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
+
+            if (director.getIsDelete()) {
+                throw new IllegalArgumentException("해당 계정은 삭제되었습니다.");
+            }
 
             // 기존 비밀번호 안맞으면 Exception
             if (!passwordEncoder.matches(requestDto.getOldPassword(), director.getPw())) {
@@ -285,6 +319,11 @@ public class MemberService {
     public void deleteMember(String id) {
         Director director = memberDirectorRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(id + "인 ID는 존재하지 않습니다."));
+
+        if (director.getIsDelete()) {
+            throw new IllegalArgumentException("해당 계정은 이미 삭제되었습니다.");
+        }
+
         director.delete();
         memberDirectorRepository.save(director);
     }
