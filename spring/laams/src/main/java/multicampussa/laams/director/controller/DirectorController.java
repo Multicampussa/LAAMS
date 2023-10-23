@@ -1,6 +1,7 @@
 package multicampussa.laams.director.controller;
 
 import lombok.RequiredArgsConstructor;
+import multicampussa.laams.director.dto.ExamDayListDto;
 import multicampussa.laams.director.dto.ExamMonthListDto;
 import multicampussa.laams.director.service.DirectorService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,5 +29,10 @@ public class DirectorController {
     @GetMapping("/{directorNo}/exams/{year}/{month}")
     public List<ExamMonthListDto> getExamMonthList(@PathVariable Long directorNo, @PathVariable Integer year, @PathVariable Integer month){
         return directorService.getExamMonthList(directorNo, year, month);
+    }
+
+    @GetMapping("/{directorNo}/exams/{year}/{month}/{day}")
+    public List<ExamDayListDto> getExamDayList(@PathVariable Long directorNo, @PathVariable Integer year, @PathVariable Integer month, @PathVariable Integer day){
+        return directorService.getExamDayList(directorNo, year, month, day);
     }
 }
