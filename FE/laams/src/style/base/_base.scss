@@ -7,3 +7,15 @@ body {
     background-color: $color-white-light;
     color: $color-black;
 }
+.App{
+    position: relative;
+}
+
+.hidden-text{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: polygon(0 0, 0 0, 0 0);
+}
