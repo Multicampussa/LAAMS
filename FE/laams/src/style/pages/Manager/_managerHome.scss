@@ -1,0 +1,126 @@
+.manager-home{
+  min-width: 100%;
+  height: 100%;
+}
+
+@mixin slider-mobile(){
+  .manager-home{
+    overflow: hidden;
+    &-title{
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+    &-schedule{
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      background-color: red;
+    }
+    &-reward{
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      background-color: green;
+    }
+    &-report{
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      background-color: blue;
+    }
+    &-chart{
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      background-color: yellow;
+    }
+    &-slider-1{
+      white-space:nowrap;
+      width: auto;
+      height: 100%;
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.1s;
+      transition-timing-function: ease-out;
+      transform: translateX(0);
+    }
+    &-slider-2{
+      white-space:nowrap;
+      width: auto;
+      height: 100%;
+
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.1s;
+      transition-timing-function: ease-out;
+      transform: translateX(-100vw);
+    }
+    &-slider-3{
+      white-space:nowrap;
+      width: auto;
+      height: 100%;
+
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.1s;
+      transition-timing-function: ease-out;
+      transform: translateX(-200vw);
+    }
+    &-slider-4{
+      white-space:nowrap;
+      width: auto;
+      height: 100%;
+
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.1s;
+      transition-timing-function: ease-out;
+      transform: translateX(-300vw);
+    }
+  }
+}
+@include mobile{
+  @include slider-mobile()
+}
+@include tablet{
+  @include slider-mobile()
+}
+
+@include desktop{
+  .manager-home{
+    &-title{
+      display: none;
+    }
+    &-slider-1{
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1%;
+    }
+    &-schedule{
+      width: 30%;
+      height: 30%;
+      background-color: red;
+    }
+    &-reward{
+      width: 30%;
+      height: 30%;
+      background-color: green;
+    }
+    &-report{
+      width: 30%;
+      height: 30%;
+      background-color: blue;
+    }
+    &-chart{
+      width: 60%;
+      height: 93%;
+      background-color: yellow;
+    }
+  }
+}
