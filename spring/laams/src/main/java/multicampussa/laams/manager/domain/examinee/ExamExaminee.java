@@ -33,6 +33,8 @@ public class ExamExaminee extends BaseTimeEntity {
 
     private Boolean compensation;
 
+    private String compensationType;
+
     private String compensationReason;
 
     private String imageUrl;
