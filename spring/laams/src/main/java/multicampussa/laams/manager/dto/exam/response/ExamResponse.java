@@ -13,6 +13,7 @@ public class ExamResponse {
     private LocalDateTime examDate;
     private Long managerNo;
     private String managerName;
+    private String examType;
 
     public ExamResponse(Exam exam) {
         this.no = exam.getNo();
@@ -20,6 +21,7 @@ public class ExamResponse {
         this.examDate = exam.getExamDate();
         this.managerNo = exam.getManager().getNo();
         this.managerName = exam.getManager().getName();
+        this.examType = exam.getExamType();
     }
 
 }
