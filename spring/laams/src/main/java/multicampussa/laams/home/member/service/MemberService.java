@@ -387,4 +387,8 @@ public class MemberService {
         encodedPasswordDto.setPw(passwordEncoder.encode(encodedPasswordDto.getPw()));
         return encodedPasswordDto;
     }
+
+    public boolean isPresentId(String id) {
+        return memberManagerRepository.existsById(id) || memberDirectorRepository.existsById(id);
+    }
 }
