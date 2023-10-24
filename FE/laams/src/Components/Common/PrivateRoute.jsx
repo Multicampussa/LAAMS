@@ -30,6 +30,8 @@ const PrivateRoute = ({role, children }) => {
             isAllow=true;
           }
           break;
+        default:
+          break;
       }
       if(!isAllow){
         alert("권한이 없습니다!");
@@ -37,7 +39,7 @@ const PrivateRoute = ({role, children }) => {
       }
     }
 
-  },[user,navigate])
+  },[user,navigate,role])
 
   return (
     <>
