@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {setModalShow} from "../../../redux/actions/modalAction.js";
-import DirectorHome from "../../Director/Home/DirectorHome.jsx"
+
 const Modal = () => {
   const show = useSelector(state=>state.Modal.show);
   const type = useSelector(state=>state.Modal.type);
@@ -10,11 +10,12 @@ const Modal = () => {
 
   const closeModal = useCallback(()=>{
     dispatch(setModalShow(false));
-  },[]);
+  },[dispatch]);
 
   useEffect(()=>{
     switch(type){
-        
+        default:
+          break;
     }
   },[type]);
   return (
