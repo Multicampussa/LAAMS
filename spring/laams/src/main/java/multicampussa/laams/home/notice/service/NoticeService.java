@@ -3,12 +3,15 @@ package multicampussa.laams.home.notice.service;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import multicampussa.laams.home.notice.domain.Notice;
-import multicampussa.laams.home.notice.dto.NoticeCreateDto;
-import multicampussa.laams.home.notice.dto.NoticeUpdateDto;
+import multicampussa.laams.home.notice.dto.*;
 import multicampussa.laams.home.notice.repository.NoticeRepository;
 import multicampussa.laams.manager.domain.manager.Manager;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -83,14 +86,9 @@ public class NoticeService {
         return result;
     }
 
-    public boolean deleteNotice(Long noticeNo, String authority) {
+    public boolean deleteNotice(Long noticeNo, Long memberNo) {
 
         boolean result = true;
-
-        // 감독관은 공지사항 삭제할 수 없으니깐
-        if (authority.equals("ROLE_DIRECTOR")) {
-            throw new IllegalArgumentException("접근 권한이 없습니다.");
-        }
 
         Optional<Notice> findNotice = noticeRepository.findById(noticeNo);
 
@@ -98,8 +96,62 @@ public class NoticeService {
             // 공지사항이 존재하지 않는 경우
             throw new IllegalArgumentException("존재하지 않는 공지사항입니다.");
         }
-        noticeRepository.deleteById(noticeNo);
+        if (findNotice.get().getManager().getNo().equals(memberNo)) {
+            noticeRepository.deleteById(noticeNo);
+        } else {
+            throw new IllegalArgumentException("내가 작성한 글이 아닙니다.");
+        }
 
         return result;
     }
+
+    public List<NoticeListResDto> getNoticeList(int count, int page) {
+
+        int theNumberOfNotice = noticeRepository.getTheNumberOfNotice();
+        System.out.println("theNumberOfNotice = " + theNumberOfNotice);
+
+        // Pagination 계산 Class 생성
+        Pageable pageable = PageRequest.of(page - 1, count);
+
+        // 반환할 DTO List 생성
+        List<NoticeListResDto> res = new ArrayList<>();
+
+        // DB에서 데이터 Pagination 해서 불러오기
+        List<Notice> results = noticeRepository.findNoticeWithManagerSortByCreatedAt(pageable);
+
+        // Entity to DTO Mapping
+        for (Notice result : results) {
+
+            NoticeListResDto tmp = new NoticeListResDto();
+
+            tmp.toEntity(result);
+            res.add(tmp);
+        }
+
+        // 반환
+        return res;
+
+//        // Pagination 계산 처리
+//        page = (page - 1) * count;
+//
+//        // Notice 불러오기
+//        List<NoticeListResDto> noticeListPagination = new ArrayList<>();
+//        List<Test> noticeList = noticeRepository.getNoticeList(count, page);
+//        for (Test test : noticeList) {
+//            NoticeListResDto res = NoticeListResDto.builder()
+//                    .managerNo(test.getManagerNo())
+//                    .noticeNo(test.getNoticeNo())
+//                    .title(test.getTitle())
+//                    .content(test.getContent())
+//                    .createdAt(test.getCreatedAt())
+//                    .updatedAt(test.getUpdatedAt())
+//                    .build();
+//            System.out.println(res);
+//            noticeListPagination.add(res);
+//        }
+//
+//        return noticeListPagination;
+//        return noticeRepository.getNoticeList(count, page);
+    }
+
 }

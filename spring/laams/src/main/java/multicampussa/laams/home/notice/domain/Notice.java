@@ -39,4 +39,15 @@ public class Notice extends BaseTimeEntity {
         this.content = noticeUpdateDto.getContent();
     }
 
+
+    @Override
+    public String toString() {
+        return "Notice{" +
+                "no=" + no +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createdAt=" + getCreatedAt() + '\'' +
+                ", updatedAt=" + getUpdatedAt() + '\'' +
+                '}';
+    }
 }
