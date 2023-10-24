@@ -15,6 +15,6 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
     List<Exam> findByCenterNo(Long centerNo);
 
     // 특정 년도, 특정 월의 시험 조회
-    @Query("SELECT e FROM Exam e WHERE YEAR(e.examDate) = :year AND MONTH(e.examDate) = :month")
-    List<Exam> findExamsByYearAndMonth(@Param("year") int year, @Param("month") int month);
+    @Query("SELECT COUNT(e) FROM Exam e WHERE YEAR(e.examDate) = :year AND MONTH(e.examDate) = :month")
+    int countExamsByYearAndMonth(@Param("year") int year, @Param("month") int month);
 }

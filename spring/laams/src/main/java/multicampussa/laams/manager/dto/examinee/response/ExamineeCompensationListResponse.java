@@ -15,7 +15,7 @@ public class ExamineeCompensationListResponse {
     private LocalDateTime examDate;
     private String examineeName;
     private String examineeCode;
-    private String compensationReason;
+    private String compensationType;
 
     public ExamineeCompensationListResponse(ExamExaminee examExaminee) {
         this.examNo = examExaminee.getExam().getNo();
@@ -23,6 +23,6 @@ public class ExamineeCompensationListResponse {
         this.examDate = examExaminee.getExam().getExamDate();
         this.examineeName = examExaminee.getExaminee().getName();
         this.examineeCode = examExaminee.getExamineeCode();
-        this.compensationReason = examExaminee.getCompensationReason();
+        this.compensationType = examExaminee.getCompensationType();
     }
 }

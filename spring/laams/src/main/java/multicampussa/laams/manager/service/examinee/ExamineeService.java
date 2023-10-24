@@ -8,6 +8,7 @@ import multicampussa.laams.manager.domain.examinee.Examinee;
 import multicampussa.laams.manager.domain.examinee.ExamineeRepository;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeCreateRequest;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeUpdateRequest;
+import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationDetailResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationListResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeResponse;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,15 @@ public class ExamineeService {
 
         return compensationListResponse;
     }
+
+    // 보상 대상 응시자 상세 조회
+    @Transactional
+    public ExamineeCompensationDetailResponse getCompensationDetail(Long examineeNo) {
+        ExamExaminee examExaminee = examExamineeRepository.findByExamineeNo(examineeNo);
+        ExamineeCompensationDetailResponse examineeCompensationDetailResponse = new ExamineeCompensationDetailResponse(examExaminee);
+        return examineeCompensationDetailResponse;
+    }
+
 
     // 응시자 수정
     @Transactional
