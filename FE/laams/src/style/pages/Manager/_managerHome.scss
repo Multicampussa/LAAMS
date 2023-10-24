@@ -1,6 +1,60 @@
 .manager-home{
   min-width: 100%;
   height: 100%;
+  &-chart{
+    &-box{
+      position: relative;
+      box-sizing: border-box;
+      height: 85%;
+      padding-top: 2%;
+    }
+    &-canvas{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: red;
+    }
+    &-select{
+      box-sizing: border-box;
+      padding: 1rem;
+      font-size: 2rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      border: 0.1rem solid $color-gray-light;
+      position: relative;
+      &-false{
+        height: 0;
+        overflow: hidden;
+      }
+      &-true{
+        z-index: 99;
+        width: 100%;
+        height: 10rem;
+        background-color: $color-white;
+        border-radius: 0 0 1rem 1rem;
+        box-sizing: border-box;
+        border: 1px solid $color-gray-light;
+        position: absolute;
+        top: 4.5rem;
+        left: 0;
+        -ms-overflow-style: none;
+        overflow-y: scroll;
+      }
+      &-true::-webkit-scrollbar{
+        display:none;
+      }
+    }
+    &-item{
+      background-color: $color-white;
+      box-sizing: border-box;
+      padding: 0 1rem;
+      width: 100%;
+      height: 3rem;
+      line-height: 3rem;
+      cursor: pointer;
+
+    }
+  }
 }
 
 @mixin slider-mobile(){
@@ -10,30 +64,30 @@
       display: flex;
       align-items: center;
       justify-content: space-around;
+      background-color: $color-blue;
+      color: $color-white;
+      & button{
+        color: $color-white;
+        height: 5rem;
+        font-size: 2rem;
+      }
+      & div{
+        font-size: 2rem;
+      }
     }
-    &-schedule{
+    &-box{
       display: inline-block;
       width: 100%;
       height: 100%;
-      background-color: red;
-    }
-    &-reward{
-      display: inline-block;
-      width: 100%;
-      height: 100%;
-      background-color: green;
-    }
-    &-report{
-      display: inline-block;
-      width: 100%;
-      height: 100%;
-      background-color: blue;
+      background-color: $color-white;
+      &-title{
+        display: none;
+      }
     }
     &-chart{
       display: inline-block;
       width: 100%;
       height: 100%;
-      background-color: yellow;
     }
     &-slider-1{
       white-space:nowrap;
@@ -102,25 +156,22 @@
       flex-wrap: wrap;
       gap: 1%;
     }
-    &-schedule{
+    &-box{
+      box-sizing: border-box;
+      padding: 2rem;
       width: 30%;
       height: 30%;
-      background-color: red;
-    }
-    &-reward{
-      width: 30%;
-      height: 30%;
-      background-color: green;
-    }
-    &-report{
-      width: 30%;
-      height: 30%;
-      background-color: blue;
+      background-color: $color-white;
+      &-title{
+        font-size: 2rem;
+      }
     }
     &-chart{
+      box-sizing: border-box;
+      padding: 2rem;
       width: 60%;
       height: 93%;
-      background-color: yellow;
+      background-color: $color-white;
     }
   }
 }
