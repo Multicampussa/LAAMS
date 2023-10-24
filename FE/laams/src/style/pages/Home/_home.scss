@@ -7,83 +7,140 @@
   box-sizing: border-box;
 
 
-.login{
+  .login{
 
-  &-container{
-    box-sizing: border-box;
-    display:flex;
-    align-items:center;
-    gap: 10rem;
-  }
-  &-box{
-    box-sizing: border-box;
-    width: 62rem;
-    height: 39rem;
-    background-color: $color-white;
-    border-radius: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem 12rem 4rem 12rem;
-  }
-  &-input-box{
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-  &-title{
-    font-size: 4rem;
-    height: 9rem;
-  }
-  &-logo{
-    padding-left: 4rem;
-  }
-  &-input{
-    border: 0.1rem solid $color-gray-light;
-    width: 34rem;
-    height: 4rem;
-    border-radius: 0.7rem;
-  }
-  &-input::placeholder{
-    padding-left: 1rem;
-    font-size: 2rem;
-  }
-  &-btn{
-    width: 34rem;
-    height: 5rem;
-    background-color: $color-blue;
-    border-radius: 0.7rem;
-    font-size: 2rem;
-    color: $color-white;
-  }
-  &-checkbox{
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    align-self:flex-start;
-    align-items: center;
-    padding: 1rem 0rem 2rem 2rem;
-    &-label{
-      padding-left: 1rem;
-      vertical-align: top;
+    &-container{
+      width: 80%;
+      height: 100%;
+      box-sizing: border-box;
+      display:flex;
+      align-items:center;
+    }
+    &-box{
+      box-sizing: border-box;
+      width: 50%;
+      height: 60%;
+      background-color: $color-white;
+      border-radius: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      .login-input{
+        border: 0.1rem solid $color-gray-light;
+        width: 100%;
+        height: 4rem;
+        border-radius: 0.7rem;
+      }
+    }
+    &-form{
+      width: 80%;
     }
     &-input{
-      appearance: auto;
-      margin: 0rem;
+      padding-left: 1rem;
+    }
+    &-input-box{
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    &-title{
+      font-size: 4rem;
+      height: 7rem;
+    }
+    &-logo{
+      width: 50%;
+      height: 100%;
+      background-image: url("../../../assets/images/logo.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 70%;
+    }
+
+    &-input::placeholder{
+      font-size: 2rem;
+    }
+    &-btn{
+      width: 80%;
+      height: 5rem;
+      background-color: $color-blue;
+      border-radius: 0.7rem;
+      font-size: 2rem;
+      color: $color-white;
+    }
+    &-checkbox{
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      align-self:flex-start;
+      align-items: center;
+      padding: 1rem 0rem 2rem 0.5rem;
+      &-label{
+        padding-left: 1rem;
+        vertical-align: top;
+      }
+      &-input{
+        appearance: auto;
+        margin: 0rem;
+      }
+    }
+    &-text{
+      box-sizing: border-box;
+      width: 80%;
+      display:flex; 
+      padding-top: 1rem;
+      justify-content:space-between; 
+      &-right { 
+        display: flex;
+        gap: 1rem;
+      }
+
     }
   }
-  &-text{
-    box-sizing: border-box;
-    align-self: flex-start;
-    width:100%;
-    display:flex; 
-    padding: 1rem 2rem 0rem 2rem;
-    justify-content:space-between; 
-    &-right { 
-      display: flex;
-      gap: 1rem;
-     }
 
+  @mixin mobile-home{
+    .login{
+      &-container{
+        width: 100%;
+        height: 80%;
+        flex-direction: column;
+        align-items:center;
+      }
+      &-logo{
+        width: 80%;
+      }
+      &-box{
+        width: 80%;
+        height: 100%;
+      }
+      &-input-box{
+        width: 100%;
+      }
+      &-checkbox{
+        padding: 1rem 0rem 2rem 0.5rem;
+      }
+      &-btn{
+        width: 80%;
+      }
+      &-text{
+        box-sizing: border-box;
+        width:80%;
+        display:flex; 
+        padding: 1rem 0rem 2rem 0rem;
+        justify-content:space-between; 
+        &-right { 
+          display: flex;
+          gap: 1rem;
+        }
+  
+      }
+    }
   }
-}
+  @include mobile {
+    @include mobile-home()
+  }
+  @include tablet{
+    @include mobile-home()
+  }
 }
