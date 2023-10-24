@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -84,7 +85,7 @@ public class MemberController {
 
     @PostMapping("/refresh")
     @ApiOperation(value = "액세스 토큰 만료시 리프레시 토큰으로 액세스 토큰 재발급")
-    public ResponseEntity<Map<String, Object>> refresh(@RequestHeader String authorization) {
+    public ResponseEntity<Map<String, Object>> refresh(@ApiIgnore @RequestHeader String authorization) {
         String token = authorization.replace("Bearer ", "");
         Map<String, Object> response = new HashMap<>();
 
@@ -95,7 +96,6 @@ public class MemberController {
         } catch (Exception e) {
             response.put("message", e.getMessage());
             response.put("code", HttpStatus.UNAUTHORIZED.value());
-            response.put("status", "success");
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
@@ -145,7 +145,7 @@ public class MemberController {
 
     @GetMapping("/info/{memberId}")
     @ApiOperation(value = "운영자가 특정 감독관 또는 자신의 정보 조회")
-    public ResponseEntity<Map<String, Object>> directorInfo(@RequestHeader String authorization, @PathVariable String memberId) {
+    public ResponseEntity<Map<String, Object>> directorInfo(@ApiIgnore @RequestHeader String authorization, @PathVariable String memberId) {
         String token = authorization.replace("Bearer ", "");
         String authority = jwtTokenProvider.getAuthority(token);
         String directorId = jwtTokenProvider.getId(token);
@@ -185,7 +185,7 @@ public class MemberController {
 
     @PutMapping("/info/update")
     @ApiOperation(value = "회원 정보 수정")
-    public ResponseEntity<Map<String, Object>> update(@RequestBody MemberUpdateDto memberUpdateByUserDto, @RequestHeader String authorization) {
+    public ResponseEntity<Map<String, Object>> update(@RequestBody MemberUpdateDto memberUpdateByUserDto, @ApiIgnore @RequestHeader String authorization) {
         String token = authorization.replace("Bearer ", "");
         String id = jwtTokenProvider.getId(token);
         String authority = jwtTokenProvider.getAuthority(token);
@@ -196,7 +196,7 @@ public class MemberController {
 
     @PutMapping("/info/updatepassword")
     @ApiOperation(value = "비밀번호 변경")
-    public ResponseEntity<Map<String, Object>> updatePassword(@RequestHeader String authorization, @RequestBody MemberUpdatePasswordDto requestDto) {
+    public ResponseEntity<Map<String, Object>> updatePassword(@ApiIgnore @RequestHeader String authorization, @RequestBody MemberUpdatePasswordDto requestDto) {
         Map<String, Object> resultMap = new HashMap<>();
         String token = authorization.replace("Bearer ", "");
         String id = jwtTokenProvider.getId(token);
@@ -222,7 +222,7 @@ public class MemberController {
 
     @PutMapping("/delete")
     @ApiOperation(value = "회원 탈퇴")
-    public ResponseEntity<Map<String, Object>> delete(@RequestBody MemberInfoDto memberInfoDto, @RequestHeader String authorization) {
+    public ResponseEntity<Map<String, Object>> delete(@RequestBody MemberInfoDto memberInfoDto, @ApiIgnore @RequestHeader String authorization) {
         Map<String, Object> resultMap = new HashMap<>();
         String token = authorization.replace("Bearer ", "");
         String id = memberInfoDto.getId();
