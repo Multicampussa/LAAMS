@@ -19,5 +19,17 @@ public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long
 
     // 시험 응시자 상세 조회
     ExamExaminee findByExamNoAndExamineeNo(Long examNo, Long examineeNo);
+
+    // 시험 응시자 수 카운트
+    @Query(value = "SELECT count(ee) FROM ExamExaminee ee WHERE ee.exam.no = :examNo")
+    int countByExamineeNo(Long examNo);
+
+    // 시험 출결 여부 카운트
+    @Query(value = "SELECT count(ee) FROM ExamExaminee ee WHERE ee.exam.no = :examNo AND ee.attendance = true")
+    int countByAttendance(Long examNo);
+
+    // 시험 서류 지참 카운트
+    @Query(value = "SELECT count(ee) FROM ExamExaminee ee WHERE ee.exam.no = :examNo AND ee.document = true")
+    int countByDocument(Long examNo);
 }
 

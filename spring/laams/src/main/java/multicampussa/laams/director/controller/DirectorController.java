@@ -2,11 +2,9 @@ package multicampussa.laams.director.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.director.dto.ExamExamineeDto;
-import multicampussa.laams.director.dto.ExamExamineeListDto;
-import multicampussa.laams.director.dto.ExamInformationDto;
-import multicampussa.laams.director.dto.ExamMonthDayListDto;
+import multicampussa.laams.director.dto.*;
 import multicampussa.laams.director.service.DirectorService;
 import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import org.springframework.http.ResponseEntity;
@@ -54,5 +52,11 @@ public class DirectorController {
         return ResponseEntity.ok(examExamineeDto);
     }
 
+    @ApiOperation(value = "시험 응시자 현황 조회")
+    @GetMapping("/exams/{examNo}/status")
+    public ResponseEntity<?> getExamStatus(@PathVariable Long examNo){
+        ExamStatusDto examStatusDto = directorService.getExamStatus(examNo);
+        return ResponseEntity.ok(examStatusDto);
+    }
 
 }
