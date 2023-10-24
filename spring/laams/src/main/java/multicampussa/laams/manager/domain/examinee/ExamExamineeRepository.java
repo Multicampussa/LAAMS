@@ -16,5 +16,8 @@ public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long
 
     // 보상대상 여부가 true인 응시자 전체 조회
     List<ExamExaminee> findByCompensation(Boolean compensation);
+
+    // 시험 응시자 상세 조회
+    ExamExaminee findByExamNoAndExamineeNo(Long examNo, Long examineeNo);
 }
 

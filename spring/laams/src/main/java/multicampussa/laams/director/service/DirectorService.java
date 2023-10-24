@@ -1,6 +1,7 @@
 package multicampussa.laams.director.service;
 
 import lombok.RequiredArgsConstructor;
+import multicampussa.laams.director.dto.ExamExamineeDto;
 import multicampussa.laams.director.dto.ExamExamineeListDto;
 import multicampussa.laams.director.dto.ExamInformationDto;
 import multicampussa.laams.director.dto.ExamMonthDayListDto;
@@ -43,6 +44,7 @@ public class DirectorService {
         return new ExamInformationDto(exam);
     }
 
+    // 시험 응시자 목록 조회
     public List<ExamExamineeListDto> getExamExamineeList(Long examNo) {
         List<ExamExamineeListDto> examExamineeListDtos = new ArrayList<>();
         List<ExamExaminee> examExaminees = examExamineeRepository.findByExamNo(examNo);
@@ -50,5 +52,11 @@ public class DirectorService {
             examExamineeListDtos.add(new ExamExamineeListDto(examExaminee));
         }
         return examExamineeListDtos;
+    }
+
+    // 시험 응시자 상세 조회
+    public ExamExamineeDto getExamExaminee(Long examNo, Long examineeNo) {
+        ExamExaminee examExaminee = examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo);
+        return new ExamExamineeDto(examExaminee);
     }
 }
