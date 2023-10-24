@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import useLogin from '../../Hook/useLogin'
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
   const [loginData,] = useState({id:localStorage.getItem("id")? localStorage.getItem("id") : "", password:""});
   const [isChecked, setChecked] = useState(localStorage.getItem("id")? true : false); 
   const [isLogin, login] = useLogin();
-
-
+  const user = useSelector(state=>state.User);
+  const navigate = useNavigate();
   // TODO: id, password 확인 및 로그인
   const loginButtonClick = useCallback(() => {
     if(loginData["id"] === ""){
@@ -20,12 +22,23 @@ const Home = () => {
     login(loginData["id"], loginData["password"]);
   },[loginData,login]);
 
-  // FIXME: 로그인 후 권한에 따라 홈화면 변경
   // TODO : 로그인 후처리 
   useEffect(()=>{
     if(isLogin){
       if(isChecked){
         localStorage.setItem("id", loginData["id"])
+      }
+      if(user.authority){
+        switch(user.authority){
+          case "ROLE_DIRECTOR":
+            navigate("/director");
+          break;
+          case "ROLE_MANAGER":
+            navigate("/manager");
+          break;
+        }
+      }else{
+        alert("권한이 설정되지 않았습니다!");
       }
     }
   },[isLogin,isChecked,loginData])
