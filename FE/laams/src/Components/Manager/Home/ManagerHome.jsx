@@ -20,7 +20,7 @@ const ManagerHome = () => {
     ]
     return chartList.map((e,idx)=>
     <li className='manager-home-chart-item' key={idx} onClick={()=>handleChartItem(e)}>{e}</li>);
-  },[]);
+  },[handleChartItem]);
 
   const sliderPrev = useCallback(()=>{
     if(page === 1) return;

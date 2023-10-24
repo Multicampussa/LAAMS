@@ -11,8 +11,8 @@ const PrivateRoute = ({role, children }) => {
   //TODO : 권한을 확인
   useEffect(()=>{
     if (!user.accessToken || !user.accessTokenExpireTime) {
-      // alert("로그인해주세요!");
-      // navigate("/",{replace:true})
+      alert("로그인해주세요!");
+      navigate("/",{replace:true})
     }else{
       if(!user.authority) {
         alert("토큰이 만료되었거나 권한이 설정되지 않았습니다!");
@@ -30,6 +30,8 @@ const PrivateRoute = ({role, children }) => {
             isAllow=true;
           }
           break;
+        default:
+          break;
       }
       if(!isAllow){
         alert("권한이 없습니다!");
@@ -37,7 +39,7 @@ const PrivateRoute = ({role, children }) => {
       }
     }
 
-  },[user,navigate])
+  },[user,navigate,role])
 
   return (
     <>
