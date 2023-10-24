@@ -154,4 +154,30 @@ public class NoticeService {
 //        return noticeRepository.getNoticeList(count, page);
     }
 
+    public NoticeListResDto getNoticeDetail(Long noticeNo) {
+
+//        int theNumberOfNotice = noticeRepository.getTheNumberOfNotice();
+//        System.out.println("theNumberOfNotice = " + theNumberOfNotice);
+
+        // DB에서 데이터 Pagination 해서 불러오기
+        Optional<Notice> notice = noticeRepository.findById(noticeNo);
+        if (notice.isPresent()) {
+            NoticeListResDto tmp = new NoticeListResDto();
+
+            tmp.toEntity(notice.get());
+            return tmp;
+        } else {
+            throw new IllegalArgumentException("존재하지 않는 공지사항입니다.");
+        }
+
+    }
+
+    public int getNoticeCount() {
+
+        int theNumberOfNotice = noticeRepository.getTheNumberOfNotice();
+
+        return theNumberOfNotice;
+
+    }
+
 }
