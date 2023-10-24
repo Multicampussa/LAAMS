@@ -10,4 +10,7 @@ public interface ExamDirectorRepository extends JpaRepository<ExamDirector, Long
 
     // 시험 정보로 ExamDirector 조회
     List<ExamDirector> findByExam(Exam exam);
+
+    // 시험 no로 ExamDirector 조회
+    List<ExamDirector> findByExamNo(Long examNo);
 }
