@@ -128,7 +128,7 @@ public class JwtTokenProvider {
         if (memberDirectorRepository.existsById(id)) {
             storedRefreshToken = memberDirectorRepository.findById(id).get().getRefreshToken();
             authority = "ROLE_DIRECTOR";
-        } else if (memberDirectorRepository.existsById(id)) {
+        } else if (memberManagerRepository.existsById(id)) {
             storedRefreshToken = memberManagerRepository.findById(id).get().getRefreshToken();
             authority = "ROLE_MANAGER";
         } else {
