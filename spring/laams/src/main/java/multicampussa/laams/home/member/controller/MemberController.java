@@ -273,7 +273,7 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/encodedpassword")
+    @PostMapping("/encodedpassword")
     public ResponseEntity<Map<String, Object>> encodedPassword(@RequestBody EncodedPasswordDto encodedPasswordDto) {
         Map<String, Object> resultMap = new HashMap<>();
         try {

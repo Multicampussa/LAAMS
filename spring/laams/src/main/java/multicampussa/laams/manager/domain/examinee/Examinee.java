@@ -30,6 +30,8 @@ public class Examinee {
 
     private String pw;
 
+    private int point;
+
     public Examinee(String name, Integer age, String phoneNum, String gender, String id, String pw) {
         this.id = id;
         this.pw = pw;
