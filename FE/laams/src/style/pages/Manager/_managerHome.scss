@@ -1,0 +1,177 @@
+.manager-home{
+  min-width: 100%;
+  height: 100%;
+  &-chart{
+    &-box{
+      position: relative;
+      box-sizing: border-box;
+      height: 85%;
+      padding-top: 2%;
+    }
+    &-canvas{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: red;
+    }
+    &-select{
+      box-sizing: border-box;
+      padding: 1rem;
+      font-size: 2rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      border: 0.1rem solid $color-gray-light;
+      position: relative;
+      &-false{
+        height: 0;
+        overflow: hidden;
+      }
+      &-true{
+        z-index: 99;
+        width: 100%;
+        height: 10rem;
+        background-color: $color-white;
+        border-radius: 0 0 1rem 1rem;
+        box-sizing: border-box;
+        border: 1px solid $color-gray-light;
+        position: absolute;
+        top: 4.5rem;
+        left: 0;
+        -ms-overflow-style: none;
+        overflow-y: scroll;
+      }
+      &-true::-webkit-scrollbar{
+        display:none;
+      }
+    }
+    &-item{
+      background-color: $color-white;
+      box-sizing: border-box;
+      padding: 0 1rem;
+      width: 100%;
+      height: 3rem;
+      line-height: 3rem;
+      cursor: pointer;
+
+    }
+  }
+}
+
+@mixin slider-mobile(){
+  .manager-home{
+    overflow: hidden;
+    &-title{
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background-color: $color-blue;
+      color: $color-white;
+      & button{
+        color: $color-white;
+        height: 5rem;
+        font-size: 2rem;
+      }
+      & div{
+        font-size: 2rem;
+      }
+    }
+    &-box{
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      background-color: $color-white;
+      &-title{
+        display: none;
+      }
+    }
+    &-chart{
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+    }
+    &-slider-1{
+      white-space:nowrap;
+      width: auto;
+      height: 100%;
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.1s;
+      transition-timing-function: ease-out;
+      transform: translateX(0);
+    }
+    &-slider-2{
+      white-space:nowrap;
+      width: auto;
+      height: 100%;
+
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.1s;
+      transition-timing-function: ease-out;
+      transform: translateX(-100vw);
+    }
+    &-slider-3{
+      white-space:nowrap;
+      width: auto;
+      height: 100%;
+
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.1s;
+      transition-timing-function: ease-out;
+      transform: translateX(-200vw);
+    }
+    &-slider-4{
+      white-space:nowrap;
+      width: auto;
+      height: 100%;
+
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.1s;
+      transition-timing-function: ease-out;
+      transform: translateX(-300vw);
+    }
+  }
+}
+@include mobile{
+  @include slider-mobile()
+}
+@include tablet{
+  @include slider-mobile()
+}
+
+@include desktop{
+  .manager-home{
+    &-title{
+      display: none;
+    }
+    &-slider-1{
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1%;
+    }
+    &-box{
+      box-sizing: border-box;
+      padding: 2rem;
+      width: 30%;
+      height: 30%;
+      background-color: $color-white;
+      &-title{
+        font-size: 2rem;
+      }
+    }
+    &-chart{
+      box-sizing: border-box;
+      padding: 2rem;
+      width: 60%;
+      height: 93%;
+      background-color: $color-white;
+    }
+  }
+}
