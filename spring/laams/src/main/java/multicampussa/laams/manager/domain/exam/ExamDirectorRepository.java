@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ExamDirectorRepository extends JpaRepository<ExamDirector, Long> {
-    List<Director> findByExamNo(Long examNo);
+
+    // 시험 정보로 ExamDirector 조회
+    List<ExamDirector> findByExam(Exam exam);
 }

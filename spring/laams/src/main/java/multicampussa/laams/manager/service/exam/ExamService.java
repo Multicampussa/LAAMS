@@ -1,6 +1,7 @@
 package multicampussa.laams.manager.service.exam;
 
 import multicampussa.laams.director.domain.Director;
+import multicampussa.laams.manager.domain.exam.ExamDirector;
 import multicampussa.laams.manager.domain.exam.ExamDirectorRepository;
 import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
@@ -62,11 +63,16 @@ public class ExamService {
     // 시험 상세 조회
     @Transactional(readOnly = true)
     public ExamDetailResponse getExam(Long no) {
-        // 전달 받은 시험 no로 조회
+        // 전달 받은 시험번호로 시험 조회
         Exam exam = examRepository.findById(no)
                 .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(no + "번 시험 없음"));
+        // 시험 번호
         Long examNo = exam.getNo();
+
+        // 시험으로 센터 번호 조회
         Long centerNo = exam.getCenter().getNo();
+
+        // 센터 번호로 센터 조회
         Center center = centerRepository.findById(centerNo)
                 .orElseThrow(() -> new CustomExceptions.CenterNotFundException(centerNo + "번 센터 없음"));
 
@@ -81,11 +87,15 @@ public class ExamService {
         // 보상 대상자 전체 조회
         List<ExamExaminee> compensationList = examExamineeRepository.findByCompensation(true);
         int compensationNum = compensationList.size();
-        List<Director> directors = examDirectorRepository.findByExamNo(examNo);
 
-        // 감독관 리스트 생성
+        // 시험 번호로 감독관 리스트 조회
+        List<Director> directors = examDirectorRepository.findByExam(exam).stream()
+                .map(ExamDirector::getDirector)
+                .collect(Collectors.toList());
+
+        // 감독관 리스트를 감독관 응답 DTO로 변환
         List<DirectorListResponse> directorListResponse = directors.stream()
-                .map(director -> new DirectorListResponse(director))
+                .map(DirectorListResponse::new)
                 .collect(Collectors.toList());
 
         return new ExamDetailResponse(center, exam, examineeNum, attendanceNum, compensationNum, directorListResponse);
