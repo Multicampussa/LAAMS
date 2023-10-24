@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom';
 
 const ManagerHome = () => {
   const [page,setPage]=useState(1);
@@ -61,6 +62,7 @@ const ManagerHome = () => {
       <ul className={`manager-home-slider-${page}`}>
         <li className='manager-home-box'>
           <div className='manager-home-box-title'>오늘 일정</div>
+          <Link to="/manager/exam" className='manager-home-link'>더보기</Link>
           <ul>
             <li>
               구미 센터점 09:00 - 10:00
