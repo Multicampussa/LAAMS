@@ -20,7 +20,10 @@ const Home = () => {
       return
     }
     login(loginData["id"], loginData["password"]);
-  },[loginData,login]);
+    if(!isLogin){
+      alert('로그인 정보가 잘못되었습니다.')
+    }
+  },[loginData,login,isLogin]);
 
   // TODO : 로그인 후처리 
   useEffect(()=>{
@@ -47,11 +50,10 @@ const Home = () => {
   return (
     <section className='home'>
       <div className='login-container'>
-        <img src="logo.svg" alt="logo"
-        className='login-logo'
-        />
+        <div className='login-logo'></div>
         <article className='login-box'>
           <div className='login-title'>Login</div>
+          <form action="" className='login-form'>
           <div className='login-input-box'>
             <input 
               className='login-input'
@@ -84,6 +86,7 @@ const Home = () => {
               </span>
             </label>
           </div>
+          </form>
           <button 
             className='login-btn' 
             onClick={loginButtonClick}>
