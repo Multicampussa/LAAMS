@@ -17,21 +17,25 @@ public class ExamineeController {
         this.examineeService = examineeService;
     }
 
-    @PostMapping("/manager/examinee")  //POST examinee
+    // 응시자 생성
+    @PostMapping("/manager/examinee")
     public void saveExaminee(@RequestBody ExamineeCreateRequest request) {
         examineeService.saveExaminee(request);
     }
 
+    // 응시자 목록 조회
     @GetMapping("/manager/examinees")
     public List<ExamineeResponse> getExaminees() {
         return examineeService.getExaminees();
     }
 
+    // 응시자 수정
     @PutMapping("/manager/examinee")
     public void updateExaminee(@RequestBody ExamineeUpdateRequest request) {
         examineeService.updateExaminee(request);
     }
 
+    // 응시자 삭제
     @DeleteMapping("/manager/examinee/{no}")
     public void deleteExaminee(@PathVariable Long no) {
         examineeService.deleteExaminee(no);
