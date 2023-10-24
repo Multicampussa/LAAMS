@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.home.member.exception.JwtAuthenticationException;
 import multicampussa.laams.home.member.repository.MemberDirectorRepository;
+import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import multicampussa.laams.home.member.service.UserDetailsServiceImpl;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 //import org.springframework.security.core.Authentication;
@@ -25,6 +26,8 @@ public class JwtTokenProvider {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final MemberDirectorRepository memberDirectorRepository;
+    private final MemberManagerRepository memberManagerRepository;
+
     private String secretKey = "s1s2a3f4y@"; // 비밀키
     private long validityInMilliseconds = 3600000; // 1 hour
 
@@ -119,11 +122,20 @@ public class JwtTokenProvider {
     public String refreshAccessToken(String refreshToken) {
         String id = getId(refreshToken);
 
+        String storedRefreshToken = "";
+        String authority = "";
         // 발급된 리프레시 토큰에 담겨있는 ID로 DB에 저장된 리프레시 토큰 받아오기.
-        String storedRefreshToken = memberDirectorRepository.findById(id).get().getRefreshToken();
+        if (memberDirectorRepository.existsById(id)) {
+            storedRefreshToken = memberDirectorRepository.findById(id).get().getRefreshToken();
+            authority = "ROLE_DIRECTOR";
+        } else if (memberManagerRepository.existsById(id)) {
+            storedRefreshToken = memberManagerRepository.findById(id).get().getRefreshToken();
+            authority = "ROLE_MANAGER";
+        } else {
+            throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
+        }
 
         // 권한 정보 (액세스 토큰을 발급받기 위함)
-        String authority = "ROLE_ADMIN";
 
         if (storedRefreshToken == null || !refreshToken.equals(storedRefreshToken)) {
             throw new JwtAuthenticationException("리프레시 토큰이 유효하지 않습니다.");
