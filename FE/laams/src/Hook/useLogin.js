@@ -17,7 +17,7 @@ const useLogin = ()=> {
         localStorage.setItem("refreshToken",data.refreshToken);
         console.log(data);
         setIsLogin(true);
-      }).catch(err=>console.log(err.response));
+      }).catch(err=>alert(err.response.data.message));
   },[dispatch])
 
   return [isLogin,login];

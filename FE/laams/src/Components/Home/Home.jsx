@@ -42,14 +42,7 @@ const Home = () => {
         alert("권한이 설정되지 않았습니다!");
       }
     }
-  },[isLogin,isChecked,loginData, navigate,user])
-
-  useEffect(()=>{
-    if((loginData['id'] || loginData['password']) && !isLogin){
-      alert("로그인 정보가 잘못되었습니다.")
-    }
-  },[isLogin, loginData])
-
+  },[isLogin,isChecked,loginData, navigate ,user])
 
   return (
     <section className='home'>
@@ -57,7 +50,7 @@ const Home = () => {
         <div className='login-logo'></div>
         <article className='login-box'>
           <div className='login-title'>Login</div>
-          <form action="" className='login-form'>
+          <div className='login-form'>
             <div className='login-input-box'>
               <input 
                 className='login-input'
@@ -67,14 +60,17 @@ const Home = () => {
                   loginData['id'] = e.target.value
                 }}
               />
-              <input 
-                className='login-input'
-                placeholder='비밀번호'
-                type='password'
-                onChange={e=>{
-                  loginData['password'] = e.target.value
-                }}
-              />
+              <form>
+                <input 
+                  className='login-input'
+                  placeholder='비밀번호'
+                  type='password'
+                  onChange={e=>{
+                    loginData['password'] = e.target.value
+                  }}
+                />
+              </form>
+
             </div>          
             <div className='login-checkbox'>
               <label>
@@ -95,7 +91,7 @@ const Home = () => {
               onClick={loginButtonClick}>
               로그인
             </button>
-          </form>
+          </div>
           <div className='login-text'>
             <div>
               <div>회원가입</div>
