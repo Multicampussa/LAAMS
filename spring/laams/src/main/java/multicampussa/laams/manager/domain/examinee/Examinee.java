@@ -26,6 +26,8 @@ public class Examinee {
     @Column(nullable = false, length = 5)
     private String gender;
 
+    private String email;
+
     private String id;
 
     private String pw;
