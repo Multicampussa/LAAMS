@@ -20,6 +20,7 @@ import multicampussa.laams.manager.exception.CustomExceptions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,12 +94,12 @@ public class ExamService {
                 .map(ExamDirector::getDirector)
                 .collect(Collectors.toList());
 
-        // 감독관 리스트를 감독관 응답 DTO로 변환
-        List<DirectorListResponse> directorListResponse = directors.stream()
-                .map(DirectorListResponse::new)
+        // 시험 번호로 ExamDirector 조회하고 다시 DirectorListResponse 생성
+        List<DirectorListResponse> directorListResponseList = examDirectorRepository.findByExam(exam).stream()
+                .map(examDirector -> new DirectorListResponse(examDirector.getDirector(), examDirector))
                 .collect(Collectors.toList());
 
-        return new ExamDetailResponse(center, exam, examineeNum, attendanceNum, compensationNum, directorListResponse);
+        return new ExamDetailResponse(center, exam, examineeNum, attendanceNum, compensationNum, directorListResponseList);
 
     }
 
