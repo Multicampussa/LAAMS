@@ -24,8 +24,7 @@ public class CenterService {
     @Transactional
     public CenterMonthlyExamCountsResponse getMonthlyExamCounts(Long centerNo, int year, int month) {
         // 특정 년도, 특정 월에 대한 시험 리스트
-        List<Exam> exams = examRepository.findExamsByYearAndMonth(year, month);
-        int numberOfExam = exams.size();
+        int numberOfExam = examRepository.countExamsByYearAndMonth(year, month);
 
         // 센터 이름
         String centerName = centerRepository.findByNo(centerNo).getName();
