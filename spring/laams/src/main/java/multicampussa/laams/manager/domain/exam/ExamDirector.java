@@ -25,5 +25,7 @@ public class ExamDirector extends BaseTimeEntity {
     @JoinColumn(name = "director_no")
     private Director director;
 
+    private Boolean directorAttendance = false;
+
 }
 
