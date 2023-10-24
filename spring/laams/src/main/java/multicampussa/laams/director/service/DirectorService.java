@@ -1,9 +1,7 @@
 package multicampussa.laams.director.service;
 
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.director.dto.ExamExamineeListDto;
-import multicampussa.laams.director.dto.ExamInformationDto;
-import multicampussa.laams.director.dto.ExamMonthDayListDto;
+import multicampussa.laams.director.dto.*;
 import multicampussa.laams.director.repository.DirectorRepository;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamRepository;
@@ -43,6 +41,7 @@ public class DirectorService {
         return new ExamInformationDto(exam);
     }
 
+    // 시험 응시자 목록 조회
     public List<ExamExamineeListDto> getExamExamineeList(Long examNo) {
         List<ExamExamineeListDto> examExamineeListDtos = new ArrayList<>();
         List<ExamExaminee> examExaminees = examExamineeRepository.findByExamNo(examNo);
@@ -50,5 +49,24 @@ public class DirectorService {
             examExamineeListDtos.add(new ExamExamineeListDto(examExaminee));
         }
         return examExamineeListDtos;
+    }
+
+    // 시험 응시자 상세 조회
+    public ExamExamineeDto getExamExaminee(Long examNo, Long examineeNo) {
+        ExamExaminee examExaminee = examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo);
+        return new ExamExamineeDto(examExaminee);
+    }
+
+    // 시험 현황 조회
+    public ExamStatusDto getExamStatus(Long examNo) {
+        Exam exam = examRepository.findById(examNo)
+                .orElseThrow(() -> new IllegalArgumentException("해당 시험은 없습니다."));
+
+        int examineeCnt = examExamineeRepository.countByExamineeNo(examNo);
+        int attendanceCnt = examExamineeRepository.countByAttendance(examNo);
+        int documentCnt = examExamineeRepository.countByDocument(examNo);
+
+        return new ExamStatusDto(examineeCnt, attendanceCnt, documentCnt);
+
     }
 }
