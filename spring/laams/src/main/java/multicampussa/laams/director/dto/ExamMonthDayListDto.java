@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExamDayListDto {
+public class ExamMonthDayListDto {
 
     private Long examNo;
     private LocalDateTime examDate;
@@ -21,7 +21,7 @@ public class ExamDayListDto {
     private String centerName;
     private String centerRegion;
 
-    public ExamDayListDto(Exam exam){
+    public ExamMonthDayListDto(Exam exam){
         this.examNo = exam.getNo();
         this.examDate = exam.getExamDate();
         this.examType = exam.getExamType();
