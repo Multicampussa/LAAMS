@@ -2,6 +2,7 @@ import { BrowserRouter, Routes,Route } from 'react-router-dom';
 import Home from "../Home/Home.jsx"
 import DirectorHome from "../Director/Home/DirectorHome.jsx"
 import PrivateRoute from './PrivateRoute.jsx';
+import ManagerHome from '../Manager/Home/ManagerHome.jsx';
 const Router = () => {
   return (
     <>
@@ -11,7 +12,13 @@ const Router = () => {
           <Route
             path='/director'
             element={
-              <PrivateRoute children={<DirectorHome/>}></PrivateRoute>
+              <PrivateRoute role="director" children={<DirectorHome/>}></PrivateRoute>
+            }
+          />
+          <Route
+            path='/manager'
+            element={
+              <PrivateRoute role="manager" children={<ManagerHome/>}></PrivateRoute>
             }
           />
         </Routes>
