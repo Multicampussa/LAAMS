@@ -1,11 +1,14 @@
 package multicampussa.laams.director.service;
 
 import lombok.RequiredArgsConstructor;
+import multicampussa.laams.director.dto.ExamExamineeListDto;
 import multicampussa.laams.director.dto.ExamInformationDto;
 import multicampussa.laams.director.dto.ExamMonthDayListDto;
 import multicampussa.laams.director.repository.DirectorRepository;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamRepository;
+import multicampussa.laams.manager.domain.examinee.ExamExaminee;
+import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,6 +21,7 @@ public class DirectorService {
 
     private final DirectorRepository directorRepository;
     private final ExamRepository examRepository;
+    private final ExamExamineeRepository examExamineeRepository;
 
     // 감독관 시험 월별, 일별 조회
     @Transactional
@@ -37,5 +41,14 @@ public class DirectorService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 시험은 없습니다."));
 
         return new ExamInformationDto(exam);
+    }
+
+    public List<ExamExamineeListDto> getExamExamineeList(Long examNo) {
+        List<ExamExamineeListDto> examExamineeListDtos = new ArrayList<>();
+        List<ExamExaminee> examExaminees = examExamineeRepository.findByExamNo(examNo);
+        for(ExamExaminee examExaminee : examExaminees){
+            examExamineeListDtos.add(new ExamExamineeListDto(examExaminee));
+        }
+        return examExamineeListDtos;
     }
 }
