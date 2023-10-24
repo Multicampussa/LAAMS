@@ -44,6 +44,12 @@ public class MemberController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequestDto loginRequestDto) {
         try {
             String id = loginRequestDto.getId();
+            if (!memberService.isPresentId(id)) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "존재하지 않는 아이디입니다.");
+                response.put("status", HttpStatus.UNAUTHORIZED.value());
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            }
             // 아이디와 비밀번호 인증
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, loginRequestDto.getPw()));
 
@@ -62,8 +68,8 @@ public class MemberController {
             String accessToken = jwtTokenProvider.createAccessToken(id, authority, memberId);
             String refreshToken = jwtTokenProvider.createRefreshToken(id);
             ResponseEntity<Map<String, Object>> signInResponse = memberService.signIn(loginRequestDto, refreshToken, authority);
-
             Map<String, Object> response = signInResponse.getBody();
+
             if (signInResponse.getStatusCodeValue() == 200) {
                 response.put("accessToken", accessToken);
                 response.put("refreshToken", refreshToken);
