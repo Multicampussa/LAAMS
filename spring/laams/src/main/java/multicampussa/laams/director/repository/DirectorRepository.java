@@ -14,13 +14,7 @@ public interface DirectorRepository extends JpaRepository<Director, Long> {
 
     @Query(value = "SELECT e, c FROM Exam e INNER JOIN Center c ON e.center.no = c.no " +
             "WHERE e.no IN (SELECT ed.no FROM ExamDirector ed WHERE ed.director.no = :directorNo) " +
-            "AND year(e.examDate) = :year AND month(e.examDate) = :month " +
-            "ORDER BY e.examDate asc")
-    List<Exam> findAllByDirectorNoContainingMonth(@Param("directorNo") Long directorNo, @Param("year") Integer year, @Param("month") Integer month);
-
-    @Query(value = "SELECT e, c FROM Exam e INNER JOIN Center c ON e.center.no = c.no " +
-            "WHERE e.no IN (SELECT ed.no FROM ExamDirector ed WHERE ed.director.no = :directorNo) " +
             "AND year(e.examDate) = :year AND month(e.examDate) = :month AND (day(e.examDate) = :day OR :day = 0) " +
             "ORDER BY e.examDate asc")
-    List<Exam> findAllByDirectorNoContainingDay(@Param("directorNo") Long directorNo, @Param("year") Integer year, @Param("month") Integer month, @Param("day") Integer day);
+    List<Exam> findAllByDirectorNoContainingMonthAndDay(@Param("directorNo") Long directorNo, @Param("year") Integer year, @Param("month") Integer month, @Param("day") Integer day);
 }
