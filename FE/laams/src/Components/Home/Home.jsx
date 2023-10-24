@@ -20,10 +20,7 @@ const Home = () => {
       return
     }
     login(loginData["id"], loginData["password"]);
-    if(!isLogin){
-      alert('로그인 정보가 잘못되었습니다.')
-    }
-  },[loginData,login,isLogin]);
+  },[loginData,login]);
 
   // TODO : 로그인 후처리 
   useEffect(()=>{
@@ -33,6 +30,7 @@ const Home = () => {
       }
       if(user.authority){
         switch(user.authority){
+          default : break
           case "ROLE_DIRECTOR":
             navigate("/director");
           break;
@@ -44,8 +42,7 @@ const Home = () => {
         alert("권한이 설정되지 않았습니다!");
       }
     }
-  },[isLogin,isChecked,loginData])
-
+  },[isLogin,isChecked,loginData, navigate ,user])
 
   return (
     <section className='home'>
@@ -53,45 +50,48 @@ const Home = () => {
         <div className='login-logo'></div>
         <article className='login-box'>
           <div className='login-title'>Login</div>
-          <form action="" className='login-form'>
-          <div className='login-input-box'>
-            <input 
-              className='login-input'
-              placeholder='ID'
-              defaultValue={loginData['id']}
-              onChange={e=>{
-                loginData['id'] = e.target.value
-              }}
-            />
-            <input 
-              className='login-input'
-              placeholder='비밀번호'
-              type='password'
-              onChange={e=>{
-                loginData['password'] = e.target.value
-              }}
-            />
-          </div>          
-          <div className='login-checkbox'>
-            <label>
-              <input
-                type="checkbox" 
-                defaultChecked={isChecked}
-                onChange={() =>{
-                  setChecked(!isChecked);}}
-                className='login-checkbox-input'
+          <div className='login-form'>
+            <div className='login-input-box'>
+              <input 
+                className='login-input'
+                placeholder='ID'
+                defaultValue={loginData['id']}
+                onChange={e=>{
+                  loginData['id'] = e.target.value
+                }}
               />
-              <span className='login-checkbox-label'>
-                아이디 저장
-              </span>
-            </label>
+              <form>
+                <input 
+                  className='login-input'
+                  placeholder='비밀번호'
+                  type='password'
+                  onChange={e=>{
+                    loginData['password'] = e.target.value
+                  }}
+                />
+              </form>
+
+            </div>          
+            <div className='login-checkbox'>
+              <label>
+                <input
+                  type="checkbox" 
+                  defaultChecked={isChecked}
+                  onChange={() =>{
+                    setChecked(!isChecked);}}
+                  className='login-checkbox-input'
+                />
+                <span className='login-checkbox-label'>
+                  아이디 저장
+                </span>
+              </label>
+            </div>
+            <button 
+              className='login-btn' 
+              onClick={loginButtonClick}>
+              로그인
+            </button>
           </div>
-          </form>
-          <button 
-            className='login-btn' 
-            onClick={loginButtonClick}>
-            로그인
-          </button>
           <div className='login-text'>
             <div>
               <div>회원가입</div>
