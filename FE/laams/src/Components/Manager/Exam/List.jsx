@@ -1,6 +1,13 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useDispatch } from 'react-redux';
+import { setModalShow, setModalType } from '../../../redux/actions/modalAction';
 
 const List = () => {
+  const dispatch = useDispatch();
+  const handleExamCreate = useCallback(()=>{
+    dispatch(setModalType("exam-create"));
+    dispatch(setModalShow(true));
+  },[dispatch]);
   return (
     <div className='manager-exam-list'>
       <div className='manager-exam-list-title'>시험일정</div>
@@ -14,7 +21,7 @@ const List = () => {
         </select>
       </div>
       <ul className='manager-exam-list-container'>
-      <button className='manager-exam-list-btn-create'>생성</button>
+      <button className='manager-exam-list-btn-create' onClick={handleExamCreate}>생성</button>
         <li className='manager-exam-list-box'>
           <div className='manager-exam-list-item1'>No</div>
           <div className='manager-exam-list-item2'>시험 명</div>
