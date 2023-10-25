@@ -120,4 +120,21 @@ public class DirectorController {
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @ApiOperation(value = "응시자 출결 변경")
+//    @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendance")
+//    public ResponseEntity<Map<String, Object>> changeAttendance(@PathVariable Long examNo, @PathVariable Long examineeNo, @RequestBody ){
+//        Map<String, Object> resultMap = new HashMap<>();
+//        try {
+//            resultMap.put("message","응시자의 출결 사항을 변경했습니다.");
+//            resultMap.put("data", directorService.getExamExamineeList(examNo));
+//            resultMap.put("code", HttpStatus.OK.value());
+//            resultMap.put("status", "success");
+//            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+//        } catch (IllegalArgumentException e){
+//            resultMap.put("message", e.getMessage());
+//            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+//            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+//        }
+//    }
 }
