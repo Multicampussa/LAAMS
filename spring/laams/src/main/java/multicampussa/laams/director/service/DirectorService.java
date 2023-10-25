@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,29 +36,48 @@ public class DirectorService {
     // 시험 상세정보 조회
     @Transactional
     public ExamInformationDto getExamInformation(Long examNo) {
-        Exam exam = examRepository.findById(examNo)
-                .orElseThrow(() -> new IllegalArgumentException("해당 시험은 없습니다."));
-
-        return new ExamInformationDto(exam);
+        Optional<Exam> exam = examRepository.findById(examNo);
+        if (exam.isPresent()) {
+            return new ExamInformationDto(exam.get());
+        } else {
+            throw new IllegalArgumentException("해당 시험은 없습니다.");
+        }
     }
 
     // 시험 응시자 목록 조회
+    @Transactional
     public List<ExamExamineeListDto> getExamExamineeList(Long examNo) {
-        List<ExamExamineeListDto> examExamineeListDtos = new ArrayList<>();
-        List<ExamExaminee> examExaminees = examExamineeRepository.findByExamNo(examNo);
-        for(ExamExaminee examExaminee : examExaminees){
-            examExamineeListDtos.add(new ExamExamineeListDto(examExaminee));
+        Optional<Exam> exam = examRepository.findById(examNo);
+        if(exam.isPresent()){
+            List<ExamExamineeListDto> examExamineeListDtos = new ArrayList<>();
+            List<ExamExaminee> examExaminees = examExamineeRepository.findByExamNo(examNo);
+            for(ExamExaminee examExaminee : examExaminees){
+                examExamineeListDtos.add(new ExamExamineeListDto(examExaminee));
+            }
+            return examExamineeListDtos;
+        }else {
+            throw new IllegalArgumentException("해당 시험은 없습니다.");
         }
-        return examExamineeListDtos;
     }
 
     // 시험 응시자 상세 조회
+    @Transactional
     public ExamExamineeDto getExamExaminee(Long examNo, Long examineeNo) {
-        ExamExaminee examExaminee = examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo);
-        return new ExamExamineeDto(examExaminee);
+        Optional<Exam> exam = examRepository.findById(examNo);
+        if(exam.isPresent()){
+            Optional<ExamExaminee> examExaminee = Optional.ofNullable(examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo));
+            if(examExaminee.isEmpty()){
+                throw new IllegalArgumentException("해당 시험의 응시자가 아닙니다.");
+            }else {
+                return new ExamExamineeDto(examExaminee.get());
+            }
+        } else {
+            throw new IllegalArgumentException("해당 시험은 없습니다.");
+        }
     }
 
     // 시험 현황 조회
+    @Transactional
     public ExamStatusDto getExamStatus(Long examNo) {
         Exam exam = examRepository.findById(examNo)
                 .orElseThrow(() -> new IllegalArgumentException("해당 시험은 없습니다."));
