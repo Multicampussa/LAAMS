@@ -1,15 +1,32 @@
 import React, { useCallback, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom'
 
 const Header = () => {
   const [menu,setMenu]=useState("close");
   const toggleMenu = useCallback(()=>{
     setMenu(menu==="open"?"close":"open")
   },[menu]);
+  const user = useSelector(state=>state.User);
+  const navigate = useNavigate();
+  const handleHome = useCallback(()=>{
+    switch(user.authority){
+      case "ROLE_DIRECTOR":
+        navigate("/director");
+      break;
+      case "ROLE_MANAGER":
+        navigate("/manager");
+      break;
+      default:
+        navigate("/",{replace:true});
+        break;
+    }
+  },[navigate,user]);
+
   return (
     <>
       <header className='header'>
-        <Link className='header-home' to="/"><div className='hidden-text'>LAAMS</div></Link>
+        <button onClick={handleHome} className='header-home'><div className='hidden-text'>Home</div></button>
         <div className='header-btn'>
           <button onClick={toggleMenu} className={`header-menu-${menu}`}>
             <span></span>
