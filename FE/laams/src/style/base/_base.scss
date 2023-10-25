@@ -26,3 +26,13 @@ main{
     overflow: hidden;
     clip-path: polygon(0 0, 0 0, 0 0);
 }
+
+input{
+    border-radius: 0.5rem;
+    border: 0.1rem solid $color-gray-light;
+}
+button{
+    border-radius: 0.5rem;
+    background-color: $color-blue;
+    color: $color-white;
+}
