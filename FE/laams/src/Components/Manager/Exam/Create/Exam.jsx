@@ -34,6 +34,16 @@ const Exam = ({setType,data}) => {
 
   //TODO : 다음페이지로 이동
   const handleNext = useCallback(()=>{
+    if(!data.test){
+      alert("시험을 선택해 주세요!");
+      return;
+    }
+
+    if(!data.language){
+      alert("언어를 선택해 주세요!");
+      return;
+    }
+    
     setType("time");
   },[setType]);
 

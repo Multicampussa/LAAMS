@@ -70,6 +70,16 @@ const Center = ({setType,data}) => {
 
   //TODO : 다음 페이지로 이동
   const handleNext = useCallback(()=>{
+    if(!data.city){
+      alert("지역을 선택해 주세요!");
+      return;
+    }
+
+    if(!data.center){
+      alert("센터를 선택해 주세요!");
+      return;
+    }
+    
     setType("exam");
   },[setType]);
 
