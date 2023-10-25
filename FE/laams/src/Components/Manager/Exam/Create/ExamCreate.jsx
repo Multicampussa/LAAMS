@@ -9,7 +9,7 @@ const ExamCreate = () => {
   const [main,setMain] = useState();
   const close = useSelector(state=>state.Modal.show);
 
-  //Todo : 모달이 닫혔을 때 data 초기화
+  //TODO : 모달이 닫혔을 때 data 초기화
   useEffect(()=>{
     if(!close){
       setType("센터");
@@ -27,7 +27,7 @@ const ExamCreate = () => {
       case "exam":
         setMain(<Exam setType={setType} data={data} />);
         break;
-      case "main":
+      case "time":
         setMain(<Time setType={setType} data={data} />);
         break;
     }

@@ -1,8 +1,24 @@
-import React, { useMemo, useState,useCallback } from 'react'
+import React, { useMemo, useState,useCallback, useEffect } from 'react'
 
 const Center = ({setType,data}) => {
   const [cityIdx,setCityIdx] = useState(-1);
   const [centerIdx,setCenterIdx] = useState(-1);
+
+  //TODO : 초기화 작업, 기존의 데이터가 있으면 동기화
+  useEffect(()=>{
+    if(data.city){
+      setCityIdx(data.city.idx);
+    }else{
+      setCityIdx(-1);
+    }
+
+    if(data.center){
+      setCenterIdx(data.center.idx);
+    }else{
+      setCenterIdx(-1);
+    }
+  },[data]);
+
   const [centerData,] = useState([
     {city:"서울특별시",center:[]},
     {city:"부산광역시",center:["a","b","a","b","a","b","a","b","a","b","a","b"]},
@@ -23,20 +39,28 @@ const Center = ({setType,data}) => {
     {city:"제주특별자치도",center:[]},
   ]);
 
+  //선택한 지역을 저장
+  const handleCityItem = useCallback((idx)=>{
+    if(idx < 0) return;
+    setCityIdx(idx);
+    data.city={name:centerData[idx].city,idx};
+  },[centerData,data]);
+
+  //TODO : 선택한 센터를 저장
   const handleCenterItem = useCallback((idx) => {
+    if(idx < 0) return;
     setCenterIdx(idx);
-    data["city"]=centerData[cityIdx].city;
-    data["center"]=centerData[cityIdx].center[centerIdx];
-  },[centerData,cityIdx,centerIdx,data]);
-  
+    data.center={name:centerData[cityIdx].center[idx],idx};
+  },[centerData,cityIdx,data]);
 
-
+  //TODO : 지역목록을 반환
   const citys = useMemo(()=>{
     const temp = [];
-    centerData.forEach((e,idx)=>temp.push(<div onClick={()=>setCityIdx(idx)} className={idx!==cityIdx? "modal-item-deactive" : "modal-item-active"} key={idx}>{e.city}</div>));
+    centerData.forEach((e,idx)=>temp.push(<div onClick={()=>handleCityItem(idx)} className={idx!==cityIdx? "modal-item-deactive" : "modal-item-active"} key={idx}>{e.city}</div>));
     return temp;
-  },[centerData,cityIdx]);
+  },[centerData,cityIdx,handleCityItem]);
 
+  //TODO : 센터DivList를 반환
   const centers = useMemo(()=>{
     const temp = [];
     if(cityIdx===-1) return temp;
@@ -44,6 +68,7 @@ const Center = ({setType,data}) => {
     return temp;
   },[centerData,cityIdx,centerIdx,handleCenterItem]);
 
+  //TODO : 다음 페이지로 이동
   const handleNext = useCallback(()=>{
     setType("exam");
   },[setType]);
@@ -59,9 +84,7 @@ const Center = ({setType,data}) => {
           {centers}
         </div>
       </div>
-      <div className='flex-row-sb-center'>
-        <button className='modal-btn-full' onClick={handleNext}>다음</button>
-      </div>
+      <button className='modal-btn-full' onClick={handleNext}>다음</button>
     </>
   )
 }
