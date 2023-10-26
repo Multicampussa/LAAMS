@@ -80,6 +80,7 @@ const ManagerHome = () => {
         </li>
         <li className='manager-home-box'>
           <div className='manager-home-box-title'>미처리 보상</div>
+          <Link to="/manager/reward" className='manager-home-link'>더보기</Link>
           <ul>
             <li>보상대상자 이름 / 수험번호 / 감독관이름 / 사유 타입</li>
             <li>보상대상자 이름 / 수험번호 / 감독관이름 / 사유 타입</li>
@@ -89,6 +90,7 @@ const ManagerHome = () => {
         </li>
         <li className='manager-home-box'>
           <div className='manager-home-box-title'>에러 리포트</div>
+          <Link to="/manager/error-report" className='manager-home-link'>더보기</Link>
           <ul>
             <li>제목 / 감독관 이름 / 보고시간</li>
             <li>제목 / 감독관 이름 / 보고시간</li>
