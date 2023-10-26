@@ -206,7 +206,7 @@ const Join = () => {
                   />
                   <button 
                     className='join-input-box-button' 
-                    onClick={sendEmail}>메일 전송</button>
+                    onClick={sendEmail}>전송</button>
                 </div>
                 <div className='join-input-email'>
                   <input 
