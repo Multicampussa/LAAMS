@@ -7,5 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 public interface ChatRepository extends MongoRepository<ChatRoom, String> {
-    ChatRoom findByRoomId(String roomId);
+    ChatRoom findByRoomName(String roomName);
+    boolean existsByRoomName(String roomName);
 }
