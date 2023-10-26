@@ -1,6 +1,5 @@
 package multicampussa.laams.manager.service.examinee;
 
-import multicampussa.laams.manager.domain.exam.ExamDirector;
 import multicampussa.laams.manager.domain.exam.ExamDirectorRepository;
 import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
@@ -19,13 +18,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ExamineeService {
+public class ManagerExamineeService {
 
     private final ExamineeRepository examineeRepository;
     private final ExamExamineeRepository examExamineeRepository;
     private final ExamDirectorRepository examDirectorRepository;
 
-    public ExamineeService(ExamineeRepository examineeRepository, ExamExamineeRepository examExamineeRepository, ExamDirectorRepository examDirectorRepository) {
+    public ManagerExamineeService(ExamineeRepository examineeRepository, ExamExamineeRepository examExamineeRepository, ExamDirectorRepository examDirectorRepository) {
         this.examineeRepository = examineeRepository;
         this.examExamineeRepository = examExamineeRepository;
         this.examDirectorRepository = examDirectorRepository;
