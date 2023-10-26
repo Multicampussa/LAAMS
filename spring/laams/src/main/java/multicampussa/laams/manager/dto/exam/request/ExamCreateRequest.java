@@ -12,4 +12,5 @@ public class ExamCreateRequest {
     private Long managerNo;
     private int runningTime;
     private String examType;
+    private String examLanguage;
 }
