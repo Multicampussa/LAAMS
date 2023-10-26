@@ -29,7 +29,14 @@ public class ExamExaminee extends BaseTimeEntity {
 
     private Boolean attendance;
 
-    private Boolean document;
+    public enum DocumentStatus {
+        서류_제출_대기,
+        서류_제출_완료,
+        서류_미제출
+    };
+
+    @Enumerated(EnumType.STRING)
+    private DocumentStatus document = DocumentStatus.서류_제출_대기;
 
     private Boolean compensation;
 
