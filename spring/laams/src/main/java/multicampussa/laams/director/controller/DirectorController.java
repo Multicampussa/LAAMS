@@ -123,10 +123,10 @@ public class DirectorController {
     
     @ApiOperation(value = "응시자 출석(응시자용) - 출석시간 업데이트")
     @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendanceTime")
-    public ResponseEntity<Map<String, Object>> updateAttendanceTime(@PathVariable Long examNo, @PathVariable Long examineeNo, @RequestBody AttendanceTimeDto attendanceTimeDto){
+    public ResponseEntity<Map<String, Object>> updateAttendanceTime(@PathVariable Long examNo, @PathVariable Long examineeNo){
         Map<String, Object> resultMap = new HashMap<>();
         try{
-            directorService.updateAttendanceTime(examNo, examineeNo, attendanceTimeDto);
+            directorService.updateAttendanceTime(examNo, examineeNo);
             resultMap.put("message", "출석시간이 업데이트 되었습니다.");
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
