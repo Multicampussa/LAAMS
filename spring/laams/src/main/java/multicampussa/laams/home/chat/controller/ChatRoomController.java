@@ -6,6 +6,7 @@ import multicampussa.laams.home.chat.domain.ChatRoom;
 import multicampussa.laams.home.chat.dto.CreateChatRoomDto;
 import multicampussa.laams.home.chat.service.ChatService;
 import multicampussa.laams.home.member.dto.MemberSignUpDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,13 +39,18 @@ public class ChatRoomController {
     @PostMapping("/room")
     @ApiOperation(value = "채팅방 생성")
     public ResponseEntity<Map<String, Object>> createRoom(@RequestBody CreateChatRoomDto createChatRoomDto) {
-        ResponseEntity<String> result = chatService.createRoom(createChatRoomDto);
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("message", result.getBody());
-        resultMap.put("code", result.getStatusCode().value());
-        resultMap.put("status", "success");
-        System.out.println(result.get);
-        return new ResponseEntity<>(resultMap, result.getStatusCode());
+        try {
+            ResponseEntity<String> result = chatService.createRoom(createChatRoomDto);
+            resultMap.put("message", result.getBody());
+            resultMap.put("code", result.getStatusCode().value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, result.getStatusCode());
+        } catch (Exception e) {
+            resultMap.put("message", e.getMessage().split(":")[1]);
+            resultMap.put("code", e.getMessage().split(":")[0]);
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
     }
 
     // 채팅방 입장 화면

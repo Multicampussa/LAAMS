@@ -46,7 +46,7 @@ public class ChatService {
     public ResponseEntity<String> createRoom(CreateChatRoomDto createChatRoomDto) {
         String roomName = createChatRoomDto.getDirectorId() + "&" + createChatRoomDto.getManagerId();
         if (chatRepository.existsByRoomName(roomName)) {
-            return ResponseEntity.status(HttpStatus.valueOf(10001)).body("존재하는 채팅방입니다.");
+            throw new IllegalArgumentException("a001:존재하는 채팅방입니다.");
         }
 
         ChatRoom chatRoom = ChatRoom.create(roomName);
