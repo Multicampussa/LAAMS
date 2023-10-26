@@ -6,6 +6,7 @@ import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.manager.domain.exam.Exam;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -47,6 +48,8 @@ public class ExamExaminee extends BaseTimeEntity {
     private String imageUrl;
 
     private String imageReason;
+
+    private LocalDateTime attendanceTime = null;
 
 
 }
