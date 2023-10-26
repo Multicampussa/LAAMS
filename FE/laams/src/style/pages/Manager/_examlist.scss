@@ -1,87 +1,86 @@
 .manager-exam-list{
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2.5% 10%;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  &-title{
-    font-size: 3rem;
-  }
-  &-search{
-    height: 5rem;
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    align-items: center;
-    & input{
-      background-color: $color-white;
-      border: 0.1rem solid $color-gray-light;
-      height: 2rem;
-    }
-    & select{
-      background-color: $color-white;
-      border: 0.1rem solid $color-gray-light;
-      height: 2rem;
-    }
-  }
-  &-btn-create{
-    position: absolute;
-    top: -6rem;
-    right: 0;
-    width: 11rem;
-    height: 5rem;
-    font-size: 2rem;
-    background-color: $color-blue;
-    color: $color-white;
-    border-radius: 1rem;
-  }
-  &-navigation{
-    height: 2rem;
-    font-size: 1.5rem;
-    display: flex;
-    & li{
-      cursor: pointer;
-    }
-  }
-  &-container{
-    position: relative;
-    width: 100%;
-    flex: 1;
-    background-color: $color-white;
-    padding: 3rem;
-    border-radius: 1rem;
-  }
-  &-item1{
-    width: 10%;
+  &-item{
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr;
     text-align: center;
-    box-sizing: border-box;
-  }
-  &-item2{
-    text-align: center;
-    width: 50%;
-  }
-  &-item3{
-    text-align: center;
-    width: 20%;
-  }
-  &-item4{
-    text-align: center;
-    width: 20%;
-  }
-  &-box{
-    width: 100%;
+    border-bottom: 0.1rem solid $color-gray-light;
     height: 3rem;
     line-height: 3rem;
-    display: flex;
-    border-bottom: 0.1rem solid $color-gray-light;
+    font-size: 1.5rem;
+    cursor: pointer;
   }
-  &-box:nth-child(2){
+  &-item:first-child{
     background-color: $color-black-light;
     color: $color-white;
+    font-weight: 900;
     border-radius: 1rem 1rem 0 0;
+    cursor: default;
+  }
+  &-create{
+    @include mobile{
+      width: 100%;
+      height: 3rem;
+      background-color: $color-blue;
+      color: $color-white;
+      border-radius: 1rem;
+      font-size: 1.5rem;
+      font-weight: 900;
+    }
+
+    @include tablet{
+      border-radius: 0.5rem;
+      background-color: $color-blue;
+      color: $color-white;
+      box-sizing: border-box;
+      white-space: nowrap;
+      text-align: center;
+      font-weight: 900;
+      width: 10rem;
+      height: 4rem;
+      font-size: 2rem;
+    }
+
+    @include desktop{
+      border-radius: 0.5rem;
+      background-color: $color-blue;
+      color: $color-white;
+      box-sizing: border-box;
+      white-space: nowrap;
+      text-align: center;
+      font-weight: 900;
+      width: 10rem;
+      height: 4rem;
+      font-size: 2rem;
+    }
+  }
+  &-title{
+    display: flex;
+
+
+    @include mobile{
+      flex-direction: column;
+    }
+
+    @include tablet {
+
+    }
+
+    @include desktop{
+      
+    }
+  }
+  &-search{
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+
+    @include tablet{
+      padding-left: 2rem;
+      align-items: center;
+    }
+    @include desktop{
+      padding-left: 3rem;
+      align-items: center;
+    }
   }
 }

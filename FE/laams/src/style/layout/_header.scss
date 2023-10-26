@@ -35,6 +35,7 @@
   }
   &-menu-box{
     &-close{
+      z-index: 1;
       position: fixed;
       border: 0.1rem solid $color-gray-light;
       border-radius: 0 0 1rem 1rem;
@@ -48,6 +49,7 @@
       transform: translateY(calc(-100% - 5rem));
     }
     &-open{
+      z-index: 1;
       position: fixed;
       border: 0.1rem solid $color-gray-light;
       border-radius: 0 0 1rem 1rem;
