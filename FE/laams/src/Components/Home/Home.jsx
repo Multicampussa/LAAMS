@@ -60,11 +60,15 @@ const Home = () => {
                   loginData['id'] = e.target.value
                 }}
               />
-              <form>
+              <form onSubmit={e=>{
+                e.preventDefault();
+                loginButtonClick();
+              }}>
                 <input 
                   className='login-input'
                   placeholder='비밀번호'
                   type='password'
+                  autoComplete='new-password'
                   onChange={e=>{
                     loginData['password'] = e.target.value
                   }}
@@ -95,9 +99,12 @@ const Home = () => {
           {/* 해당 텍스트 누르면 해당 페이지로 가야 함 */}
           <div className='login-text'>
             <div>
-            <div className='login-text-left'onClick={()=>{
+            <div 
+              className='login-text-left'
+              onClick={()=>{
                 navigate('/join');
-              }}>회원가입</div>
+              }}
+              >회원가입</div>
             </div>
             <div className="login-text-right">
               <div>아이디 찾기</div>

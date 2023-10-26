@@ -66,7 +66,10 @@
             }
         }
     }
-    &-input p{
+    &-input-phone{
+        color: $color-gray-light;
+    }
+    &-input-tag{
         color: red;
     }
     &-btn{

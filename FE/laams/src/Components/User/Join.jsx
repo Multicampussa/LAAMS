@@ -191,7 +191,7 @@ const Join = () => {
                   autoComplete='new-password' 
                   className='join-input-box'
                   onChange={e=>{checkPassword(e)}}/>
-                <p ref={pwTextRef}>{pwValidText}</p>
+                <p ref={pwTextRef} className='join-input-tag'>{pwValidText}</p>
               </label>
 
               <label className='join-input'>
@@ -219,7 +219,7 @@ const Join = () => {
                     className='join-input-box-button'
                     onClick={checkEmailCode}>인증</button>
                 </div>
-                <p ref={emailTextRef}>{emailValidText}</p>
+                <p ref={emailTextRef} className='join-input-tag'>{emailValidText}</p>
               </label>
               <label className='join-input'>
                 <div className='join-input-title'>전화번호</div>
@@ -229,6 +229,7 @@ const Join = () => {
                   onChange={e=>{
                     joinData["phone"] = e.target.value;
                   }}/>
+                  <p className='join-input-phone'>01012345678 형식으로 입력해주세요</p>
               </label>
               {/* FIXME : 백엔드 엔티티에 코드 부분 없고 address로 되어있어서 임시로 address라 지정 */}
               <label className='join-input'>
