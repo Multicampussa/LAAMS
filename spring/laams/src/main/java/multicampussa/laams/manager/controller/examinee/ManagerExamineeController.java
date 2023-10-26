@@ -2,24 +2,23 @@ package multicampussa.laams.manager.controller.examinee;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import multicampussa.laams.manager.domain.examinee.Examinee;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeCreateRequest;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeUpdateRequest;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationDetailResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationListResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeResponse;
-import multicampussa.laams.manager.service.examinee.ExamineeService;
+import multicampussa.laams.manager.service.examinee.ManagerExamineeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Api(tags = "응시자 관련")
 @RestController
-public class ExamineeController {
+public class ManagerExamineeController {
 
-    private final ExamineeService examineeService;
+    private final ManagerExamineeService examineeService;
 
-    public ExamineeController(ExamineeService examineeService) {
+    public ManagerExamineeController(ManagerExamineeService examineeService) {
         this.examineeService = examineeService;
     }
 
