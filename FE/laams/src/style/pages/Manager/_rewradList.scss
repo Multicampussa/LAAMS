@@ -1,0 +1,19 @@
+.manager-reward-list{
+  &-item{
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 2fr 2fr;
+    text-align: center;
+    border-bottom: 0.1rem solid $color-gray-light;
+    height: 3rem;
+    line-height: 3rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  &-item:first-child{
+    background-color: $color-black-light;
+    color: $color-white;
+    font-weight: 900;
+    border-radius: 1rem 1rem 0 0;
+    cursor: default;
+  }
+}

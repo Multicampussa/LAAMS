@@ -12,7 +12,7 @@ const List = () => {
     <section className='list'>
       <div className='list-title'>
         <div className='manager-exam-list-title'>
-          <h1>시험일정</h1>
+          <h3>시험일정</h3>
           <ul className='manager-exam-list-search'>
             <li><input type='date'/></li>
             <li>
