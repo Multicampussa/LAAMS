@@ -1,20 +1,31 @@
 package multicampussa.laams.examinee.service;
 
+import multicampussa.laams.examinee.dto.request.EnrollExamRequest;
 import multicampussa.laams.examinee.dto.response.CenterExamsResponse;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamRepository;
+import multicampussa.laams.manager.domain.examinee.ExamExaminee;
+import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
+import multicampussa.laams.manager.domain.examinee.Examinee;
+import multicampussa.laams.manager.domain.examinee.ExamineeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
 public class ExamineeService {
 
     private final ExamRepository examRepository;
+    private final ExamExamineeRepository examExamineeRepository;
+    private final ExamineeRepository examineeRepository;
 
-    public ExamineeService(ExamRepository examRepository) {
+    public ExamineeService(ExamRepository examRepository, ExamExamineeRepository examExamineeRepository, ExamineeRepository examineeRepository) {
         this.examRepository = examRepository;
+        this.examExamineeRepository = examExamineeRepository;
+        this.examineeRepository = examineeRepository;
     }
 
     public List<CenterExamsResponse> getCenterExams(Long centerNo) {
@@ -25,4 +36,30 @@ public class ExamineeService {
 
         return centerExamsResponses;
     }
+
+    private static final AtomicInteger counter = new AtomicInteger(00000000); // 초기 값 설정
+
+    public String generateUniqueExamineeCode() {
+        int nextValue = counter.getAndIncrement();
+        if (nextValue >= 99999999) {
+            // 예외 처리: 범위를 초과한 경우
+            throw new RuntimeException("Examinee code range exceeded.");
+        }
+        return String.format("%08d", nextValue);
+    }
+
+    public void enrollExam(EnrollExamRequest enrollExamRequest) {
+        // 입력 받은 시험 no로 조회
+        Exam exam = examRepository.findByNo(enrollExamRequest.getExamNo());
+
+        // 입력 받은 응시자 no로 조회
+        Examinee examinee = examineeRepository.findByNo(enrollExamRequest.getExamineeNo());
+
+        // 수험 번호 생성
+        String examineeCode = generateUniqueExamineeCode();
+
+        // 수험자 등록
+        examExamineeRepository.save(new ExamExaminee(examinee, exam, examineeCode));
+    }
+
 }

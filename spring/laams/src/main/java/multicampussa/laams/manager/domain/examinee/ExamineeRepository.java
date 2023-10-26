@@ -7,4 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ExamineeRepository extends JpaRepository<Examinee, Long> {
+
+    // 응시자 no로 조회
+    Examinee findByNo(Long no);
 }
