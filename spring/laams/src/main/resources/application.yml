@@ -7,6 +7,10 @@ spring:
     hikari:
       maximumPoolSize: 3
 
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/mydb
+
   jpa:
     hibernate:
       ddl-auto: update
