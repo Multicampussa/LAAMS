@@ -44,7 +44,6 @@
         &-email{
             display: flex;
             gap: 1rem;
-            justify-content: start;
         }
         &-box{
             box-sizing: border-box;
@@ -66,7 +65,10 @@
             }
         }
     }
-    &-input p{
+    &-input-phone{
+        color: $color-gray-light;
+    }
+    &-input-tag{
         color: red;
     }
     &-btn{
