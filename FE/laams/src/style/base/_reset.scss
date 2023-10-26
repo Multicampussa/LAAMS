@@ -1,4 +1,4 @@
-html {
+:root{
   font-size: 62.5%;
 }
 body,
@@ -14,6 +14,11 @@ ol {
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  padding-inline-start: 0;
 }
 h1 {
   font-weight: normal;
@@ -51,6 +56,11 @@ img {
 }
 fieldset {
   border: 0 none;
+  margin: 0;
+  padding: 0;
+}
+
+h1,h2,h3,h4,h5{
   margin: 0;
   padding: 0;
 }

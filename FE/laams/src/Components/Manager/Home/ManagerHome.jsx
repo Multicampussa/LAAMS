@@ -98,8 +98,8 @@ const ManagerHome = () => {
         </li>
         <li className='manager-home-chart'>
           <div className='manager-home-box-title'>시험 현황</div>
-          <div className='manager-home-chart-select' onClick={()=>setSelectOpen(!selectOpen)}>
-            {chartTitle}
+          <div className='manager-home-chart-title' onClick={()=>setSelectOpen(!selectOpen)}>{chartTitle}</div>
+          <div className='manager-home-chart-select'>
             <ul className={`manager-home-chart-select-${selectOpen}`}>
               {
                 chartItem
