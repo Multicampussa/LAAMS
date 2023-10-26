@@ -1,5 +1,8 @@
 @mixin flex($dir:row){
   &-sb{
+    display: flex;
+    flex-direction: $dir;
+    justify-content: space-between;
     &-center{
       display: flex;
       flex-direction: $dir;
@@ -8,6 +11,8 @@
     }
   }
   &-sa{
+    display: flex;
+    justify-content: space-around;
     &-center{
       display: flex;
       justify-content: space-around;
@@ -15,6 +20,8 @@
     }
   }
   &-center{
+    display: flex;
+    justify-content: center;
     &-center{
       display: flex;
       justify-content: center;
@@ -62,4 +69,26 @@
   &-scrollx::-webkit-scrollbar{
     display: none;
   }
+}
+
+.flex-grow-1{
+  flex-grow: 1;
+}
+.flex-grow-2{
+  flex-grow: 2;
+}
+.flex-grow-3{
+  flex-grow: 3;
+}
+
+.gap-1{
+  gap: 1rem;
+}
+
+.gap-2{
+  gap: 2rem;
+}
+
+.gap-3{
+  gap: 3rem;
 }

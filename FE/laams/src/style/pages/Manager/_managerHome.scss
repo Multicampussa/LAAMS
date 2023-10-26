@@ -2,6 +2,16 @@
   min-width: 100%;
   height: 100%;
   &-chart{
+    box-sizing: border-box;
+    padding-top: 2rem;
+    &-title{
+      box-sizing: border-box;
+      padding: 1rem;
+      font-size: 2rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      border: 0.1rem solid $color-gray-light;
+    }
     &-box{
       position: relative;
       box-sizing: border-box;
@@ -15,12 +25,6 @@
       background-color: red;
     }
     &-select{
-      box-sizing: border-box;
-      padding: 1rem;
-      font-size: 2rem;
-      border-radius: 1rem;
-      cursor: pointer;
-      border: 0.1rem solid $color-gray-light;
       position: relative;
       &-false{
         height: 0;
@@ -35,7 +39,7 @@
         box-sizing: border-box;
         border: 1px solid $color-gray-light;
         position: absolute;
-        top: 4.5rem;
+        top: 0;
         left: 0;
         -ms-overflow-style: none;
         overflow-y: scroll;
@@ -84,7 +88,7 @@
       }
     }
     &-box{
-      display: inline-block;
+      flex-shrink: 0;
       width: 100%;
       height: 100%;
       background-color: $color-white;
@@ -93,12 +97,12 @@
       }
     }
     &-chart{
-      display: inline-block;
+      flex-shrink: 0;
       width: 100%;
       height: 100%;
     }
     &-slider-1{
-      white-space:nowrap;
+      display: flex;
       width: auto;
       height: 100%;
       will-change: transform;
@@ -108,7 +112,7 @@
       transform: translateX(0);
     }
     &-slider-2{
-      white-space:nowrap;
+      display: flex;
       width: auto;
       height: 100%;
 
@@ -119,7 +123,7 @@
       transform: translateX(-100vw);
     }
     &-slider-3{
-      white-space:nowrap;
+      display: flex;
       width: auto;
       height: 100%;
 
@@ -130,7 +134,7 @@
       transform: translateX(-200vw);
     }
     &-slider-4{
-      white-space:nowrap;
+      display: flex;
       width: auto;
       height: 100%;
 
@@ -154,7 +158,7 @@
     &-title{
       display: none;
     }
-    &-slider-1{
+    &-slider-1,&-slider-2,&-slider-3,&-slider-4{
       width: 100%;
       height: 100%;
       display: flex;
@@ -172,6 +176,7 @@
       background-color: $color-white;
       &-title{
         font-size: 2rem;
+        padding-bottom: 1rem;
       }
     }
     &-chart{

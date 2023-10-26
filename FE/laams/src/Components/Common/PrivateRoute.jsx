@@ -12,7 +12,7 @@ const PrivateRoute = ({role, children }) => {
   useEffect(()=>{
     if (!user.accessToken || !user.accessTokenExpireTime) {
       alert("로그인해주세요!");
-      navigate("/",{replace:true})
+      navigate("/",{replace:true});
     }else{
       if(!user.authority) {
         alert("토큰이 만료되었거나 권한이 설정되지 않았습니다!");
