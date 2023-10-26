@@ -6,9 +6,11 @@ import { useSelector } from 'react-redux';
 const Home = () => {
   const [loginData,] = useState({id:localStorage.getItem("id")? localStorage.getItem("id") : "", password:""});
   const [isChecked, setChecked] = useState(localStorage.getItem("id")? true : false); 
-  const [isLogin, login] = useLogin();
+  const [, login] = useLogin();
   const user = useSelector(state=>state.User);
   const navigate = useNavigate();
+  const isLogin = useSelector(state=>state.User.accessToken);
+
   // TODO: id, password 확인 및 로그인
   const loginButtonClick = useCallback(() => {
     if(loginData["id"] === ""){
@@ -19,15 +21,12 @@ const Home = () => {
       alert("비밀번호를 입력해 주세요");
       return
     }
-    login(loginData["id"], loginData["password"]);
-  },[loginData,login]);
+    login(loginData["id"], loginData["password"],isChecked);
+  },[loginData,login,isChecked]);
 
   // TODO : 로그인 후처리 
   useEffect(()=>{
     if(isLogin){
-      if(isChecked){
-        localStorage.setItem("id", loginData["id"])
-      }
       if(user.authority){
         switch(user.authority){
           default : break
@@ -42,13 +41,13 @@ const Home = () => {
         alert("권한이 설정되지 않았습니다!");
       }
     }
-  },[isLogin,isChecked,loginData, navigate ,user])
+  },[isLogin, navigate ,user])
 
   return (
     <section className='home'>
       <div className='login-container'>
         <div className='login-logo'></div>
-        <article className='login-box'>
+          <article className='login-box'>
           <div className='login-title'>Login</div>
           <div className='login-form'>
             <div className='login-input-box'>
