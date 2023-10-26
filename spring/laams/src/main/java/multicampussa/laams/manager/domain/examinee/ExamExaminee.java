@@ -28,7 +28,7 @@ public class ExamExaminee extends BaseTimeEntity {
     @Column(unique = true)
     private String examineeCode;
 
-    private Boolean attendance;
+    private Boolean attendance = false;
 
     public enum DocumentStatus {
         서류_제출_대기,
@@ -39,7 +39,7 @@ public class ExamExaminee extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private DocumentStatus document = DocumentStatus.서류_제출_대기;
 
-    private Boolean compensation;
+    private Boolean compensation = false;
 
     private String compensationType;
 
@@ -52,4 +52,14 @@ public class ExamExaminee extends BaseTimeEntity {
     private LocalDateTime attendanceTime = null;
 
 
+    public void updateAttendanceTime(LocalDateTime attendanceTime) {
+        this.attendanceTime = attendanceTime;
+    }
+
+    public ExamExaminee(Examinee examinee, Exam exam, String examineeCode) {
+        this.examinee = examinee;
+        this.exam = exam;
+        this.examineeCode = examineeCode;
+
+    }
 }
