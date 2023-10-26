@@ -14,6 +14,7 @@ public class ExamResponse {
     private Long managerNo;
     private String managerName;
     private String examType;
+    public String examLanguage;
 
     public ExamResponse(Exam exam) {
         this.no = exam.getNo();
@@ -22,6 +23,7 @@ public class ExamResponse {
         this.managerNo = exam.getManager().getNo();
         this.managerName = exam.getManager().getName();
         this.examType = exam.getExamType();
+        this.examLanguage = exam.getExamLanguage();
     }
 
 }

@@ -20,7 +20,6 @@ import multicampussa.laams.manager.exception.CustomExceptions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +49,7 @@ public class ExamService {
         // 입력 받은 매니저 번호로 시험 담당 매니저 호출
         Manager responsibleManager = managerRepository.findById(request.getManagerNo())
                 .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getManagerNo() + "번 매니저는 존재하지 않습니다."));
-        examRepository.save(new Exam(existingCenter, request.getExamDate(), responsibleManager, request.getRunningTime(), request.getExamType()));
+        examRepository.save(new Exam(existingCenter, request.getExamDate(), responsibleManager, request.getRunningTime(), request.getExamType(), request.getExamLanguage()));
     }
 
     // 시험 목록 조회
