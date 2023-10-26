@@ -51,9 +51,15 @@ public class ExamExaminee extends BaseTimeEntity {
 
     private LocalDateTime attendanceTime = null;
 
+
+    public void updateAttendanceTime(LocalDateTime attendanceTime) {
+        this.attendanceTime = attendanceTime;
+    }
+
     public ExamExaminee(Examinee examinee, Exam exam, String examineeCode) {
         this.examinee = examinee;
         this.exam = exam;
         this.examineeCode = examineeCode;
+
     }
 }
