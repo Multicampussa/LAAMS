@@ -84,9 +84,9 @@ public class DirectorService {
 
         int examineeCnt = examExamineeRepository.countByExamineeNo(examNo);
         int attendanceCnt = examExamineeRepository.countByAttendance(examNo);
-        int documentCnt = examExamineeRepository.countByDocument(examNo);
+//        int documentCnt = examExamineeRepository.countByDocument(examNo);
 
-        return new ExamStatusDto(examineeCnt, attendanceCnt, documentCnt);
+        return new ExamStatusDto(examineeCnt, attendanceCnt);
 
     }
 }

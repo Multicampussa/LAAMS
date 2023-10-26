@@ -13,11 +13,11 @@ public class ExamStatusDto {
 
     private int exmaineeCnt;
     private int attendanceCnt;
-    private int documentCnt;
+//    private int documentCnt;
 
-    public ExamStatusDto(int examineeCnt, int attendanceCnt, int documentCnt){
+    public ExamStatusDto(int examineeCnt, int attendanceCnt){
         this.exmaineeCnt = examineeCnt;
         this.attendanceCnt = attendanceCnt;
-        this.documentCnt = documentCnt;
+//        this.documentCnt = documentCnt;
     }
 }

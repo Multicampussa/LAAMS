@@ -16,7 +16,7 @@ public class ExamExamineeListDto {
     private String examineeName;
     private String examineeCode;
     private Boolean attendance;
-    private Boolean document;
+    private ExamExaminee.DocumentStatus document;
 
     public ExamExamineeListDto(ExamExaminee examExaminee){
         this.examineeNo = examExaminee.getExaminee().getNo();
