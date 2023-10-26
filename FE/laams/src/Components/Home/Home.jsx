@@ -92,9 +92,12 @@ const Home = () => {
               로그인
             </button>
           </div>
+          {/* 해당 텍스트 누르면 해당 페이지로 가야 함 */}
           <div className='login-text'>
             <div>
-              <div>회원가입</div>
+            <div className='login-text-left'onClick={()=>{
+                navigate('/join');
+              }}>회원가입</div>
             </div>
             <div className="login-text-right">
               <div>아이디 찾기</div>
