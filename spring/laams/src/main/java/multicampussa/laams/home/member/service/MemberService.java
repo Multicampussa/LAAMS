@@ -6,6 +6,8 @@ import multicampussa.laams.home.member.dto.*;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
+import multicampussa.laams.manager.domain.centerManager.CenterManager;
+import multicampussa.laams.manager.domain.centerManager.CenterManagerRepository;
 import multicampussa.laams.manager.domain.manager.Manager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +30,27 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final JavaMailSender javaMailSender;
     private final MemberManagerRepository memberManagerRepository;
+    private final CenterManagerRepository centerManagerRepository;
     private final Random random = new SecureRandom();
 
     // 회원가입
     public ResponseEntity<String> signUp(MemberSignUpDto memberSignUpDto) {
+        boolean centerManagerBoolean = false;
+        List<CenterManager> centerManagers = centerManagerRepository.findAll();
+        for (CenterManager centerManager : centerManagers) {
+            if (centerManager.getCode().equals(memberSignUpDto.getCenterManagerCode())) {
+                centerManagerBoolean = true;
+            }
+        }
+
+        if (memberSignUpDto.getCenterManagerCode().equals("")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("센터 담당자 코드를 입력하세요.");
+        }
+
+        if (!centerManagerBoolean) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("센터 담당자 코드가 일치하지 않습니다.");
+        }
+
         if (memberDirectorRepository.existsByEmail(memberSignUpDto.getEmail()) && !memberDirectorRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsDelete()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이메일입니다.");
         }

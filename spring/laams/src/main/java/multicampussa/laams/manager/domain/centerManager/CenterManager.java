@@ -22,5 +22,7 @@ public class CenterManager {
     private String phoneNum;
 
     private String email;
+
+    private String code;
 }
 

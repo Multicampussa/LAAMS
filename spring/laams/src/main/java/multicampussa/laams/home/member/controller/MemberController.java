@@ -21,7 +21,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/member")
-@Api(tags = "Member Controller")
+@Api(tags = "멤버 관련")
 public class MemberController {
 
     private final MemberService memberService;
@@ -47,7 +47,7 @@ public class MemberController {
             if (!memberService.isPresentId(id)) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("message", "존재하지 않는 아이디입니다.");
-                response.put("status", HttpStatus.UNAUTHORIZED.value());
+                response.put("code", HttpStatus.UNAUTHORIZED.value());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
             // 아이디와 비밀번호 인증
@@ -84,7 +84,7 @@ public class MemberController {
         } catch (AuthenticationException e) {
             Map<String, Object> response = new HashMap<>();
             response.put("message", "아이디 또는 비밀번호가 일치하지 않습니다.");
-            response.put("status", HttpStatus.UNAUTHORIZED.value());
+            response.put("code", HttpStatus.UNAUTHORIZED.value());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
@@ -108,7 +108,7 @@ public class MemberController {
 
         response.put("accessToken", newAccessToken);
         response.put("message", "액세스 토큰을 성공적으로 발급하였습니다.");
-        response.put("status", HttpStatus.OK.value());
+        response.put("code", HttpStatus.OK.value());
         response.put("accessTokenExpireTime", jwtTokenProvider.getTokenExpireTime(newAccessToken));
         response.put("authority", jwtTokenProvider.getAuthority(newAccessToken));
 
@@ -127,7 +127,7 @@ public class MemberController {
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         } catch (Exception e) {
             resultMap.put("message", e.getMessage().split(": ")[1]);
-            resultMap.put("status", Integer.parseInt(e.getMessage().split(": ")[0]));
+            resultMap.put("code", Integer.parseInt(e.getMessage().split(": ")[0]));
             return new ResponseEntity<>(resultMap, HttpStatus.valueOf(Integer.parseInt(e.getMessage().split(": ")[0])));
         }
     }
@@ -144,7 +144,7 @@ public class MemberController {
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         } catch (Exception e) {
             resultMap.put("message", e.getMessage());
-            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            resultMap.put("code", HttpStatus.BAD_REQUEST.value());
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
@@ -160,7 +160,7 @@ public class MemberController {
         if (authority.equals("ROLE_DIRECTOR")) {
             if (!directorId.equals(memberId)) {
                 resultMap.put("message", "다른 유저는 열람할 수 없습니다.");
-                resultMap.put("status", HttpStatus.UNAUTHORIZED.value());
+                resultMap.put("code", HttpStatus.UNAUTHORIZED.value());
                 return new ResponseEntity<>(resultMap, HttpStatus.UNAUTHORIZED);
             }
             try {
@@ -171,7 +171,7 @@ public class MemberController {
                 return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
             } catch (IllegalArgumentException e) {
                 resultMap.put("message", e.getMessage());
-                resultMap.put("status", HttpStatus.NOT_FOUND.value());
+                resultMap.put("code", HttpStatus.NOT_FOUND.value());
                 return new ResponseEntity<>(resultMap, HttpStatus.NOT_FOUND);
             }
         }
@@ -184,7 +184,7 @@ public class MemberController {
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             resultMap.put("message", e.getMessage());
-            resultMap.put("status", HttpStatus.NOT_FOUND.value());
+            resultMap.put("code", HttpStatus.NOT_FOUND.value());
             return new ResponseEntity<>(resultMap, HttpStatus.NOT_FOUND);
         }
     }
@@ -209,7 +209,7 @@ public class MemberController {
 
         if (!id.equals(requestDto.getId())) {
             resultMap.put("message", "내 계정이 아닙니다.");
-            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            resultMap.put("code", HttpStatus.BAD_REQUEST.value());
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
 
@@ -221,7 +221,7 @@ public class MemberController {
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             resultMap.put("message", e.getMessage());
-            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            resultMap.put("code", HttpStatus.BAD_REQUEST.value());
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
@@ -236,7 +236,7 @@ public class MemberController {
         if (authority.equals("ROLE_DIRECTOR")) {
             if (!id.equals(jwtTokenProvider.getId(token))) {
                 resultMap.put("message", "접근 권한이 없습니다.");
-                resultMap.put("status", HttpStatus.UNAUTHORIZED.value());
+                resultMap.put("code", HttpStatus.UNAUTHORIZED.value());
                 return new ResponseEntity<>(resultMap, HttpStatus.UNAUTHORIZED);
             }
         }
@@ -265,7 +265,7 @@ public class MemberController {
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             resultMap.put("message", e.getMessage());
-            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            resultMap.put("code", HttpStatus.BAD_REQUEST.value());
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
@@ -282,7 +282,7 @@ public class MemberController {
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             resultMap.put("message", e.getMessage());
-            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            resultMap.put("code", HttpStatus.BAD_REQUEST.value());
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
@@ -294,11 +294,12 @@ public class MemberController {
         try {
             resultMap.put("message", "성공적으로 암호화하였습니다.");
             resultMap.put("data", memberService.encodedPassword(encodedPasswordDto));
-            resultMap.put("status", HttpStatus.OK.value());
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             resultMap.put("message", e.getMessage());
-            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            resultMap.put("code", HttpStatus.BAD_REQUEST.value());
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
