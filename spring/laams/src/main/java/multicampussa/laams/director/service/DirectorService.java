@@ -89,4 +89,24 @@ public class DirectorService {
         return new ExamStatusDto(examineeCnt, attendanceCnt);
 
     }
+
+    // 응시자 출석 시간 업데이트 (응시자 지각여부 판단)
+    @ Transactional
+    public void updateAttendanceTime(Long examNo, Long examineeNo, AttendanceTimeDto attendanceTimeDto) {
+
+        Optional<Exam> exam = examRepository.findById(examNo);
+        System.out.println(examNo);
+        if(exam.isPresent()){
+            Optional<ExamExaminee> examExaminee = Optional.ofNullable(examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo));
+            if(examExaminee.isEmpty()){
+                throw new IllegalArgumentException("해당 시험의 응시자가 아닙니다.");
+            }else {
+                // 출석 시간 업데이트
+                examExaminee.get().updateAttendanceTime(attendanceTimeDto);
+                examExamineeRepository.save(examExaminee.get());
+            }
+        } else {
+            throw new IllegalArgumentException("해당 시험은 없습니다.");
+        }
+    }
 }

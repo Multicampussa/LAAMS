@@ -120,21 +120,22 @@ public class DirectorController {
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
+    
+    @ApiOperation(value = "응시자 출석(응시자용) - 출석시간 업데이트")
+    @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendanceTime")
+    public ResponseEntity<Map<String, Object>> updateAttendanceTime(@PathVariable Long examNo, @PathVariable Long examineeNo, @RequestBody AttendanceTimeDto attendanceTimeDto){
+        Map<String, Object> resultMap = new HashMap<>();
+        try{
+            directorService.updateAttendanceTime(examNo, examineeNo, attendanceTimeDto);
+            resultMap.put("message", "출석시간이 업데이트 되었습니다.");
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
 
-//    @ApiOperation(value = "응시자 출결 변경")
-//    @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendance")
-//    public ResponseEntity<Map<String, Object>> changeAttendance(@PathVariable Long examNo, @PathVariable Long examineeNo, @RequestBody ){
-//        Map<String, Object> resultMap = new HashMap<>();
-//        try {
-//            resultMap.put("message","응시자의 출결 사항을 변경했습니다.");
-//            resultMap.put("data", directorService.getExamExamineeList(examNo));
-//            resultMap.put("code", HttpStatus.OK.value());
-//            resultMap.put("status", "success");
-//            return new ResponseEntity<>(resultMap, HttpStatus.OK);
-//        } catch (IllegalArgumentException e){
-//            resultMap.put("message", e.getMessage());
-//            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
-//            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
-//        }
-//    }
 }

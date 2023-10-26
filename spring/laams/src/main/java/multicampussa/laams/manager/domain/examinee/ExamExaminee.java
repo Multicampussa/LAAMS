@@ -2,6 +2,7 @@ package multicampussa.laams.manager.domain.examinee;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import multicampussa.laams.director.dto.AttendanceTimeDto;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.manager.domain.exam.Exam;
 
@@ -52,4 +53,7 @@ public class ExamExaminee extends BaseTimeEntity {
     private LocalDateTime attendanceTime = null;
 
 
+    public void updateAttendanceTime(AttendanceTimeDto attendanceTimeDto){
+        this.attendanceTime = attendanceTimeDto.getAttendanceTime();
+    }
 }
