@@ -110,9 +110,6 @@ public class ExamService {
     public List<ExamResponse> getMonthlyExams(Integer year, Integer month) {
         // 특정 년도, 특정 월 시험 조회
         List<Exam> monthlyExams = examRepository.findExamsByYearAndMonth(year, month);
-        if (monthlyExams.isEmpty()) {
-            throw new CustomExceptions.ExamNotFoundException("시험 목록이 없습니다. 년도와 월을 확인하세요.");
-        }
 
         return monthlyExams.stream()
                 .map(ExamResponse::new)
@@ -124,9 +121,6 @@ public class ExamService {
     public List<ExamResponse> getDailyExams(Integer year, Integer month, Integer day) {
         // 특정 년도, 특정 월, 특정 일 시험 조회
         List<Exam> dailyExams = examRepository.findExamsByYearMonthAndDay(year, month, day);
-        if (dailyExams.isEmpty()) {
-            throw new CustomExceptions.ExamNotFoundException("시험 목록이 없습니다. 년도와 월 일자를 확인하세요.");
-        }
 
         return dailyExams.stream()
                 .map(ExamResponse::new)
@@ -135,16 +129,15 @@ public class ExamService {
 
     // 시험 수정
     @Transactional
-    public void updateExam(ExamUpdateRequest request) {
-        // 기존 시험 찾기
-        Exam existingExam = examRepository.findById(request.getExamNo())
-                .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(request.getExamNo() + "번 시험은 존재하지 않습니다."));
-        Center existingCenter = centerRepository.findByName(request.getCenterName())
-                .orElseThrow(() -> new CustomExceptions.CenterNotFoundException(request.getCenterName() + " 이름의 센터는 존재하지 않습니다."));
-        Manager manager = managerRepository.findById(request.getManagerNo())
-                .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getManagerNo() + "번 매니저는 존재하지 않습니다."));
+    public void updateExam(Long examNo, ExamUpdateRequest request) {
+        Exam existingExam = examRepository.findById(examNo)
+                .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(examNo + "번 시험은 존재하지 않습니다."));
+        Center existingCenter = centerRepository.findByName(request.getNewCenterName())
+                .orElseThrow(() -> new CustomExceptions.CenterNotFoundException(request.getNewCenterName() + " 이름의 센터는 존재하지 않습니다."));
+        Manager manager = managerRepository.findById(request.getNewManagerNo())
+                .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getNewManagerNo() + "번 매니저는 존재하지 않습니다."));
 
-        existingExam.updateExamInfo(existingCenter, request.getExamDate(), manager, request.getRunningTime(), request.getExamType());
+        existingExam.updateExamInfo(existingCenter, request.getNewExamDate(), manager, request.getNewRunningTime(), request.getNewExamType());
     }
 
     // 시험 삭제

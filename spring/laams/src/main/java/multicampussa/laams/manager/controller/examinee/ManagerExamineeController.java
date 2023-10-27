@@ -50,7 +50,6 @@ public class ManagerExamineeController {
         return examineeService.getCompensationDetail(examineeNo);
     }
 
-
     // 응시자 수정
     @ApiOperation("응시자 수정")
     @PutMapping("/api/v1/manager/examinee")
