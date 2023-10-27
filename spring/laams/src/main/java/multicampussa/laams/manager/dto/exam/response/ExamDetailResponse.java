@@ -14,6 +14,7 @@ public class ExamDetailResponse {
     private String centerName;  // 센터명
     private String centerManagerName;  // 센터 매니저 이름
     private String examType;  // 시험 타입
+    private String examLanguage;
     private LocalDateTime examDate;  // 시험 날짜
     private int examineeNum;  // 총 응시자 수
     private int attendanceNum; // 출석자 수
@@ -24,6 +25,7 @@ public class ExamDetailResponse {
         this.centerName = center.getName();
         this.centerManagerName = center.getCenterManager().getName();
         this.examType = exam.getExamType();
+        this.examLanguage = exam.getExamLanguage();
         this.examDate = exam.getExamDate();
         this.examineeNum = examineeNum;
         this.attendanceNum = attendanceNum;
