@@ -17,6 +17,7 @@ import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
 import multicampussa.laams.manager.dto.exam.response.ExamDetailResponse;
 import multicampussa.laams.manager.dto.exam.response.ExamResponse;
 import multicampussa.laams.manager.exception.CustomExceptions;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,20 +43,28 @@ public class ExamService {
 
     // 시험 생성
     @Transactional
-    public void saveExam(ExamCreateRequest request) {
+    public ResponseEntity<String> saveExam(ExamCreateRequest request) {
         // 입력 받은 센터 이름으로 기존 센터 데이터를 불러와서 시험 정보 저장
         Center existingCenter = centerRepository.findByName(request.getCenterName())
-                .orElseThrow(() -> new CustomExceptions.CenterNotFundException(request.getCenterName() + " 이름의 센터는 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomExceptions.CenterNotFoundException(request.getCenterName() + " 이름의 센터는 존재하지 않습니다."));
         // 입력 받은 매니저 번호로 시험 담당 매니저 호출
         Manager responsibleManager = managerRepository.findById(request.getManagerNo())
                 .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getManagerNo() + "번 매니저는 존재하지 않습니다."));
         examRepository.save(new Exam(existingCenter, request.getExamDate(), responsibleManager, request.getRunningTime(), request.getExamType(), request.getExamLanguage()));
+
+        return ResponseEntity.ok("시험이 성공적으로 생성되었습니다");
     }
+
 
     // 시험 목록 조회
     @Transactional(readOnly = true)
     public List<ExamResponse> getExams() {
-        return examRepository.findAll().stream()
+        List<Exam> exams = examRepository.findAll();
+        if (exams.isEmpty()) {
+            throw new CustomExceptions.ExamNotFoundException("시험 목록이 없습니다. 시험을 생성하세요.");
+        }
+
+        return exams.stream()
                 .map(ExamResponse::new)
                 .collect(Collectors.toList());
     }
@@ -65,7 +74,7 @@ public class ExamService {
     public ExamDetailResponse getExam(Long no) {
         // 전달 받은 시험번호로 시험 조회
         Exam exam = examRepository.findById(no)
-                .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(no + "번 시험 없음"));
+                .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(no + "번 시험이 존재하지 않습니다."));
         // 시험 번호
         Long examNo = exam.getNo();
 
@@ -73,8 +82,7 @@ public class ExamService {
         Long centerNo = exam.getCenter().getNo();
 
         // 센터 번호로 센터 조회
-        Center center = centerRepository.findById(centerNo)
-                .orElseThrow(() -> new CustomExceptions.CenterNotFundException(centerNo + "번 센터 없음"));
+        Center center = centerRepository.findByNo(centerNo);
 
         // 시험 아이디로 응시자 전체 조회
         List<ExamExaminee> examExamineeList = examExamineeRepository.findByExamNo(examNo);
@@ -88,11 +96,6 @@ public class ExamService {
         List<ExamExaminee> compensationList = examExamineeRepository.findByCompensation(true);
         int compensationNum = compensationList.size();
 
-        // 시험 번호로 감독관 리스트 조회
-        List<Director> directors = examDirectorRepository.findByExam(exam).stream()
-                .map(ExamDirector::getDirector)
-                .collect(Collectors.toList());
-
         // 시험 번호로 ExamDirector 조회하고 다시 DirectorListResponse 생성
         List<DirectorListResponse> directorListResponseList = examDirectorRepository.findByExam(exam).stream()
                 .map(examDirector -> new DirectorListResponse(examDirector.getDirector(), examDirector))
@@ -103,9 +106,15 @@ public class ExamService {
     }
 
     // 월별 시험 조회
+    @Transactional(readOnly = true)
     public List<ExamResponse> getMonthlyExams(Integer year, Integer month) {
         // 특정 년도, 특정 월 시험 조회
-        return examRepository.findExamsByYearAndMonth(year, month).stream()
+        List<Exam> monthlyExams = examRepository.findExamsByYearAndMonth(year, month);
+        if (monthlyExams.isEmpty()) {
+            throw new CustomExceptions.ExamNotFoundException("시험 목록이 없습니다. 년도와 월을 확인하세요.");
+        }
+
+        return monthlyExams.stream()
                 .map(ExamResponse::new)
                 .collect(Collectors.toList());
     }
@@ -114,7 +123,12 @@ public class ExamService {
     @Transactional(readOnly = true)
     public List<ExamResponse> getDailyExams(Integer year, Integer month, Integer day) {
         // 특정 년도, 특정 월, 특정 일 시험 조회
-        return examRepository.findExamsByYearMonthAndDay(year, month, day).stream()
+        List<Exam> dailyExams = examRepository.findExamsByYearMonthAndDay(year, month, day);
+        if (dailyExams.isEmpty()) {
+            throw new CustomExceptions.ExamNotFoundException("시험 목록이 없습니다. 년도와 월 일자를 확인하세요.");
+        }
+
+        return dailyExams.stream()
                 .map(ExamResponse::new)
                 .collect(Collectors.toList());
     }
@@ -126,7 +140,7 @@ public class ExamService {
         Exam existingExam = examRepository.findById(request.getExamNo())
                 .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(request.getExamNo() + "번 시험은 존재하지 않습니다."));
         Center existingCenter = centerRepository.findByName(request.getCenterName())
-                .orElseThrow(() -> new CustomExceptions.CenterNotFundException(request.getCenterName() + " 이름의 센터는 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomExceptions.CenterNotFoundException(request.getCenterName() + " 이름의 센터는 존재하지 않습니다."));
         Manager manager = managerRepository.findById(request.getManagerNo())
                 .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getManagerNo() + "번 매니저는 존재하지 않습니다."));
 
@@ -137,7 +151,7 @@ public class ExamService {
     @Transactional
     public void deleteExam(Long no) {
         Exam exam = examRepository.findById(no)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(no + "번 시험은 존재하지 않습니다."));
         examRepository.delete(exam);
     }
 
