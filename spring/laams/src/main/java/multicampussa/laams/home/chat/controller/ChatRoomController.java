@@ -6,11 +6,13 @@ import multicampussa.laams.home.chat.domain.ChatRoom;
 import multicampussa.laams.home.chat.dto.CreateChatRoomDto;
 import multicampussa.laams.home.chat.service.ChatService;
 import multicampussa.laams.home.member.dto.MemberSignUpDto;
+import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +22,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/chat")
 public class ChatRoomController {
+
     private final ChatService chatService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 채팅 리스트 화면
     @GetMapping("/room")
@@ -38,10 +42,13 @@ public class ChatRoomController {
     // 채팅방 생성
     @PostMapping("/room")
     @ApiOperation(value = "채팅방 생성")
-    public ResponseEntity<Map<String, Object>> createRoom(@RequestBody CreateChatRoomDto createChatRoomDto) {
+    public ResponseEntity<Map<String, Object>> createRoom(@ApiIgnore @RequestHeader String authorization, @RequestBody CreateChatRoomDto createChatRoomDto) {
+        String token = authorization.replace("Bearer ", "");
+        String senderId = jwtTokenProvider.getId(token);
+
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            ResponseEntity<String> result = chatService.createRoom(createChatRoomDto);
+            ResponseEntity<String> result = chatService.createRoom(createChatRoomDto, senderId);
             resultMap.put("message", result.getBody());
             resultMap.put("code", result.getStatusCode().value());
             resultMap.put("status", "success");

@@ -8,6 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateChatRoomDto {
-    private String directorId;
-    private String managerId;
+    private String receiverId;
 }

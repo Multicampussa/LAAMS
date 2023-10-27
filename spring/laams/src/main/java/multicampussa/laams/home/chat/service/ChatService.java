@@ -7,6 +7,8 @@ import multicampussa.laams.home.chat.domain.ChatRoom;
 import multicampussa.laams.home.chat.dto.CreateChatRoomDto;
 import multicampussa.laams.home.chat.repository.ChatRepository;
 import multicampussa.laams.home.member.dto.MemberSignUpDto;
+import multicampussa.laams.home.member.repository.MemberDirectorRepository;
+import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ public class ChatService {
 
     private Map<String, ChatRoom> chatRooms;
     private final ChatRepository chatRepository;
+    private final MemberManagerRepository memberManagerRepository;
+    private final MemberDirectorRepository memberDirectorRepository;
 
     @PostConstruct
     //의존관계 주입완료되면 실행되는 코드
@@ -43,8 +47,16 @@ public class ChatService {
     }
 
     //채팅방 생성
-    public ResponseEntity<String> createRoom(CreateChatRoomDto createChatRoomDto) {
-        String roomName = createChatRoomDto.getDirectorId() + "&" + createChatRoomDto.getManagerId();
+    public ResponseEntity<String> createRoom(CreateChatRoomDto createChatRoomDto, String senderId) {
+        String roomName;
+        if (memberManagerRepository.existsById(senderId)) {
+            roomName = createChatRoomDto.getReceiverId() + "&" + senderId;
+        } else if (memberDirectorRepository.existsById(senderId)) {
+            roomName = senderId + "&" + createChatRoomDto.getReceiverId();
+        } else {
+            throw new IllegalArgumentException("해당 유저는 없습니다.");
+        }
+
         if (chatRepository.existsByRoomName(roomName)) {
             throw new IllegalArgumentException("a001:존재하는 채팅방입니다.");
         }
