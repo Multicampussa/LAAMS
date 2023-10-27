@@ -1,5 +1,4 @@
-.join{
-
+.user{
     width: 100%;
     min-height: 100%;
     box-sizing: border-box;
@@ -21,6 +20,20 @@
     &-logo{
         width: 40%;
     }
+    &-id-box{
+        width: 100%;
+        border: 0.1rem solid $color-gray-light;
+        height: 4rem;
+        background-color: lightgray;
+        color: black;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding-left: 1rem;
+        display:flex;
+        align-items: center;
+        border-radius: 0.5rem;
+        
+    }
     &-box{
         width: 80%;
         padding: 5rem 0rem;
@@ -32,6 +45,10 @@
         align-items: center;
         justify-content: center;
         gap: 2rem;
+        &-title{
+            font-size: 3rem;
+            font-weight: 700;
+        }
     }
     &-input{
         display: flex;
@@ -86,7 +103,7 @@
         margin-bottom: 2rem;
     }
 
-    @mixin mobile-join{
+    @mixin mobile-user{
         &-container{
             width: 90%;
         }
@@ -102,11 +119,11 @@
     }
 
     @include mobile{
-        @include mobile-join();
+        @include mobile-user();
     }
 
     @include tablet{
-        @include mobile-join();
+        @include mobile-user();
         &-input{
             width: 60%;
         }
