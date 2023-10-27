@@ -49,22 +49,31 @@ public class ExamController {
 
     // 월별 시험 목록 조회
     @ApiOperation("월별 시험 목록 조회")
-    @GetMapping("/api/vi/manager/exam/{year}/{month}")
-    public List<ExamResponse> getMonthlyExams(@PathVariable Integer year, @PathVariable Integer month) {
+    @GetMapping("/api/v1/manager/exam/monthly")
+    public List<ExamResponse> getMonthlyExams(
+            @RequestParam Integer year,
+            @RequestParam Integer month)
+    {
         return examService.getMonthlyExams(year, month);
     }
 
     // 일별 시험 목록 조회
     @ApiOperation("일별 시험 목록 조회")
-    @GetMapping("/api/vi/manager/exam/{year}/{month}/{day}")
-    public List<ExamResponse> getDailyExams(@PathVariable Integer year, @PathVariable Integer month, @PathVariable Integer day) {
+    @GetMapping("/api/v1/manager/exam/daily")
+    public List<ExamResponse> getDailyExams(
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @RequestParam Integer day)
+    {
         return examService.getDailyExams(year, month, day);
     }
 
     // 시험 수정
     @ApiOperation("시험 수정")
     @PutMapping("/api/v1/manager/exam/{examId}")
-    public ResponseEntity<String> updateExam(@PathVariable Long examId, @RequestBody ExamUpdateRequest request) {
+    public ResponseEntity<String> updateExam(
+            @PathVariable Long examId,
+            @RequestBody ExamUpdateRequest request) {
         examService.updateExam(examId, request);
         return ResponseEntity.ok("시험이 성공적으로 수정되었습니다.");
     }
