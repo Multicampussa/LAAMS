@@ -26,35 +26,35 @@ public class ExamController {
 
     // 시험 생성
     @ApiOperation("시험 생성")
-    @PostMapping("/manager/exam")
+    @PostMapping("/api/v1/manager/exam")
     public void saveExam(@RequestBody ExamCreateRequest request) {
         examService.saveExam(request);
     }
 
     // 시험 목록 조회
     @ApiOperation("시험 목록 조회")
-    @GetMapping("/manager/exams")
+    @GetMapping("/api/v1/manager/exams")
     public List<ExamResponse> getExams() {
         return examService.getExams();
     }
 
     // 시험 상세 조회
     @ApiOperation("시험 상세 조회")
-    @GetMapping("/manager/exam/{no}")
+    @GetMapping("/api/v1/manager/exam/{no}")
     public ExamDetailResponse getExam(@PathVariable Long no) {
         return examService.getExam(no);
     }
 
     // 시험 수정
     @ApiOperation("시험 수정")
-    @PutMapping("/manager/exam")
+    @PutMapping("/api/v1/manager/exam")
     public void updateExam(@RequestBody ExamUpdateRequest request) {
         examService.updateExam(request);
     }
 
     // 시험 삭제
     @ApiOperation("시험 삭제")
-    @DeleteMapping("/manager/exam/{no}")
+    @DeleteMapping("/api/v1/manager/exam/{no}")
     public void deleteExam(@PathVariable Long no) {
         examService.deleteExam(no);
     }
