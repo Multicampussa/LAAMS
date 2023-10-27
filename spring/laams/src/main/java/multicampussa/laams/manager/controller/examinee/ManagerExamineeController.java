@@ -45,7 +45,7 @@ public class ManagerExamineeController {
 
     // 보상대상자 상세 조회
     @ApiOperation("보상 대상 응시자 상세 조회")
-    @GetMapping("/api/v1manager/examinees/compensation/{examineeNo}")
+    @GetMapping("/api/v1/manager/examinees/compensation/{examineeNo}")
     public ExamineeCompensationDetailResponse getCompensationDetail(@PathVariable Long examineeNo){
         return examineeService.getCompensationDetail(examineeNo);
     }
