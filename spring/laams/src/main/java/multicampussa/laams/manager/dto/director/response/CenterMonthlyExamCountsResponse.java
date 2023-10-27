@@ -1,4 +1,4 @@
-package multicampussa.laams.manager.dto.center;
+package multicampussa.laams.manager.dto.director.response;
 
 import lombok.Getter;
 
