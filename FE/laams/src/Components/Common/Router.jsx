@@ -8,6 +8,7 @@ import ManagerRewardList from "../Manager/Reward/List.jsx";
 import ManagerErrorReportList from "../Manager/ErrorReport/List.jsx"
 import Join from '../User/Join.jsx';
 import UpdateUser from '../User/UpdateUser.jsx';
+import Test from '../Test.jsx';
 const Router = () => {
   return (
     <>
@@ -46,6 +47,7 @@ const Router = () => {
           />
           <Route path='/join' element={<Join/>} />
           <Route path='/update/user' element={<PrivateRoute role="director" children={<UpdateUser/>}></PrivateRoute>}/>
+          <Route path='/test' element={<Test/>} />
         </Routes>
       </BrowserRouter>
     </>
