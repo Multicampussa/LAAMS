@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -36,4 +37,11 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
             @Param("day") Integer day
     );
 
+    // 대시보드용 센터별 시험 횟수(한달) 조회
+    @Query("select count(*) from Exam e where (e.center.no = :centerNo and year(e.examDate) = :year and month(e.examDate) = :month) group by e.center")
+    String getCenterExamMonthCount(@Param("centerNo") Long centerNo, @Param("year") int year, @Param("month") int month);
+
+    // 대시보드용 센터별 월 응시자 수 조회
+    @Query("select count(e) from Exam e join fetch ExamExaminee ee on e.no = ee.exam.no where (e.center.no = :centerNo and year(e.examDate) = :year and month(e.examDate) = :month) group by e.center")
+    String getCenterExamineeMonthCount(@Param("centerNo") Long centerNo, @Param("year") int year, @Param("month") int month);
 }
