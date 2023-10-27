@@ -63,9 +63,10 @@ public class ExamController {
 
     // 시험 수정
     @ApiOperation("시험 수정")
-    @PutMapping("/api/v1/manager/exam")
-    public void updateExam(@RequestBody ExamUpdateRequest request) {
-        examService.updateExam(request);
+    @PutMapping("/api/v1/manager/exam/{examId}")
+    public ResponseEntity<String> updateExam(@PathVariable Long examId, @RequestBody ExamUpdateRequest request) {
+        examService.updateExam(examId, request);
+        return ResponseEntity.ok("시험이 성공적으로 수정되었습니다.");
     }
 
     // 시험 삭제
