@@ -12,3 +12,8 @@ export const setAuthority = (payload) => ({
   type: "authority",
   payload
 });
+
+export const setMemberId = (payload) => ({
+  type: "memberId",
+  payload
+})
