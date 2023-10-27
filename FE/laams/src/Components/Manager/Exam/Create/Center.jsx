@@ -81,7 +81,7 @@ const Center = ({setType,data}) => {
     }
     
     setType("exam");
-  },[setType]);
+  },[setType,data]);
 
   return (
     <>
