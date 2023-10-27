@@ -2,13 +2,14 @@ import {useSelector,useDispatch} from "react-redux";
 import {setAccessToken,setAccessTokenExpireTime} from "../redux/actions/userAction.js";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import { useRef } from "react";
 const useApi = () => {
   const user = useSelector(state=>state.User);
-  const api = axios.create({baseURL:`${process.env.REACT_APP_SPRING_URL}`,headers: { "Content-type": "application/json" }});
+  const api = useRef(axios.create({baseURL:`${process.env.REACT_APP_SPRING_URL}`,headers: { "Content-type": "application/json" }}));
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  api.interceptors.request.use(
+  api.current.interceptors.request.use(
     async (config)=>{
       if (!user.accessToken) {
         config.headers.authorization = null;
@@ -40,7 +41,7 @@ const useApi = () => {
     }
   );
 
-  api.interceptors.response.use(
+  api.current.interceptors.response.use(
     async (response)=>{
       switch (response.data.code) {  
         case "l001":
@@ -79,7 +80,7 @@ const useApi = () => {
     }
   );
 
-  return api;
+  return api.current;
 };
 
 export default useApi;

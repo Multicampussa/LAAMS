@@ -20,6 +20,20 @@
     &-logo{
         width: 40%;
     }
+    &-id-box{
+        width: 100%;
+        border: 0.1rem solid $color-gray-light;
+        height: 4rem;
+        background-color: lightgray;
+        color: black;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding-left: 1rem;
+        display:flex;
+        align-items: center;
+        border-radius: 0.5rem;
+        
+    }
     &-box{
         width: 80%;
         padding: 5rem 0rem;

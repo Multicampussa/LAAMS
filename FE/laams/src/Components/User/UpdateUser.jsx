@@ -4,11 +4,12 @@ import useApi from '../../Hook/useApi';
 import { useSelector } from 'react-redux';
 
 const UpdateUser = () => {
-  const [userData,] = useState({'id':'', 'name':'', 'email':'', 'phone':''});
-  const [originData,] = useState({});
+  const [userData,] = useState({});
+  const [originData,setOriginData] = useState({});
   const [checkPwText, setCheckPwText] = useState();
   const [pwValidText, setPwValidText] = useState('특수기호 및 영어 포함 8~15자');
   const [emailValidText, setEmailValidText] = useState('인증번호가 올바르지 않습니다')
+  const [verifyCode, setVerifyCode] = useState({});
   const pwTextRef = useRef();
   const emailTextRef = useRef();
   const [isEmailChecked, setIsEmailChecked] = useState(false);
@@ -39,18 +40,19 @@ const UpdateUser = () => {
 // TODO: 회원 정보 변경
 
 const updateUserInfo = useCallback(()=>{
-    if((isEmailChecked || !userData['email']) && 
+    if((isEmailChecked || (!userData['email'] && !userData['emailCode'])) && 
     (isPwChecked || (!userData['password'] && !checkPwText))){
-        console.log(userData)
-    api.put(`member/info/update`,{
-        "email": userData['email'],
-        "id": userData['id'],
-        "name": userData['name'],
-        "phone": userData['phone']
+      console.log(userData)
+      console.log(isEmailChecked)
+        api.put(`member/info/update`,{
+        "email": userData['email']? userData['email']:originData['email'],
+        "id": originId,
+        "name": userData['name']? userData['name']:originData['name'],
+        "phone": userData['phone']? userData['phone']:originData['phone`']
     })
     .then((res)=>{
         console.log(res)
-        if(res.data.status === 200){
+        if(res.data.code === 200){
           alert('회원정보 수정이 완료되었습니다')
         }
         else{
@@ -66,12 +68,12 @@ const updateUserInfo = useCallback(()=>{
             console.log(checkPwText)
             return
           }
-          if(isEmailChecked || !userData['email']){
+          if(!isEmailChecked || !userData['emailCode']){
             alert('이메일 인증을 해주세요');
             return
           }
     }
-},[userData,api,isPwChecked,checkPwText,isEmailChecked])
+},[userData,api,isPwChecked,checkPwText,isEmailChecked,originId,originData])
 
   
   // TODO : 유저 정보 조회
@@ -79,18 +81,18 @@ const updateUserInfo = useCallback(()=>{
   const getUserInfo = useCallback(async()=>{
     await api.get(`member/info/${originId}`)
     .then(({data})=>{
-        originData['name'] = data.data['name'];
-        // originData['id'] = data.data['name'];
-        originData['email'] = data.data['email'];
-        originData['phone'] = data.data['phone'];   
+      setOriginData({
+        name: data.data['name'],
+        email: data.data['email'],
+        phone: data.data['phone']
+      });
     })
     .catch((err)=>{console.log(err)})
-  },[originId, api,originData])
+  },[originId,api])
 
   useEffect(()=>{
     getUserInfo();
   },[getUserInfo])
-
   // TODO : 이메일 전송 로직
   //FIXME : 중복코드 수정 및 useAPI활용필요
   const sendEmail = useCallback(()=>{
@@ -131,6 +133,10 @@ const updateUserInfo = useCallback(()=>{
     .then(()=>{
       setEmailValidText('올바른 인증번호입니다.');
       setIsEmailChecked(true)
+      setVerifyCode({
+        email : userData['email'],
+        emailCode : userData['emailCode']
+      });
       emailTextRef.current.style.color = "blue";
     })
     .catch((err)=>{
@@ -192,13 +198,9 @@ const updateUserInfo = useCallback(()=>{
               </label>
               <label className='user-input'>
                 <div className='user-input-title'>아이디</div>
-                <input 
-                  defaultValue={originId} 
-                  className='user-input-box'
-                  onChange={e=>{
-                    userData["id"] = e.target.value;
-                  }}  
-                />
+                <div 
+                  className='user-id-box' 
+                >{originId}</div>
               </label>
               <label className='user-input'>
                 <div 
@@ -249,6 +251,17 @@ const updateUserInfo = useCallback(()=>{
                     className='user-input-box-email'
                     onChange={e=>{
                       userData['email'] = e.target.value;
+                      if(userData['email']===verifyCode['email'] 
+                      && userData['emailCode'] === verifyCode['emailCode']){
+                        setIsEmailChecked(true)
+                        setEmailValidText('올바른 인증번호입니다.');
+                        emailTextRef.current.style.color = "blue";
+                      }else{
+                        setEmailValidText('인증 확인을 해주세요');
+                        setIsEmailChecked(false);
+                        emailTextRef.current.style.color = "red";
+                      }
+
                     }}
                   />
                   <button 
@@ -261,6 +274,16 @@ const updateUserInfo = useCallback(()=>{
                     className='user-input-box-email'
                     onChange={e=>{
                       userData['emailCode'] = e.target.value;
+                      if(userData['email']===verifyCode['email'] 
+                      && userData['emailCode'] === verifyCode['emailCode']){
+                        setIsEmailChecked(true)
+                        setEmailValidText('올바른 인증번호입니다.');
+                        emailTextRef.current.style.color = "blue";
+                      }else{
+                        setEmailValidText('인증확인을 해주세요');
+                        setIsEmailChecked(false);
+                        emailTextRef.current.style.color = "red";
+                      }
                     }} />
                   <button 
                     className='user-input-box-button'
