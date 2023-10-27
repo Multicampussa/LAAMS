@@ -51,38 +51,21 @@ public class DashboardController {
         }
     }
 
-    // 공지사항 상세조회
-    @GetMapping("/notice/detail/{noticeNo}")
-    public ResponseEntity<Map<String, Object>> getNoticeDetail(@PathVariable Long noticeNo) {
+    // 센터별 월 응시자 수 조회
+    @ApiOperation(value = "센터별 월 응시자 수 조회")
+    @GetMapping("/{centerNo}/examinee")
+    public ResponseEntity<Map<String, Object>> getCenterExamineeMonthCount(@RequestHeader String authorization, @PathVariable Long centerNo, @RequestParam int year, @RequestParam int month) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
+            String token  = authorization.replace("Bearer ", "");
+            String authority = jwtTokenProvider.getAuthority(token);
+            Map<String, Object> centerExamineeCount = new HashMap<String, Object>();
 
-            NoticeListResDto notice= noticeService.getNoticeDetail(noticeNo);
+            centerExamineeCount = dashboardService.getCenterExamineeMonthCount(authority, centerNo, year, month);
 
-            resultMap.put("message", "성공적으로 공지사항을 불러왔습니다.");
+            resultMap.put("message", "성공적으로 센터별 응시자 수를 불러왔습니다.");
             resultMap.put("status", HttpStatus.OK.value());
-            resultMap.put("data", notice);
-            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            resultMap.put("message", e.getMessage());
-            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
-            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    // 공지사항 전체 개수 조회
-    @GetMapping("/notice/count")
-    public ResponseEntity<Map<String, Object>> getNoticeCount() {
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        try{
-            Map<String, Object> countData = new HashMap<String, Object>();
-            int noticeCount = noticeService.getNoticeCount();
-
-            countData.put("count", noticeCount);
-
-            resultMap.put("message", "성공적으로 공지사항 총 개수를 불러왔습니다.");
-            resultMap.put("status", HttpStatus.OK.value());
-            resultMap.put("data", countData);
+            resultMap.put("data", centerExamineeCount);
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             resultMap.put("message", e.getMessage());
