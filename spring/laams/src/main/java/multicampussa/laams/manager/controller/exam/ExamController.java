@@ -8,6 +8,7 @@ import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
 import multicampussa.laams.manager.dto.exam.response.ExamDetailResponse;
 import multicampussa.laams.manager.dto.exam.response.ExamResponse;
 import multicampussa.laams.manager.service.exam.ExamService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +28,9 @@ public class ExamController {
     // 시험 생성
     @ApiOperation("시험 생성")
     @PostMapping("/api/v1/manager/exam")
-    public void saveExam(@RequestBody ExamCreateRequest request) {
+    public ResponseEntity<String> saveExam(@RequestBody ExamCreateRequest request) {
         examService.saveExam(request);
+        return ResponseEntity.ok("시험이 성공적으로 생성되었습니다.");
     }
 
     // 시험 목록 조회
