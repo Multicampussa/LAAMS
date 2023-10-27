@@ -2,7 +2,8 @@
 const init = {
   accessToken:null,
   accessTokenExpireTime:null,
-  authority:null
+  authority:null,
+  memberId:null
 };
 
 const userReducer = (state = init, action)=>{
@@ -13,6 +14,8 @@ const userReducer = (state = init, action)=>{
       return { ...state, accessTokenExpireTime: action.payload};
     case "authority":
       return { ...state, authority: action.payload};
+    case "memberId":
+      return { ...state, memberId: action.payload};
     default:
       return state;
   }

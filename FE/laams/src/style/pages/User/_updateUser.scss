@@ -1,5 +1,4 @@
-.join{
-
+.user{
     width: 100%;
     min-height: 100%;
     box-sizing: border-box;
@@ -32,6 +31,10 @@
         align-items: center;
         justify-content: center;
         gap: 2rem;
+        &-title{
+            font-size: 3rem;
+            font-weight: 700;
+        }
     }
     &-input{
         display: flex;
@@ -86,7 +89,7 @@
         margin-bottom: 2rem;
     }
 
-    @mixin mobile-join{
+    @mixin mobile-user{
         &-container{
             width: 90%;
         }
@@ -102,11 +105,11 @@
     }
 
     @include mobile{
-        @include mobile-join();
+        @include mobile-user();
     }
 
     @include tablet{
-        @include mobile-join();
+        @include mobile-user();
         &-input{
             width: 60%;
         }
