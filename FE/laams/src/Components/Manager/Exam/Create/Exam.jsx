@@ -45,7 +45,7 @@ const Exam = ({setType,data}) => {
     }
     
     setType("time");
-  },[setType]);
+  },[setType,data]);
 
   //TODO : 이전페이지로 이동
   const handlePrev = useCallback(()=>{

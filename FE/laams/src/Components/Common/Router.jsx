@@ -7,6 +7,7 @@ import ManagerExamList from '../Manager/Exam/List.jsx';
 import ManagerRewardList from "../Manager/Reward/List.jsx";
 import ManagerErrorReportList from "../Manager/ErrorReport/List.jsx"
 import Join from '../User/Join.jsx';
+import Test from '../Test.jsx';
 const Router = () => {
   return (
     <>
@@ -44,6 +45,7 @@ const Router = () => {
             }
           />
           <Route path='/join' element={<Join/>} />
+          <Route path='/test' element={<Test/>} />
         </Routes>
       </BrowserRouter>
     </>
