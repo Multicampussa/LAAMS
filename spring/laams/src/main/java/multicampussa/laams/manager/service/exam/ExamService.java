@@ -102,6 +102,23 @@ public class ExamService {
 
     }
 
+    // 월별 시험 조회
+    public List<ExamResponse> getMonthlyExams(Integer year, Integer month) {
+        // 특정 년도, 특정 월 시험 조회
+        return examRepository.findExamsByYearAndMonth(year, month).stream()
+                .map(ExamResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    // 일별 시험 조회
+    @Transactional(readOnly = true)
+    public List<ExamResponse> getDailyExams(Integer year, Integer month, Integer day) {
+        // 특정 년도, 특정 월, 특정 일 시험 조회
+        return examRepository.findExamsByYearMonthAndDay(year, month, day).stream()
+                .map(ExamResponse::new)
+                .collect(Collectors.toList());
+    }
+
     // 시험 수정
     @Transactional
     public void updateExam(ExamUpdateRequest request) {

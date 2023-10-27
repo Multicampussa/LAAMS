@@ -45,6 +45,20 @@ public class ExamController {
         return examService.getExam(no);
     }
 
+    // 월별 시험 목록 조회
+    @ApiOperation("월별 시험 목록 조회")
+    @GetMapping("/api/vi/manager/exam/{year}/{month}")
+    public List<ExamResponse> getMonthlyExams(@PathVariable Integer year, @PathVariable Integer month) {
+        return examService.getMonthlyExams(year, month);
+    }
+
+    // 일별 시험 목록 조회
+    @ApiOperation("일별 시험 목록 조회")
+    @GetMapping("/api/vi/manager/exam/{year}/{month}/{day}")
+    public List<ExamResponse> getDailyExams(@PathVariable Integer year, @PathVariable Integer month, @PathVariable Integer day) {
+        return examService.getDailyExams(year, month, day);
+    }
+
     // 시험 수정
     @ApiOperation("시험 수정")
     @PutMapping("/api/v1/manager/exam")
