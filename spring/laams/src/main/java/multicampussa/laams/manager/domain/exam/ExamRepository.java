@@ -20,4 +20,20 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
     // 특정 년도, 특정 월의 시험 조회
     @Query("SELECT COUNT(e) FROM Exam e WHERE YEAR(e.examDate) = :year AND MONTH(e.examDate) = :month")
     int countExamsByYearAndMonth(@Param("year") int year, @Param("month") int month);
+
+    // 특정 년도, 특정 월, 특정 일 시험 조회
+    @Query("SELECT e FROM Exam e WHERE YEAR(e.examDate) = :year AND MONTH(e.examDate) = :month")
+    List<Exam> findExamsByYearAndMonth(
+            @Param("year") Integer year,
+            @Param("month") Integer month
+    );
+
+    // 특정 년도, 특정 월, 특정 일 시험 조회
+    @Query("SELECT e FROM Exam e WHERE YEAR(e.examDate) = :year AND MONTH(e.examDate) = :month AND DAY(e.examDate) = :day")
+    List<Exam> findExamsByYearMonthAndDay(
+            @Param("year") Integer year,
+            @Param("month") Integer month,
+            @Param("day") Integer day
+    );
+
 }

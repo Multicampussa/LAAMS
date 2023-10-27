@@ -7,10 +7,9 @@ import java.time.LocalDateTime;
 @Getter
 public class ExamUpdateRequest {
 
-    private String centerName;
-    private LocalDateTime examDate;
-    private Long managerNo;
-    private Long examNo;
-    private int runningTime;
-    private String examType;
+    private String newCenterName;
+    private LocalDateTime newExamDate;
+    private Long newManagerNo;
+    private int newRunningTime;
+    private String newExamType;
 }

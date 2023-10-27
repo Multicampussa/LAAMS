@@ -24,43 +24,42 @@ public class ManagerExamineeController {
 
     // 응시자 생성
     @ApiOperation("응시자 생성")
-    @PostMapping("/manager/examinee")
+    @PostMapping("/api/v1/manager/examinee")
     public void saveExaminee(@RequestBody ExamineeCreateRequest request) {
         examineeService.saveExaminee(request);
     }
 
     // 응시자 목록 조회
     @ApiOperation("응시자 목록 조회")
-    @GetMapping("/manager/examinees")
+    @GetMapping("/api/v1/manager/examinees")
     public List<ExamineeResponse> getExaminees() {
         return examineeService.getExaminees();
     }
 
     // 보상대상 응시자 조회
     @ApiOperation("보상 대상 응시자 조회")
-    @GetMapping("/manager/examinees/compensation")
+    @GetMapping("/api/v1/manager/examinees/compensation")
     public List<ExamineeCompensationListResponse> getCompensationList() {
         return examineeService.getCompensationList();
     }
 
     // 보상대상자 상세 조회
     @ApiOperation("보상 대상 응시자 상세 조회")
-    @GetMapping("manager/examinees/compensation/{examineeNo}")
+    @GetMapping("/api/v1manager/examinees/compensation/{examineeNo}")
     public ExamineeCompensationDetailResponse getCompensationDetail(@PathVariable Long examineeNo){
         return examineeService.getCompensationDetail(examineeNo);
     }
 
-
     // 응시자 수정
     @ApiOperation("응시자 수정")
-    @PutMapping("/manager/examinee")
+    @PutMapping("/api/v1/manager/examinee")
     public void updateExaminee(@RequestBody ExamineeUpdateRequest request) {
         examineeService.updateExaminee(request);
     }
 
     // 응시자 삭제
     @ApiOperation("응시자 삭제")
-    @DeleteMapping("/manager/examinee/{no}")
+    @DeleteMapping("/api/v1/manager/examinee/{no}")
     public void deleteExaminee(@PathVariable Long no) {
         examineeService.deleteExaminee(no);
     }

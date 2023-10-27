@@ -20,7 +20,7 @@ public class CenterController {
 
     // 센터별 시험 횟수(한달)
     @ApiOperation(value = "센터의 월별 시험 횟수 조회")
-    @GetMapping("/manager/center/{centerNo}/{year}/{month}")
+    @GetMapping("/api/v1/manager/center/{centerNo}/{year}/{month}")
     public CenterMonthlyExamCountsResponse getMonthlyExamCounts(@PathVariable Long centerNo, @PathVariable int year,@PathVariable int month) {
         return centerService.getMonthlyExamCounts(centerNo, year,month);
     }
