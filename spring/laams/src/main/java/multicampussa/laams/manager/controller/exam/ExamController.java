@@ -8,6 +8,7 @@ import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
 import multicampussa.laams.manager.dto.exam.response.ExamDetailResponse;
 import multicampussa.laams.manager.dto.exam.response.ExamResponse;
 import multicampussa.laams.manager.service.exam.ExamService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,35 +27,60 @@ public class ExamController {
 
     // 시험 생성
     @ApiOperation("시험 생성")
-    @PostMapping("/manager/exam")
-    public void saveExam(@RequestBody ExamCreateRequest request) {
+    @PostMapping("/api/v1/manager/exam")
+    public ResponseEntity<String> saveExam(@RequestBody ExamCreateRequest request) {
         examService.saveExam(request);
+        return ResponseEntity.ok("시험이 성공적으로 생성되었습니다.");
     }
 
     // 시험 목록 조회
     @ApiOperation("시험 목록 조회")
-    @GetMapping("/manager/exams")
+    @GetMapping("/api/v1/manager/exams")
     public List<ExamResponse> getExams() {
         return examService.getExams();
     }
 
     // 시험 상세 조회
     @ApiOperation("시험 상세 조회")
-    @GetMapping("/manager/exam/{no}")
+    @GetMapping("/api/v1/manager/exam/{no}")
     public ExamDetailResponse getExam(@PathVariable Long no) {
         return examService.getExam(no);
     }
 
+    // 월별 시험 목록 조회
+    @ApiOperation("월별 시험 목록 조회")
+    @GetMapping("/api/v1/manager/exam/monthly")
+    public List<ExamResponse> getMonthlyExams(
+            @RequestParam Integer year,
+            @RequestParam Integer month)
+    {
+        return examService.getMonthlyExams(year, month);
+    }
+
+    // 일별 시험 목록 조회
+    @ApiOperation("일별 시험 목록 조회")
+    @GetMapping("/api/v1/manager/exam/daily")
+    public List<ExamResponse> getDailyExams(
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @RequestParam Integer day)
+    {
+        return examService.getDailyExams(year, month, day);
+    }
+
     // 시험 수정
     @ApiOperation("시험 수정")
-    @PutMapping("/manager/exam")
-    public void updateExam(@RequestBody ExamUpdateRequest request) {
-        examService.updateExam(request);
+    @PutMapping("/api/v1/manager/exam/{examId}")
+    public ResponseEntity<String> updateExam(
+            @PathVariable Long examId,
+            @RequestBody ExamUpdateRequest request) {
+        examService.updateExam(examId, request);
+        return ResponseEntity.ok("시험이 성공적으로 수정되었습니다.");
     }
 
     // 시험 삭제
     @ApiOperation("시험 삭제")
-    @DeleteMapping("/manager/exam/{no}")
+    @DeleteMapping("/api/v1/manager/exam/{no}")
     public void deleteExam(@PathVariable Long no) {
         examService.deleteExam(no);
     }

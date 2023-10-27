@@ -33,7 +33,7 @@ public class NoticeService {
         }
 
         if (authority.equals("ROLE_DIRECTOR")) {
-            throw new IllegalArgumentException("접근 권한이 없습니다.");
+            throw new IllegalArgumentException("공지사항 생성 권한이 없습니다.");
         }
 
         Notice notice = new Notice();
@@ -57,7 +57,7 @@ public class NoticeService {
         return result;
     }
 
-    public boolean updateNotice(NoticeUpdateDto noticeUpdateDto, Long memberId) {
+    public boolean updateNotice(NoticeUpdateDto noticeUpdateDto, Long memberId, String authority) {
 
         boolean result = true;
 
@@ -65,6 +65,10 @@ public class NoticeService {
             throw new IllegalArgumentException("제목을 입력해주세요.");
         } else if (noticeUpdateDto.getContent().isEmpty()) {
             throw new IllegalArgumentException("내용을 입력해주세요.");
+        }
+
+        if (authority.equals("ROLE_DIRECTOR")) {
+            throw new IllegalArgumentException("공지사항 수정 권한이 없습니다.");
         }
 
         Long noticeNo = noticeUpdateDto.getNoticeNo();
@@ -86,7 +90,7 @@ public class NoticeService {
         return result;
     }
 
-    public boolean deleteNotice(Long noticeNo, Long memberNo) {
+    public boolean deleteNotice(Long noticeNo, Long memberNo, String authority) {
 
         boolean result = true;
 
@@ -96,11 +100,18 @@ public class NoticeService {
             // 공지사항이 존재하지 않는 경우
             throw new IllegalArgumentException("존재하지 않는 공지사항입니다.");
         }
-        if (findNotice.get().getManager().getNo().equals(memberNo)) {
-            noticeRepository.deleteById(noticeNo);
-        } else {
-            throw new IllegalArgumentException("내가 작성한 글이 아닙니다.");
+
+        if (authority.equals("ROLE_DIRECTOR")) {
+            throw new IllegalArgumentException("공지사항 삭제 권한이 없습니다.");
         }
+
+        noticeRepository.deleteById(noticeNo);
+
+//        if (findNotice.get().getManager().getNo().equals(memberNo)) {
+//            noticeRepository.deleteById(noticeNo);
+//        } else {
+//            throw new IllegalArgumentException("내가 작성한 글이 아닙니다.");
+//        }
 
         return result;
     }

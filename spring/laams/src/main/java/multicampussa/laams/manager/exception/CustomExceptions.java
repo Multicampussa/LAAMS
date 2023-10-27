@@ -14,9 +14,17 @@ public class CustomExceptions {
         }
     }
 
-    public static class CenterNotFundException extends RuntimeException {
-        public CenterNotFundException(String message) {
+    public static class CenterNotFoundException extends RuntimeException {
+        public CenterNotFoundException(String message) {
             super(message);
         }
+    }
+
+    public static class ExamineeNotFoundException extends RuntimeException {
+        public ExamineeNotFoundException(String message) {super(message);}
+    }
+
+    public static class DirectorNotFoundException extends RuntimeException {
+        public DirectorNotFoundException(String message) {super(message);}
     }
 }
