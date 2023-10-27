@@ -1,10 +1,15 @@
-package multicampussa.laams.home.notice.service;
+package multicampussa.laams.home.dashboard.service;
 
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import multicampussa.laams.home.notice.domain.Notice;
-import multicampussa.laams.home.notice.dto.*;
+import multicampussa.laams.home.notice.dto.NoticeCreateDto;
+import multicampussa.laams.home.notice.dto.NoticeListResDto;
+import multicampussa.laams.home.notice.dto.NoticeUpdateDto;
 import multicampussa.laams.home.notice.repository.NoticeRepository;
+import multicampussa.laams.manager.domain.center.CenterRepository;
+import multicampussa.laams.manager.domain.exam.ExamRepository;
+import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
 import multicampussa.laams.manager.domain.manager.Manager;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +22,11 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class NoticeService {
+public class DashboardService {
 
+    public final CenterRepository centerRepository;
+    public final ExamRepository examRepository;
+    public final ExamExamineeRepository examExamineeRepository;
     public final NoticeRepository noticeRepository;
     public final MemberManagerRepository managerRepository;
 
@@ -32,8 +40,8 @@ public class NoticeService {
             throw new IllegalArgumentException("내용을 입력해주세요.");
         }
 
-        if (authority.equals("ROLE_DIRECTOR")) {
-            throw new IllegalArgumentException("공지사항 생성 권한이 없습니다.");
+        if (authority.equals("ROLE_MANAGER")) {
+//            throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
 
         Notice notice = new Notice();
@@ -57,7 +65,7 @@ public class NoticeService {
         return result;
     }
 
-    public boolean updateNotice(NoticeUpdateDto noticeUpdateDto, Long memberId, String authority) {
+    public boolean updateNotice(NoticeUpdateDto noticeUpdateDto, Long memberId) {
 
         boolean result = true;
 
@@ -65,10 +73,6 @@ public class NoticeService {
             throw new IllegalArgumentException("제목을 입력해주세요.");
         } else if (noticeUpdateDto.getContent().isEmpty()) {
             throw new IllegalArgumentException("내용을 입력해주세요.");
-        }
-
-        if (authority.equals("ROLE_DIRECTOR")) {
-            throw new IllegalArgumentException("공지사항 수정 권한이 없습니다.");
         }
 
         Long noticeNo = noticeUpdateDto.getNoticeNo();
@@ -90,7 +94,7 @@ public class NoticeService {
         return result;
     }
 
-    public boolean deleteNotice(Long noticeNo, Long memberNo, String authority) {
+    public boolean deleteNotice(Long noticeNo, Long memberNo) {
 
         boolean result = true;
 
@@ -100,18 +104,11 @@ public class NoticeService {
             // 공지사항이 존재하지 않는 경우
             throw new IllegalArgumentException("존재하지 않는 공지사항입니다.");
         }
-
-        if (authority.equals("ROLE_DIRECTOR")) {
-            throw new IllegalArgumentException("공지사항 삭제 권한이 없습니다.");
+        if (findNotice.get().getManager().getNo().equals(memberNo)) {
+            noticeRepository.deleteById(noticeNo);
+        } else {
+            throw new IllegalArgumentException("내가 작성한 글이 아닙니다.");
         }
-
-        noticeRepository.deleteById(noticeNo);
-
-//        if (findNotice.get().getManager().getNo().equals(memberNo)) {
-//            noticeRepository.deleteById(noticeNo);
-//        } else {
-//            throw new IllegalArgumentException("내가 작성한 글이 아닙니다.");
-//        }
 
         return result;
     }

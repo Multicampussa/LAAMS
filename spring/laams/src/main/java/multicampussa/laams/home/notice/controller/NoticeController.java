@@ -54,16 +54,9 @@ public class NoticeController {
         try{
             String token  = authorization.replace("Bearer ", "");
             Long memberId = jwtTokenProvider.getMemberNo(token);
-            if (memberId != noticeUpdateDto.getManagerNo()) {
+            String authority = jwtTokenProvider.getAuthority(token);
 
-//                resultDTO.setMessage();
-                // 데이터 넣기
-
-                resultMap.put("message", "내가 쓴 글이 아닙니다.");
-                resultMap.put("status", HttpStatus.BAD_REQUEST.value());
-                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
-            }
-            boolean result = noticeService.updateNotice(noticeUpdateDto, memberId);
+            boolean result = noticeService.updateNotice(noticeUpdateDto, memberId, authority);
 
             resultMap.put("message", "성공적으로 수정하였습니다.");
             resultMap.put("status", HttpStatus.OK.value());
@@ -81,8 +74,9 @@ public class NoticeController {
         try{
             String token  = authorization.replace("Bearer ", "");
             Long memberNo = jwtTokenProvider.getMemberNo(token);
+            String authority = jwtTokenProvider.getAuthority(token);
 
-            boolean result = noticeService.deleteNotice(noticeNo, memberNo);
+            boolean result = noticeService.deleteNotice(noticeNo, memberNo, authority);
 
             resultMap.put("message", "성공적으로 삭제하였습니다.");
             resultMap.put("status", HttpStatus.OK.value());
