@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Join = () => {
 
-  const [joinData, setJoinData] = useState({});
+  const [joinData,] = useState({});
   const [checkPwText, setCheckPwText] = useState();
   const [pwValidText, setPwValidText] = useState('특수기호 및 영어 포함 8~15자');
   const [emailValidText, setEmailValidText] = useState('인증번호가 올바르지 않습니다')
@@ -79,7 +79,7 @@ const Join = () => {
           "content-type": "application/json"
         },
         data:{
-          "address": joinData['address'],
+          "centerManagerCode": joinData['centerManagerCode'],
           "email": joinData['email'],
           "id": joinData['id'],
           "name": joinData['name'],
@@ -231,14 +231,13 @@ const Join = () => {
                   }}/>
                   <p className='join-input-phone'>01012345678 형식으로 입력해주세요</p>
               </label>
-              {/* FIXME : 백엔드 엔티티에 코드 부분 없고 address로 되어있어서 임시로 address라 지정 */}
               <label className='join-input'>
                 <div className='join-input-title'>센터 담당자 코드</div>
                 <input 
                   placeholder='센터 담당자 코드' 
                   className='join-input-box'
                   onChange={e=>{
-                    joinData['address'] = e.target.value;
+                    joinData['centerManagerCode'] = e.target.value;
                   }}/>
               </label>
             </article>
