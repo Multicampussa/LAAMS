@@ -42,7 +42,7 @@ const Header = () => {
         <Link to="/" className='header-menu-box-item'>전체 시험 일정</Link>
         <Link to="/" className='header-menu-box-item'>보상</Link>
         <Link to="/" className='header-menu-box-item'>에러리포트</Link>
-        <Link to="/" className='header-menu-box-item'>로그아웃</Link>
+        <Link to="/test" className='header-menu-box-item'>로그아웃</Link>
       </div>
     </>
   )
