@@ -18,8 +18,14 @@ public class RedisUtil {
         redisTemplate.opsForValue().set(key, o, minutes, TimeUnit.MINUTES);
     }
 
-    public Object get(String key) {
-        return redisTemplate.opsForValue().get(key);
+    public void setInfinity(String key, Object o) {
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer(o.getClass()));
+        redisTemplate.opsForValue().set(key, o);
+    }
+
+    public <T> T get(String key, Class<T> clazz) {
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(clazz));
+        return (T) redisTemplate.opsForValue().get(key);
     }
 
     public boolean delete(String key) {
