@@ -28,7 +28,7 @@ const useCenter = () => {
   useEffect(()=>{
     getData();
   },[getData]);
-  return [centerData,Object.keys(centerData).reverse()];
+  return centerData;
 }
 
 export default useCenter
