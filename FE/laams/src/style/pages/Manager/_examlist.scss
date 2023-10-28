@@ -53,34 +53,11 @@
       font-size: 2rem;
     }
   }
-  &-title{
-    display: flex;
-
-
-    @include mobile{
-      flex-direction: column;
-    }
-
-    @include tablet {
-
-    }
-
-    @include desktop{
-      
-    }
-  }
   &-search{
+    box-sizing: border-box;
     display: flex;
     gap: 0.5rem;
     width: 100%;
-
-    @include tablet{
-      padding-left: 2rem;
-      align-items: center;
-    }
-    @include desktop{
-      padding-left: 3rem;
-      align-items: center;
-    }
+    padding-top: 2rem;
   }
 }

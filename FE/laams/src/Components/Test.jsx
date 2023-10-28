@@ -1,9 +1,44 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Calendar from './Common/Calendar/Calendar'
-import useExamList from '../Hook/useExamList'
+import useApi from '../Hook/useApi';
 const Test = () => {
-  const examList = useExamList();
+  const [examList,setExamList] = useState();
+  const api = useApi();
   const [curDate,setCurDate] = useState(new Date());
+  const getExamList = useCallback(async(date)=>{
+    await api.get(`manager/exam/monthly?year=${date.getFullYear()}&month=${date.getMonth()+1}`)
+    .then(({data})=>{
+      const res = {};
+      console.log(data);
+      data.forEach(e=>{
+        const date = new Date(e.examDate);
+        if(res[date.getDate()]){
+          res[date.getDate()].push({
+            centerName : e.centerName,
+            examDate : new Date(e.examDate),
+            managerName: e.managerName,
+            examType : e.examType,
+            examLanguage : e.examLanguage
+          });
+        }else{
+          res[date.getDate()]=[{
+            centerName : e.centerName,
+            examDate : new Date(e.examDate),
+            managerName: e.managerName,
+            examType : e.examType,
+            examLanguage : e.examLanguage
+          }];
+        }
+      });
+      console.log(res);
+      setExamList(res);
+    }).catch(err=>console.log(err.response));
+  },[api]);
+
+  useEffect(()=>{
+    if(!curDate) return;
+    getExamList(curDate);
+  },[getExamList,curDate]);
 
   //TODO : 이전 달 호출
   //FIXME : 데이터 갱신

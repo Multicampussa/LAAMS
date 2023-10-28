@@ -7,8 +7,6 @@ examList : 한달간 시험목록 (Object)
 curDate : 현재 날짜
 handleNext : 다음 달 호출 함수
 handlePrev : 이전 달 호출 함수
-
-
 */
 const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
   //TODO : 해당 달의 첫날 반환
@@ -47,7 +45,7 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
           examList && examList[i]? <ul>
             <li>
               {
-                examList[i].map((e,idx)=><div key={idx}>{e.centerName}</div>)
+                examList[i].filter((e,idx)=>idx<3).map((e,idx)=><div key={idx}>{e.centerName}</div>)
               }    
             </li>
           </ul>: null
