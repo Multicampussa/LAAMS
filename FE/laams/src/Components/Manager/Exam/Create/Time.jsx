@@ -1,9 +1,12 @@
 import React, { useCallback } from 'react'
 import useApi from '../../../../Hook/useApi';
+import { setModalShow } from '../../../../redux/actions/modalAction';
+import { useDispatch } from 'react-redux';
 
 const Time = ({setType,data}) => {
   const handlePrev = useCallback(()=>{setType("exam")},[setType]);
   const api = useApi();
+  const dispatch = useDispatch();
   const handleCreate = useCallback(()=>{
     api.post("manager/exam",{
       "centerName": data.centerName.name,
@@ -13,11 +16,12 @@ const Time = ({setType,data}) => {
       "managerNo": 1,
       "runningTime": parseInt(data.testTime)
     }).then(({data})=>{
-      console.log(data);
+      alert(data);
+      dispatch(setModalShow(false));
     }).catch(err=>{
-      console.log(err.response);
+      alert("시험을 생성하는데 실패했습니다!");
     })
-  },[data]);
+  },[data,dispatch]);
 
   return (
     <>
