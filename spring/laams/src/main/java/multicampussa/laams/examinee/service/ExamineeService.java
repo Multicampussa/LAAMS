@@ -62,9 +62,15 @@ public class ExamineeService {
     public void enrollExam(EnrollExamRequest enrollExamRequest) {
         // 입력 받은 시험 no로 조회
         Exam exam = examRepository.findByNo(enrollExamRequest.getExamNo());
+        if (exam == null) {
+            throw new CustomExceptions.ExamNotFoundException(enrollExamRequest.getExamNo() + "번 시험이 존재하지 않습니다.");
+        }
 
         // 입력 받은 응시자 no로 조회
         Examinee examinee = examineeRepository.findByNo(enrollExamRequest.getExamineeNo());
+        if (examinee == null) {
+            throw new CustomExceptions.ExamineeNotFoundException(enrollExamRequest.getExamineeNo() + "번 응시자가 존재하지 않습니다.");
+        }
 
         // 수험 번호 생성
         String examineeCode = generateUniqueExamineeCode();
