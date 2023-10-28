@@ -20,10 +20,13 @@
     box-sizing: border-box;
     font-size: 1.5rem;
   }
-  input{
-    width: 10rem;
+  &-startTime{
     margin-left: 1rem;
     background-color: $color-white;
-    border: 0.1rem solid $color-gray-light;
+  }
+  &-testTime{
+    width: 5rem;
+    margin-left: 1rem;
+    background-color: $color-white;
   }
 }

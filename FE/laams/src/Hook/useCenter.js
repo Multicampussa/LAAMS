@@ -6,7 +6,7 @@ TODO : 센터목록을 받아와 센터 와 지역목록을 분리해 데이터�
 res : 센터 목록, 지역 목록
 */
 const useCenter = () => {
-  const [centerData,setCenterData] = useState({});
+  const [centerData,setCenterData] = useState();
   const api = useApi();
   const getData = useCallback(async ()=>{
     try{

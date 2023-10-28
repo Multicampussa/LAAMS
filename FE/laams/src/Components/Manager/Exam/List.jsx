@@ -53,6 +53,7 @@ const List = () => {
     .then(({data})=>setData(data)).catch(err=>console.log(err.response));
   },[api]);
 
+
   //TODO : 시험상세정보 모달 호출
   const handleExamItem = useCallback((no)=>{
     dispatch(setExamNo(no));
@@ -95,12 +96,12 @@ const List = () => {
           <ul className='manager-exam-list-search'>
             <li><input type='date' value={getDateFormat()} onChange={e=>setDate(new Date(e.target.value))} /></li>
             <li>
-              <select onChange={e=>setLocation(e.target.value)}>
+              <select value={location} onChange={e=>setLocation(e.target.value)}>
                 {locationItems}
               </select>
             </li>
             <li>
-              <select onChange={e=>setCenter(e.target.value)}>
+              <select value={center} onChange={e=>setCenter(e.target.value)}>
                 {centerItems}
               </select>
             </li>

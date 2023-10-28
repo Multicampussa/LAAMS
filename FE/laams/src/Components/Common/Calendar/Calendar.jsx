@@ -45,7 +45,7 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
           examList && examList[i]? <ul>
             <li>
               {
-                examList[i].map((e,idx)=><div key={idx}>{e.centerName}</div>)
+                examList[i].filter((e,idx)=>idx<3).map((e,idx)=><div key={idx}>{e.centerName}</div>)
               }    
             </li>
           </ul>: null
