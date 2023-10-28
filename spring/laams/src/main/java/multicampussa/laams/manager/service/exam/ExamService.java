@@ -1,7 +1,5 @@
 package multicampussa.laams.manager.service.exam;
 
-import multicampussa.laams.director.domain.Director;
-import multicampussa.laams.manager.domain.exam.ExamDirector;
 import multicampussa.laams.manager.domain.exam.ExamDirectorRepository;
 import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
@@ -16,7 +14,7 @@ import multicampussa.laams.manager.dto.exam.request.ExamCreateRequest;
 import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
 import multicampussa.laams.manager.dto.exam.response.ExamDetailResponse;
 import multicampussa.laams.manager.dto.exam.response.ExamResponse;
-import multicampussa.laams.manager.exception.CustomExceptions;
+import multicampussa.laams.global.CustomExceptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
