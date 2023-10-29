@@ -1,6 +1,7 @@
 package multicampussa.laams.home.member.service;
 
 import lombok.RequiredArgsConstructor;
+import multicampussa.laams.config.RedisUtil;
 import multicampussa.laams.director.domain.Director;
 import multicampussa.laams.home.member.dto.*;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
@@ -31,6 +32,7 @@ public class MemberService {
     private final JavaMailSender javaMailSender;
     private final MemberManagerRepository memberManagerRepository;
     private final CenterManagerRepository centerManagerRepository;
+    private final RedisUtil redisUtil;
     private final Random random = new SecureRandom();
 
     // 회원가입
@@ -51,7 +53,8 @@ public class MemberService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("센터 담당자 코드가 일치하지 않습니다.");
         }
 
-        if (memberDirectorRepository.existsByEmail(memberSignUpDto.getEmail()) && !memberDirectorRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsDelete()) {
+        if ((memberDirectorRepository.existsByEmail(memberSignUpDto.getEmail()) && !memberDirectorRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsDelete())
+                || memberManagerRepository.existsByEmail(memberSignUpDto.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이메일입니다.");
         }
 
@@ -63,17 +66,21 @@ public class MemberService {
 
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(memberSignUpDto.getPw());
-
-        Director director;
-        if (!memberDirectorRepository.existsByEmail(memberSignUpDto.getEmail()) || !memberDirectorRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsVerified()) {
+        Director newDirector = redisUtil.get(memberSignUpDto.getEmail(), Director.class);
+        if (newDirector == null || !newDirector.getIsVerified()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이메일 인증을 진행해주세요.");
         } else {
             // 삭제한 이메일로 다시 한 번 회원가입 할 때
-            director = memberDirectorRepository.findByEmail(memberSignUpDto.getEmail()).get();
+            if (memberDirectorRepository.existsByEmail(memberSignUpDto.getEmail())) {
+                Director oldDirector = memberDirectorRepository.findByEmail(memberSignUpDto.getEmail()).get();
+                oldDirector.update(memberSignUpDto, encodedPassword);
+                memberDirectorRepository.save(oldDirector);
+            } else {
+                newDirector.update(memberSignUpDto, encodedPassword);
+                memberDirectorRepository.save(newDirector);
+            }
 
-            director.update(memberSignUpDto, encodedPassword);
-
-            Director savedMember = memberDirectorRepository.save(director);
+            redisUtil.delete(newDirector.getEmail());
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("회원 가입에 성공하였습니다.");
@@ -88,25 +95,14 @@ public class MemberService {
             throw new IllegalArgumentException("400: 이메일을 입력해주세요.");
         }
 
-        // 이메일이 이미 DB에 존재하는 경우
-        if (memberDirectorRepository.existsByEmail(email)) {
-            Director existingMember = memberDirectorRepository.findByEmail(email)
-                    .orElseThrow(() -> new RuntimeException("404: 유저를 찾을 수 없습니다."));
-
-            // 해당 이메일에 대한 사용자 계정이 삭제 상태가 아니라면 에러 메시지 반환
-            if (!existingMember.getIsDelete()) {
-                throw new RuntimeException("409: 이미 존재하는 이메일입니다.");
-            } else {
-                // 삭제된 사용자라면 인증 코드를 업데이트
-                existingMember.updateVerificationCode(email, code);
-                memberDirectorRepository.save(existingMember);
-            }
-        } else {
-            // 이메일이 DB에 없는 경우 새로운 Director 객체 생성 및 저장
-            Director newMember = new Director();
-            newMember.updateVerificationCode(email, code);
-            memberDirectorRepository.save(newMember);
+        if ((memberDirectorRepository.existsByEmail(email) && !memberDirectorRepository.findByEmail(email).get().getIsDelete())
+                || memberManagerRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("409: 이미 존재하는 이메일입니다.");
         }
+
+        Director director = new Director();
+        director.updateVerificationCode(email, code);
+        redisUtil.set(email, director, 10);
 
         try {
             String message = "다음 코드를 입력하여 이메일을 확인해주세요: " + code;
@@ -133,15 +129,18 @@ public class MemberService {
 
     // 이메일 인증코드 확인
     public void confirmEmailVerification(String email, String code) {
-        Director director = memberDirectorRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 이메일입니다."));
+        Director director = redisUtil.get(email, Director.class);
+
+        if (director == null) {
+            throw new RuntimeException("인증 시간이 초과되었습니다.");
+        }
 
         if (!director.getVerificationCode().equals(code)) {
             throw new RuntimeException("인증 코드가 일치하지 않습니다.");
         }
 
-        director.updateVerified(true); // 이메일이 인증되었음을 표시
-        memberDirectorRepository.save(director);
+        director.updateVerified(true);
+        redisUtil.setInfinity(email, director);
     }
 
     // 감독관 정보 불러오기
@@ -233,24 +232,41 @@ public class MemberService {
     // 사용자가 자신의 정보를 수정하는 서비스
     public ResponseEntity<Map<String, Object>> updateMemberByUser(String id, String authority, MemberUpdateDto memberUpdateDto) {
         Map<String, Object> response = new HashMap<>();
-        Director director;
+        Director oldDirector;
         Manager manager;
 
         // DB에 없는 ID를 검색하려고 하면 IllegalArgumentException
         try {
             if (authority.equals("ROLE_DIRECTOR")) {
                 if (id.equals(memberUpdateDto.getId())) {
-                    director = memberDirectorRepository.findById(id).get();
+                    oldDirector = memberDirectorRepository.findById(id).get();
 
-                    if (director.getIsDelete()) {
+                    if (oldDirector.getIsDelete()) {
                         response.put("message", "해당 유저는 삭제되었습니다.");
                         response.put("code", HttpStatus.NOT_FOUND.value());
                         return ResponseEntity.ok(response);
                     }
 
-                    director.update(memberUpdateDto);
-                    memberDirectorRepository.save(director);
-                    MemberDto updatedMemberDto = MemberDto.fromEntityByDirector(director);
+                    Director newDirector = redisUtil.get(memberUpdateDto.getEmail(), Director.class);
+
+                    if (!oldDirector.getEmail().equals(memberUpdateDto.getEmail()) && (memberDirectorRepository.existsByEmail(memberUpdateDto.getEmail()) || memberManagerRepository.existsByEmail(memberUpdateDto.getEmail()))) {
+                        response.put("message", "이미 존재하는 이메일입니다.");
+                        response.put("status", HttpStatus.BAD_REQUEST.value());
+
+                        return ResponseEntity.ok(response);
+                    }
+
+                    if (!oldDirector.getEmail().equals(memberUpdateDto.getEmail()) && (newDirector == null || !newDirector.getIsVerified())) {
+                        response.put("message", "이메일 인증을 진행해주세요.");
+                        response.put("status", HttpStatus.BAD_REQUEST.value());
+
+                        return ResponseEntity.ok(response);
+                    }
+
+                    oldDirector.update(memberUpdateDto);
+                    oldDirector.updateEmail(oldDirector.getEmail());
+                    memberDirectorRepository.save(oldDirector);
+                    redisUtil.delete(oldDirector.getEmail());
 
                     response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
                     response.put("code", HttpStatus.OK.value());
@@ -276,18 +292,18 @@ public class MemberService {
 
                     return ResponseEntity.ok(response);
                 } else {
-                    director = memberDirectorRepository.findById(memberUpdateDto.getId()).get();
+                    oldDirector = memberDirectorRepository.findById(memberUpdateDto.getId()).get();
 
-                    if (director.getIsDelete()) {
+                    if (oldDirector.getIsDelete()) {
                         response.put("message", "해당 계정은 삭제되었습니다.");
                         response.put("status", HttpStatus.NOT_FOUND.value());
 
                         return ResponseEntity.ok(response);
                     }
 
-                    director.update(memberUpdateDto);
-                    memberDirectorRepository.save(director);
-                    MemberDto updatedMemberDto = MemberDto.fromEntityByDirector(director);
+                    oldDirector.update(memberUpdateDto);
+                    memberDirectorRepository.save(oldDirector);
+                    MemberDto updatedMemberDto = MemberDto.fromEntityByDirector(oldDirector);
 
                     response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
                     response.put("code", HttpStatus.OK.value());
@@ -297,6 +313,7 @@ public class MemberService {
                 }
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             response.put("message", memberUpdateDto.getId() + "은 존재하지 않습니다.");
             response.put("status", HttpStatus.NOT_FOUND);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -368,6 +385,7 @@ public class MemberService {
         }
     }
 
+    // 비밀번호 찾기
     public void findPassword(FindPasswordDto findPasswordDto) {
         String tempPassword = UUID.randomUUID().toString().split("-")[0];
         Director director;
@@ -407,6 +425,7 @@ public class MemberService {
         return encodedPasswordDto;
     }
 
+    // 해당 아이디가 있는지 확인하는 로직
     public boolean isPresentId(String id) {
         return memberManagerRepository.existsById(id) || memberDirectorRepository.existsById(id);
     }
