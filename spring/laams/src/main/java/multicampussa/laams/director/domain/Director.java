@@ -89,4 +89,9 @@ public class Director extends BaseTimeEntity {
         this.isDelete = true;
         this.refreshToken = null;
     }
+
+    // Email을 수정하고 싶을 때
+    public void updateEmail(String email) {
+        this.email = email;
+    }
 }
