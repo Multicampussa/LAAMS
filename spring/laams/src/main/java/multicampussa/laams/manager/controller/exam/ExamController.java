@@ -8,11 +8,12 @@ import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
 import multicampussa.laams.manager.dto.exam.response.ExamDetailResponse;
 import multicampussa.laams.manager.dto.exam.response.ExamResponse;
 import multicampussa.laams.manager.service.exam.ExamService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "시험 관련")
+@Api(tags = "운영자의 시험 관련 기능")
 @RestController
 public class ExamController {
 
@@ -27,8 +28,9 @@ public class ExamController {
     // 시험 생성
     @ApiOperation("시험 생성")
     @PostMapping("/api/v1/manager/exam")
-    public void saveExam(@RequestBody ExamCreateRequest request) {
+    public ResponseEntity<String> saveExam(@RequestBody ExamCreateRequest request) {
         examService.saveExam(request);
+        return ResponseEntity.ok("시험이 성공적으로 생성되었습니다.");
     }
 
     // 시험 목록 조회
@@ -45,11 +47,35 @@ public class ExamController {
         return examService.getExam(no);
     }
 
+    // 월별 시험 목록 조회
+    @ApiOperation("월별 시험 목록 조회")
+    @GetMapping("/api/v1/manager/exam/monthly")
+    public List<ExamResponse> getMonthlyExams(
+            @RequestParam Integer year,
+            @RequestParam Integer month)
+    {
+        return examService.getMonthlyExams(year, month);
+    }
+
+    // 일별 시험 목록 조회
+    @ApiOperation("일별 시험 목록 조회")
+    @GetMapping("/api/v1/manager/exam/daily")
+    public List<ExamResponse> getDailyExams(
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @RequestParam Integer day)
+    {
+        return examService.getDailyExams(year, month, day);
+    }
+
     // 시험 수정
     @ApiOperation("시험 수정")
-    @PutMapping("/api/v1/manager/exam")
-    public void updateExam(@RequestBody ExamUpdateRequest request) {
-        examService.updateExam(request);
+    @PutMapping("/api/v1/manager/exam/{examId}")
+    public ResponseEntity<String> updateExam(
+            @PathVariable Long examId,
+            @RequestBody ExamUpdateRequest request) {
+        examService.updateExam(examId, request);
+        return ResponseEntity.ok("시험이 성공적으로 수정되었습니다.");
     }
 
     // 시험 삭제

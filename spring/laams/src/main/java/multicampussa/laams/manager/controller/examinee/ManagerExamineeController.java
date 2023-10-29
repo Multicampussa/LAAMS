@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "응시자 관련")
+@Api(tags = "운영자의 응시자 관련 기능")
 @RestController
 public class ManagerExamineeController {
 
@@ -45,11 +45,10 @@ public class ManagerExamineeController {
 
     // 보상대상자 상세 조회
     @ApiOperation("보상 대상 응시자 상세 조회")
-    @GetMapping("/api/v1manager/examinees/compensation/{examineeNo}")
+    @GetMapping("/api/v1/manager/examinees/compensation/{examineeNo}")
     public ExamineeCompensationDetailResponse getCompensationDetail(@PathVariable Long examineeNo){
         return examineeService.getCompensationDetail(examineeNo);
     }
-
 
     // 응시자 수정
     @ApiOperation("응시자 수정")

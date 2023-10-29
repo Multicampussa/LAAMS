@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import multicampussa.laams.examinee.dto.request.EnrollExamRequest;
 import multicampussa.laams.examinee.dto.response.CenterExamsResponse;
 import multicampussa.laams.examinee.service.ExamineeService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,14 +22,15 @@ public class ExamineeController {
 
     // 시험 응시 신청
     @ApiOperation("시험 응시 신청")
-    @PostMapping("/examinee/exam")
-    public void enrollExam(@RequestBody EnrollExamRequest enrollExamRequest) {
+    @PostMapping("/api/v1/examinee/exam")
+    public ResponseEntity<String> enrollExam(@RequestBody EnrollExamRequest enrollExamRequest) {
         examineeService.enrollExam(enrollExamRequest);
+        return ResponseEntity.ok(enrollExamRequest.getExamNo() + "번 시험에 " + enrollExamRequest.getExamineeNo() + "번 응시자가 등록되었습니다.");
     }
 
     // 센터별 시험 목록 조회
     @ApiOperation("센터별 시험 목록 조회")
-    @GetMapping("/examinee/center/{centerNo}/exams")
+    @GetMapping("/api/v1/examinee/center/{centerNo}/exams")
     public List<CenterExamsResponse> getCenterExams(@PathVariable Long centerNo) {
         return examineeService.getCenterExams(centerNo);
     }
