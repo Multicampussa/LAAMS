@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "응시자 관련")
+@Api(tags = "운영자의 응시자 관련 기능")
 @RestController
 public class ManagerExamineeController {
 

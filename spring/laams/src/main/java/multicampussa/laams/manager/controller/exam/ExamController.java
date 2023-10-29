@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "시험 관련")
+@Api(tags = "운영자의 시험 관련 기능")
 @RestController
 public class ExamController {
 
