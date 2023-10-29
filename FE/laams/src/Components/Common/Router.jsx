@@ -10,6 +10,7 @@ import ManagerErrorReportList from "../Manager/ErrorReport/List.jsx"
 import Join from '../User/Join.jsx';
 import UpdateUser from '../User/UpdateUser.jsx';
 import Test from '../Test.jsx';
+import ExamDetail from './../Director/Exam/ExamDetail';
 const Router = () => {
   return (
     <>
@@ -53,7 +54,18 @@ const Router = () => {
             }
           />
           <Route path='/join' element={<Join/>} />
-          <Route path='/update/user' element={<PrivateRoute role="director" children={<UpdateUser/>}></PrivateRoute>}/>
+          <Route 
+            path='/update/user' 
+            element={
+            <PrivateRoute role="director" children={<UpdateUser/>}></PrivateRoute>
+            }
+          />
+          <Route 
+            path='/director/exam/:no' 
+            element={
+            <PrivateRoute role="director" children={<ExamDetail/>}></PrivateRoute>
+            }
+          />
           <Route path='/test' element={<Test/>} />
         </Routes>
       </BrowserRouter>

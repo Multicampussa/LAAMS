@@ -44,6 +44,7 @@ const Header = () => {
         <Link to="/" className='header-menu-box-item'>에러리포트</Link>
         <Link to="/update/user" className='header-menu-box-item'>회원 정보</Link>
         <Link to="/test" className='header-menu-box-item'>로그아웃</Link>
+        <Link to='/director/exam/1' className='header-menu-box-item'>시험 상세</Link>
       </div>
     </>
   )
