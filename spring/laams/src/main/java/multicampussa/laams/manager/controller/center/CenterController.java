@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Api(tags = "센터 관련")
+@Api(tags = "운영자의 센터 관련 기능")
 @RestController
 public class CenterController {
 
