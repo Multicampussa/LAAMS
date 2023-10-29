@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import multicampussa.laams.director.dto.*;
 import multicampussa.laams.director.service.DirectorService;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
+import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -145,6 +146,51 @@ public class DirectorController {
         try{
             directorService.updateAttendanceTime(examNo, examineeNo);
             resultMap.put("message", "출석시간이 업데이트 되었습니다.");
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "응시자 출결 확인")
+    @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendance")
+    public ResponseEntity<Map<String, Object>> checkAttendance(@RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo){
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            String token  = authorization.replace("Bearer ", "");
+            String authority = jwtTokenProvider.getAuthority(token);
+
+            CheckAttendanceDto checkAttendanceDto = directorService.checkAttendance(examNo, examineeNo, authority);
+            resultMap.put("data", checkAttendanceDto);
+            resultMap.put("message", "응시자의 출결이 확인되었습니다.");
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+
+        }catch (IllegalArgumentException e){
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "감독관 시험 배정 요청")
+    @PostMapping("/exams/request")
+    public ResponseEntity<Map<String, Object>> requestExamAssignment(@RequestHeader String authorization, @RequestBody Map<String, Long> examNo){
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            String token = authorization.replace("Bearer", "");
+            String authority = jwtTokenProvider.getAuthority(token);
+            String directorId = jwtTokenProvider.getId(token);
+
+            Long examPk = examNo.get("examNo");
+
+            directorService.requestExamAssignment(examPk, authority,directorId);
+            resultMap.put("message", "감독관의 시험 배정 요청이 정상적으로 처리 되었습니다.");
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
