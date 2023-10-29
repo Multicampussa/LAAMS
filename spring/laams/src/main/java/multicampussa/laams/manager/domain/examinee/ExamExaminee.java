@@ -2,6 +2,7 @@ package multicampussa.laams.manager.domain.examinee;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import multicampussa.laams.director.dto.CheckAttendanceDto;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.manager.domain.exam.Exam;
 
@@ -62,4 +63,13 @@ public class ExamExaminee extends BaseTimeEntity {
         this.examineeCode = examineeCode;
 
     }
+
+    // 출결 확인
+    public void updateAttendace(CheckAttendanceDto checkAttendanceDto) {
+        this.attendance = checkAttendanceDto.getAttendance();
+        this.compensation = checkAttendanceDto.getCompensation();
+        this.compensationType = checkAttendanceDto.getCompensationType();
+    }
+
+
 }
