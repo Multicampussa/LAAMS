@@ -180,13 +180,16 @@ public class DirectorController {
 
     @ApiOperation(value = "감독관 시험 배정 요청")
     @PostMapping("/exams/request")
-    public ResponseEntity<Map<String, Object>> requestExamAssignment(@RequestHeader String authorization, @RequestParam Long examNo){
+    public ResponseEntity<Map<String, Object>> requestExamAssignment(@RequestHeader String authorization, @RequestBody Map<String, Long> examNo){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String token = authorization.replace("Bearer", "");
             String authority = jwtTokenProvider.getAuthority(token);
+            String directorId = jwtTokenProvider.getId(token);
 
-            directorService.requestExamAssignment(examNo, authority);
+            Long examPk = examNo.get("examNo");
+
+            directorService.requestExamAssignment(examPk, authority,directorId);
             resultMap.put("message", "감독관의 시험 배정 요청이 정상적으로 처리 되었습니다.");
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");

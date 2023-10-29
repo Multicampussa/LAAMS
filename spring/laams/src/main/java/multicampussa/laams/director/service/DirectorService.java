@@ -1,6 +1,7 @@
 package multicampussa.laams.director.service;
 
 import lombok.RequiredArgsConstructor;
+import multicampussa.laams.director.domain.Director;
 import multicampussa.laams.director.dto.*;
 import multicampussa.laams.director.repository.DirectorRepository;
 import multicampussa.laams.manager.domain.exam.Exam;
@@ -15,6 +16,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -182,16 +184,23 @@ public class DirectorService {
     }
 
     // 감독관 시험 배정 요청
+    // 요청 한 번 했으면 더 안되게 만들어야함
     @Transactional
-    public void requestExamAssignment(Long examNo, String authority) {
+    public void requestExamAssignment(Long examNo, String authority, String directorId) {
+        System.out.println(directorId);
         if(authority.equals("ROLE_DIRECTOR")){
             Exam exam = examRepository.findById(examNo).orElse(null);
+            Director director = directorRepository.findById(directorId);
             // 시험 있으면 배정 요청(
             if(exam != null){
                 ExamDirector examDirector = new ExamDirector();
-                examDirector.setExam(exam);
+                examDirector.setExam(exam, director);
                 examDirectorRepository.save(examDirector);
             }
+            else {
+                throw new IllegalArgumentException("해당 시험은 없습니다.");
+            }
+
         }
         else{
             throw new IllegalArgumentException("접근 권한이 없습니다.");

@@ -26,6 +26,15 @@ public class ExamDirector extends BaseTimeEntity {
     private Director director;
 
     private Boolean directorAttendance = false;
+    private Boolean confirm = false;
 
+    public void setExam(Exam exam, Director director) {
+        this.exam = exam;
+        this.director = director;
+    }
+
+//    public void setDirector(Director director) {
+//        this.director = director;
+//    }
 }
 
