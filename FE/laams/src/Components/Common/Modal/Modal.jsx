@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {setModalShow} from "../../../redux/actions/modalAction.js";
 import ExamCreate from "../../Manager/Exam/Create/ExamCreate.jsx"
+import ExamDetail from "../../Manager/Exam/Detail.jsx";
 const Modal = () => {
   const show = useSelector(state=>state.Modal.show);
   const type = useSelector(state=>state.Modal.type);
@@ -16,6 +17,9 @@ const Modal = () => {
     switch(type){
       case "exam-create":
         setComponent(<ExamCreate/>);
+        break;
+      case "exam-detail":
+        setComponent(<ExamDetail/>);
         break;
       default:
         break;

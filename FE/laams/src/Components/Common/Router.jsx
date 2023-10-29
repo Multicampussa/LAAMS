@@ -4,6 +4,7 @@ import DirectorHome from "../Director/Home/DirectorHome.jsx"
 import PrivateRoute from './PrivateRoute.jsx';
 import ManagerHome from '../Manager/Home/ManagerHome.jsx';
 import ManagerExamList from '../Manager/Exam/List.jsx';
+import ManagerExamDetail from "../Manager/Exam/Detail.jsx";
 import ManagerRewardList from "../Manager/Reward/List.jsx";
 import ManagerErrorReportList from "../Manager/ErrorReport/List.jsx"
 import Join from '../User/Join.jsx';
@@ -32,6 +33,12 @@ const Router = () => {
             path='/manager/exam'
             element={
               <PrivateRoute role="manager" children={<ManagerExamList/>}></PrivateRoute>
+            }
+          />
+          <Route
+            path='/manager/exam/detail'
+            element={
+              <PrivateRoute role="manager" children={<ManagerExamDetail/>}></PrivateRoute>
             }
           />
           <Route
