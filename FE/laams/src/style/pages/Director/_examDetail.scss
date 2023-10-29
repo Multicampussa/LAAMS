@@ -1,0 +1,95 @@
+.exam-detail{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    &-aside{
+        width: 20%;
+        height: 100%;
+        background-color: white;
+        border-right: 0.1rem solid $color-gray-light;
+        display: flex;
+        justify-content: center;
+        &-box{
+            width: 95%;
+            padding-top: 4rem;
+            display: flex;
+            gap: 2rem;
+            flex-direction: column;
+        }
+        &-title{
+            font-size: 3rem;
+            font-weight: 900;
+            color: $color-blue;
+            &-box{
+                font-size: 2rem;
+                border: 0.1rem solid $color-gray-light;
+                border-radius: 0.5rem;
+                text-align: center;
+                padding: 1rem 0rem;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                font-weight: 600;
+            }
+        }
+        &-btn-m{
+            font-size: 2rem;
+            height: 2rem;
+        }
+    }
+
+    &-examinees{
+        width: 80%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &-box{
+            width: 90%;
+            height: 85%;
+            background-color: white;
+            border-radius: 2rem;
+            border: 0.1rem solid $color-gray-light;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}
+ul{
+    width: 98%;
+    height: 95%;
+}
+.director-examinees-list{
+    &-items{
+        width: 100%;
+        display: grid;
+        text-align: center;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        font-size: 2rem;
+        height: 3rem;
+        line-height: 3rem;
+        border-bottom: 0.1rem solid $color-gray-light;
+        padding: 0.5rem 0rem;
+    }
+    &-items:first-child{
+        background-color: $color-black-light;
+        color: white;
+        border-radius: 1rem 1rem 0rem 0rem;
+    }
+    &-btn{
+        width: 80%;
+        background-color: $color-blue;
+        border-radius: 0.5rem;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 600;
+        padding: 0.5rem 0rem;
+        justify-self: center;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center; /* 세로 - 상단으로 */
+    }
+
+}
