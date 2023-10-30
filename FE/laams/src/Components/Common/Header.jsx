@@ -38,7 +38,7 @@ const Header = () => {
         </div>
       </header>
       <div className={`header-menu-box-${menu}`}>
-        <Link to="/" className='header-menu-box-item'>공지사항</Link>
+        <Link to="/notice" className='header-menu-box-item'>공지사항</Link>
         <Link to="/" className='header-menu-box-item'>전체 시험 일정</Link>
         <Link to="/" className='header-menu-box-item'>보상</Link>
         <Link to="/" className='header-menu-box-item'>에러리포트</Link>
