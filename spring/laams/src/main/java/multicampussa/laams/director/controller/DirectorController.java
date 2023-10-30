@@ -3,12 +3,11 @@ package multicampussa.laams.director.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.director.dto.Director.*;
+import multicampussa.laams.director.dto.director.*;
 import multicampussa.laams.director.service.DirectorService;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;

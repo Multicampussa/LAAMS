@@ -1,9 +1,10 @@
-package multicampussa.laams.director.domain.ErrorReport;
+package multicampussa.laams.director.domain.errorReport;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import multicampussa.laams.director.domain.Director.Director;
+import multicampussa.laams.director.domain.director.Director;
+import multicampussa.laams.director.dto.errorReport.ErrorReportCreateDto;
 import multicampussa.laams.global.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -27,4 +28,12 @@ public class ErrorReport extends BaseTimeEntity {
     private String content;
     private String type;
     private LocalDateTime errorTime;
+
+    public void toEntity(ErrorReportCreateDto errorReportCreateDto, Director director) {
+        this.title = errorReportCreateDto.getTitle();
+        this.content = errorReportCreateDto.getContent();
+        this.type = errorReportCreateDto.getType();
+        this.errorTime = errorReportCreateDto.getErrorTime();
+        this.director = director;
+    }
 }

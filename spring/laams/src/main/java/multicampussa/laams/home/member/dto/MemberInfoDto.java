@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import multicampussa.laams.director.domain.Director.Director;
+import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.manager.domain.manager.Manager;
 
 @Getter
