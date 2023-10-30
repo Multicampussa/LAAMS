@@ -1,4 +1,4 @@
-package multicampussa.laams.director.domain;
+package multicampussa.laams.director.domain.Director;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

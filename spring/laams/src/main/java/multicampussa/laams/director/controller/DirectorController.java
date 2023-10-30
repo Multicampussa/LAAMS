@@ -2,19 +2,16 @@ package multicampussa.laams.director.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.director.dto.*;
+import multicampussa.laams.director.dto.Director.*;
 import multicampussa.laams.director.service.DirectorService;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
-import multicampussa.laams.manager.domain.exam.Exam;
-import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -178,7 +175,7 @@ public class DirectorController {
         }
     }
 
-    @ApiOperation(value = "감독관 시험 배정 요청")
+    @ApiOperation(value = "감독관 시험 배정 요청", notes = "로우 추가")
     @PostMapping("/exams/request")
     public ResponseEntity<Map<String, Object>> requestExamAssignment(@RequestHeader String authorization, @RequestBody Map<String, Long> examNo){
         Map<String, Object> resultMap = new HashMap<>();
@@ -191,6 +188,26 @@ public class DirectorController {
 
             directorService.requestExamAssignment(examPk, authority,directorId);
             resultMap.put("message", "감독관의 시험 배정 요청이 정상적으로 처리 되었습니다.");
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "보상 신청", notes = "컬럼 업데이트")
+    @PostMapping("/exams/{examNo}/examinees/{examineeNo}/applyCompensation")
+    public ResponseEntity<Map<String, Object>> applyCompensation(@RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo, @RequestBody CompensationApplyDto compensationApplyDto){
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            String token = authorization.replace("Bearer", "");
+            String authority = jwtTokenProvider.getAuthority(token);
+
+            directorService.applyCompensation(examNo, examineeNo, compensationApplyDto ,authority);
+            resultMap.put("message", "보상 신청이 되었습니다.");
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
