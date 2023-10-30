@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -17,6 +19,7 @@ public class ExamExamineeListDto {
     private String examineeCode;
     private Boolean attendance;
     private ExamExaminee.DocumentStatus document;
+    private LocalDateTime attendanceTime;
 
     public ExamExamineeListDto(ExamExaminee examExaminee){
         this.examineeNo = examExaminee.getExaminee().getNo();
@@ -24,5 +27,6 @@ public class ExamExamineeListDto {
         this.examineeCode = examExaminee.getExamineeCode();
         this.attendance = examExaminee.getAttendance();
         this.document = examExaminee.getDocument();
+        this.attendanceTime = examExaminee.getAttendanceTime();
     }
 }
