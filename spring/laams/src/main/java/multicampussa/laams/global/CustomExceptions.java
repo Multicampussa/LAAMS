@@ -27,4 +27,8 @@ public class CustomExceptions {
     public static class DirectorNotFoundException extends RuntimeException {
         public DirectorNotFoundException(String message) {super(message);}
     }
+
+    public static class ErrorReportNotFoundException extends RuntimeException {
+        public ErrorReportNotFoundException(String message) {super(message);}
+    }
 }

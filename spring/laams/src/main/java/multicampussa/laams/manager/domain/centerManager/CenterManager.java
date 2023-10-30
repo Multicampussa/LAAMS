@@ -2,6 +2,7 @@ package multicampussa.laams.manager.domain.centerManager;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import multicampussa.laams.global.BaseTimeEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +12,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor
-public class CenterManager {
+public class CenterManager extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
