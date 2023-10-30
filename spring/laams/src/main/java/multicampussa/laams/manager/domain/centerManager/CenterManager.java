@@ -40,6 +40,7 @@ public class CenterManager extends BaseTimeEntity {
                 .memberNo(centerManager.getNo())
                 .name(centerManager.getName())
                 .createdAt(centerManager.getCreatedAt())
+                .phone(centerManager.getPhoneNum())
                 .updatedAt(centerManager.getUpdatedAt())
                 .email(centerManager.getEmail())
                 .build();
