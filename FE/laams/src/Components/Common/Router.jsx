@@ -25,7 +25,7 @@ const Router = () => {
           <Route
             path='/notice/create'
             element={
-              <PublicRoute role="manager" children={<NoticeCreate/>}></PublicRoute>
+              <PrivateRoute role="manager" children={<NoticeCreate/>}></PrivateRoute>
             }
           />
           <Route
