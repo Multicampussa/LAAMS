@@ -1,4 +1,4 @@
-package multicampussa.laams.director.dto.Director;
+package multicampussa.laams.director.dto.director;
 
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package multicampussa.laams.director.dto.Director;
+package multicampussa.laams.director.dto.director;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,21 +12,24 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExamMonthDayListDto {
+public class ExamInformationDto {
 
     private Long examNo;
     private LocalDateTime examDate;
+    private int runningTime;
     private String examType;
     private String examLanguage;
     private String centerName;
     private String centerRegion;
 
-    public ExamMonthDayListDto(Exam exam){
+    public ExamInformationDto(Exam exam){
         this.examNo = exam.getNo();
         this.examDate = exam.getExamDate();
+        this.runningTime = exam.getRunningTime();
         this.examType = exam.getExamType();
         this.examLanguage = exam.getExamLanguage();
         this.centerName = exam.getCenter().getName();
         this.centerRegion = exam.getCenter().getRegion();
     }
+
 }

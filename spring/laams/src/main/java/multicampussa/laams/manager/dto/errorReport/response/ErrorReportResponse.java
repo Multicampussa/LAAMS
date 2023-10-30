@@ -1,7 +1,7 @@
 package multicampussa.laams.manager.dto.errorReport.response;
 
 import lombok.Getter;
-import multicampussa.laams.director.domain.ErrorReport.ErrorReport;
+import multicampussa.laams.director.domain.errorReport.ErrorReport;
 
 @Getter
 public class ErrorReportResponse {
