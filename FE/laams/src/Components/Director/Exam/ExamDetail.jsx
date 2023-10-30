@@ -1,9 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import useApi from '../../../Hook/useApi';
 import { useParams } from 'react-router-dom';
+import { setModalShow, setModalType } from './../../../redux/actions/modalAction';
+import { useDispatch } from 'react-redux';
+
 
 const ExamDetail = () => {
   const params = useParams();
+  const dispatch = useDispatch();
   const [examData, setExamData] = useState({});
   const [examineesData, setExaminessData] = useState([]);
   const api = useApi();
@@ -23,6 +27,11 @@ const ExamDetail = () => {
         console.log(err)
     })
   },[api,params])
+
+  const handleCompensationModal = useCallback(()=>{
+    dispatch(setModalType("exam-compensation"));
+    dispatch(setModalShow(true));
+  },[dispatch])
 
 
   const getTime = useCallback((time, runningTime)=>{
@@ -74,12 +83,24 @@ const ExamDetail = () => {
   const docCnt = useCallback(()=>{
     let cnt = 0
     for (let examinee of examineesData){
-      if(examinee.document){
+      if(examinee.document === '서류_제출_완료'){
         cnt = cnt + 1
       }
     }
     return cnt;
   },[examineesData])
+
+
+  // TODO : 서류 제출 형식 변경
+  const docFormat = useCallback((doc)=>{
+      if(doc === "서류_제출_대기"){
+        return "대기"
+      }else if(doc === "서류_제출_완료"){
+        return "제출"
+      }else{
+        return "미제출"
+      }
+    },[])
 
   return (      
     <section className='exam-detail'>
@@ -88,8 +109,8 @@ const ExamDetail = () => {
             <div className='exam-detail-aside-title'>시험정보</div>
             <div className='exam-detail-aside-title-box'>
               <p>{examData['centerName']}</p>
-              <p>시험 시간 : {getTime(examData['examDate'],examData['runningTime'])[0]} ~ {getTime(examData['examDate'],examData['runningTime'])[1]} ({examData['runningTime']}분)</p>
-              {/* api 연결 필요 */}
+              <p>{getTime(examData['examDate'],examData['runningTime'])[0]} ~ {getTime(examData['examDate'],examData['runningTime'])[1]} ({examData['runningTime']}분)</p>
+              {/* FIXME : api 연결 필요 */}
               <p>감독관 센터 도착 완료</p>
             </div>
             <button className='btn-m'>감독관 센터 도착 인증</button>
@@ -105,7 +126,7 @@ const ExamDetail = () => {
         </aside>
         <article className='exam-detail-examinees'>
             <div className='exam-detail-examinees-box'>
-              <ul>
+              <ul className='exam-detail-examinees-list'>
                 <li className='director-examinees-list-items'>
                   <div>수험번호</div>
                   <div>응시자 이름</div>
@@ -120,11 +141,20 @@ const ExamDetail = () => {
                     <li className='director-examinees-list-items' key={index}>
                       <div>{examinee.examineeCode}</div>
                       <div>{examinee.examineeName}</div>
-                      <div>{examinee.attendance ? "출석" : "결석"}</div>
+                      <div>
+                        <select value={examinee.attendance? '출석' : '결석'}>
+                          <option>지각</option>
+                          <option >결석</option> 
+                          <option>출석</option>
+                          
+                        </select>
+                      </div>
                       <div>9:00</div>
-                      <div>{examinee.document}</div>
+                      <div>{docFormat(examinee.document)}</div>
                       
-                      <button className='director-examinees-list-btn'>보상 신청</button>
+                      <button 
+                        className='director-examinees-list-btn'
+                        onClick={handleCompensationModal}>보상 신청</button>
                       <button className='director-examinees-list-btn'>추가 서류</button>
                     </li> 
                   )
