@@ -207,4 +207,29 @@ public class DirectorService {
     }
 
 
+    public void applyCompensation(Long examNo, Long examineeNo, CompensationApplyDto compensationApplyDto, String authority) {
+        if(authority.equals("ROLE_DIRECTOR")){
+            Exam exam = examRepository.findById(examNo).orElse(null);
+            if(exam != null){
+                ExamExaminee examExaminee = examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo);
+                if(examExaminee != null){
+                    if(compensationApplyDto.getCompensationType().isEmpty()){
+                        throw new IllegalArgumentException("보상타입이 없습니다.");
+                    }
+
+                    examExaminee.setCompensation(compensationApplyDto);
+                    examExamineeRepository.save(examExaminee);
+                }
+                else {
+                    throw new IllegalArgumentException("해당 시험의 응시자가 없습니다.");
+                }
+            }
+            else {
+                throw new IllegalArgumentException("해당 시험은 없습니다.");
+            }
+        }
+        else{
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+    }
 }
