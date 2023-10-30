@@ -365,20 +365,20 @@ public class MemberService {
     }
 
     // 아이디 찾기
-    public MemberInfoDto findId(FindIdDto findIdDto) {
+    public MemberInfoDto findId(String email, String memberName) {
         MemberInfoDto responseDto = new MemberInfoDto();
         Director director;
         Manager manager;
 
-        if (memberDirectorRepository.existsByEmail(findIdDto.getEmail())) {
-            director = memberDirectorRepository.findByEmail(findIdDto.getEmail()).get();
-            if (!director.getName().equals(findIdDto.getName())) {
+        if (memberDirectorRepository.existsByEmail(email)) {
+            director = memberDirectorRepository.findByEmail(email).get();
+            if (!director.getName().equals(memberName)) {
                 throw new IllegalArgumentException("이름과 이메일이 일치하지 않습니다.");
             }
             return responseDto.fromEntityByDirector(director);
         } else {
-            manager = memberManagerRepository.findByEmail(findIdDto.getEmail()).get();
-            if (!manager.getName().equals(findIdDto.getName())) {
+            manager = memberManagerRepository.findByEmail(email).get();
+            if (!manager.getName().equals(memberName)) {
                 throw new IllegalArgumentException("이름과 이메일이 일치하지 않습니다.");
             }
             return responseDto.fromEntityByManager(manager);

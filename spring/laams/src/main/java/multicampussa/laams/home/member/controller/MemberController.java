@@ -251,11 +251,11 @@ public class MemberController {
 
     @GetMapping("/findid")
     @ApiOperation(value = "아이디 찾기")
-    public ResponseEntity<Map<String, Object>> findId(@RequestBody FindIdDto findIdDto) {
+    public ResponseEntity<Map<String, Object>> findId(@RequestParam String email, @RequestParam String memberName) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             resultMap.put("message", "성공적으로 조회하였습니다.");
-            resultMap.put("data", memberService.findId(findIdDto));
+            resultMap.put("data", memberService.findId(email, memberName));
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
