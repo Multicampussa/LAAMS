@@ -34,7 +34,13 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(CustomExceptions.DirectorNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleDirectorNotFoundException(CustomExceptions.DirectorNotFoundException ex) {
-        return new ErrorResponse("examineeNotFound", ex.getMessage());
+        return new ErrorResponse("directorNotFound", ex.getMessage());
+    }
+
+    @ExceptionHandler(CustomExceptions.ErrorReportNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleErrorReportNotFoundException(CustomExceptions.ErrorReportNotFoundException ex) {
+        return new ErrorResponse("errorReportNotFound", ex.getMessage());
     }
 
 }
