@@ -3,6 +3,7 @@ package multicampussa.laams.manager.domain.examinee;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.director.dto.Director.CheckAttendanceDto;
+import multicampussa.laams.director.dto.Director.CompensationApplyDto;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.manager.domain.exam.Exam;
 
@@ -69,6 +70,13 @@ public class ExamExaminee extends BaseTimeEntity {
         this.attendance = checkAttendanceDto.getAttendance();
         this.compensation = checkAttendanceDto.getCompensation();
         this.compensationType = checkAttendanceDto.getCompensationType();
+    }
+
+
+    // 보상 신청
+    public void setCompensation(CompensationApplyDto compensationApplyDto) {
+        this.compensationType = compensationApplyDto.getCompensationType();
+        this.compensationReason = compensationApplyDto.getCompensationReason();
     }
 
 
