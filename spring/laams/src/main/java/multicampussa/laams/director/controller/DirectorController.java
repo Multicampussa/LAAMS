@@ -140,7 +140,8 @@ public class DirectorController {
     public ResponseEntity<Map<String, Object>> updateAttendanceTime(@PathVariable Long examNo, @PathVariable Long examineeNo){
         Map<String, Object> resultMap = new HashMap<>();
         try{
-            directorService.updateAttendanceTime(examNo, examineeNo);
+            UpdateAttendanceDto updateAttendanceDto = directorService.updateAttendanceTime(examNo, examineeNo);
+            resultMap.put("data", updateAttendanceDto);
             resultMap.put("message", "출석시간이 업데이트 되었습니다.");
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
