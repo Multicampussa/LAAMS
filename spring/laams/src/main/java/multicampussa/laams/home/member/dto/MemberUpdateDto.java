@@ -1,7 +1,7 @@
 package multicampussa.laams.home.member.dto;
 
 import lombok.*;
-import multicampussa.laams.director.domain.Director;
+import multicampussa.laams.director.domain.Director.Director;
 
 @Getter
 @Setter

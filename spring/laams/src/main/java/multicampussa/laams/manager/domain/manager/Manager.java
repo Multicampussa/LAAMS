@@ -3,7 +3,6 @@ package multicampussa.laams.manager.domain.manager;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import multicampussa.laams.director.domain.Director;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.home.member.dto.MemberDto;
 import multicampussa.laams.home.member.dto.MemberUpdateDto;

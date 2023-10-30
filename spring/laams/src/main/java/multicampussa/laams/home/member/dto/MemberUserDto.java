@@ -2,7 +2,7 @@ package multicampussa.laams.home.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import multicampussa.laams.director.domain.Director;
+import multicampussa.laams.director.domain.Director.Director;
 
 import java.time.LocalDateTime;
 
