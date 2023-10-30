@@ -163,11 +163,17 @@ public class MemberService {
         return Manager.toMemberDto(memberManagerRepository.findById(id).get());
     }
 
+    // 센터담당자 정보 불러오기
+    public MemberDto CenterManagerInfo(String id) {
+        return CenterManager.toMemberDto(centerManagerRepository.findById(id).get());
+    }
+
     // 로그인 및 토큰 발급
     public ResponseEntity<Map<String, Object>> signIn(LoginRequestDto loginRequestDto, String refreshToken, String authority) {
         Map<String, Object> response = new HashMap<>();
         Optional<Director> directorOptional;
         Optional<Manager> managerOptional;
+        Optional<CenterManager> centerManagerOptional;
 
         if (authority.equals("ROLE_DIRECTOR")) {
             directorOptional = memberDirectorRepository.findById(loginRequestDto.getId());
@@ -192,7 +198,7 @@ public class MemberService {
                 response.put("message", "탈퇴한 유저입니다.");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
-        } else {
+        } else if (authority.equals("ROLE_MANAGER")) {
             managerOptional = memberManagerRepository.findById(loginRequestDto.getId());
             managerOptional.get().updateRefreshToken(refreshToken);
             memberManagerRepository.save(managerOptional.get());
@@ -209,21 +215,37 @@ public class MemberService {
                 response.put("message", "사용자를 찾을 수 없습니다.");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
+        } else if (authority.equals("ROLE_CENTER_MANAGER")) {
+            centerManagerOptional = centerManagerRepository.findById(loginRequestDto.getId());
+            centerManagerOptional.get().updateRefreshToken(refreshToken);
+            centerManagerRepository.save(centerManagerOptional.get());
+            if (centerManagerOptional.isPresent()) {
+                CenterManager centerManager = centerManagerOptional.get();
+                if (passwordEncoder.matches(loginRequestDto.getPw(), centerManager.getPw())) {
+                    response.put("message", "로그인에 성공하였습니다.");
+                    return ResponseEntity.status(HttpStatus.OK).body(response);
+                } else {
+                    response.put("message", "비밀번호가 일치하지 않습니다.");
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+                }
+            } else {
+                response.put("message", "사용자를 찾을 수 없습니다.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+        } else {
+            response.put("message", "사용자를 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
-    // 운영자가 감독관 또는 운영자의 정보를 조회하는 서비스
+    // 운영자가 감독관 또는 운영자 또는 센터담당자의 정보를 조회하는 서비스
     public MemberDto UserInfo(String memberId) {
         if (memberDirectorRepository.existsById(memberId)) {
-            Director director = memberDirectorRepository.findById(memberId).get();
-
-            if (director.getIsDelete()) {
-                throw new IllegalArgumentException("해당 아이디는 삭제되었습니다.");
-            }
-
-            return Director.toMemberDto(director);
+            return Director.toMemberDto(memberDirectorRepository.findById(memberId).get());
         } else if (memberManagerRepository.existsById(memberId)) {
             return Manager.toMemberDto(memberManagerRepository.findById(memberId).get());
+        } else if (centerManagerRepository.existsById(memberId)) {
+            return CenterManager.toMemberDto(centerManagerRepository.findById(memberId).get());
         } else {
             throw new IllegalArgumentException("해당 아이디는 존재하지 않습니다.");
         }
@@ -427,6 +449,6 @@ public class MemberService {
 
     // 해당 아이디가 있는지 확인하는 로직
     public boolean isPresentId(String id) {
-        return memberManagerRepository.existsById(id) || memberDirectorRepository.existsById(id);
+        return memberManagerRepository.existsById(id) || memberDirectorRepository.existsById(id) || centerManagerRepository.existsById(id);
     }
 }

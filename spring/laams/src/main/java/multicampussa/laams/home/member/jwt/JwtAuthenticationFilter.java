@@ -43,16 +43,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 !path.startsWith("/api/v1/member/encodedpassword") &&
                 !path.startsWith("/")) {
 
-//            if (path.startsWith("/api/v1/member/refresh")) {
-//                try {
-//                    jwtTokenProvider.validateToken(token);
-//                } catch (Exception e) {
-//                    // 토큰이 유효하지 않을 때
-//                    sendErrorResponse((HttpServletResponse) res, "로그인이 필요한 서비스입니다.", "l001");
-//                    return; // 추가 처리 중지
-//                }
-//            }
-
 
             if (token != null) {
                 try {

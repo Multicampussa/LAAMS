@@ -3,6 +3,9 @@ package multicampussa.laams.manager.domain.centerManager;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
+import multicampussa.laams.home.member.dto.MemberDto;
+import multicampussa.laams.manager.domain.center.Center;
+import multicampussa.laams.manager.domain.manager.Manager;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,10 +23,32 @@ public class CenterManager extends BaseTimeEntity {
 
     private String name;
 
+    private String id;
+
+    private String pw;
+
     private String phoneNum;
 
     private String email;
 
     private String code;
+
+    private String refreshToken;
+
+    public static MemberDto toMemberDto(CenterManager centerManager) {
+        return MemberDto.builder()
+                .memberNo(centerManager.getNo())
+                .name(centerManager.getName())
+                .createdAt(centerManager.getCreatedAt())
+                .updatedAt(centerManager.getUpdatedAt())
+                .email(centerManager.getEmail())
+                .build();
+    }
+
+    // 리프레시 토큰 업데이트
+    // 이미 리프레시 토큰이 있어도 업데이트 됨.
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }
 
