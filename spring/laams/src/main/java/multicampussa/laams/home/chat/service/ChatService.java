@@ -2,11 +2,9 @@ package multicampussa.laams.home.chat.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import multicampussa.laams.director.domain.Director;
 import multicampussa.laams.home.chat.domain.ChatRoom;
 import multicampussa.laams.home.chat.dto.CreateChatRoomDto;
 import multicampussa.laams.home.chat.repository.ChatRepository;
-import multicampussa.laams.home.member.dto.MemberSignUpDto;
 import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import org.springframework.http.HttpStatus;
