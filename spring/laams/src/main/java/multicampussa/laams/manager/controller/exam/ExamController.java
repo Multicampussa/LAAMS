@@ -8,10 +8,13 @@ import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
 import multicampussa.laams.manager.dto.exam.response.ExamDetailResponse;
 import multicampussa.laams.manager.dto.exam.response.ExamResponse;
 import multicampussa.laams.manager.service.exam.ExamService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "운영자의 시험 관련 기능")
 @RestController
@@ -28,9 +31,13 @@ public class ExamController {
     // 시험 생성
     @ApiOperation("시험 생성")
     @PostMapping("/api/v1/manager/exam")
-    public ResponseEntity<String> saveExam(@RequestBody ExamCreateRequest request) {
+    public ResponseEntity<Map<String, Object>> saveExam(@RequestBody ExamCreateRequest request) {
+        Map<String, Object> resultMap = new HashMap<>();
         examService.saveExam(request);
-        return ResponseEntity.ok("시험이 성공적으로 생성되었습니다.");
+        resultMap.put("message", "시험이 성공적으로 생성되었습니다.");
+        resultMap.put("code", HttpStatus.OK.value());
+        resultMap.put("status", "success");
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     // 시험 목록 조회
