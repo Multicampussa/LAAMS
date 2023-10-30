@@ -25,7 +25,10 @@ public class ErrorReport extends BaseTimeEntity {
     private Director director;
 
     private String title;
+
+    @Column(length = 10000)
     private String content;
+
     private String type;
     private LocalDateTime errorTime;
 
