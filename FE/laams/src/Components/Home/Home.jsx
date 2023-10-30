@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const Home = () => {
-  const [loginData,] = useState({id:localStorage.getItem("id")? localStorage.getItem("id") : "", password:""});
+  const [loginData,setLoginData] = useState({id:localStorage.getItem("id")? localStorage.getItem("id") : "", password:"", authority:"ROLE_DIRECTOR"});
   const [isChecked, setChecked] = useState(localStorage.getItem("id")? true : false); 
   const [, login] = useLogin();
   const user = useSelector(state=>state.User);
@@ -21,7 +21,7 @@ const Home = () => {
       alert("비밀번호를 입력해 주세요");
       return
     }
-    login(loginData["id"], loginData["password"],isChecked);
+    login(loginData["id"], loginData["password"],loginData["authority"],isChecked);
   },[loginData,login,isChecked]);
 
   // TODO : 로그인 후처리 
@@ -43,12 +43,29 @@ const Home = () => {
     }
   },[isLogin, navigate ,user])
 
+  
+
   return (
     <section className='home'>
       <div className='login-container'>
         <div className='login-logo'></div>
           <article className='login-box'>
           <div className='login-title'>Login</div>
+          <ul className='login-tab'> 
+           
+            <li 
+              className={`login-tab-items-${loginData['authority'] === 'ROLE_DIRECTOR'? 'active':'deactive'}`} 
+              onClick={e=>setLoginData({...loginData, authority:'ROLE_DIRECTOR'})}
+              >감독관</li>
+            <li 
+              className={`login-tab-items-${loginData['authority'] === 'ROLE_MANAGER'? 'active':'deactive'}`}
+              onClick={e=>setLoginData({...loginData, authority:'ROLE_MANAGER'})}
+              >운영자</li>
+            <li 
+              className={`login-tab-items-${loginData['authority'] === 'ROLE_CENTER_MANAGER'? 'active':'deactive'}`}
+              onClick={e=>setLoginData({...loginData, authority:'ROLE_CENTER_MANAGER'})}
+              >센터담당자</li>
+          </ul>
           <div className='login-form'>
             <div className='login-input-box'>
               <input 
@@ -95,7 +112,6 @@ const Home = () => {
               로그인
             </button>
           </div>
-          {/* 해당 텍스트 누르면 해당 페이지로 가야 함 */}
           <div className='login-text'>
             <div>
             <div 
