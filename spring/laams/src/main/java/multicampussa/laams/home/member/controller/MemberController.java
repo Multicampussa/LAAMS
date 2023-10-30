@@ -54,20 +54,16 @@ public class MemberController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, loginRequestDto.getPw()));
 
             // 권한 설정
-            String authority;
             MemberDto userInfo = memberService.DirectorInfo(loginRequestDto.getId());
             if (userInfo == null) {
-                authority = "ROLE_MANAGER";
                 userInfo = memberService.ManagerInfo(loginRequestDto.getId());
-            } else {
-                authority = "ROLE_DIRECTOR";
             }
 
             // 토큰 발급
             Long memberId = userInfo.getMemberNo();
-            String accessToken = jwtTokenProvider.createAccessToken(id, authority, memberId);
+            String accessToken = jwtTokenProvider.createAccessToken(id, loginRequestDto.getAuthority(), memberId);
             String refreshToken = jwtTokenProvider.createRefreshToken(id);
-            ResponseEntity<Map<String, Object>> signInResponse = memberService.signIn(loginRequestDto, refreshToken, authority);
+            ResponseEntity<Map<String, Object>> signInResponse = memberService.signIn(loginRequestDto, refreshToken, loginRequestDto.getAuthority());
             Map<String, Object> response = signInResponse.getBody();
 
             if (signInResponse.getStatusCodeValue() == 200) {

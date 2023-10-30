@@ -2,7 +2,7 @@ package multicampussa.laams.home.member.service;
 
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.config.RedisUtil;
-import multicampussa.laams.director.domain.Director.Director;
+import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.home.member.dto.*;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.member.repository.MemberDirectorRepository;

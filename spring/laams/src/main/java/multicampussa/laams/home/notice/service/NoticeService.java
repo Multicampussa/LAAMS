@@ -165,7 +165,7 @@ public class NoticeService {
 //        return noticeRepository.getNoticeList(count, page);
     }
 
-    public NoticeListResDto getNoticeDetail(Long noticeNo) {
+    public NoticeDetailResDto getNoticeDetail(Long noticeNo) {
 
 //        int theNumberOfNotice = noticeRepository.getTheNumberOfNotice();
 //        System.out.println("theNumberOfNotice = " + theNumberOfNotice);
@@ -173,7 +173,7 @@ public class NoticeService {
         // DB에서 데이터 Pagination 해서 불러오기
         Optional<Notice> notice = noticeRepository.findById(noticeNo);
         if (notice.isPresent()) {
-            NoticeListResDto tmp = new NoticeListResDto();
+            NoticeDetailResDto tmp = new NoticeDetailResDto();
 
             tmp.toEntity(notice.get());
             return tmp;
