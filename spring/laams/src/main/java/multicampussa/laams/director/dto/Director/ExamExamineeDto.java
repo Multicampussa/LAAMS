@@ -1,4 +1,4 @@
-package multicampussa.laams.director.dto;
+package multicampussa.laams.director.dto.Director;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

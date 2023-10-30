@@ -1,6 +1,6 @@
 package multicampussa.laams.home.member.repository;
 
-import multicampussa.laams.director.domain.Director;
+import multicampussa.laams.director.domain.Director.Director;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

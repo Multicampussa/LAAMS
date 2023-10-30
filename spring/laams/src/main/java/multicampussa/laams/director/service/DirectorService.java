@@ -1,8 +1,8 @@
 package multicampussa.laams.director.service;
 
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.director.domain.Director;
-import multicampussa.laams.director.dto.*;
+import multicampussa.laams.director.domain.Director.Director;
+import multicampussa.laams.director.dto.Director.*;
 import multicampussa.laams.director.repository.DirectorRepository;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamDirector;
@@ -16,7 +16,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service

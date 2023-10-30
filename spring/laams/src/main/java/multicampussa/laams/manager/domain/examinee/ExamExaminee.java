@@ -2,7 +2,7 @@ package multicampussa.laams.manager.domain.examinee;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import multicampussa.laams.director.dto.CheckAttendanceDto;
+import multicampussa.laams.director.dto.Director.CheckAttendanceDto;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.manager.domain.exam.Exam;
 
