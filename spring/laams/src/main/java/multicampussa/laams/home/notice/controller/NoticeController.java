@@ -114,7 +114,7 @@ public class NoticeController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
 
-            NoticeListResDto notice= noticeService.getNoticeDetail(noticeNo);
+            NoticeDetailResDto notice= noticeService.getNoticeDetail(noticeNo);
 
             resultMap.put("message", "성공적으로 공지사항을 불러왔습니다.");
             resultMap.put("status", HttpStatus.OK.value());

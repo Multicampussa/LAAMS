@@ -12,12 +12,13 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoticeListResDto {
+public class NoticeDetailResDto {
     private Long noticeNo;
     private Long managerNo;
 
     private String title;
-//    private String content;
+    private String content;
+    private String imagePath;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -26,7 +27,8 @@ public class NoticeListResDto {
         this.noticeNo = notice.getNo();
         this.managerNo = notice.getManager().getNo();
         this.title = notice.getTitle();
-//        this.content = notice.getContent();
+        this.content = notice.getContent();
+        this.imagePath = notice.getImagePath();
         this.createdAt = notice.getCreatedAt();
         this.updatedAt = notice.getUpdatedAt();
     }
