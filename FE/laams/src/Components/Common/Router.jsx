@@ -2,6 +2,7 @@ import { BrowserRouter, Routes,Route } from 'react-router-dom';
 import Home from "../Home/Home.jsx"
 import DirectorHome from "../Director/Home/DirectorHome.jsx"
 import PrivateRoute from './PrivateRoute.jsx';
+import PublicRoute from './PublicRoute.jsx';
 import ManagerHome from '../Manager/Home/ManagerHome.jsx';
 import ManagerExamList from '../Manager/Exam/List.jsx';
 import ManagerExamDetail from "../Manager/Exam/Detail.jsx";
@@ -10,13 +11,22 @@ import ManagerErrorReportList from "../Manager/ErrorReport/List.jsx"
 import Join from '../User/Join.jsx';
 import UpdateUser from '../User/UpdateUser.jsx';
 import Test from '../Test.jsx';
-import ExamDetail from './../Director/Exam/ExamDetail';
+import ExamDetail from '../Director/Exam/ExamDetail';
+import NoticeList from "../Notice/List.jsx";
+import NoticeCreate from "../Notice/Create.jsx";
 const Router = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home/>} />
+          <Route path="/notice" element={<PublicRoute children={<NoticeList/>} />} />
+          <Route
+            path='/notice/create'
+            element={
+              <PrivateRoute role="manager" children={<NoticeCreate/>}></PrivateRoute>
+            }
+          />
           <Route
             path='/director'
             element={
