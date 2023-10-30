@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {setModalShow} from "../../../redux/actions/modalAction.js";
 import ExamCreate from "../../Manager/Exam/Create/ExamCreate.jsx"
 import ExamDetail from "../../Manager/Exam/Detail.jsx";
+import ExamCompensation from '../../Director/Exam/ExamCompensation.jsx';
 const Modal = () => {
   const show = useSelector(state=>state.Modal.show);
   const type = useSelector(state=>state.Modal.type);
@@ -21,6 +22,9 @@ const Modal = () => {
       case "exam-detail":
         setComponent(<ExamDetail/>);
         break;
+      case "exam-compensation":
+        setComponent(<ExamCompensation/>);
+        break
       default:
         break;
     }
