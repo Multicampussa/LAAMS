@@ -1,9 +1,9 @@
-package multicampussa.laams.director.domain.errorReport;
+package multicampussa.laams.director.domain.ErrorReport;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import multicampussa.laams.director.domain.Director;
+import multicampussa.laams.director.domain.Director.Director;
 import multicampussa.laams.global.BaseTimeEntity;
 
 import javax.persistence.*;

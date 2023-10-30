@@ -1,7 +1,7 @@
 package multicampussa.laams.home.member.service;
 
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.director.domain.Director;
+import multicampussa.laams.director.domain.Director.Director;
 import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;

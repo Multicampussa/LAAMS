@@ -2,19 +2,18 @@ package multicampussa.laams.director.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.director.dto.*;
+import multicampussa.laams.director.dto.Director.CheckAttendanceDto;
+import multicampussa.laams.director.dto.Director.ExamExamineeDto;
+import multicampussa.laams.director.dto.Director.ExamInformationDto;
+import multicampussa.laams.director.dto.Director.ExamStatusDto;
 import multicampussa.laams.director.service.DirectorService;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
-import multicampussa.laams.manager.domain.exam.Exam;
-import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
