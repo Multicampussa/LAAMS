@@ -12,23 +12,24 @@
         justify-content: center;
         &-box{
             width: 95%;
-            padding-top: 4rem;
+            padding-top: 2rem;
             display: flex;
             gap: 2rem;
             flex-direction: column;
         }
         &-title{
-            font-size: 3rem;
+            font-size: 2rem;
             font-weight: 900;
             color: $color-blue;
             &-box{
-                font-size: 2rem;
+                font-size: 1.5rem;
                 border: 0.1rem solid $color-gray-light;
                 border-radius: 0.5rem;
                 text-align: center;
                 padding: 1rem 0rem;
                 display: flex;
                 flex-direction: column;
+                align-items: center;
                 gap: 1rem;
                 font-weight: 600;
             }
@@ -55,11 +56,11 @@
             justify-content: center;
             align-items: center;
         }
+        &-list{
+            width: 98%;
+            height: 95%;
+        }
     }
-}
-ul{
-    width: 98%;
-    height: 95%;
 }
 .director-examinees-list{
     &-items{
@@ -85,9 +86,10 @@ ul{
         color: white;
         font-size: 1.5rem;
         font-weight: 600;
-        padding: 0.5rem 0rem;
+        padding: 0.2rem 0rem;
         justify-self: center;
         display: inline-flex;
+        box-sizing: border-box;
         flex-direction: column;
         align-items: center; /* 세로 - 상단으로 */
     }
