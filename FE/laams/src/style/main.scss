@@ -9,14 +9,20 @@
 @import "layout/list";
 
 @import "pages/Home/home";
+
+@import "pages/User/join";
+@import "pages/User/updateUser";
+
 @import "pages/Manager/managerHome";
 @import "pages/Manager/examlist";
-@import "pages/User/join";
 @import "pages/Manager/rewradList";
 @import "pages/Manager/errorReportList";
-@import "pages/User/updateUser";
+
 @import "pages/Director/examDetail";
 
+@import "pages/Notice/list";
+@import "pages/Notice/create";
+@import "pages/Notice/detail";
 
 @import "base/base";
 

@@ -1,0 +1,65 @@
+.notice-create{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  box-sizing: border-box;
+  @include desktop{
+    padding: 3rem 15%;
+  }
+  @include tablet{
+    padding: 2rem 10%;
+  }
+  @include mobile{
+    padding: 1rem 0;
+  }
+
+  &-title{
+    height: 4rem;
+    box-sizing: border-box;
+    padding: 1rem;
+    background-color: $color-white;
+    font-weight: 900;
+    @include desktop{
+      width: calc(100% - 12rem);
+    }
+    @include tablet{
+      width: calc(100% - 12rem);
+    }
+    @include mobile{
+      width: 100%;
+    }
+  }
+  &-wrap{
+    flex: 1;
+    box-sizing: border-box;
+    padding: 2rem 0;
+    display: block;
+  }
+  &-btn{
+    border-radius: 0.5rem;
+    background-color: #0A6EBD;
+    color: #FFFFFF;
+    box-sizing: border-box;
+    white-space: nowrap;
+    text-align: center;
+    font-weight: 900;
+    height: 4rem;
+    font-size: 2rem;
+    @include desktop{
+      position: absolute;
+      right: 15%;
+      width: 10rem;
+    }
+    @include tablet{
+      position: absolute;
+      right: 10%;
+      width: 10rem;
+    }
+    @include mobile{
+      position: static;
+      width: 90%;
+      margin-left: 5%;
+    }
+  }
+}
