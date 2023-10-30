@@ -2,7 +2,7 @@ package multicampussa.laams.manager.domain.exam;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import multicampussa.laams.director.domain.Director.Director;
+import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.global.BaseTimeEntity;
 
 import javax.persistence.*;

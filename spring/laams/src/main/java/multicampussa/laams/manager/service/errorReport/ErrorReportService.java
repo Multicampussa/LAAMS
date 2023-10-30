@@ -1,8 +1,6 @@
 package multicampussa.laams.manager.service.errorReport;
 
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import multicampussa.laams.director.domain.ErrorReport.ErrorReport;
+import multicampussa.laams.director.domain.errorReport.ErrorReport;
 import multicampussa.laams.director.repository.errorReport.ErrorReportRepository;
 import multicampussa.laams.global.CustomExceptions;
 import multicampussa.laams.manager.dto.errorReport.response.ErrorReportDetailResponse;
