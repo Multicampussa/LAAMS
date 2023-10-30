@@ -22,7 +22,11 @@ public class Notice extends BaseTimeEntity {
 
     private String title;
 
+    @Column(length = 10000)
     private String content;
+
+    private String imagePath;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="manager_no")
@@ -32,11 +36,13 @@ public class Notice extends BaseTimeEntity {
         this.title = noticeCreateDto.getTitle();
         this.content = noticeCreateDto.getContent();
         this.manager = manager;
+        this.imagePath = noticeCreateDto.getImagePath();
     }
 
     public void update(NoticeUpdateDto noticeUpdateDto) {
         this.title = noticeUpdateDto.getTitle();
         this.content = noticeUpdateDto.getContent();
+        this.imagePath = noticeUpdateDto.getImagePath();
     }
 
 
@@ -46,6 +52,7 @@ public class Notice extends BaseTimeEntity {
                 "no=" + no +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
+                ", imagePath='" + imagePath + '\'' +
                 ", createdAt=" + getCreatedAt() + '\'' +
                 ", updatedAt=" + getUpdatedAt() + '\'' +
                 '}';
