@@ -1,0 +1,48 @@
+.notice-list{
+  &-box{
+    position: relative;
+  }
+  &-item{
+    display: grid;
+    text-align: center;
+    border-bottom: 0.1rem solid $color-gray-light;
+    height: 3rem;
+    line-height: 3rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+
+    @include desktop{
+      grid-template-columns: 1fr 7fr 2fr;
+    }
+    @include tablet{
+      grid-template-columns: 1fr 7fr 2fr;
+    }
+    @include mobile{
+      grid-template-columns: 1fr 6fr 4fr;
+    }
+    & div{
+      height: 3rem;
+    }
+  }
+  &-item:first-child{
+    background-color: $color-black-light;
+    color: $color-white;
+    font-weight: 900;
+    border-radius: 1rem 1rem 0 0;
+    cursor: default;
+  }
+  &-create{
+    position: absolute;
+    top: -5rem;
+    right: 0;
+    width: 8rem;
+    height: 3rem;
+    background-color: $color-blue;
+    color: $color-white;
+    border-radius: 1rem;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-align: center;
+    line-height: 3rem;
+  }
+}

@@ -48,7 +48,7 @@ const Center = ({setType,data}) => {
     const temp = [];
     centerRegionData.forEach((e,idx)=>temp.push(<div onClick={()=>handleregionItem(idx)} className={idx!==regionIdx? "modal-item-deactive" : "modal-item-active"} key={idx}>{e}</div>));
     return temp;
-  },[centerData,regionIdx,handleregionItem]);
+  },[centerRegionData,regionIdx,handleregionItem]);
 
   //TODO : 센터DivList를 반환
   const centers = useMemo(()=>{

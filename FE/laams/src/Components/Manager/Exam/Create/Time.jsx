@@ -21,7 +21,7 @@ const Time = ({setType,data}) => {
     }).catch(err=>{
       alert("시험을 생성하는데 실패했습니다!");
     })
-  },[data,dispatch]);
+  },[api,data,dispatch]);
 
   return (
     <>
