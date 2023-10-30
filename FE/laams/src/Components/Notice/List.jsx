@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import useApi from './../../Hook/useApi';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const List = () => {
   const api = useApi();
@@ -10,6 +10,7 @@ const List = () => {
   const [count,setCount] = useState(10);
   const [total,setTotal] = useState();
   const authority = useSelector(state=>state.User.authority);
+  const navigate = useNavigate();
   //TODO : 페이지 총 개수 저장
   useEffect(()=>{
     api.get("app/notice/count")
@@ -33,8 +34,8 @@ const List = () => {
 
   //TODO : 공지사항 세부페이지 이동
   const handleNoticeItem = useCallback((noticeNo)=>{
-    alert(noticeNo);
-  },[]);
+    navigate(`/notice/detail/${noticeNo}`);
+  },[navigate]);
 
   //TODO : 공지사항 Data를 Div로 변환 및 반환
   const noticeItems = useMemo(()=>{

@@ -13,6 +13,12 @@ const Create = () => {
   const api = useApi();
   const [title,setTitle] = useState();
   const navigate = useNavigate();
+  const onUploadImage = async (blob, callback) => {
+    alert("이미지 업로드 구현중입니다");
+    // const url = await uploadImage(blob);
+    // callback(, 'alt text');
+    return false;
+  };
   const handleCreate = useCallback(() => {
     api.post("app/notice/create",{
       "content": editorRef.current.getInstance().getHTML(),
@@ -36,6 +42,9 @@ const Create = () => {
           useCommandShortcut={false}
           plugins={[colorSyntax]}
           language="ko-KR"
+          hooks={{
+            addImageBlobHook: onUploadImage
+          }}
         />
       </div>
       <button onClick={handleCreate} className='notice-create-btn'>작성하기</button>

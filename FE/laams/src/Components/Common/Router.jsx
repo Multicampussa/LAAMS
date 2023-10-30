@@ -25,13 +25,13 @@ const Router = () => {
           <Route
             path='/notice/create'
             element={
-              <PrivateRoute role="manager" children={<NoticeCreate/>}></PrivateRoute>
+              <PublicRoute role="manager" children={<NoticeCreate/>}></PublicRoute>
             }
           />
           <Route
-            path='/notice/detail/:no'
+            path='/notice/detail/:noticeNo'
             element={
-              <PrivateRoute role="manager" children={<NoticeDetail/>}></PrivateRoute>
+              <PublicRoute role="manager" children={<NoticeDetail/>}></PublicRoute>
             }
           />
           <Route
