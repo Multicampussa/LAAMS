@@ -3,6 +3,7 @@ package multicampussa.laams.manager.domain.examinee;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import multicampussa.laams.manager.dto.examinee.request.ExamineeCreateRequest;
 
 import javax.persistence.*;
 
@@ -23,7 +24,7 @@ public class Examinee {
     @Column(nullable = false, length = 20)
     private String phoneNum;
 
-    @Column(nullable = false, length = 5)
+    @Column(nullable = false, length = 10)
     private String gender;
 
     private String email;
@@ -34,17 +35,14 @@ public class Examinee {
 
     private int point;
 
-    public Examinee(String name, Integer age, String phoneNum, String gender, String id, String pw) {
-        this.id = id;
-        this.pw = pw;
-
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException(String.format("잘못된 name(%s)이 들어왔습니다", name));
-        }
-        this.name = name;
-        this.age = age;
-        this.phoneNum = phoneNum;
-        this.gender = gender;
+    public Examinee(ExamineeCreateRequest examineeCreateRequest) {
+        this.id = examineeCreateRequest.getId();
+        this.pw = examineeCreateRequest.getPw();
+        this.name = examineeCreateRequest.getName();
+        this.age = examineeCreateRequest.getAge();
+        this.phoneNum = examineeCreateRequest.getPhoneNum();
+        this.gender = examineeCreateRequest.getGender();
+        this.email = examineeCreateRequest.getEmail();
     }
 
     public void updateExamineeInfo(String name, Integer age, String phoneNum, String gender, String id, String pw) {
