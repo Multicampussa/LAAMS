@@ -60,7 +60,6 @@ public class Director extends BaseTimeEntity {
                 .email(director.getEmail())
                 .phone(director.getPhone())
                 .createdAt(director.getCreatedAt())
-                .isDelete(director.getIsDelete())
                 .updatedAt(director.getUpdatedAt())
                 .build();
     }

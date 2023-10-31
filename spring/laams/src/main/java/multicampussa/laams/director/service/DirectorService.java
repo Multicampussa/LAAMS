@@ -126,7 +126,7 @@ public class DirectorService {
 
     // 응시자 출석 시간 업데이트 (응시자 지각여부 판단)
     @ Transactional
-    public void updateAttendanceTime(Long examNo, Long examineeNo) {
+    public UpdateAttendanceDto updateAttendanceTime(Long examNo, Long examineeNo) {
 
         Optional<Exam> exam = examRepository.findById(examNo);
         System.out.println(examNo);
@@ -138,6 +138,8 @@ public class DirectorService {
                 // 출석 시간 업데이트
                 examExaminee.get().updateAttendanceTime(LocalDateTime.now());
                 examExamineeRepository.save(examExaminee.get());
+
+                return new UpdateAttendanceDto(examineeNo, LocalDateTime.now());
             }
         } else {
             throw new IllegalArgumentException("해당 시험은 없습니다.");
