@@ -188,6 +188,54 @@ public class DirectorService {
 
     }
 
+    // 서류 제출 확인
+    @Transactional
+    public CheckDocumentDto checkDocument(Long examNo, Long examineeNo, DocumentRequestDto documentRequestDto, String authority) {
+        if(authority.equals("ROLE_DIRECTOR")){
+            Optional<Exam> exam = examRepository.findById(examNo);
+            if(exam.isPresent()){
+                Optional<ExamExaminee> examExaminee = Optional.ofNullable(examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo));
+                if(examExaminee.isEmpty()){
+                    throw new IllegalArgumentException("해당 시험의 응시자가 아닙니다.");
+                }else {
+                    // 출석이 true인 응시자 중에서 서류 제출 여부 확인하기
+                    if(examExaminee.get().getAttendance() == true){
+                        // 서류 있음
+                        System.out.println(documentRequestDto.getDocument());
+                        if(documentRequestDto.getDocument().toString().equals("서류_제출_완료")){
+                            String document = documentRequestDto.getDocument().toString();
+                            Boolean compensation = false;
+                            String compensationType = "";
+
+                            CheckDocumentDto checkDocumentDto = new CheckDocumentDto(document, compensation, compensationType);
+                            examExaminee.get().updateDocument(checkDocumentDto);
+                            return checkDocumentDto;
+                        }else{
+                            // 서류가 없으면 서류 미제출, 보상여부 true, 보상타입 서류 미제출로
+                            String document = documentRequestDto.getDocument().toString();
+                            Boolean compensation = true;
+                            String compensationType = "서류 미제출";
+
+                            CheckDocumentDto checkDocumentDto = new CheckDocumentDto(document, compensation, compensationType);
+                            examExaminee.get().updateDocument(checkDocumentDto);
+                            return checkDocumentDto;
+                        }
+
+                    }else {
+                        throw new IllegalArgumentException("출석하지 않은 응시자 입니다.");
+                    }
+                }
+            } else {
+                throw new IllegalArgumentException("해당 시험은 없습니다.");
+            }
+        }
+        else{
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+
+    }
+
+
     // 감독관 시험 배정 요청
     // 요청 한 번 했으면 더 안되게 만들어야함
     @Transactional

@@ -175,6 +175,27 @@ public class DirectorController {
         }
     }
 
+    @ApiOperation(value = "서류 제출 확인")
+    @PutMapping ("/exams/{examNo}/examinees/{examineeNo}/document")
+    public ResponseEntity<Map<String, Object>> checkDocument(@RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo, @RequestBody DocumentRequestDto documentRequestDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            String token = authorization.replace("Bearer", "");
+            String authority = jwtTokenProvider.getAuthority(token);
+
+            CheckDocumentDto checkDocumentDto = directorService.checkDocument(examNo, examineeNo, documentRequestDto, authority);
+            resultMap.put("data", checkDocumentDto);
+            resultMap.put("message", "응시자의 서류 제출 여부가 확인되었습니다.");
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @ApiOperation(value = "감독관 시험 배정 요청", notes = "로우 추가")
     @PostMapping("/exams/request")
     public ResponseEntity<Map<String, Object>> requestExamAssignment(@RequestHeader String authorization, @RequestBody Map<String, Long> examNo){
