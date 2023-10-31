@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import multicampussa.laams.director.domain.Director.Director;
+import multicampussa.laams.director.domain.director.Director;
+import multicampussa.laams.centerManager.domain.CenterManager;
 import multicampussa.laams.manager.domain.manager.Manager;
 
 @Getter
@@ -22,6 +23,11 @@ public class MemberInfoDto {
     public static MemberInfoDto fromEntityByManager(Manager manager) {
         MemberInfoDto memberInfoDto = new MemberInfoDto();
         memberInfoDto.setId(manager.getId());
+        return memberInfoDto;
+    }
+    public static MemberInfoDto fromEntityByCenterManager(CenterManager centerManager) {
+        MemberInfoDto memberInfoDto = new MemberInfoDto();
+        memberInfoDto.setId(centerManager.getId());
         return memberInfoDto;
     }
 }

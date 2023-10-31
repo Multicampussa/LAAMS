@@ -1,9 +1,12 @@
 package multicampussa.laams.director.service;
 
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.director.domain.Director.Director;
-import multicampussa.laams.director.dto.Director.*;
+import multicampussa.laams.director.domain.director.Director;
+import multicampussa.laams.director.domain.errorReport.ErrorReport;
+import multicampussa.laams.director.dto.director.*;
+import multicampussa.laams.director.dto.errorReport.ErrorReportCreateDto;
 import multicampussa.laams.director.repository.DirectorRepository;
+import multicampussa.laams.director.repository.errorReport.ErrorReportRepository;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamDirector;
 import multicampussa.laams.manager.domain.exam.ExamDirectorRepository;
@@ -26,6 +29,7 @@ public class DirectorService {
     private final ExamRepository examRepository;
     private final ExamExamineeRepository examExamineeRepository;
     private final ExamDirectorRepository examDirectorRepository;
+    private final ErrorReportRepository errorReportRepository;
 
     // 감독관 시험 월별, 일별 조회
     @Transactional
@@ -122,7 +126,7 @@ public class DirectorService {
 
     // 응시자 출석 시간 업데이트 (응시자 지각여부 판단)
     @ Transactional
-    public void updateAttendanceTime(Long examNo, Long examineeNo) {
+    public UpdateAttendanceDto updateAttendanceTime(Long examNo, Long examineeNo) {
 
         Optional<Exam> exam = examRepository.findById(examNo);
         System.out.println(examNo);
@@ -134,6 +138,8 @@ public class DirectorService {
                 // 출석 시간 업데이트
                 examExaminee.get().updateAttendanceTime(LocalDateTime.now());
                 examExamineeRepository.save(examExaminee.get());
+
+                return new UpdateAttendanceDto(examineeNo, LocalDateTime.now());
             }
         } else {
             throw new IllegalArgumentException("해당 시험은 없습니다.");
@@ -206,5 +212,49 @@ public class DirectorService {
         }
     }
 
+
+    public void applyCompensation(Long examNo, Long examineeNo, CompensationApplyDto compensationApplyDto, String authority) {
+        if(authority.equals("ROLE_DIRECTOR")){
+            Exam exam = examRepository.findById(examNo).orElse(null);
+            if(exam != null){
+                ExamExaminee examExaminee = examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo);
+                if(examExaminee != null){
+                    if(compensationApplyDto.getCompensationType().isEmpty()){
+                        throw new IllegalArgumentException("보상타입이 없습니다.");
+                    }
+
+                    examExaminee.setCompensation(compensationApplyDto);
+                    examExamineeRepository.save(examExaminee);
+                }
+                else {
+                    throw new IllegalArgumentException("해당 시험의 응시자가 없습니다.");
+                }
+            }
+            else {
+                throw new IllegalArgumentException("해당 시험은 없습니다.");
+            }
+        }
+        else{
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+    }
+
+    // 에러리포트 작성
+    @Transactional
+    public void createErrorReport(ErrorReportCreateDto errorReportCreateDto, String authority, Long directorNo) {
+        if(authority.equals("ROLE_DIRECTOR")) {
+            ErrorReport errorReport = new ErrorReport();
+            if(directorRepository.existsById(directorNo)){
+                Director director = directorRepository.findById(directorNo).get();
+
+                errorReport.toEntity(errorReportCreateDto, director);
+                errorReportRepository.save(errorReport);
+            }else {
+                throw new IllegalArgumentException(directorNo + "가 없습니다.");
+            }
+        }else {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+    }
 
 }

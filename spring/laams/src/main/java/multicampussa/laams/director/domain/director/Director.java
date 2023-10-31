@@ -1,4 +1,4 @@
-package multicampussa.laams.director.domain.Director;
+package multicampussa.laams.director.domain.director;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -60,7 +60,6 @@ public class Director extends BaseTimeEntity {
                 .email(director.getEmail())
                 .phone(director.getPhone())
                 .createdAt(director.getCreatedAt())
-                .isDelete(director.getIsDelete())
                 .updatedAt(director.getUpdatedAt())
                 .build();
     }

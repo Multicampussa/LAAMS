@@ -2,7 +2,7 @@ package multicampussa.laams.home.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import multicampussa.laams.director.domain.Director.Director;
+import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.manager.domain.manager.Manager;
 
 import java.time.LocalDateTime;
@@ -18,9 +18,6 @@ public class MemberDto {
     private String email;
     private String name;
     private String phone;
-    private Boolean isDelete;
-    private String verificationCode;
-    private Boolean isVerified;
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime createdAt;
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
@@ -32,11 +29,8 @@ public class MemberDto {
         this.email = director.getEmail();
         this.name = director.getName();
         this.phone = director.getPhone();
-        this.isDelete = director.getIsDelete();
         this.createdAt = director.getCreatedAt();
         this.updatedAt = director.getUpdatedAt();
-        this.verificationCode = director.getVerificationCode();
-        this.isVerified = director.getIsVerified();
     }
 
     public static MemberDto fromEntityByDirector(Director director) {

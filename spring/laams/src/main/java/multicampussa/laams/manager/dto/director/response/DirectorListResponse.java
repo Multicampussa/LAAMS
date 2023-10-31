@@ -1,7 +1,7 @@
 package multicampussa.laams.manager.dto.director.response;
 
 import lombok.Getter;
-import multicampussa.laams.director.domain.Director.Director;
+import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.manager.domain.exam.ExamDirector;
 
 @Getter

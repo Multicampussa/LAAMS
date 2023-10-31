@@ -9,9 +9,7 @@ import multicampussa.laams.home.member.exception.JwtAuthenticationException;
 import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import multicampussa.laams.home.member.service.UserDetailsServiceImpl;
-//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.userdetails.UserDetails;
+import multicampussa.laams.centerManager.domain.CenterManagerRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +25,7 @@ public class JwtTokenProvider {
     private final UserDetailsServiceImpl userDetailsService;
     private final MemberDirectorRepository memberDirectorRepository;
     private final MemberManagerRepository memberManagerRepository;
+    private final CenterManagerRepository centerManagerRepository;
 
     private String secretKey = "s1s2a3f4y@"; // 비밀키
     private long validityInMilliseconds = 3600000; // 1 hour
@@ -131,6 +130,9 @@ public class JwtTokenProvider {
         } else if (memberManagerRepository.existsById(id)) {
             storedRefreshToken = memberManagerRepository.findById(id).get().getRefreshToken();
             authority = "ROLE_MANAGER";
+        } else if (centerManagerRepository.existsById(id)) {
+            storedRefreshToken = centerManagerRepository.findById(id).get().getRefreshToken();
+            authority = "ROLE_CENTER_MANAGER";
         } else {
             throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
         }
