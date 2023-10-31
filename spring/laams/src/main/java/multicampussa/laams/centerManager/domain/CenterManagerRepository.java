@@ -1,4 +1,4 @@
-package multicampussa.laams.manager.domain.centerManager;
+package multicampussa.laams.centerManager.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
