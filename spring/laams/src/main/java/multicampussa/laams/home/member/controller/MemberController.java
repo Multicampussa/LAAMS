@@ -143,7 +143,7 @@ public class MemberController {
     }
 
     @GetMapping("/info/{memberId}")
-    @ApiOperation(value = "특정 감독관 또는 운영자의 정보 조회")
+    @ApiOperation(value = "회원 정보 조회")
     public ResponseEntity<Map<String, Object>> memberInfo(@ApiIgnore @RequestHeader String authorization, @PathVariable String memberId) {
         String token = authorization.replace("Bearer ", "");
         String authority = jwtTokenProvider.getAuthority(token);

@@ -251,11 +251,12 @@ public class MemberService {
         }
     }
 
-    // 사용자가 자신의 정보를 수정하는 서비스
+    // 회원 정보를 수정하는 서비스
     public ResponseEntity<Map<String, Object>> updateMemberByUser(String id, String authority, MemberUpdateDto memberUpdateDto) {
         Map<String, Object> response = new HashMap<>();
         Director oldDirector;
         Manager manager;
+        CenterManager centerManager;
 
         // DB에 없는 ID를 검색하려고 하면 IllegalArgumentException
         try {
@@ -271,7 +272,10 @@ public class MemberService {
 
                     Director newDirector = redisUtil.get(memberUpdateDto.getEmail(), Director.class);
 
-                    if (!oldDirector.getEmail().equals(memberUpdateDto.getEmail()) && (memberDirectorRepository.existsByEmail(memberUpdateDto.getEmail()) || memberManagerRepository.existsByEmail(memberUpdateDto.getEmail()))) {
+                    if (!oldDirector.getEmail().equals(memberUpdateDto.getEmail()) &&
+                            (memberDirectorRepository.existsByEmail(memberUpdateDto.getEmail()) ||
+                                    memberManagerRepository.existsByEmail(memberUpdateDto.getEmail()) ||
+                                    centerManagerRepository.existsByEmail(memberUpdateDto.getEmail()))) {
                         response.put("message", "이미 존재하는 이메일입니다.");
                         response.put("status", HttpStatus.BAD_REQUEST.value());
 
@@ -286,7 +290,6 @@ public class MemberService {
                     }
 
                     oldDirector.update(memberUpdateDto);
-                    oldDirector.updateEmail(oldDirector.getEmail());
                     memberDirectorRepository.save(oldDirector);
                     redisUtil.delete(oldDirector.getEmail());
 
@@ -301,19 +304,36 @@ public class MemberService {
 
                     return ResponseEntity.ok(response);
                 }
-            } else {
+            } else if (authority.equals("ROLE_MANAGER")) {
                 if (memberManagerRepository.existsById(memberUpdateDto.getId())) {
+                    if (!memberUpdateDto.getId().equals(id)) {
+                        response.put("message", "접근 권한이 없습니다.");
+                        response.put("status", HttpStatus.UNAUTHORIZED.value());
+
+                        return ResponseEntity.ok(response);
+                    }
+
                     manager = memberManagerRepository.findById(id).get();
+
+                    if (!manager.getEmail().equals(memberUpdateDto.getEmail()) &&
+                            (memberDirectorRepository.existsByEmail(memberUpdateDto.getEmail()) ||
+                                    memberManagerRepository.existsByEmail(memberUpdateDto.getEmail()) ||
+                                    centerManagerRepository.existsByEmail(memberUpdateDto.getEmail()))) {
+                        response.put("message", "이미 존재하는 이메일입니다.");
+                        response.put("status", HttpStatus.BAD_REQUEST.value());
+
+                        return ResponseEntity.ok(response);
+                    }
+
                     manager.update(memberUpdateDto);
                     memberManagerRepository.save(manager);
-                    MemberDto updatedMemberDto = MemberDto.fromEntityByManager(manager);
 
                     response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
                     response.put("code", HttpStatus.OK.value());
                     response.put("status", "success");
 
                     return ResponseEntity.ok(response);
-                } else {
+                } else if (memberDirectorRepository.existsById(memberUpdateDto.getId())) {
                     oldDirector = memberDirectorRepository.findById(memberUpdateDto.getId()).get();
 
                     if (oldDirector.getIsDelete()) {
@@ -323,19 +343,110 @@ public class MemberService {
                         return ResponseEntity.ok(response);
                     }
 
+                    if (!oldDirector.getEmail().equals(memberUpdateDto.getEmail()) &&
+                            (memberDirectorRepository.existsByEmail(memberUpdateDto.getEmail()) ||
+                                    memberManagerRepository.existsByEmail(memberUpdateDto.getEmail()) ||
+                                    centerManagerRepository.existsByEmail(memberUpdateDto.getEmail()))) {
+                        response.put("message", "이미 존재하는 이메일입니다.");
+                        response.put("status", HttpStatus.BAD_REQUEST.value());
+
+                        return ResponseEntity.ok(response);
+                    }
+
                     oldDirector.update(memberUpdateDto);
                     memberDirectorRepository.save(oldDirector);
-                    MemberDto updatedMemberDto = MemberDto.fromEntityByDirector(oldDirector);
 
                     response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
                     response.put("code", HttpStatus.OK.value());
                     response.put("status", "success");
 
                     return ResponseEntity.ok(response);
+                } else if (centerManagerRepository.existsById(memberUpdateDto.getId())) {
+                    response.put("message", "접근 권한이 없습니다.");
+                    response.put("code", HttpStatus.UNAUTHORIZED.value());
+
+                    return ResponseEntity.ok(response);
+                } else {
+                    response.put("message", "해당하는 계정이 없습니다.");
+                    response.put("code", HttpStatus.NOT_FOUND.value());
+
+                    return ResponseEntity.ok(response);
                 }
+            } else if (authority.equals("ROLE_CENTER_MANAGER")) {
+                if (memberManagerRepository.existsById(memberUpdateDto.getId())) {
+                    response.put("message", "접근 권한이 없습니다.");
+                    response.put("code", HttpStatus.UNAUTHORIZED.value());
+
+                    return ResponseEntity.ok(response);
+                } else if (memberDirectorRepository.existsById(memberUpdateDto.getId())) {
+                    oldDirector = memberDirectorRepository.findById(memberUpdateDto.getId()).get();
+
+                    if (oldDirector.getIsDelete()) {
+                        response.put("message", "해당 계정은 삭제되었습니다.");
+                        response.put("status", HttpStatus.NOT_FOUND.value());
+
+                        return ResponseEntity.ok(response);
+                    }
+
+                    if (!oldDirector.getEmail().equals(memberUpdateDto.getEmail()) &&
+                            (memberDirectorRepository.existsByEmail(memberUpdateDto.getEmail()) ||
+                                    memberManagerRepository.existsByEmail(memberUpdateDto.getEmail()) ||
+                                    centerManagerRepository.existsByEmail(memberUpdateDto.getEmail()))) {
+                        response.put("message", "이미 존재하는 이메일입니다.");
+                        response.put("status", HttpStatus.BAD_REQUEST.value());
+
+                        return ResponseEntity.ok(response);
+                    }
+
+                    oldDirector.update(memberUpdateDto);
+                    memberDirectorRepository.save(oldDirector);
+
+                    response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
+                    response.put("code", HttpStatus.OK.value());
+                    response.put("status", "success");
+
+                    return ResponseEntity.ok(response);
+                } else if (centerManagerRepository.existsById(memberUpdateDto.getId())) {
+                    if (!memberUpdateDto.getId().equals(id)) {
+                        response.put("message", "접근 권한이 없습니다.");
+                        response.put("status", HttpStatus.UNAUTHORIZED.value());
+
+                        return ResponseEntity.ok(response);
+                    }
+
+                    centerManager = centerManagerRepository.findById(id).get();
+
+                    if (!centerManager.getEmail().equals(memberUpdateDto.getEmail()) &&
+                            (memberDirectorRepository.existsByEmail(memberUpdateDto.getEmail()) ||
+                                    memberManagerRepository.existsByEmail(memberUpdateDto.getEmail()) ||
+                                    centerManagerRepository.existsByEmail(memberUpdateDto.getEmail()))) {
+                        response.put("message", "이미 존재하는 이메일입니다.");
+                        response.put("status", HttpStatus.BAD_REQUEST.value());
+
+                        return ResponseEntity.ok(response);
+                    }
+
+                    centerManager.update(memberUpdateDto);
+                    centerManagerRepository.save(centerManager);
+
+                    response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
+                    response.put("code", HttpStatus.OK.value());
+                    response.put("status", "success");
+
+                    return ResponseEntity.ok(response);
+                } else {
+                    response.put("message", "해당하는 계정이 없습니다.");
+                    response.put("code", HttpStatus.NOT_FOUND.value());
+
+                    return ResponseEntity.ok(response);
+                }
+            } else {
+                response.put("message", "authority를 다시 입력해주세요.");
+                response.put("code", HttpStatus.BAD_REQUEST.value());
+
+                return ResponseEntity.ok(response);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             response.put("message", memberUpdateDto.getId() + "은 존재하지 않습니다.");
             response.put("status", HttpStatus.NOT_FOUND);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -359,7 +470,7 @@ public class MemberService {
 
             director.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
             memberDirectorRepository.save(director);
-        } else {
+        } else if (memberManagerRepository.existsById(requestDto.getId())) {
             Manager manager = memberManagerRepository.findById(requestDto.getId())
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
 
@@ -370,6 +481,19 @@ public class MemberService {
 
             manager.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
             memberManagerRepository.save(manager);
+        } else if (centerManagerRepository.existsById(requestDto.getId())) {
+            CenterManager centerManager = centerManagerRepository.findById(requestDto.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
+
+            // 기존 비밀번호 안맞으면 Exception
+            if (!passwordEncoder.matches(requestDto.getOldPassword(), centerManager.getPw())) {
+                throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
+            }
+
+            centerManager.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
+            centerManagerRepository.save(centerManager);
+        } else {
+            throw new IllegalArgumentException("authority를 다시 입력해주세요.");
         }
     }
 
@@ -391,6 +515,7 @@ public class MemberService {
         MemberInfoDto responseDto = new MemberInfoDto();
         Director director;
         Manager manager;
+        CenterManager centerManager;
 
         if (memberDirectorRepository.existsByEmail(email)) {
             director = memberDirectorRepository.findByEmail(email).get();
@@ -398,12 +523,20 @@ public class MemberService {
                 throw new IllegalArgumentException("이름과 이메일이 일치하지 않습니다.");
             }
             return responseDto.fromEntityByDirector(director);
-        } else {
+        } else if (memberManagerRepository.existsByEmail(email)) {
             manager = memberManagerRepository.findByEmail(email).get();
             if (!manager.getName().equals(memberName)) {
                 throw new IllegalArgumentException("이름과 이메일이 일치하지 않습니다.");
             }
             return responseDto.fromEntityByManager(manager);
+        } else if (centerManagerRepository.existsByEmail(email)) {
+            centerManager = centerManagerRepository.findByEmail(email).get();
+            if (!centerManager.getName().equals(memberName)) {
+                throw new IllegalArgumentException("이름과 이메일이 일치하지 않습니다.");
+            }
+            return responseDto.fromEntityByCenterManager(centerManager);
+        } else {
+            throw new IllegalArgumentException("해당하는 이메일이 없습니다.");
         }
     }
 
@@ -412,6 +545,7 @@ public class MemberService {
         String tempPassword = UUID.randomUUID().toString().split("-")[0];
         Director director;
         Manager manager;
+        CenterManager centerManager;
 
         if (memberDirectorRepository.existsById(findPasswordDto.getId())) {
             director = memberDirectorRepository.findById(findPasswordDto.getId()).get();
@@ -429,6 +563,14 @@ public class MemberService {
 
             manager.updatePassword(passwordEncoder.encode(tempPassword));
             memberManagerRepository.save(manager);
+        } else if (centerManagerRepository.existsById(findPasswordDto.getId())) {
+            centerManager = centerManagerRepository.findById(findPasswordDto.getId()).get();
+            if (!centerManager.getEmail().equals(findPasswordDto.getEmail())) {
+                throw new IllegalArgumentException("아이디와 이메일이 일치하지 않습니다.");
+            }
+
+            centerManager.updatePassword(passwordEncoder.encode(tempPassword));
+            centerManagerRepository.save(centerManager);
         } else {
             throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
         }
