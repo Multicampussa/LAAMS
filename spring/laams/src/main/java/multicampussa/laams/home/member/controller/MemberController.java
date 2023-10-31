@@ -59,7 +59,7 @@ public class MemberController {
             Long memberId = userInfo.getMemberNo();
             String accessToken = jwtTokenProvider.createAccessToken(id, loginRequestDto.getAuthority(), memberId);
             String refreshToken = jwtTokenProvider.createRefreshToken(id);
-            ResponseEntity<Map<String, Object>> signInResponse = memberService.signIn(loginRequestDto, refreshToken, loginRequestDto.getAuthority());
+            ResponseEntity<Map<String, Object>> signInResponse = memberService.signIn(loginRequestDto, refreshToken);
             Map<String, Object> response = signInResponse.getBody();
 
             if (signInResponse.getStatusCodeValue() == 200) {
