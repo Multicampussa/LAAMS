@@ -1,16 +1,30 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom';
+import Chart from '../Chart/Chart';
+import useCenter from '../../../Hook/useCenter';
 
 const ManagerHome = () => {
   const [page,setPage]=useState(1);
   const [title,setTitle] = useState("시험일정");
   const [chartTitle,setChartTitle] = useState("센터 별 시험 횟수");
   const [selectOpen,setSelectOpen] = useState(false);
+  const [region,setRegion] = useState("서울");
+  const [regionSelectOpen,setRegionSelectOpen] = useState(false);
+  const centerData = useCenter();
+
+  const handleChartRegionItem = useCallback((region)=>{
+    setRegion(region);
+    setRegionSelectOpen(false);
+  },[]);
 
   const handleChartItem = useCallback((title)=>{
     setChartTitle(title);
     setSelectOpen(false);
   },[]);
+  const regionItem = useMemo(()=>{
+    if(!centerData) return [];
+    return Object.keys(centerData).reverse().map((e,idx)=><li className='manager-home-chart-item' onClick={()=>handleChartRegionItem(e)} key={idx}>{e}</li>);
+  })
   const chartItem = useMemo(()=>{
     const chartList = [
       "센터 별 시험 횟수",
@@ -100,16 +114,30 @@ const ManagerHome = () => {
         </li>
         <li className='manager-home-chart'>
           <div className='manager-home-box-title'>시험 현황</div>
-          <div className='manager-home-chart-title' onClick={()=>setSelectOpen(!selectOpen)}>{chartTitle}</div>
-          <div className='manager-home-chart-select'>
-            <ul className={`manager-home-chart-select-${selectOpen}`}>
-              {
-                chartItem
-              }
-            </ul>
+          <div className='flex-row'>
+            <div className='flex-1'>
+              <div className='manager-home-chart-title' onClick={()=>setSelectOpen(!selectOpen)}>{chartTitle}</div>
+              <div className='manager-home-chart-select'>
+                <ul className={`manager-home-chart-select-${selectOpen}`}>
+                  {
+                    chartItem
+                  }
+                </ul>
+              </div>
+            </div>
+            <div className='flex-1'>
+                <div className='manager-home-chart-title' onClick={()=>setRegionSelectOpen(!regionSelectOpen)}>{region}</div>
+                <div className='manager-home-chart-select'>
+                  <ul className={`manager-home-chart-select-${regionSelectOpen}`}>
+                    {
+                      regionItem
+                    }
+                  </ul>
+                </div>
+              </div>
           </div>
           <div className='manager-home-chart-box'>
-            <canvas className='manager-home-chart-canvas'></canvas>
+            <Chart title={chartTitle} region={region}/>
           </div>
         </li>
       </ul>
