@@ -55,9 +55,9 @@ spring:
     cache: false
 
   redis:
-    host: localhost
-    port: 6379
-    password: ssafy1234!!
+    host: ENC(fQWwlcv7RQvGG3JDBL9NDchSFa5g13j/)
+    port: ENC(v1zBzKJHhtr3Vigt8qnxRQ==)
+    password: END(so/mouY4p4lkQV0jvBhjuw32MFr3LR0P)
 
 server:
   servlet:
