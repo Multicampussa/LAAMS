@@ -1,9 +1,11 @@
 package multicampussa.laams.manager.dto.examinee.request;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 
 @Getter
+@ApiModel
 public class ExamineeCreateRequest {
 
     @ApiModelProperty
