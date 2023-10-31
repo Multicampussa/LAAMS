@@ -8,8 +8,8 @@ const ExamineeDetail = () => {
   const api = useApi();
   const [examineeData,setExamineeData] = useState({});
  //TODO : 응시자 상세 정보 조회
- const getExamineeDetail = useCallback(()=>{
-  api.get(`director/exams/${examNo}/examinees/${examineeNo}`)
+ const getExamineeDetail = useCallback(async()=>{
+  await api.get(`director/exams/${examNo}/examinees/${examineeNo}`)
   .then(({data})=>{
     setExamineeData({
       email : data.data.email,

@@ -78,6 +78,15 @@
             cursor: pointer;
             color: $color-blue;
         }
+        &-btn{
+            width: 80%;
+            height: 80%;
+            background-color: $color-blue;
+            color: white;
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
     }
     &-items:first-child{
         background-color: $color-black-light;
