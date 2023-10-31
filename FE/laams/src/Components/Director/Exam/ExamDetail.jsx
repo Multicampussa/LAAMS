@@ -60,9 +60,22 @@ const ExamDetail = () => {
 
       return hours + ':' + minutes;
   };
-
   return [formatTime(testStartTime), formatTime(testEndTime)];
   },[])
+
+  
+  //TODO : 출석 시간 형식 조정
+  const attendanceFormat = useCallback((time)=>{
+    if(time){
+    const attendanceTime = new Date(time);
+    const hours = attendanceTime.getHours();
+    const minutes = attendanceTime.getMinutes();
+    return hours + ':' + minutes;}
+    else{
+      return ''
+    }
+  },[])
+
 
   //TODO : 시험의 응시자 목록 불러오기
   const getExaminees = useCallback(async()=>{
@@ -136,16 +149,16 @@ const ExamDetail = () => {
               <option>출석</option>
             </select>
           </div>
-          <div>{examinee.attendanceTime}</div>
+          <div>{attendanceFormat(examinee.attendanceTime)}</div>
           <div>{docFormat(examinee.document)}</div>
           
           <button 
             className='director-examinees-list-btn'
-            onClick={()=>handleCompensationModal}>보상 신청</button>
+            onClick={()=>handleCompensationModal()}>보상 신청</button>
           <button className='director-examinees-list-btn'>추가 서류</button>
         </li> 
       )
-    })},[examineesData,docFormat,handleCompensationModal,handleExamineeModal,params])
+    })},[examineesData,docFormat,handleCompensationModal,handleExamineeModal,params, attendanceFormat])
 
 
   return (      
