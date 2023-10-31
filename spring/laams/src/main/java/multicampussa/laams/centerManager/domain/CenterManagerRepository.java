@@ -1,4 +1,4 @@
-package multicampussa.laams.manager.domain.centerManager;
+package multicampussa.laams.centerManager.domain;
 
 import multicampussa.laams.config.RedisUtil;
 import multicampussa.laams.manager.domain.center.Center;

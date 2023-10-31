@@ -8,9 +8,13 @@ import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationDet
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationListResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeResponse;
 import multicampussa.laams.manager.service.examinee.ManagerExamineeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "운영자의 응시자 관련 기능")
 @RestController
@@ -25,8 +29,13 @@ public class ManagerExamineeController {
     // 응시자 생성
     @ApiOperation("응시자 생성")
     @PostMapping("/api/v1/manager/examinee")
-    public void saveExaminee(@RequestBody ExamineeCreateRequest request) {
+    public ResponseEntity<Map<String, Object>> saveExaminee(@RequestBody ExamineeCreateRequest request) {
+        Map<String, Object> resultMap = new HashMap<>();
         examineeService.saveExaminee(request);
+        resultMap.put("message", "응시자가 성공적으로 생성되었습니다.");
+        resultMap.put("code", HttpStatus.OK.value());
+        resultMap.put("status", "success");
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     // 응시자 목록 조회

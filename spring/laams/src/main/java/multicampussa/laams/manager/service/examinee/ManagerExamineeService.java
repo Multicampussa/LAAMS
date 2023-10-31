@@ -33,8 +33,7 @@ public class ManagerExamineeService {
     // 응시자 생성
     @Transactional
     public void saveExaminee(ExamineeCreateRequest request) {
-        Examinee examinee = examineeRepository.save(new Examinee(request.getName(), request.getAge(),
-                request.getPhoneNum(), request.getGender(), request.getId(), request.getPw()));
+        examineeRepository.save(new Examinee(request));
     }
 
     // 응시자 목록 조회
