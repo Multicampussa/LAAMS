@@ -44,6 +44,7 @@
       font-size: 1.5rem;
       color: white;
       height: 4rem;
+
       &-items{
         &-deactive{
           background-color: $color-black-light;
@@ -52,6 +53,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
+          white-space: nowrap;
       
         }
         &-active{
@@ -61,12 +63,14 @@
           display: flex;
           align-items: center;
           justify-content: center;
+          white-space: nowrap;
 
         }
       }
-    &-item:hover{
-      cursor: pointer;
+
     }
+    &-tab:hover{
+      cursor: pointer;
     }
     &-form{
       width: 70%;
@@ -147,7 +151,7 @@
         width: 70%;
       }
       &-box{
-        width: 80%;
+        width: 90%;
         height: 100%;
       }
       &-input-box{
@@ -158,6 +162,9 @@
       }
       &-btn{
         width: 100%;
+      }
+      &-tab{
+        font-size: 1.2rem;
       }
       &-text{
         box-sizing: border-box;
