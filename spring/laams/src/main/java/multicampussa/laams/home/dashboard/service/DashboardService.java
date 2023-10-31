@@ -1,6 +1,8 @@
 package multicampussa.laams.home.dashboard.service;
 
 import lombok.RequiredArgsConstructor;
+import multicampussa.laams.home.dashboard.dto.DashboardExamDto;
+import multicampussa.laams.home.dashboard.dto.DashboardExamineeDto;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import multicampussa.laams.home.notice.domain.Notice;
 import multicampussa.laams.home.notice.dto.NoticeCreateDto;
@@ -29,14 +31,15 @@ public class DashboardService {
     public final MemberManagerRepository managerRepository;
 
 
-
-    public Map<String, Object> getCenterExamMonthCount(String authority, Long centerNo, int year, int month) {
+//    센터별 월별 시험 횟수 조회
+    public Map<String, Object> getCenterExamMonthCount(String authority, int year, int month) {
         Map<String, Object> centerExamMap = new HashMap<String, Object>();
 
         if (authority.equals("ROLE_DIRECTOR")) {
             throw new IllegalArgumentException("대시보드 조회 권한이 없습니다.");
         }
-        String theNumberOfExam = examRepository.getCenterExamMonthCount(centerNo, year, month);
+        List<DashboardExamDto> theNumberOfExam = examRepository.getCenterExamMonthCount(year, month);
+
 //        if (theNumberOfExam == null) {
 //            theNumberOfExam = "0";
 //        }
@@ -47,13 +50,14 @@ public class DashboardService {
         return centerExamMap;
     }
 
-    public Map<String, Object> getCenterExamineeMonthCount(String authority, Long centerNo, int year, int month) {
+//    센터별 월별 응시자 수 조회
+    public Map<String, Object> getCenterExamineeMonthCount(String authority, int year, int month) {
         Map<String, Object> centerExamineeMap = new HashMap<String, Object>();
 
         if (authority.equals("ROLE_DIRECTOR")) {
             throw new IllegalArgumentException("대시보드 조회 권한이 없습니다.");
         }
-        String theNumberOfExaminee = examRepository.getCenterExamineeMonthCount(centerNo, year, month);
+        List<DashboardExamineeDto> theNumberOfExaminee = examRepository.getCenterExamineeMonthCount(year, month);
 
         centerExamineeMap.put("examineeCount", theNumberOfExaminee);
 

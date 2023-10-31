@@ -30,15 +30,15 @@ public class DashboardController {
 
     // 센터별 시험 횟수(한달) 조회
     @ApiOperation(value = "센터별 월 시험 횟수 조회")
-    @GetMapping("/{centerNo}/exam")
-    public ResponseEntity<Map<String, Object>> getCenterExamMonthCount(@RequestHeader String authorization, @PathVariable Long centerNo, @RequestParam int year, @RequestParam int month) {
+    @GetMapping("/exam")
+    public ResponseEntity<Map<String, Object>> getCenterExamMonthCount(@RequestHeader String authorization, @RequestParam int year, @RequestParam int month) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
             String token  = authorization.replace("Bearer ", "");
             String authority = jwtTokenProvider.getAuthority(token);
             Map<String, Object> centerExamCount = new HashMap<String, Object>();
 
-            centerExamCount = dashboardService.getCenterExamMonthCount(authority, centerNo, year, month);
+            centerExamCount = dashboardService.getCenterExamMonthCount(authority, year, month);
 
             resultMap.put("message", "성공적으로 센터별 시험횟수를 불러왔습니다.");
             resultMap.put("status", HttpStatus.OK.value());
@@ -53,15 +53,15 @@ public class DashboardController {
 
     // 센터별 월 응시자 수 조회
     @ApiOperation(value = "센터별 월 응시자 수 조회")
-    @GetMapping("/{centerNo}/examinee")
-    public ResponseEntity<Map<String, Object>> getCenterExamineeMonthCount(@RequestHeader String authorization, @PathVariable Long centerNo, @RequestParam int year, @RequestParam int month) {
+    @GetMapping("/examinee")
+    public ResponseEntity<Map<String, Object>> getCenterExamineeMonthCount(@RequestHeader String authorization, @RequestParam int year, @RequestParam int month) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
             String token  = authorization.replace("Bearer ", "");
             String authority = jwtTokenProvider.getAuthority(token);
             Map<String, Object> centerExamineeCount = new HashMap<String, Object>();
 
-            centerExamineeCount = dashboardService.getCenterExamineeMonthCount(authority, centerNo, year, month);
+            centerExamineeCount = dashboardService.getCenterExamineeMonthCount(authority, year, month);
 
             resultMap.put("message", "성공적으로 센터별 응시자 수를 불러왔습니다.");
             resultMap.put("status", HttpStatus.OK.value());
