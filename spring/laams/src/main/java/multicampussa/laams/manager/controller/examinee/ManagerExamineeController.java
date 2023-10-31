@@ -2,6 +2,8 @@ package multicampussa.laams.manager.controller.examinee;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeCreateRequest;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeUpdateRequest;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationDetailResponse;
@@ -41,6 +43,11 @@ public class ManagerExamineeController {
     // 응시자 목록 조회
     @ApiOperation("응시자 목록 조회")
     @GetMapping("/api/v1/manager/examinees")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "응시자가 성공적으로 조회되었습니다.", response = ExamineeResponse.class),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            // 다른 응답 코드 및 메시지 정의
+    })
     public List<ExamineeResponse> getExaminees() {
         return examineeService.getExaminees();
     }
