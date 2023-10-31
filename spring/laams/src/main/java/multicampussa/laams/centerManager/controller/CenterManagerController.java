@@ -1,6 +1,7 @@
 package multicampussa.laams.centerManager.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.centerManager.service.CenterManagerService;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
@@ -14,5 +15,7 @@ public class CenterManagerController {
 
     private final CenterManagerService centerManagerService;
     private final JwtTokenProvider jwtTokenProvider;
+
+
 
 }
