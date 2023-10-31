@@ -18,7 +18,7 @@
             flex-direction: column;
         }
         &-title{
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 900;
             color: $color-blue;
             &-box{
@@ -55,6 +55,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow-y: auto;
         }
         &-list{
             width: 98%;
@@ -67,12 +68,16 @@
         width: 100%;
         display: grid;
         text-align: center;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: repeat(7,1fr);
         font-size: 2rem;
         height: 3rem;
         line-height: 3rem;
         border-bottom: 0.1rem solid $color-gray-light;
         padding: 0.5rem 0rem;
+        &-title:hover{
+            cursor: pointer;
+            color: $color-blue;
+        }
     }
     &-items:first-child{
         background-color: $color-black-light;
@@ -93,5 +98,6 @@
         flex-direction: column;
         align-items: center; /* 세로 - 상단으로 */
     }
+
 
 }
