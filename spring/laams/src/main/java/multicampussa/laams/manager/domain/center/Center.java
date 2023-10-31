@@ -4,10 +4,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
-import multicampussa.laams.manager.domain.centerManager.CenterManager;
+import multicampussa.laams.centerManager.domain.CenterManager;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Getter
