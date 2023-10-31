@@ -53,11 +53,7 @@ public class MemberController {
             // 아이디와 비밀번호 인증
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, loginRequestDto.getPw()));
 
-            // 권한 설정
-            MemberDto userInfo = memberService.DirectorInfo(loginRequestDto.getId());
-            if (userInfo == null) {
-                userInfo = memberService.ManagerInfo(loginRequestDto.getId());
-            }
+            MemberDto userInfo = memberService.UserInfo(loginRequestDto.getId());
 
             // 토큰 발급
             Long memberId = userInfo.getMemberNo();
@@ -79,6 +75,7 @@ public class MemberController {
             return new ResponseEntity<>(response, signInResponse.getStatusCode());
         } catch (AuthenticationException e) {
             Map<String, Object> response = new HashMap<>();
+            System.out.println(e.getMessage());
             response.put("message", "아이디 또는 비밀번호가 일치하지 않습니다.");
             response.put("code", HttpStatus.UNAUTHORIZED.value());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -146,8 +143,8 @@ public class MemberController {
     }
 
     @GetMapping("/info/{memberId}")
-    @ApiOperation(value = "운영자가 특정 감독관 또는 자신의 정보 조회")
-    public ResponseEntity<Map<String, Object>> directorInfo(@ApiIgnore @RequestHeader String authorization, @PathVariable String memberId) {
+    @ApiOperation(value = "회원 정보 조회")
+    public ResponseEntity<Map<String, Object>> memberInfo(@ApiIgnore @RequestHeader String authorization, @PathVariable String memberId) {
         String token = authorization.replace("Bearer ", "");
         String authority = jwtTokenProvider.getAuthority(token);
         String directorId = jwtTokenProvider.getId(token);
