@@ -2,11 +2,13 @@ package multicampussa.laams.home.chat.controller;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.home.chat.domain.ChatRoom;
 import multicampussa.laams.home.chat.dto.CreateChatRoomDto;
 import multicampussa.laams.home.chat.service.ChatService;
 import multicampussa.laams.home.member.dto.MemberSignUpDto;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
+import multicampussa.laams.home.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +28,7 @@ public class ChatRoomController {
 
     private final ChatService chatService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final MemberService memberService;
 
     // 채팅 리스트 화면
     @GetMapping("/room")
@@ -42,20 +46,22 @@ public class ChatRoomController {
     // 채팅방 생성
     @PostMapping("/room")
     @ApiOperation(value = "채팅방 생성")
-    public ResponseEntity<Map<String, Object>> createRoom(@ApiIgnore @RequestHeader String authorization, @RequestBody CreateChatRoomDto createChatRoomDto) {
-        String token = authorization.replace("Bearer ", "");
-        String senderId = jwtTokenProvider.getId(token);
+    public ResponseEntity<Map<String, Object>> createRooms() {
+        List<String> directors = memberService.getDirectors();
 
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            ResponseEntity<String> result = chatService.createRoom(createChatRoomDto, senderId);
-            resultMap.put("message", result.getBody());
-            resultMap.put("code", result.getStatusCode().value());
+            List<ChatRoom> rooms = new ArrayList<>();
+            for (String directorId : directors) {
+                rooms.add(chatService.createRoom(directorId));
+            }
+            resultMap.put("data", rooms);
+            resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
-            return new ResponseEntity<>(resultMap, result.getStatusCode());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
         } catch (Exception e) {
-            resultMap.put("message", e.getMessage().split(":")[1]);
-            resultMap.put("code", e.getMessage().split(":")[0]);
+            resultMap.put("message", e.getMessage());
+            resultMap.put("code", HttpStatus.BAD_REQUEST.value());
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }

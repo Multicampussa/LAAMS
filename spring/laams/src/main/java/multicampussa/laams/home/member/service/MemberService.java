@@ -593,4 +593,12 @@ public class MemberService {
     public boolean isPresentId(String id) {
         return memberManagerRepository.existsById(id) || memberDirectorRepository.existsById(id) || centerManagerRepository.existsById(id);
     }
+
+    public List<String> getDirectors() {
+        List<String> directors = new ArrayList<>();
+        for (Director director : memberDirectorRepository.findAll()) {
+            directors.add(director.getId());
+        }
+        return directors;
+    }
 }

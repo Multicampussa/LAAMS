@@ -45,22 +45,22 @@ public class ChatService {
     }
 
     //채팅방 생성
-    public ResponseEntity<String> createRoom(CreateChatRoomDto createChatRoomDto, String senderId) {
+    public ChatRoom createRoom(String directorId) {
         String roomName;
-        if (memberManagerRepository.existsById(senderId)) {
-            roomName = createChatRoomDto.getReceiverId() + "&" + senderId;
-        } else if (memberDirectorRepository.existsById(senderId)) {
-            roomName = senderId + "&" + createChatRoomDto.getReceiverId();
+        List<ChatRoom> rooms = chatRepository.findAll();
+        for (ChatRoom room : rooms) {
+            if (room.getRoomName().contains(directorId)) {
+                return new ChatRoom();
+            };
+        }
+        if (memberDirectorRepository.existsById(directorId)) {
+            roomName = directorId + "'s Room";
         } else {
             throw new IllegalArgumentException("해당 유저는 없습니다.");
         }
 
-        if (chatRepository.existsByRoomName(roomName)) {
-            throw new IllegalArgumentException("a001:존재하는 채팅방입니다.");
-        }
-
         ChatRoom chatRoom = ChatRoom.create(roomName);
         chatRepository.save(chatRoom);
-        return ResponseEntity.status(HttpStatus.OK).body("채팅방 개설에 성공하였습니다.");
+        return chatRoom;
     }
 }
