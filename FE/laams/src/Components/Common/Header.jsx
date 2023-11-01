@@ -44,6 +44,8 @@ const Header = () => {
         res = [
           <Link onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,
           <Link onClick={handleMenuItem} to="/manager/chart" className='header-menu-box-item'>차트</Link>,
+          <Link onClick={handleMenuItem} to="/manager/reward" className='header-menu-box-item'>보상</Link>,
+          <Link onClick={handleMenuItem} to="/manager/error-report" className='header-menu-box-item'>에러리포트</Link>,
           <Link onClick={handleMenuItem} to="/test" className='header-menu-box-item'>로그아웃</Link>
         ];
         break;
