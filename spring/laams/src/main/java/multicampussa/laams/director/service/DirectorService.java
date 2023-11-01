@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -402,5 +403,46 @@ public class DirectorService {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
     }
+
+    // 감독관 센터 도착
+    @Transactional
+    public DirectorAttendanceDto attendanceDirector(Long examNo, Long directorNo, DirectorAttendanceRequestDto directorAttendanceRequestDto, String authority, String directorId) {
+        if(authority.equals("ROLE_DIRECTOR")) {
+            Exam exam = examRepository.findById(examNo).orElse(null);
+            if(exam != null){
+                List<ExamDirector> examDirectors = exam.getExamDirector();
+                boolean isDirectorExists = examDirectors.stream()
+                        .anyMatch(examDirector -> examDirector.getDirector().getId().equals(directorId));
+                if(isDirectorExists){
+                    ExamDirector currentExamDirector = examDirectors.stream()
+                            .filter(examDirector -> examDirector.getNo() == directorNo)
+                            .findFirst()
+                            .orElse(null);
+
+                    System.out.println(currentExamDirector.getNo()); // 아직 directorNo는 사용 안하는 중..
+                    if(currentExamDirector != null){
+
+                        if(directorAttendanceRequestDto.getLongitude() != null && directorAttendanceRequestDto.getLatitude() != null) {
+                            Boolean directorAttendance = true;
+                            DirectorAttendanceDto directorAttendanceDto = new DirectorAttendanceDto(directorAttendance);
+
+                            currentExamDirector.updateAttendance(directorAttendanceDto);
+                            return directorAttendanceDto;
+
+                        }
+                    }
+
+                } else {
+                    throw new IllegalArgumentException("감독 권한이 없는 사람입니다.");
+                }
+            }else {
+                throw new IllegalArgumentException("해당 시험은 없습니다.");
+            }
+        } else {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+        return null;
+    }
+
 
 }
