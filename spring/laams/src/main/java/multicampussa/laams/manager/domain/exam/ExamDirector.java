@@ -3,6 +3,7 @@ package multicampussa.laams.manager.domain.exam;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.director.domain.director.Director;
+import multicampussa.laams.director.dto.director.DirectorAttendanceDto;
 import multicampussa.laams.global.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -30,6 +31,10 @@ public class ExamDirector extends BaseTimeEntity {
     public void setExam(Exam exam, Director director) {
         this.exam = exam;
         this.director = director;
+    }
+
+    public void updateAttendance(DirectorAttendanceDto directorAttendanceDto) {
+        this.directorAttendance = directorAttendanceDto.getDirectorAttendance();
     }
 
 //    public void setDirector(Director director) {
