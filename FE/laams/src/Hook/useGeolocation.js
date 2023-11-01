@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-export const useGeoLocation = (options) => {
+export const useGeoLocation = () => {
 
   const getLocation = useCallback(async (geolocation)=>{
     return new Promise((resolve,rejected)=>{
@@ -15,7 +15,6 @@ export const useGeoLocation = (options) => {
       throw new Error('Geolocation is not supported.');
     }
 
-    if(!options) options = {};
     try{
       let res = await getLocation(geolocation);
       if(res){
@@ -27,7 +26,7 @@ export const useGeoLocation = (options) => {
     }catch(err){
       throw new Error(err.message);
     }
-  }, [options]);
+  }, [getLocation]);
 
   return getGeolcation
 }

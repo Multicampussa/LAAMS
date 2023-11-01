@@ -15,6 +15,7 @@ import ExamDetail from '../Director/Exam/ExamDetail';
 import NoticeList from "../Notice/List.jsx";
 import NoticeCreate from "../Notice/Create.jsx";
 import NoticeDetail from "../Notice/Detail.jsx";
+import Chart from '../Manager/Chart/Chart.jsx';
 const Router = () => {
   return (
     <>
@@ -68,6 +69,12 @@ const Router = () => {
             path='/manager/reward'
             element={
               <PrivateRoute role="manager" children={<ManagerRewardList/>}></PrivateRoute>
+            }
+          />
+          <Route
+            path='/manager/chart'
+            element={
+              <PrivateRoute role="manager" children={<Chart/>}></PrivateRoute>
             }
           />
           <Route path='/join' element={<Join/>} />
