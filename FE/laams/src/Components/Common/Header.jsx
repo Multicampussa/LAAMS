@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -23,6 +24,35 @@ const Header = () => {
     }
   },[navigate,user]);
 
+  const menuItems = useMemo(()=>{
+    let res = [];
+    switch(user.authority){
+      case "ROLE_DIRECTOR":
+        res = [
+        <Link to="/notice" className='header-menu-box-item'>공지사항</Link>,
+        <Link to="/" className='header-menu-box-item'>전체 시험 일정</Link>,
+        <Link to="/" className='header-menu-box-item'>보상</Link>,
+        <Link to="/" className='header-menu-box-item'>에러리포트</Link>,
+        <Link to="/update/user" className='header-menu-box-item'>회원 정보</Link>,
+        <Link to="/test" className='header-menu-box-item'>로그아웃</Link>,
+        <Link to='/director/exam/1' className='header-menu-box-item'>시험 상세</Link>];
+        break;
+      case "ROLE_MANAGER":
+        res = [
+          <Link to="/notice" className='header-menu-box-item'>공지사항</Link>,
+          <Link to="/test" className='header-menu-box-item'>로그아웃</Link>
+        ];
+        break;
+      default:
+        res = [
+          <Link to="/notice" className='header-menu-box-item'>공지사항</Link>,
+          <Link to="/test" className='header-menu-box-item'>로그아웃</Link>
+        ]
+        break;
+    }
+    return res;
+  },[user])
+
   return (
     <>
       <header className='header'>
@@ -38,13 +68,9 @@ const Header = () => {
         </div>
       </header>
       <div className={`header-menu-box-${menu}`}>
-        <Link to="/notice" className='header-menu-box-item'>공지사항</Link>
-        <Link to="/" className='header-menu-box-item'>전체 시험 일정</Link>
-        <Link to="/" className='header-menu-box-item'>보상</Link>
-        <Link to="/" className='header-menu-box-item'>에러리포트</Link>
-        <Link to="/update/user" className='header-menu-box-item'>회원 정보</Link>
-        <Link to="/test" className='header-menu-box-item'>로그아웃</Link>
-        <Link to='/director/exam/1' className='header-menu-box-item'>시험 상세</Link>
+        {
+          menuItems
+        }
       </div>
     </>
   )
