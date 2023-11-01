@@ -12,7 +12,7 @@ export const useGeoLocation = (options) => {
     const { geolocation } = navigator
 
     if (!geolocation) {
-      setError('Geolocation is not supported.')
+      throw new Error('Geolocation is not supported.');
       return
     }
 
