@@ -1,7 +1,5 @@
 package multicampussa.laams.global;
 
-import multicampussa.laams.manager.domain.exam.ExamDirector;
-
 public class CustomExceptions {
 
     public static class ExamNotFoundException extends RuntimeException {

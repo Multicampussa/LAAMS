@@ -3,7 +3,6 @@ package multicampussa.laams.centerManager.service;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.centerManager.dto.ConfirmDirectorRequest;
 import multicampussa.laams.global.CustomExceptions;
-import multicampussa.laams.manager.domain.center.CenterRepository;
 import multicampussa.laams.manager.domain.exam.ExamDirector;
 import multicampussa.laams.manager.domain.exam.ExamDirectorRepository;
 import org.springframework.stereotype.Service;

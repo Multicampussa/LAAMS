@@ -9,13 +9,13 @@ import multicampussa.laams.centerManager.service.CenterManagerService;
 import multicampussa.laams.global.ApiResponse;
 import multicampussa.laams.global.CustomExceptions;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
-import multicampussa.laams.manager.domain.exam.Exam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = "센터매니저 관련 기능")
 @RestController
@@ -33,10 +33,10 @@ public class CenterManagerController {
             @io.swagger.annotations.ApiResponse(code = 400, message = "잘못된 요청"),
     })
     public ResponseEntity<ApiResponse<String>> confirmDirector(
-            @RequestBody ConfirmDirectorRequest request, @RequestHeader String authorization) {
+            @RequestBody ConfirmDirectorRequest request, @ApiIgnore @RequestHeader String authorization) {
         String token = authorization.replace("Bearer", "");
         String authority = jwtTokenProvider.getAuthority(token);
-        if (authority.equals("CENTER_MANAGER")) {
+        if (authority.equals("ROLE_CENTER_MANAGER")) {
             centerManagerService.confirmDirector(request);
             return new ResponseEntity<>(
                     new ApiResponse<>(
