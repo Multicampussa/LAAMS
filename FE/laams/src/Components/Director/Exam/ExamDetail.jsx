@@ -80,7 +80,9 @@ const ExamDetail = () => {
   },[api,examineesData,params])
 
   // TODO : 보상 모달 띄우기
-  const handleCompensationModal = useCallback(()=>{
+  const handleCompensationModal = useCallback((examineeNo, examNo)=>{
+    dispatch(setExamineeNo(examineeNo));
+    dispatch(setExamNo(examNo));
     dispatch(setModalType("exam-compensation"));
     dispatch(setModalShow(true));
   },[dispatch])
@@ -237,14 +239,17 @@ const ExamDetail = () => {
               출석
             </button>
           <div>{attendanceFormat(examinee.attendanceTime)} {lateAttendance(examinee)}</div>
-          <select className='director-examinees-list-items-select' defaultValue={docFormat(examinee.document)} onChange={e=>updateDocs(index,e)}>
+          <select 
+            className='director-examinees-list-items-select' 
+            defaultValue={docFormat(examinee.document)} 
+            onChange={e=>updateDocs(index,e)}>
             <option value="대기" hidden>대기</option>
             <option value="미제출" >미제출</option>
             <option value="제출">제출</option>
           </select>
             <button 
             className='director-examinees-list-btn'
-            onClick={()=>handleCompensationModal()}>보상 신청</button>
+            onClick={()=>handleCompensationModal(examinee.examineeNo, params['no'])}>보상 신청</button>
             <button 
               className='director-examinees-list-btn'
               onClick={()=>handleDocsModal()}
