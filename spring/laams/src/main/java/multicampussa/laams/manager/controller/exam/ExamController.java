@@ -2,6 +2,7 @@ package multicampussa.laams.manager.controller.exam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import multicampussa.laams.global.ApiResponse;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.manager.dto.exam.request.ExamCreateRequest;
 import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
@@ -31,13 +32,12 @@ public class ExamController {
     // 시험 생성
     @ApiOperation("시험 생성")
     @PostMapping("/api/v1/manager/exam")
-    public ResponseEntity<Map<String, Object>> saveExam(@RequestBody ExamCreateRequest request) {
-        Map<String, Object> resultMap = new HashMap<>();
+    public ResponseEntity<ApiResponse<String>> saveExam(@RequestBody ExamCreateRequest request) {
         examService.saveExam(request);
-        resultMap.put("message", "시험이 성공적으로 생성되었습니다.");
-        resultMap.put("code", HttpStatus.OK.value());
-        resultMap.put("status", "success");
-        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>(
+                "success",
+                HttpStatus.OK.value(),
+                "시험이 성공적으로 생성되었습니다."), HttpStatus.OK);
     }
 
     // 시험 목록 조회

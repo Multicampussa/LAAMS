@@ -40,5 +40,9 @@ public class ExamDirector extends BaseTimeEntity {
 //    public void setDirector(Director director) {
 //        this.director = director;
 //    }
+    public void confirmDirector() {
+        this.confirm = true;
+    }
+
 }
 
