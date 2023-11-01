@@ -34,9 +34,14 @@
                 font-weight: 600;
             }
         }
-        &-btn-m{
+        &-btn{
+            background-color: $color-blue;
             font-size: 2rem;
-            height: 2rem;
+            font-weight: 600;
+            height: 4rem;
+            color: white;
+            border-radius: 1rem;
+
         }
     }
 
@@ -108,5 +113,28 @@
         align-items: center; /* 세로 - 상단으로 */
     }
 
-
 }
+
+@include tablet{
+    .exam-detail{
+        &-aside{
+            &-title{
+                font-size: 2rem;
+                &-box{
+                    font-size: 1.2rem;
+                }
+            }
+            &-btn{
+                font-size: 1.2rem;
+            }
+        }
+
+    }
+    .director-examinees-list{
+        &-items{
+            font-size: 1.5rem;
+            
+        }
+    }
+}
+

@@ -17,11 +17,11 @@ const ExamDetail = () => {
     await api.get(`director/exams/${params['no']}`)
     .then(({data})=>{
         setExamData({
-            centerName: data.data.centerName,
+            centerName : data.data.centerName,
             ceterRegion : data.data.ceterRegion,
             examDate : data.data.examDate,
-            examLanguage: data.data.examLanguage,
-            examType: data.data.examType,
+            examLanguage : data.data.examLanguage,
+            examType : data.data.examType,
             runningTime : data.data.runningTime
         })
     })
@@ -29,6 +29,38 @@ const ExamDetail = () => {
         console.log(err)
     })
   },[api,params])
+
+  //TODO : 서류 제출 변경
+  const updateDocs = useCallback((index, e)=>{
+    if(examineesData[index].attendanceTime){
+    if(e.target.value==="제출"){
+      api.put(`director/exams/${params['no']}/examinees/${examineesData[index].examineeNo}/document`,
+      {
+        "document": "서류_제출_완료"
+      })
+      .then((res)=>{
+        console.log(res)
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }else{
+      api.put(`director/exams/${params['no']}/examinees/${examineesData[index].examineeNo}/document`,
+      {
+        "document": "서류_미제출"
+      })
+      .then((res)=>{
+        console.log(res)
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }
+  }else{
+    alert('출석하지 않은 응시자 입니다.')
+  }
+
+  },[api,examineesData,params])
 
   // TODO : 보상 모달 띄우기
   const handleCompensationModal = useCallback(()=>{
@@ -190,7 +222,11 @@ const ExamDetail = () => {
             </button>
           </div>
           <div>{attendanceFormat(examinee.attendanceTime)} {lateAttendance(examinee)}</div>
-          <div>{docFormat(examinee.document)}</div>
+          <select defaultValue={docFormat(examinee.document)} onChange={e=>updateDocs(index,e)}>
+            <option value="대기" hidden>대기</option>
+            <option value="미제출" >미제출</option>
+            <option value="제출">제출</option>
+          </select>
           
           <button 
             className='director-examinees-list-btn'
@@ -202,7 +238,8 @@ const ExamDetail = () => {
         </li> 
       )
     })},[examineesData,docFormat,handleCompensationModal,
-      handleExamineeModal,params, attendanceFormat, changeAttendance, lateAttendance,handleDocsModal])
+      handleExamineeModal,params, attendanceFormat, changeAttendance, 
+      lateAttendance ,handleDocsModal, updateDocs])
 
 
   return (      
@@ -216,7 +253,7 @@ const ExamDetail = () => {
               {/* FIXME : api 연결 필요 */}
               <p>감독관 센터 도착 완료</p>
             </div>
-            <button className='btn-m'>감독관 센터 도착 인증</button>
+            <button className='exam-detail-aside-btn'>감독관 센터 도착 인증</button>
             <div className='exam-detail-aside-title'>응시자 현황</div>
             <div className='exam-detail-aside-title-box'>
               <p>응시자 수: {examineesData.length}명</p>
@@ -224,7 +261,7 @@ const ExamDetail = () => {
               <p>서류 현황: {docCnt()}명/{examineesData.length}명</p>
             </div>
             {/* api 연결 필요 */}
-            <button className='btn-m'>문의하기</button>
+            <button className='exam-detail-aside-btn'>문의하기</button>
           </div>
         </aside>
         <article className='exam-detail-examinees'>
