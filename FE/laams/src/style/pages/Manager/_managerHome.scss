@@ -1,125 +1,15 @@
 .manager-home{
-  min-width: 100%;
+  box-sizing: border-box;
+  width: 100%;
   height: 100%;
-  &-box{
-    position: relative;
+  @include desktop{
+    padding: 2% 20%;
   }
-  &-link{
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
+  @include tablet{
+    padding: 2% 10%;
   }
-}
-
-@mixin slider-mobile(){
-  .manager-home{
-    overflow: hidden;
-    &-title{
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      background-color: $color-blue;
-      color: $color-white;
-      & button{
-        color: $color-white;
-        height: 5rem;
-        font-size: 2rem;
-      }
-      & div{
-        font-size: 2rem;
-      }
-    }
-    &-box{
-      flex-shrink: 0;
-      width: 100%;
-      height: 100%;
-      background-color: $color-white;
-      &-title{
-        display: none;
-      }
-    }
-    &-chart{
-      flex-shrink: 0;
-      width: 100%;
-      height: 100%;
-    }
-    &-slider-1{
-      display: flex;
-      width: auto;
-      height: 100%;
-      will-change: transform;
-      transition-property: transform;
-      transition-duration: 0.1s;
-      transition-timing-function: ease-out;
-      transform: translateX(0);
-    }
-    &-slider-2{
-      display: flex;
-      width: auto;
-      height: 100%;
-
-      will-change: transform;
-      transition-property: transform;
-      transition-duration: 0.1s;
-      transition-timing-function: ease-out;
-      transform: translateX(-100vw);
-    }
-    &-slider-3{
-      display: flex;
-      width: auto;
-      height: 100%;
-
-      will-change: transform;
-      transition-property: transform;
-      transition-duration: 0.1s;
-      transition-timing-function: ease-out;
-      transform: translateX(-200vw);
-    }
-    &-slider-4{
-      display: flex;
-      width: auto;
-      height: 100%;
-
-      will-change: transform;
-      transition-property: transform;
-      transition-duration: 0.1s;
-      transition-timing-function: ease-out;
-      transform: translateX(-300vw);
-    }
+  @include mobile{
+    padding: 0;
   }
 }
-@include mobile{
-  @include slider-mobile()
-}
-@include tablet{
-  @include slider-mobile()
-}
 
-@include desktop{
-  .manager-home{
-    &-title{
-      display: none;
-    }
-    &-slider-1,&-slider-2,&-slider-3,&-slider-4{
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1%;
-    }
-    &-box{
-      box-sizing: border-box;
-      padding: 2rem;
-      width: 30%;
-      height: 30%;
-      background-color: $color-white;
-      &-title{
-        font-size: 2rem;
-        padding-bottom: 1rem;
-      }
-    }
-  }
-}

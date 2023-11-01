@@ -29,24 +29,25 @@ const Header = () => {
 
   const menuItems = useMemo(()=>{
     let res = [];
+    let key = 0;
     switch(user.authority){
       case "ROLE_DIRECTOR":
         res = [
-        <Link onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,
-        <Link onClick={handleMenuItem} to="/" className='header-menu-box-item'>전체 시험 일정</Link>,
-        <Link onClick={handleMenuItem} to="/" className='header-menu-box-item'>보상</Link>,
-        <Link onClick={handleMenuItem} to="/" className='header-menu-box-item'>에러리포트</Link>,
-        <Link onClick={handleMenuItem} to="/update/user" className='header-menu-box-item'>회원 정보</Link>,
-        <Link onClick={handleMenuItem} to="/test" className='header-menu-box-item'>로그아웃</Link>,
-        <Link onClick={handleMenuItem} to='/director/exam/1' className='header-menu-box-item'>시험 상세</Link>];
+        <Link key={key++} onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,
+        <Link key={key++} onClick={handleMenuItem} to="/" className='header-menu-box-item'>전체 시험 일정</Link>,
+        <Link key={key++} onClick={handleMenuItem} to="/" className='header-menu-box-item'>보상</Link>,
+        <Link key={key++} onClick={handleMenuItem} to="/" className='header-menu-box-item'>에러리포트</Link>,
+        <Link key={key++} onClick={handleMenuItem} to="/update/user" className='header-menu-box-item'>회원 정보</Link>,
+        <Link key={key++} onClick={handleMenuItem} to="/test" className='header-menu-box-item'>로그아웃</Link>,
+        <Link key={key++} onClick={handleMenuItem} to='/director/exam/1' className='header-menu-box-item'>시험 상세</Link>];
         break;
       case "ROLE_MANAGER":
         res = [
-          <Link onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,
-          <Link onClick={handleMenuItem} to="/manager/chart" className='header-menu-box-item'>차트</Link>,
-          <Link onClick={handleMenuItem} to="/manager/reward" className='header-menu-box-item'>보상</Link>,
-          <Link onClick={handleMenuItem} to="/manager/error-report" className='header-menu-box-item'>에러리포트</Link>,
-          <Link onClick={handleMenuItem} to="/test" className='header-menu-box-item'>로그아웃</Link>
+          <Link key={key++} onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,
+          <Link key={key++} onClick={handleMenuItem} to="/manager/chart" className='header-menu-box-item'>차트</Link>,
+          <Link key={key++} onClick={handleMenuItem} to="/manager/reward" className='header-menu-box-item'>보상</Link>,
+          <Link key={key++} onClick={handleMenuItem} to="/manager/error-report" className='header-menu-box-item'>에러리포트</Link>,
+          <Link key={key++} onClick={handleMenuItem} to="/test" className='header-menu-box-item'>로그아웃</Link>
         ];
         break;
       default:
