@@ -13,7 +13,6 @@ export const useGeoLocation = (options) => {
 
     if (!geolocation) {
       throw new Error('Geolocation is not supported.');
-      return
     }
 
     if(!options) options = {};
