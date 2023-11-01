@@ -16,7 +16,7 @@ const Header = () => {
     localStorage.clear();
     dispatch(setUserClear(null));
     navigate("/",{replace:true});
-  },[dispatch]);
+  },[dispatch,navigate]);
   const handleMenuItem = useCallback(()=>{
     setMenu("close");
   },[])
@@ -52,6 +52,7 @@ const Header = () => {
       case "ROLE_MANAGER":
         res = [
           <Link key={key++} onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,
+          <Link key={key++} onClick={handleMenuItem} to="/manager/exam" className='header-menu-box-item'>시험일정</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/chart" className='header-menu-box-item'>차트</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/reward" className='header-menu-box-item'>보상</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/error-report" className='header-menu-box-item'>에러리포트</Link>,
@@ -66,7 +67,7 @@ const Header = () => {
         break;
     }
     return res;
-  },[user])
+  },[user,handleMenuItem,logout])
 
   return (
     <>

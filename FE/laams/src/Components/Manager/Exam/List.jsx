@@ -44,7 +44,10 @@ const List = () => {
   //TODO : Date를 YYYY-MM-dd형식으로 변환
   const getDateFormat = useCallback(()=>{
     let month = date.getMonth()+1;
-    return `${date.getFullYear()}-${month < 10 ? "0"+month:month}-${date.getDate()}`;
+    month = month < 10 ? "0"+month:month;
+    let day = date.getDate();
+    day = day < 10 ? "0"+day : day;
+    return `${date.getFullYear()}-${month}-${day}`;
   },[date])
 
   //TODO : 시험일정을 불러옴
