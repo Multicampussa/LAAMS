@@ -40,9 +40,15 @@ const ExamDetail = () => {
   const handleExamineeModal = useCallback((examineeNo, examNo)=>{
     dispatch(setExamineeNo(examineeNo));
     dispatch(setExamNo(examNo));
-    console.log('응시자 정보',examineeNo,examNo)
     dispatch(setModalType("examinee-detail"));
     dispatch(setModalShow(true));
+  },[dispatch])
+
+  //TODO : 응시자 추가 서류 모달 띄우기
+  const handleDocsModal = useCallback((examineeNo)=>{
+    dispatch(setExamineeNo(examineeNo));
+    dispatch(setModalShow(true));
+    dispatch(setModalType("exam-docs"));
   },[dispatch])
 
   // TODO : 시작시간을 활용한 종료시간(시작+러닝타임) 계산 로직 및 형식 정리
@@ -68,8 +74,8 @@ const ExamDetail = () => {
   const attendanceFormat = useCallback((time)=>{
     if(time){
     const attendanceTime = new Date(time);
-    const hours = attendanceTime.getHours();
-    const minutes = attendanceTime.getMinutes();
+    const hours = attendanceTime.getHours() < 10 ? '0' + attendanceTime.getHours() : attendanceTime.getHours();
+    const minutes = attendanceTime.getMinutes() < 10 ? '0' + attendanceTime.getMinutes() : attendanceTime.getMinutes();
     return hours + ':' + minutes;}
     else{
       return ''
@@ -95,14 +101,18 @@ const ExamDetail = () => {
 
   // TODO : 출석 인원수 체크
   const attendanceCnt = useCallback(()=>{
-    let cnt = 0
-    for (let examinee of examineesData){
-      if (examinee.attendance){
-        cnt = cnt + 1
+    let cnt = 0;
+    for (let examinee of examineesData) {
+      if(examinee.attendanceTime){
+        const time = new Date(examinee.attendanceTime);
+        const examTime = new Date(examData['examDate']);
+        if(time<examTime){
+          cnt = cnt + 1;
+        }
       }
     }
     return cnt;
-  },[examineesData])
+  },[examineesData, examData])
 
   // TODO : 문서 제출 완료 갯수
   const docCnt = useCallback(()=>{
@@ -127,6 +137,34 @@ const ExamDetail = () => {
       }
     },[])
 
+  // TODO : 응시자 출석 정보 변경
+  const changeAttendance = useCallback((index)=>{
+    api.put(`director/exams/${params['no']}/examinees/${examineesData[index].examineeNo}/attendanceTime`)
+    .then((({data})=>{
+      const newExamineeData = [...examineesData];
+      newExamineeData[index].attendanceTime = data.data.attendanceTime;
+      setExamineesData(newExamineeData);
+    }))
+    .catch((err)=>{
+      console.log(err);
+    })
+  },[api,params,examineesData])
+
+  //TODO : 응시자 지각 여부 화면에 띄워줌
+  const lateAttendance = useCallback((examinee)=>{
+      if(examinee.attendanceTime){
+        const attendanceTime = new Date(examinee.attendanceTime);
+        const examTime = new Date(examData['examDate']);
+        if (attendanceTime>examTime){
+            return '지각'
+        }else{
+          return ''
+        }
+      }else{
+        return ''
+      }
+  },[examData])
+
   // TODO : 응시자 리스트 조회
   const examineeInfo = useMemo(()=>{
     return examineesData.map((examinee, index) => {
@@ -143,22 +181,28 @@ const ExamDetail = () => {
               {examinee.examineeName}
           </div>
           <div>
-            <select value={examinee.attendance? '출석' : '결석'}>
-              <option>지각</option>
-              <option>결석</option> 
-              <option>출석</option>
-            </select>
+            <button 
+              className='director-examinees-list-items-btn'
+              onClick={()=>{
+                changeAttendance(index);
+              }}>
+              출석
+            </button>
           </div>
-          <div>{attendanceFormat(examinee.attendanceTime)}</div>
+          <div>{attendanceFormat(examinee.attendanceTime)} {lateAttendance(examinee)}</div>
           <div>{docFormat(examinee.document)}</div>
           
           <button 
             className='director-examinees-list-btn'
             onClick={()=>handleCompensationModal()}>보상 신청</button>
-          <button className='director-examinees-list-btn'>추가 서류</button>
+          <button 
+            className='director-examinees-list-btn'
+            onClick={()=>handleDocsModal()}
+            >추가 서류</button>
         </li> 
       )
-    })},[examineesData,docFormat,handleCompensationModal,handleExamineeModal,params, attendanceFormat])
+    })},[examineesData,docFormat,handleCompensationModal,
+      handleExamineeModal,params, attendanceFormat, changeAttendance, lateAttendance,handleDocsModal])
 
 
   return (      

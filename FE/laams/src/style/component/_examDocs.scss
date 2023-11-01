@@ -1,0 +1,57 @@
+.exam-docs{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    &-container{
+        width: 90%;
+        height: 90%;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+        &-title{
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+            padding: 1rem;
+            background-color: $color-black-light;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+    }
+    &-box{
+        width: 100%;
+        height: 80%;
+        border-top: 0.1rem solid $color-gray-light;
+        border-bottom: 0.1rem solid $color-gray-light;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        padding-top: 4rem;
+        overflow-y: auto;
+        &-image{
+            width: 100%;
+            height: 60%;
+        }
+        &-file{
+            display: flex;
+            width: 100%;
+            height: 30%;
+            &-input{
+                width: 100%;
+            }
+        }
+    }
+    &-btn{
+        width: 100%;
+        height: 6rem;
+        background-color: $color-blue;
+        border-radius: 0.5rem;
+        color: white;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+    
+
+}

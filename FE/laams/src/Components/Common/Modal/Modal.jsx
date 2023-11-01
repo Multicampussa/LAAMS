@@ -5,6 +5,7 @@ import ExamCreate from "../../Manager/Exam/Create/ExamCreate.jsx"
 import ExamDetail from "../../Manager/Exam/Detail.jsx";
 import ExamCompensation from '../../Director/Exam/ExamCompensation.jsx';
 import ExamineeDetail from '../../Director/Exam/ExamineeDetail.jsx';
+import ExamDocs from '../../Director/Exam/ExamDocs.jsx';
 const Modal = () => {
   const show = useSelector(state=>state.Modal.show);
   const type = useSelector(state=>state.Modal.type);
@@ -28,6 +29,9 @@ const Modal = () => {
         break
       case "examinee-detail":
         setComponent(<ExamineeDetail/>);
+        break
+      case "exam-docs":
+        setComponent(<ExamDocs/>);
         break
       default:
         break;
