@@ -34,9 +34,14 @@
                 font-weight: 600;
             }
         }
-        &-btn-m{
-            font-size: 2rem;
-            height: 2rem;
+        &-btn{
+            background-color: $color-blue;
+            font-size: 1.6rem;
+            font-weight: 600;
+            height: 4rem;
+            color: white;
+            border-radius: 1rem;
+
         }
     }
 
@@ -78,14 +83,11 @@
             cursor: pointer;
             color: $color-blue;
         }
-        &-btn{
+        &-select{
             width: 80%;
-            height: 80%;
-            background-color: $color-blue;
-            color: white;
-            border-radius: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: 600;
+            height: 3rem;
+            justify-self: center;
+            
         }
     }
     &-items:first-child{
@@ -95,6 +97,7 @@
     }
     &-btn{
         width: 80%;
+        height: 3rem;
         background-color: $color-blue;
         border-radius: 0.5rem;
         color: white;
@@ -105,8 +108,55 @@
         display: inline-flex;
         box-sizing: border-box;
         flex-direction: column;
-        align-items: center; /* 세로 - 상단으로 */
+        align-items: center;
+        line-height: 2.5rem;
     }
 
+}
 
+@include tablet{
+    .exam-detail{
+        &-aside{
+            &-title{
+                font-size: 2rem;
+                &-box{
+                    font-size: 1.2rem;
+                }
+            }
+            &-btn{
+                font-size: 1.2rem;
+                height: 3rem;
+                border-radius: 0.5rem;
+            }
+        }
+
+    }
+    .director-examinees-list{
+        &-items{
+            font-size: 1.5rem;
+        }
+        &-items:first-child{
+            font-size: 1.2rem;
+        }
+        &-btn{
+            height: 3rem;
+            font-size: 1.2rem;             
+        }
+    }
+}
+
+@include mobile{
+    .exam-detail{
+        min-height: 100%;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        &-aside{
+            width: 100%;
+            height: 60%;
+        }
+        &-examinees{
+            width: 100%;
+        }
+    }
 }
