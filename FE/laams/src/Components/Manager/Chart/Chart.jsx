@@ -13,13 +13,48 @@ import useCenter from './../../../Hook/useCenter';
 import { useMemo } from 'react';
 import { useState } from 'react';
 import { useCallback } from 'react';
+import useApi from '../../../Hook/useApi';
+import { useEffect } from 'react';
 
 const Chart = () => {
+  const api = useApi();
   const centerData = useCenter();
-  const [chartTitle,setChartTitle] = useState("센터 별 시험 횟수");
+  const [chartTitle,setChartTitle] = useState("이번달 센터 별 시험 횟수");
   const [selectOpen,setSelectOpen] = useState(false);
   const [region,setRegion] = useState("서울");
   const [regionSelectOpen,setRegionSelectOpen] = useState(false);
+  const [chartData,setChartData] = useState({});
+  useEffect(()=>{
+    if(!api) return;
+    switch(chartTitle){
+      case "이번달 센터 별 시험 횟수":
+        api.get(`/manager/dashboard/exam?year=${(new Date()).getFullYear()}&month=${(new Date()).getMonth()+1}`)
+        .then(({data})=>{
+          const temp = {};
+          data.data.examCount.forEach(e=>{
+            temp[e.center]=e.count;
+          });
+          setChartData(temp);
+        }).catch(err=>{
+          console.log(err);
+        })
+        break;
+      case "이번달 센터 별 응시자 수":
+        api.get(`/manager/dashboard/examinee?year=${(new Date()).getFullYear()}&month=${(new Date()).getMonth()+1}`)
+        .then(({data})=>{
+          const temp = {};
+          data.data.examineeCount.forEach(e=>{
+            temp[e.center]=e.count;
+          });
+          setChartData(temp);
+        }).catch(err=>{
+          console.log(err);
+        })
+        break;
+      default:
+        break;
+    }
+  },[api,chartTitle]);
 
   const handleChartRegionItem = useCallback((region)=>{
     setRegion(region);
@@ -34,31 +69,52 @@ const Chart = () => {
   const regionItem = useMemo(()=>{
     if(!centerData) return [];
     return Object.keys(centerData).reverse().map((e,idx)=><li className='manager-chart-item' onClick={()=>handleChartRegionItem(e)} key={idx}>{e}</li>);
-  })
+  },[handleChartRegionItem,centerData]);
+
   const chartItem = useMemo(()=>{
     const chartList = [
-      "센터 별 시험 횟수",
-      "센터 별 보상 건 수",
-      "센터 별 응시자 수",
-      "일년간 에러리포트 수 변화",
-      "일년간 보상요청 수 변화"
+      "이번달 센터 별 시험 횟수",
+      // "이번달 센터 별 보상 건 수",
+      "이번달 센터 별 응시자 수",
+      // "일년간 에러리포트 수 변화",
+      // "일년간 보상요청 수 변화"
     ]
     return chartList.map((e,idx)=>
     <li className='manager-chart-item' key={idx} onClick={()=>handleChartItem(e)}>{e}</li>);
   },[handleChartItem]);
 
-  const datasets = useMemo(()=>{
+  const monthExamData = useCallback(()=>{
     if(!centerData || !region) return [];
-    const temp = centerData[region].map(e=>{
+    return centerData[region].map(e=>{
       return {
         label: e.centerName,
-        data: [Math.floor(Math.random()*(1000))],
+        data: [chartData[e.centerName]],
         backgroundColor: `rgba(${Math.floor(Math.random()*(255))},${Math.floor(Math.random()*(255))}, ${Math.floor(Math.random()*(255))}, 0.5)`,
       };
     });
-    console.log(temp);
-    return temp;
-  },[centerData,region])
+  },[centerData,region,chartData]);
+
+  const monthExamineeData = useCallback(()=>{
+    if(!centerData || !region) return [];
+    return centerData[region].map(e=>{
+      return {
+        label: e.centerName,
+        data: [chartData[e.centerName]],
+        backgroundColor: `rgba(${Math.floor(Math.random()*(255))},${Math.floor(Math.random()*(255))}, ${Math.floor(Math.random()*(255))}, 0.5)`,
+      };
+    });
+  },[centerData,chartData,region])
+
+  const datasets = useMemo(()=>{
+    switch(chartTitle){
+      case "이번달 센터 별 시험 횟수":
+        return monthExamData();
+      case "이번달 센터 별 응시자 수":
+        return monthExamineeData();
+      default:
+        return [];
+    }
+  },[chartTitle,monthExamData,monthExamineeData])
 
   ChartJS.register(
     CategoryScale,
