@@ -112,34 +112,6 @@ const ManagerHome = () => {
             <li>제목 / 감독관 이름 / 보고시간</li>
           </ul>
         </li>
-        <li className='manager-home-chart'>
-          <div className='manager-home-box-title'>시험 현황</div>
-          <div className='flex-row'>
-            <div className='flex-1'>
-              <div className='manager-home-chart-title' onClick={()=>setSelectOpen(!selectOpen)}>{chartTitle}</div>
-              <div className='manager-home-chart-select'>
-                <ul className={`manager-home-chart-select-${selectOpen}`}>
-                  {
-                    chartItem
-                  }
-                </ul>
-              </div>
-            </div>
-            <div className='flex-1'>
-                <div className='manager-home-chart-title' onClick={()=>setRegionSelectOpen(!regionSelectOpen)}>{region}</div>
-                <div className='manager-home-chart-select'>
-                  <ul className={`manager-home-chart-select-${regionSelectOpen}`}>
-                    {
-                      regionItem
-                    }
-                  </ul>
-                </div>
-              </div>
-          </div>
-          <div className='manager-home-chart-box'>
-            <Chart title={chartTitle} region={region}/>
-          </div>
-        </li>
       </ul>
     </section>
   )

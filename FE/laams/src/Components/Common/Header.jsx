@@ -10,6 +10,9 @@ const Header = () => {
   },[menu]);
   const user = useSelector(state=>state.User);
   const navigate = useNavigate();
+  const handleMenuItem = useCallback(()=>{
+    setMenu("close");
+  },[])
   const handleHome = useCallback(()=>{
     switch(user.authority){
       case "ROLE_DIRECTOR":
@@ -29,24 +32,25 @@ const Header = () => {
     switch(user.authority){
       case "ROLE_DIRECTOR":
         res = [
-        <Link to="/notice" className='header-menu-box-item'>공지사항</Link>,
-        <Link to="/" className='header-menu-box-item'>전체 시험 일정</Link>,
-        <Link to="/" className='header-menu-box-item'>보상</Link>,
-        <Link to="/" className='header-menu-box-item'>에러리포트</Link>,
-        <Link to="/update/user" className='header-menu-box-item'>회원 정보</Link>,
-        <Link to="/test" className='header-menu-box-item'>로그아웃</Link>,
-        <Link to='/director/exam/1' className='header-menu-box-item'>시험 상세</Link>];
+        <Link onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,
+        <Link onClick={handleMenuItem} to="/" className='header-menu-box-item'>전체 시험 일정</Link>,
+        <Link onClick={handleMenuItem} to="/" className='header-menu-box-item'>보상</Link>,
+        <Link onClick={handleMenuItem} to="/" className='header-menu-box-item'>에러리포트</Link>,
+        <Link onClick={handleMenuItem} to="/update/user" className='header-menu-box-item'>회원 정보</Link>,
+        <Link onClick={handleMenuItem} to="/test" className='header-menu-box-item'>로그아웃</Link>,
+        <Link onClick={handleMenuItem} to='/director/exam/1' className='header-menu-box-item'>시험 상세</Link>];
         break;
       case "ROLE_MANAGER":
         res = [
-          <Link to="/notice" className='header-menu-box-item'>공지사항</Link>,
-          <Link to="/test" className='header-menu-box-item'>로그아웃</Link>
+          <Link onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,
+          <Link onClick={handleMenuItem} to="/manager/chart" className='header-menu-box-item'>차트</Link>,
+          <Link onClick={handleMenuItem} to="/test" className='header-menu-box-item'>로그아웃</Link>
         ];
         break;
       default:
         res = [
-          <Link to="/notice" className='header-menu-box-item'>공지사항</Link>,
-          <Link to="/test" className='header-menu-box-item'>로그아웃</Link>
+          <Link onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,
+          <Link onClick={handleMenuItem} to="/test" className='header-menu-box-item'>로그아웃</Link>
         ]
         break;
     }

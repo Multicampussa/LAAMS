@@ -1,64 +1,6 @@
 .manager-home{
   min-width: 100%;
   height: 100%;
-  &-chart{
-    box-sizing: border-box;
-    padding-top: 2rem;
-    &-title{
-      box-sizing: border-box;
-      padding: 1rem;
-      font-size: 2rem;
-      border-radius: 1rem;
-      cursor: pointer;
-      border: 0.1rem solid $color-gray-light;
-    }
-    &-box{
-      position: relative;
-      box-sizing: border-box;
-      height: 85%;
-      padding-top: 2%;
-    }
-    &-canvas{
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-color: red;
-    }
-    &-select{
-      position: relative;
-      &-false{
-        height: 0;
-        overflow: hidden;
-      }
-      &-true{
-        z-index: 1;
-        width: 100%;
-        height: 10rem;
-        background-color: $color-white;
-        border-radius: 0 0 1rem 1rem;
-        box-sizing: border-box;
-        border: 1px solid $color-gray-light;
-        position: absolute;
-        top: 0;
-        left: 0;
-        -ms-overflow-style: none;
-        overflow-y: scroll;
-      }
-      &-true::-webkit-scrollbar{
-        display:none;
-      }
-    }
-    &-item{
-      background-color: $color-white;
-      box-sizing: border-box;
-      padding: 0 1rem;
-      width: 100%;
-      height: 3rem;
-      line-height: 3rem;
-      cursor: pointer;
-
-    }
-  }
   &-box{
     position: relative;
   }
@@ -178,13 +120,6 @@
         font-size: 2rem;
         padding-bottom: 1rem;
       }
-    }
-    &-chart{
-      box-sizing: border-box;
-      padding: 2rem;
-      width: 60%;
-      height: 93%;
-      background-color: $color-white;
     }
   }
 }
