@@ -1,5 +1,7 @@
 package multicampussa.laams.global;
 
+import multicampussa.laams.manager.domain.exam.ExamDirector;
+
 public class CustomExceptions {
 
     public static class ExamNotFoundException extends RuntimeException {
@@ -30,5 +32,13 @@ public class CustomExceptions {
 
     public static class ErrorReportNotFoundException extends RuntimeException {
         public ErrorReportNotFoundException(String message) {super(message);}
+    }
+
+    public static class ExamDirectorNotFoundException extends RuntimeException {
+        public ExamDirectorNotFoundException(String message) {super(message);}
+    }
+
+    public static class UnauthorizedException extends RuntimeException {
+        public UnauthorizedException(String message) {super(message);}
     }
 }

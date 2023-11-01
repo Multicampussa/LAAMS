@@ -1,6 +1,7 @@
 package multicampussa.laams.global;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @ControllerAdvice
@@ -15,8 +16,9 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(CustomExceptions.ManagerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleManagerNotFoundException(CustomExceptions.ManagerNotFoundException ex) {
-        return new ErrorResponse("managerNotFound", ex.getMessage());
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleManagerNotFoundException(CustomExceptions.ManagerNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("managerNotFound", ex.getMessage());
+        return new ResponseEntity<>(new ApiResponse<>("error", HttpStatus.NOT_FOUND.value(), errorResponse), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(CustomExceptions.CenterNotFoundException.class)
@@ -43,4 +45,18 @@ public class ControllerExceptionHandler {
         return new ErrorResponse("errorReportNotFound", ex.getMessage());
     }
 
+    @ExceptionHandler(CustomExceptions.ExamDirectorNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleExamDirectorNotFoundException(CustomExceptions.ExamDirectorNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("examDirectorNotFound", ex.getMessage());
+        return new ResponseEntity<>(new ApiResponse<>("error", HttpStatus.NOT_FOUND.value(), errorResponse), HttpStatus.NOT_FOUND);
+    }
+
+    // 권한 오류
+    @ExceptionHandler(CustomExceptions.UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ApiResponse<ErrorResponse>> UnauthorizedException(CustomExceptions.UnauthorizedException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("UnauthorizedException", ex.getMessage());
+        return new ResponseEntity<>(new ApiResponse<>("error", HttpStatus.UNAUTHORIZED.value(), errorResponse), HttpStatus.UNAUTHORIZED);
+    }
 }
