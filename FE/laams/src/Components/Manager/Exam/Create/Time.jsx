@@ -16,7 +16,7 @@ const Time = ({setType,data}) => {
       "managerNo": 1,
       "runningTime": parseInt(data.testTime)
     }).then(({data})=>{
-      alert(data);
+      alert(data.data);
       dispatch(setModalShow(false));
     }).catch(err=>{
       alert("시험을 생성하는데 실패했습니다!");
