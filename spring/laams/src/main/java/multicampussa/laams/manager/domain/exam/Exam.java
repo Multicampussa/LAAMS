@@ -7,6 +7,8 @@ import multicampussa.laams.manager.domain.center.Center;
 import multicampussa.laams.manager.domain.manager.Manager;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +34,10 @@ public class Exam extends BaseTimeEntity {
     private String examType;
 
     private String examLanguage;
+
+    @OneToMany(mappedBy = "exam")
+    private List<ExamDirector> examDirector;
+
 
     public Exam(Center center, LocalDateTime examDate, Manager manager, int runningTime, String examType, String examLanguage) {
         this.center = center;
