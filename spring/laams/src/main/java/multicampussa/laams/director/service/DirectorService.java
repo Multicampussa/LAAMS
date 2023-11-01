@@ -147,28 +147,77 @@ public class DirectorService {
     }
 
     // 응시자 출석 시간 업데이트 (응시자 지각여부 판단)
-    @ Transactional
-    public UpdateAttendanceDto updateAttendanceTime(Long examNo, Long examineeNo) {
-
-        Optional<Exam> exam = examRepository.findById(examNo);
-        System.out.println(examNo);
-        if(exam.isPresent()){
-            Optional<ExamExaminee> examExaminee = Optional.ofNullable(examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo));
-            if(examExaminee.isEmpty()){
-                throw new IllegalArgumentException("해당 시험의 응시자가 아닙니다.");
-            }else {
-                // 출석 시간 업데이트
-                examExaminee.get().updateAttendanceTime(LocalDateTime.now());
-                examExamineeRepository.save(examExaminee.get());
-
-                return new UpdateAttendanceDto(examineeNo, LocalDateTime.now());
-            }
-        } else {
-            throw new IllegalArgumentException("해당 시험은 없습니다.");
-        }
-    }
+//    @ Transactional
+//    public UpdateAttendanceDto updateAttendanceTime(Long examNo, Long examineeNo) {
+//
+//        Optional<Exam> exam = examRepository.findById(examNo);
+//        System.out.println(examNo);
+//        if(exam.isPresent()){
+//            Optional<ExamExaminee> examExaminee = Optional.ofNullable(examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo));
+//            if(examExaminee.isEmpty()){
+//                throw new IllegalArgumentException("해당 시험의 응시자가 아닙니다.");
+//            }else {
+//                // 출석 시간 업데이트
+//                examExaminee.get().updateAttendanceTime(LocalDateTime.now());
+//                examExamineeRepository.save(examExaminee.get());
+//
+//                return new UpdateAttendanceDto(examineeNo, LocalDateTime.now());
+//            }
+//        } else {
+//            throw new IllegalArgumentException("해당 시험은 없습니다.");
+//        }
+//    }
 
     // 응시자 출석 확인
+//    @Transactional
+//    public CheckAttendanceDto checkAttendance(Long examNo, Long examineeNo, String authority, String directorId) {
+//        if(authority.equals("ROLE_DIRECTOR")){
+//            Optional<Exam> exam = examRepository.findById(examNo);
+//            if(exam.isPresent()){
+//                List<ExamDirector> examDirectors = exam.get().getExamDirector();
+//                boolean isDirectorExists = examDirectors.stream()
+//                        .anyMatch(examDirector -> examDirector.getDirector().getId().equals(directorId));
+//                if(isDirectorExists){
+//                    Optional<ExamExaminee> examExaminee = Optional.ofNullable(examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo));
+//                    if(examExaminee.isEmpty()){
+//                        throw new IllegalArgumentException("해당 시험의 응시자가 아닙니다.");
+//                    }else {
+//                        // 응시자의 출석 시간과 시험 시작 시간 비교
+//                        LocalDateTime examineeAttendanceTime =examExaminee.get().getAttendanceTime();
+//                        LocalDateTime examStartTime = exam.get().getExamDate();
+//                        // 응시자의 출석 시간이 더 빠름(지각x)
+//                        if(examineeAttendanceTime.isBefore(examStartTime)){
+//                            Boolean attendance = true;
+//                            Boolean compensation = false;
+//                            String compensationType = null;
+//
+//                            CheckAttendanceDto checkAttendanceDto = new CheckAttendanceDto(attendance, compensation, compensationType);
+//                            examExaminee.get().updateAttendace(checkAttendanceDto);
+//                            return checkAttendanceDto;
+//                        }else{
+//                            Boolean attendance = true;
+//                            Boolean compensation = true;
+//                            String compensationType = "지각";
+//
+//                            CheckAttendanceDto checkAttendanceDto = new CheckAttendanceDto(attendance, compensation, compensationType);
+//                            examExaminee.get().updateAttendace(checkAttendanceDto);
+//                            return checkAttendanceDto;
+//                        }
+//                    }
+//                } else {
+//                    throw new IllegalArgumentException("감독 권한이 없는 사람입니다.");
+//                }
+//            } else {
+//                throw new IllegalArgumentException("해당 시험은 없습니다.");
+//            }
+//        }
+//        else{
+//            throw new IllegalArgumentException("접근 권한이 없습니다.");
+//        }
+//
+//    }
+
+    // 출석 확인
     @Transactional
     public CheckAttendanceDto checkAttendance(Long examNo, Long examineeNo, String authority, String directorId) {
         if(authority.equals("ROLE_DIRECTOR")){
@@ -182,6 +231,10 @@ public class DirectorService {
                     if(examExaminee.isEmpty()){
                         throw new IllegalArgumentException("해당 시험의 응시자가 아닙니다.");
                     }else {
+
+                        examExaminee.get().updateAttendanceTime(LocalDateTime.now());
+                        examExamineeRepository.save(examExaminee.get());
+
                         // 응시자의 출석 시간과 시험 시작 시간 비교
                         LocalDateTime examineeAttendanceTime =examExaminee.get().getAttendanceTime();
                         LocalDateTime examStartTime = exam.get().getExamDate();
@@ -191,7 +244,7 @@ public class DirectorService {
                             Boolean compensation = false;
                             String compensationType = null;
 
-                            CheckAttendanceDto checkAttendanceDto = new CheckAttendanceDto(attendance, compensation, compensationType);
+                            CheckAttendanceDto checkAttendanceDto = new CheckAttendanceDto(LocalDateTime.now(), attendance, compensation, compensationType);
                             examExaminee.get().updateAttendace(checkAttendanceDto);
                             return checkAttendanceDto;
                         }else{
@@ -199,7 +252,7 @@ public class DirectorService {
                             Boolean compensation = true;
                             String compensationType = "지각";
 
-                            CheckAttendanceDto checkAttendanceDto = new CheckAttendanceDto(attendance, compensation, compensationType);
+                            CheckAttendanceDto checkAttendanceDto = new CheckAttendanceDto(LocalDateTime.now(), attendance, compensation, compensationType);
                             examExaminee.get().updateAttendace(checkAttendanceDto);
                             return checkAttendanceDto;
                         }
