@@ -31,4 +31,12 @@ public class CustomExceptions {
     public static class ErrorReportNotFoundException extends RuntimeException {
         public ErrorReportNotFoundException(String message) {super(message);}
     }
+
+    public static class ExamDirectorNotFoundException extends RuntimeException {
+        public ExamDirectorNotFoundException(String message) {super(message);}
+    }
+
+    public static class UnauthorizedException extends RuntimeException {
+        public UnauthorizedException(String message) {super(message);}
+    }
 }

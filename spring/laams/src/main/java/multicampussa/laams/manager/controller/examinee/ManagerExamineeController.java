@@ -31,6 +31,11 @@ public class ManagerExamineeController {
     // 응시자 생성
     @ApiOperation("응시자 생성")
     @PostMapping("/api/v1/manager/examinee")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "응시자가 성공적으로 생성되었습니다."),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            // 다른 응답 코드 및 메시지 정의
+    })
     public ResponseEntity<Map<String, Object>> saveExaminee(@RequestBody ExamineeCreateRequest request) {
         Map<String, Object> resultMap = new HashMap<>();
         examineeService.saveExaminee(request);
