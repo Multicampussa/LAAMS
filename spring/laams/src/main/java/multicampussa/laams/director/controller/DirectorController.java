@@ -55,8 +55,9 @@ public class DirectorController {
         try{
             String token  = authorization.replace("Bearer ", "");
             String authority = jwtTokenProvider.getAuthority(token);
+            String directorId = jwtTokenProvider.getId(token);
 
-            ExamInformationDto examInformationDto = directorService.getExamInformation(examNo, authority);
+            ExamInformationDto examInformationDto = directorService.getExamInformation(examNo, authority, directorId);
 
             resultMap.put("message","시험 상세정보를 성공적으로 조회했습니다.");
             resultMap.put("data", examInformationDto);
@@ -77,9 +78,10 @@ public class DirectorController {
         try{
             String token  = authorization.replace("Bearer ", "");
             String authority = jwtTokenProvider.getAuthority(token);
+            String directorId = jwtTokenProvider.getId(token);
 
             resultMap.put("message","시험 응시자 목록을 성공적으로 조회했습니다.");
-            resultMap.put("data", directorService.getExamExamineeList(examNo, authority));
+            resultMap.put("data", directorService.getExamExamineeList(examNo, authority, directorId));
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
@@ -97,8 +99,10 @@ public class DirectorController {
         try{
             String token  = authorization.replace("Bearer ", "");
             String authority = jwtTokenProvider.getAuthority(token);
+            String directorId = jwtTokenProvider.getId(token);
 
-            ExamExamineeDto examExamineeDto = directorService.getExamExaminee(examNo, examineeNo, authority);
+
+            ExamExamineeDto examExamineeDto = directorService.getExamExaminee(examNo, examineeNo, authority, directorId);
 
             resultMap.put("message","시험 응시자의 상세 정보를 성공적으로 조회했습니다.");
             resultMap.put("data", examExamineeDto);
@@ -119,6 +123,7 @@ public class DirectorController {
         try {
             String token  = authorization.replace("Bearer ", "");
             String authority = jwtTokenProvider.getAuthority(token);
+//            String directorId = jwtTokenProvider.getId(token);
 
             ExamStatusDto examStatusDto = directorService.getExamStatus(examNo, authority);
 
@@ -160,8 +165,9 @@ public class DirectorController {
         try {
             String token  = authorization.replace("Bearer ", "");
             String authority = jwtTokenProvider.getAuthority(token);
+            String directorId = jwtTokenProvider.getId(token);
 
-            CheckAttendanceDto checkAttendanceDto = directorService.checkAttendance(examNo, examineeNo, authority);
+            CheckAttendanceDto checkAttendanceDto = directorService.checkAttendance(examNo, examineeNo, authority, directorId);
             resultMap.put("data", checkAttendanceDto);
             resultMap.put("message", "응시자의 출결이 확인되었습니다.");
             resultMap.put("code", HttpStatus.OK.value());
@@ -182,8 +188,9 @@ public class DirectorController {
         try {
             String token = authorization.replace("Bearer", "");
             String authority = jwtTokenProvider.getAuthority(token);
+            String directorId = jwtTokenProvider.getId(token);
 
-            CheckDocumentDto checkDocumentDto = directorService.checkDocument(examNo, examineeNo, documentRequestDto, authority);
+            CheckDocumentDto checkDocumentDto = directorService.checkDocument(examNo, examineeNo, documentRequestDto, authority, directorId);
             resultMap.put("data", checkDocumentDto);
             resultMap.put("message", "응시자의 서류 제출 여부가 확인되었습니다.");
             resultMap.put("code", HttpStatus.OK.value());
@@ -207,7 +214,7 @@ public class DirectorController {
 
             Long examPk = examNo.get("examNo");
 
-            directorService.requestExamAssignment(examPk, authority,directorId);
+            directorService.requestExamAssignment(examPk, authority, directorId);
             resultMap.put("message", "감독관의 시험 배정 요청이 정상적으로 처리 되었습니다.");
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
@@ -226,8 +233,9 @@ public class DirectorController {
         try {
             String token = authorization.replace("Bearer", "");
             String authority = jwtTokenProvider.getAuthority(token);
+            String directorId = jwtTokenProvider.getId(token);
 
-            directorService.applyCompensation(examNo, examineeNo, compensationApplyDto ,authority);
+            directorService.applyCompensation(examNo, examineeNo, compensationApplyDto ,authority, directorId);
             resultMap.put("message", "보상 신청이 되었습니다.");
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
