@@ -17,3 +17,8 @@ export const setMemberId = (payload) => ({
   type: "memberId",
   payload
 })
+
+export const setUserClear = (payload) =>({
+  type: "userClear",
+  payload
+})

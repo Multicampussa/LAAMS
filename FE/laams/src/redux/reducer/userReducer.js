@@ -16,6 +16,13 @@ const userReducer = (state = init, action)=>{
       return { ...state, authority: action.payload};
     case "memberId":
       return { ...state, memberId: action.payload};
+    case "userClear":
+      return {
+        accessToken:null,
+        accessTokenExpireTime:null,
+        authority:null,
+        memberId:null
+      };
     default:
       return state;
   }
