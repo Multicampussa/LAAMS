@@ -5,14 +5,17 @@ import { setModalShow, setModalType } from './../../../redux/actions/modalAction
 import { useDispatch } from 'react-redux';
 import { setExamineeNo } from '../../../redux/actions/examineeDetailAction';
 import { setExamNo } from '../../../redux/actions/managerExamDetailAction';
+import { useGeoLocation } from './../../../Hook/useGeolocation';
 
-// TODO : 시험 상세 정보 조회
 const ExamDetail = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const [examData, setExamData] = useState({});
   const [examineesData, setExamineesData] = useState([]);
   const api = useApi();
+  const geolocation = useGeoLocation();
+  
+// TODO : 시험 상세 정보 조회
   const getExam = useCallback(async()=>{
     await api.get(`director/exams/${params['no']}`)
     .then(({data})=>{
@@ -30,6 +33,16 @@ const ExamDetail = () => {
     })
   },[api,params])
 
+  // TODO : 현재 위치 정보 콘솔에 찍기
+  const getLocation = useCallback(async()=>{
+    try{
+      const location = await geolocation();
+      console.log(location);
+    }catch(err){
+      alert(err.message);
+    }
+  },[geolocation])
+
   //TODO : 서류 제출 변경
   const updateDocs = useCallback((index, e)=>{
     if(examineesData[index].attendanceTime){
@@ -38,8 +51,10 @@ const ExamDetail = () => {
       {
         "document": "서류_제출_완료"
       })
-      .then((res)=>{
-        console.log(res)
+      .then(({data})=>{
+        const newExamineeData = [...examineesData];
+        newExamineeData[index].document = data.data.compensationType
+        setExamineesData(newExamineeData);
       })
       .catch((err)=>{
         console.log(err)
@@ -49,8 +64,10 @@ const ExamDetail = () => {
       {
         "document": "서류_미제출"
       })
-      .then((res)=>{
-        console.log(res)
+      .then(({data})=>{
+        const newExamineeData = [...examineesData];
+        newExamineeData[index].document = data.data.compensationType
+        setExamineesData(newExamineeData);
       })
       .catch((err)=>{
         console.log(err)
@@ -171,7 +188,7 @@ const ExamDetail = () => {
 
   // TODO : 응시자 출석 정보 변경
   const changeAttendance = useCallback((index)=>{
-    api.put(`director/exams/${params['no']}/examinees/${examineesData[index].examineeNo}/attendanceTime`)
+    api.put(`director/exams/${params['no']}/examinees/${examineesData[index].examineeNo}/attendance`)
     .then((({data})=>{
       const newExamineeData = [...examineesData];
       newExamineeData[index].attendanceTime = data.data.attendanceTime;
@@ -212,29 +229,29 @@ const ExamDetail = () => {
             onClick={()=>handleExamineeModal(examinee.examineeNo,params['no'])}>
               {examinee.examineeName}
           </div>
-          <div>
             <button 
-              className='director-examinees-list-items-btn'
+              className='director-examinees-list-btn'
               onClick={()=>{
                 changeAttendance(index);
               }}>
               출석
             </button>
-          </div>
           <div>{attendanceFormat(examinee.attendanceTime)} {lateAttendance(examinee)}</div>
-          <select defaultValue={docFormat(examinee.document)} onChange={e=>updateDocs(index,e)}>
+          <select className='director-examinees-list-items-select' defaultValue={docFormat(examinee.document)} onChange={e=>updateDocs(index,e)}>
             <option value="대기" hidden>대기</option>
             <option value="미제출" >미제출</option>
             <option value="제출">제출</option>
           </select>
-          
-          <button 
+            <button 
             className='director-examinees-list-btn'
             onClick={()=>handleCompensationModal()}>보상 신청</button>
-          <button 
-            className='director-examinees-list-btn'
-            onClick={()=>handleDocsModal()}
-            >추가 서류</button>
+            <button 
+              className='director-examinees-list-btn'
+              onClick={()=>handleDocsModal()}
+              >추가 서류</button>
+
+         
+
         </li> 
       )
     })},[examineesData,docFormat,handleCompensationModal,
@@ -253,7 +270,12 @@ const ExamDetail = () => {
               {/* FIXME : api 연결 필요 */}
               <p>감독관 센터 도착 완료</p>
             </div>
-            <button className='exam-detail-aside-btn'>감독관 센터 도착 인증</button>
+            <button 
+            className='exam-detail-aside-btn'
+            onClick={()=>{
+              getLocation()
+            }}
+            >감독관 센터 도착 인증</button>
             <div className='exam-detail-aside-title'>응시자 현황</div>
             <div className='exam-detail-aside-title-box'>
               <p>응시자 수: {examineesData.length}명</p>
