@@ -9,7 +9,7 @@ import multicampussa.laams.home.member.exception.JwtAuthenticationException;
 import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import multicampussa.laams.home.member.service.UserDetailsServiceImpl;
-import multicampussa.laams.manager.domain.centerManager.CenterManagerRepository;
+import multicampussa.laams.centerManager.domain.CenterManagerRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;

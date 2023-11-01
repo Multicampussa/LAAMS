@@ -1,4 +1,4 @@
-package multicampussa.laams.manager.domain.centerManager;
+package multicampussa.laams.centerManager.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -2,15 +2,21 @@ package multicampussa.laams.manager.controller.examinee;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeCreateRequest;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeUpdateRequest;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationDetailResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationListResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeResponse;
 import multicampussa.laams.manager.service.examinee.ManagerExamineeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "운영자의 응시자 관련 기능")
 @RestController
@@ -25,13 +31,28 @@ public class ManagerExamineeController {
     // 응시자 생성
     @ApiOperation("응시자 생성")
     @PostMapping("/api/v1/manager/examinee")
-    public void saveExaminee(@RequestBody ExamineeCreateRequest request) {
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "응시자가 성공적으로 생성되었습니다."),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            // 다른 응답 코드 및 메시지 정의
+    })
+    public ResponseEntity<Map<String, Object>> saveExaminee(@RequestBody ExamineeCreateRequest request) {
+        Map<String, Object> resultMap = new HashMap<>();
         examineeService.saveExaminee(request);
+        resultMap.put("message", "응시자가 성공적으로 생성되었습니다.");
+        resultMap.put("code", HttpStatus.OK.value());
+        resultMap.put("status", "success");
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     // 응시자 목록 조회
     @ApiOperation("응시자 목록 조회")
     @GetMapping("/api/v1/manager/examinees")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "응시자가 성공적으로 조회되었습니다.", response = ExamineeResponse.class),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            // 다른 응답 코드 및 메시지 정의
+    })
     public List<ExamineeResponse> getExaminees() {
         return examineeService.getExaminees();
     }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import multicampussa.laams.director.domain.director.Director;
-import multicampussa.laams.manager.domain.centerManager.CenterManager;
+import multicampussa.laams.centerManager.domain.CenterManager;
 import multicampussa.laams.manager.domain.manager.Manager;
 
 @Getter
