@@ -140,41 +140,63 @@ public class DirectorController {
         }
     }
     
-    @ApiOperation(value = "응시자 출석(응시자용) - 출석시간 업데이트")
-    @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendanceTime")
-    public ResponseEntity<Map<String, Object>> updateAttendanceTime(@PathVariable Long examNo, @PathVariable Long examineeNo){
-        Map<String, Object> resultMap = new HashMap<>();
-        try{
-            UpdateAttendanceDto updateAttendanceDto = directorService.updateAttendanceTime(examNo, examineeNo);
-            resultMap.put("data", updateAttendanceDto);
-            resultMap.put("message", "출석시간이 업데이트 되었습니다.");
-            resultMap.put("code", HttpStatus.OK.value());
-            resultMap.put("status", "success");
-            return new ResponseEntity<>(resultMap, HttpStatus.OK);
-        }catch (IllegalArgumentException e){
-            resultMap.put("message", e.getMessage());
-            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
-            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @ApiOperation(value = "응시자 출석(응시자용) - 출석시간 업데이트")
+//    @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendanceTime")
+//    public ResponseEntity<Map<String, Object>> updateAttendanceTime(@PathVariable Long examNo, @PathVariable Long examineeNo){
+//        Map<String, Object> resultMap = new HashMap<>();
+//        try{
+//            UpdateAttendanceDto updateAttendanceDto = directorService.updateAttendanceTime(examNo, examineeNo);
+//            resultMap.put("data", updateAttendanceDto);
+//            resultMap.put("message", "출석시간이 업데이트 되었습니다.");
+//            resultMap.put("code", HttpStatus.OK.value());
+//            resultMap.put("status", "success");
+//            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+//        }catch (IllegalArgumentException e){
+//            resultMap.put("message", e.getMessage());
+//            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+//            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
+//    @ApiOperation(value = "응시자 출결 확인")
+//    @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendance")
+//    public ResponseEntity<Map<String, Object>> checkAttendance(@RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo){
+//        Map<String, Object> resultMap = new HashMap<>();
+//        try {
+//            String token  = aㅔuthorization.replace("Bearer ", "");
+//            String authority = jwtTokenProvider.getAuthority(token);
+//            String directorId = jwtTokenProvider.getId(token);
+//
+//            CheckAttendanceDto checkAttendanceDto = directorService.checkAttendance(examNo, examineeNo, authority, directorId);
+//            resultMap.put("data", checkAttendanceDto);
+//            resultMap.put("message", "응시자의 출결이 확인되었습니다.");
+//            resultMap.put("code", HttpStatus.OK.value());
+//            resultMap.put("status", "success");
+//            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+//
+//        }catch (IllegalArgumentException e){
+//            resultMap.put("message", e.getMessage());
+//            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+//            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
-    @ApiOperation(value = "응시자 출결 확인")
+    @ApiOperation(value = "출석 확인")
     @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendance")
     public ResponseEntity<Map<String, Object>> checkAttendance(@RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo){
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            String token  = authorization.replace("Bearer ", "");
+            String token = authorization.replace("Bearer", "");
             String authority = jwtTokenProvider.getAuthority(token);
             String directorId = jwtTokenProvider.getId(token);
 
             CheckAttendanceDto checkAttendanceDto = directorService.checkAttendance(examNo, examineeNo, authority, directorId);
             resultMap.put("data", checkAttendanceDto);
-            resultMap.put("message", "응시자의 출결이 확인되었습니다.");
+            resultMap.put("message", "응시자의 출석이 확인되었습니다.");
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
-
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             resultMap.put("message", e.getMessage());
             resultMap.put("status", HttpStatus.BAD_REQUEST.value());
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
