@@ -169,21 +169,48 @@ public class MemberService {
     }
 
     // 로그인 및 토큰 발급
-    public ResponseEntity<Map<String, Object>> signIn(LoginRequestDto loginRequestDto, String refreshToken, String authority) {
+    public ResponseEntity<Map<String, Object>> signIn(LoginRequestDto loginRequestDto, String refreshToken) {
         Map<String, Object> response = new HashMap<>();
         Optional<Director> directorOptional;
         Optional<Manager> managerOptional;
         Optional<CenterManager> centerManagerOptional;
 
-        if (authority.equals("ROLE_DIRECTOR")) {
-            directorOptional = memberDirectorRepository.findById(loginRequestDto.getId());
-            directorOptional.get().updateRefreshToken(refreshToken);
-            memberDirectorRepository.save(directorOptional.get());
+        if (loginRequestDto.getAuthority().equals("ROLE_DIRECTOR")) {
+            if (memberDirectorRepository.existsById(loginRequestDto.getId())) {
+                directorOptional = memberDirectorRepository.findById(loginRequestDto.getId());
+                directorOptional.get().updateRefreshToken(refreshToken);
+                memberDirectorRepository.save(directorOptional.get());
 
-            if (!directorOptional.get().getIsDelete()) {
-                if (directorOptional.isPresent()) {
-                    Director director = directorOptional.get();
-                    if (passwordEncoder.matches(loginRequestDto.getPw(), director.getPw())) {
+                if (!directorOptional.get().getIsDelete()) {
+                    if (directorOptional.isPresent()) {
+                        Director director = directorOptional.get();
+                        if (passwordEncoder.matches(loginRequestDto.getPw(), director.getPw())) {
+                            response.put("message", "로그인에 성공하였습니다.");
+                            return ResponseEntity.status(HttpStatus.OK).body(response);
+                        } else {
+                            response.put("message", "비밀번호가 일치하지 않습니다.");
+                            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+                        }
+                    } else {
+                        response.put("message", "사용자를 찾을 수 없습니다.");
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                    }
+                } else {
+                    response.put("message", "탈퇴한 유저입니다.");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                }
+            } else {
+                response.put("message", "사용자를 찾을 수 없습니다.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+        } else if (loginRequestDto.getAuthority().equals("ROLE_MANAGER")) {
+            if (memberManagerRepository.existsById(loginRequestDto.getId())) {
+                managerOptional = memberManagerRepository.findById(loginRequestDto.getId());
+                managerOptional.get().updateRefreshToken(refreshToken);
+                memberManagerRepository.save(managerOptional.get());
+                if (managerOptional.isPresent()) {
+                    Manager manager = managerOptional.get();
+                    if (passwordEncoder.matches(loginRequestDto.getPw(), manager.getPw())) {
                         response.put("message", "로그인에 성공하였습니다.");
                         return ResponseEntity.status(HttpStatus.OK).body(response);
                     } else {
@@ -195,38 +222,26 @@ public class MemberService {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
                 }
             } else {
-                response.put("message", "탈퇴한 유저입니다.");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            }
-        } else if (authority.equals("ROLE_MANAGER")) {
-            managerOptional = memberManagerRepository.findById(loginRequestDto.getId());
-            managerOptional.get().updateRefreshToken(refreshToken);
-            memberManagerRepository.save(managerOptional.get());
-            if (managerOptional.isPresent()) {
-                Manager manager = managerOptional.get();
-                if (passwordEncoder.matches(loginRequestDto.getPw(), manager.getPw())) {
-                    response.put("message", "로그인에 성공하였습니다.");
-                    return ResponseEntity.status(HttpStatus.OK).body(response);
-                } else {
-                    response.put("message", "비밀번호가 일치하지 않습니다.");
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-                }
-            } else {
                 response.put("message", "사용자를 찾을 수 없습니다.");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
-        } else if (authority.equals("ROLE_CENTER_MANAGER")) {
-            centerManagerOptional = centerManagerRepository.findById(loginRequestDto.getId());
-            centerManagerOptional.get().updateRefreshToken(refreshToken);
-            centerManagerRepository.save(centerManagerOptional.get());
-            if (centerManagerOptional.isPresent()) {
-                CenterManager centerManager = centerManagerOptional.get();
-                if (passwordEncoder.matches(loginRequestDto.getPw(), centerManager.getPw())) {
-                    response.put("message", "로그인에 성공하였습니다.");
-                    return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else if (loginRequestDto.getAuthority().equals("ROLE_CENTER_MANAGER")) {
+            if (centerManagerRepository.existsById(loginRequestDto.getId())) {
+                centerManagerOptional = centerManagerRepository.findById(loginRequestDto.getId());
+                centerManagerOptional.get().updateRefreshToken(refreshToken);
+                centerManagerRepository.save(centerManagerOptional.get());
+                if (centerManagerOptional.isPresent()) {
+                    CenterManager centerManager = centerManagerOptional.get();
+                    if (passwordEncoder.matches(loginRequestDto.getPw(), centerManager.getPw())) {
+                        response.put("message", "로그인에 성공하였습니다.");
+                        return ResponseEntity.status(HttpStatus.OK).body(response);
+                    } else {
+                        response.put("message", "비밀번호가 일치하지 않습니다.");
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+                    }
                 } else {
-                    response.put("message", "비밀번호가 일치하지 않습니다.");
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+                    response.put("message", "사용자를 찾을 수 없습니다.");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
                 }
             } else {
                 response.put("message", "사용자를 찾을 수 없습니다.");
