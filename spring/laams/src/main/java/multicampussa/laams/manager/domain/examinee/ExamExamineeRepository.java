@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long> {
@@ -34,5 +35,9 @@ public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long
     // 시험 서류 지참 카운트
 //    @Query(value = "SELECT count(ee) FROM ExamExaminee ee WHERE ee.exam.no = :examNo AND ee.document = true")
 //    int countByDocument(Long examNo);
+
+    // 생성날짜와 보상여부로 조회
+    @Query("SELECT ee FROM ExamExaminee ee WHERE DATE(ee.createdAt) = :targetDate AND ee.compensation = true AND ee.isCompensation = false")
+    List<ExamExaminee> findUncompensatedByDate(@Param("targetDate") java.sql.Date targetDate);
 }
 
