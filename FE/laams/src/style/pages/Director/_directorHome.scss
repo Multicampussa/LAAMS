@@ -1,0 +1,95 @@
+.director-home{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &-container{
+        width: 80%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding-bottom: 5rem;
+        box-sizing: border-box;
+    }
+    &-task{
+        width: 60%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        &-title{
+            height: 7rem;
+            box-sizing: border-box;
+            font-size: 3rem;
+            font-weight: 700;
+            padding: 1rem 0rem 2rem 0rem;
+        }
+        &-calendar{
+            flex: 1;
+        }
+    }
+    &-todo{
+        width: 35%;
+        height: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        &-title{
+            height: 7rem;
+            box-sizing: border-box;
+            font-size: 3rem;
+            font-weight: 700;
+            padding: 1rem 0rem 2rem 0rem;
+        }
+        &-box{
+            width: 100%;
+            flex: 1;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            padding-top: 1rem;
+            border-radius: 1rem;
+            box-sizing: border-box;
+            &-btn{
+                width: 90%;
+                height: 5rem;
+                background-color: $color-blue;
+                color: white;
+                font-size: 2rem;
+                border-radius: 1rem;
+                font-weight: 600;
+            }
+        }
+
+    }
+    &-notice{
+        width: 35%;
+        height: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        &-flex{
+            height: 7rem;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0rem 2rem 0rem;
+            align-items: end;
+            &-title{
+                font-size: 3rem;
+                font-weight: 700;
+            }
+            &-additional{
+                font-size: 2rem;
+                font-weight: 600;
+            }
+        }
+        &-box{
+            width: 100%;
+            flex: 1;
+            background-color: white;
+            border-radius: 1rem;
+        }
+    }
+}
