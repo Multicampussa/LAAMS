@@ -24,7 +24,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/chat")
+@RequestMapping("/api/v1/chat")
 @Api(tags = "채팅방 관련")
 public class ChatRoomController {
 
