@@ -9,7 +9,10 @@ import multicampussa.laams.manager.domain.manager.Manager;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +22,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class NoticeService {
 
+    private final S3Service s3Service;
+
     public final NoticeRepository noticeRepository;
     public final MemberManagerRepository managerRepository;
 
-    public boolean createNotice(NoticeCreateDto noticeCreateDto, Long memberId, String authority) {
+    @Transactional
+    public boolean createNotice(NoticeCreateDto noticeCreateDto, Long memberNo, String authority, MultipartFile file) {
 
         boolean result = true;
+        String attachFileUrl = "";
 
         if (noticeCreateDto.getTitle().isEmpty()) {
             throw new IllegalArgumentException("제목을 입력해주세요.");
@@ -39,15 +46,20 @@ public class NoticeService {
         Notice notice = new Notice();
 //        Manager manager = new Manager();
 //        Manager manager = managerRepository.findById(memberId).get();
-        if (managerRepository.existsById(memberId)) {
-            Optional<Manager> findMangerById = managerRepository.findById(memberId);
+        if (managerRepository.existsById(memberNo)) {
+
+            if (file != null) {
+                attachFileUrl = s3Service.saveFile(file);
+            }
+            Optional<Manager> findMangerById = managerRepository.findById(memberNo);
 
             Manager manager = findMangerById.get();
             notice.toEntity(noticeCreateDto, manager);
+            notice.setAttachFileUrl(attachFileUrl);
             noticeRepository.save(notice);
         } else {
             result = false;
-            throw new IllegalArgumentException(memberId + "가 없습니다");
+            throw new IllegalArgumentException(memberNo + "가 없습니다");
         }
 //
 //        if (findMangerById.isEmpty()) {
@@ -57,7 +69,8 @@ public class NoticeService {
         return result;
     }
 
-    public boolean updateNotice(NoticeUpdateDto noticeUpdateDto, Long memberId, String authority) {
+    @Transactional
+    public boolean updateNotice(NoticeUpdateDto noticeUpdateDto, Long memberNo, String authority, MultipartFile file) {
 
         boolean result = true;
 
@@ -73,14 +86,41 @@ public class NoticeService {
 
         Long noticeNo = noticeUpdateDto.getNoticeNo();
         Notice notice = noticeRepository.findById(noticeNo).get();
+
 //        Manager manager = new Manager();
 //        Manager manager = managerRepository.findById(memberId).get();
-        if (managerRepository.existsById(memberId)) {
+        if (managerRepository.existsById(memberNo)) {
             notice.update(noticeUpdateDto);
+
+            String attachFileUrl = "";
+
+            // 생성 시 사진 첨부, 수정 시 새로운 사진으로 변경
+            if (notice.getAttachFile() != null && file != null) {
+                // S3에 올라가있는거 지우고
+
+
+                // 새로운 파일을 S3에 추가
+//                attachFileUrl = s3Service.saveFile(file).getBody();
+                attachFileUrl = s3Service.saveFile(file);
+            }
+            // 생성 시 사진 첨부, 수정 시 기존 사진 그대로
+            if (notice.getAttachFile() != null && file == null) {
+                attachFileUrl = notice.getAttachFile();
+            }
+            // 생성 시 사진 없음, 수정 시 사진 첨부
+            if(notice.getAttachFile() == null && file != null) {
+                attachFileUrl = s3Service.saveFile(file);
+            }
+            // 생성 시 사진 없음, 수정 시에도 없음
+            if (notice.getAttachFile() == null && file == null) {
+                attachFileUrl = "";
+            }
+
+            notice.setAttachFileUrl(attachFileUrl);
             noticeRepository.save(notice);
         } else {
             result = false;
-            throw new IllegalArgumentException(memberId + "가 없습니다");
+            throw new IllegalArgumentException(memberNo + "가 없습니다");
         }
 //
 //        if (findMangerById.isEmpty()) {
@@ -90,6 +130,7 @@ public class NoticeService {
         return result;
     }
 
+    @Transactional
     public boolean deleteNotice(Long noticeNo, Long memberNo, String authority) {
 
         boolean result = true;
@@ -116,6 +157,7 @@ public class NoticeService {
         return result;
     }
 
+    @Transactional
     public List<NoticeListResDto> getNoticeList(int count, int page) {
 
         int theNumberOfNotice = noticeRepository.getTheNumberOfNotice();
@@ -165,6 +207,7 @@ public class NoticeService {
 //        return noticeRepository.getNoticeList(count, page);
     }
 
+    @Transactional
     public NoticeDetailResDto getNoticeDetail(Long noticeNo) {
 
 //        int theNumberOfNotice = noticeRepository.getTheNumberOfNotice();
@@ -183,6 +226,7 @@ public class NoticeService {
 
     }
 
+    @Transactional
     public int getNoticeCount() {
 
         int theNumberOfNotice = noticeRepository.getTheNumberOfNotice();

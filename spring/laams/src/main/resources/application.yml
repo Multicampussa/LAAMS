@@ -32,6 +32,25 @@ spring:
     host: localhost
     port: 6379
     password: ssafy1234!!
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 server:
   servlet:
     context-path: /
+
+cloud:
+  aws:
+    s3:
+      endpoint: https://kr.object.ncloudstorage.com
+      bucket: laams
+    credentials:
+      access-key: 8scKCA8RIIv7UmfxCDud
+      secret-key: Ijm4NfDuwt6fTeDrUT0mdOH1KTQdRY00xHhvKOF1
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false

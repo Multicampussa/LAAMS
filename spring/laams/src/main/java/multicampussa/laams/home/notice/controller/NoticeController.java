@@ -7,6 +7,7 @@ import multicampussa.laams.home.notice.service.NoticeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,21 +15,21 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/app")
+@RequestMapping("/api/v1")
 public class NoticeController {
 
     private final NoticeService noticeService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/notice/create")
-    public ResponseEntity<Map<String, Object>> createNotice(@RequestHeader String authorization,  @RequestBody NoticeCreateDto noticeCreateDto) {
+    public ResponseEntity<Map<String, Object>> createNotice(@RequestHeader String authorization, @RequestBody NoticeCreateDto noticeCreateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
             String token  = authorization.replace("Bearer ", "");
-            Long memberId = jwtTokenProvider.getMemberNo(token);
+            Long memberNo = jwtTokenProvider.getMemberNo(token);
             String authority = jwtTokenProvider.getAuthority(token);
 
-            boolean result = noticeService.createNotice(noticeCreateDto, memberId, authority);
+            boolean result = noticeService.createNotice(noticeCreateDto, memberNo, authority, file);
 
             resultMap.put("message", "성공적으로 작성하였습니다.");
             resultMap.put("status", HttpStatus.OK.value());
@@ -41,7 +42,7 @@ public class NoticeController {
     }
 
     @PutMapping("/notice/update")
-    public ResponseEntity<Map<String, Object>> updateNotice(@RequestHeader String authorization, @RequestBody NoticeUpdateDto noticeUpdateDto) {
+    public ResponseEntity<Map<String, Object>> updateNotice(@RequestHeader String authorization, @RequestBody NoticeUpdateDto noticeUpdateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
         BaseResultDTO resultDTO = new BaseResultDTO();
@@ -53,10 +54,10 @@ public class NoticeController {
          */
         try{
             String token  = authorization.replace("Bearer ", "");
-            Long memberId = jwtTokenProvider.getMemberNo(token);
+            Long memberNo = jwtTokenProvider.getMemberNo(token);
             String authority = jwtTokenProvider.getAuthority(token);
 
-            boolean result = noticeService.updateNotice(noticeUpdateDto, memberId, authority);
+            boolean result = noticeService.updateNotice(noticeUpdateDto, memberNo, authority, file);
 
             resultMap.put("message", "성공적으로 수정하였습니다.");
             resultMap.put("status", HttpStatus.OK.value());

@@ -11,7 +11,6 @@ public class NoticeUpdateDto {
     private Long noticeNo;
     private String title;
     private String content;
-    private String imagePath;
 
 
 }
