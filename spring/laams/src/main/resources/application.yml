@@ -6,6 +6,11 @@ spring:
     password: ENC(9cdu1LZgayPrMOBofUI9yg==)
     hikari:
       maximumPoolSize: 3
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/mydb
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,6 +19,7 @@ spring:
         show_sql: true
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -25,13 +31,34 @@ spring:
           auth: true
           starttls:
             enable: true
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+
+  freemarker:
+    cache: false
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+
   redis:
-    host: localhost
-    port: 6379
-    password: ssafy1234!!
+    host: ENC(fQWwlcv7RQvGG3JDBL9NDchSFa5g13j/)
+    port: ENC(v1zBzKJHhtr3Vigt8qnxRQ==)
+    password: END(so/mouY4p4lkQV0jvBhjuw32MFr3LR0P)
+
 server:
   servlet:
     context-path: /
