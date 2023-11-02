@@ -25,16 +25,18 @@ const ManagerChat = () => {
   const recvMessage = useCallback( (recv)=> {
     // this.messages.unshift({"type":recv.type,"sender":recv.type=='ENTER'?'[알림]':recv.sender,"message":recv.message})
     // axios.get(`${process.env.REACT_APP_SPRING_URL}/room/`+roomId).then(response => console.log("TEST",response));
+    console.log(recv.message);
     setMessageList((e)=>[...e,`${recv.sender} : ${recv.message}`]);
   },[])
 
   
   const connect = useCallback(() =>{
+    if(!roomId) return;
     // pub/sub event
     ws.current.connect({'Authorization': `Bearer ${accessToken}`}, function(frame) {
       ws.current.subscribe(`/topic/chat/room/alarm`, function(message) {
         const recv = JSON.parse(message.body);
-        alert(recv.message);
+        // alert(recv.message);
       });
       ws.current.subscribe(`/topic/chat/room/${roomId}`, function(message) {
         const recv = JSON.parse(message.body);
@@ -43,12 +45,15 @@ const ManagerChat = () => {
       ws.current.send("/app/chat/message", {'Authorization': `Bearer ${accessToken}`}, JSON.stringify({type:'ENTER', roomId:roomId, sender:null}));
     }, function(error) {
       if(reconnect.current++ <= 5) {
-        setTimeout(function() {
+        const timer = setTimeout(function() {
           socket.current = new SockJS(`${process.env.REACT_APP_SPRING_URL}/ws/chat`);
           ws.current = Stomp.over(socket.current);
-                connect();
-            },10*1000);
-        }
+          connect();
+        },10*1000);
+        window.addEventListener("beforeunload",()=>{
+          clearTimeout(timer);
+        });
+      }
     });
   },[accessToken,recvMessage,roomId])
 

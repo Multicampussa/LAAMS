@@ -7,7 +7,7 @@ import useApi from '../../../Hook/useApi';
 const DirectorChat = () => {
   const [roomId,setRoomId]=useState();
   const [roomName,setRoomName] = useState();
-  const socket = useRef(new SockJS(`${process.env.REACT_APP_SPRING_URL}/ws/chat`));
+  const socket = useRef(new SockJS(`${process.env.REACT_APP_SPRING_URL}/ws/chat`, null, {withCredentials: true}));
   const ws = useRef(new Stomp.over(socket.current));
   const reconnect = useRef(0);
   const [message,setMessage] = useState("");
@@ -26,7 +26,8 @@ const DirectorChat = () => {
     // this.messages.unshift({"type":recv.type,"sender":recv.type=='ENTER'?'[알림]':recv.sender,"message":recv.message})
     // axios.get(`${process.env.REACT_APP_SPRING_URL}/room/`+roomId).then(response => console.log("TEST",response));
     setMessageList((e)=>[...e,`${recv.sender} : ${recv.message}`]);
-  },[])
+    console.log("보내져!!!",roomId)
+  },[roomId])
 
   const connect = useCallback(() =>{
     // pub/sub event
@@ -37,27 +38,30 @@ const DirectorChat = () => {
       });
       ws.current.send("/app/chat/message", {'Authorization': `Bearer ${accessToken}`}, JSON.stringify({type:'ENTER', roomId:roomId, sender:roomName}));
     }, function(error) {
+      console.log(error);
       if(reconnect.current++ <= 5) {
-        setTimeout(function() {
-          console.log("connection reconnect");
-          socket.current = new SockJS(`${process.env.REACT_APP_SPRING_URL}/ws/chat`);
+        const timer = setTimeout(function() {
+          socket.current = new SockJS(`${process.env.REACT_APP_SPRING_URL}/ws/chat`, null, {withCredentials: true});
           ws.current = Stomp.over(socket.current);
-                connect();
-            },10*1000);
-        }
+          connect();
+        },10*1000);
+        window.addEventListener("beforeunload",()=>{
+          clearTimeout(timer);
+        });
+      }
     });
   },[accessToken,recvMessage,roomId,roomName])
   
   const getRoomData = useCallback(()=>{
-    api.get("chat/rooms")
+    api.post("chat/room")
       .then(({data})=>{
-        setRoomId(data[0].roomId);
-        setRoomName(data[0].roomName);
+        setRoomId(data.data.roomId);
+        setRoomName(data.data.roomName);
       })
       .catch(err=>{console.log(err);});
   },[api])
 
-  useEffect(()=>{  
+  useEffect(()=>{
     if(!roomId || !roomName) {
       getRoomData();
     }else{
@@ -70,6 +74,7 @@ const DirectorChat = () => {
   },[messageList]);
   return (
     <div>
+      <button onClick={connect}>연결</button>
       <label>채팅 <input value={message} onKeyDown={e=>{
         if(e.keyCode === 13){sendMessage();}
       }} onChange={e=>{setMessage(e.target.value);}}/></label><button onClick={sendMessage}>입력</button>
