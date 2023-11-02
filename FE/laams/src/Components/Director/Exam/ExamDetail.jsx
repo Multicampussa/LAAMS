@@ -190,6 +190,10 @@ const ExamDetail = () => {
 
   // TODO : 응시자 출석 정보 변경
   const changeAttendance = useCallback((index)=>{
+    if(examineesData[index].attendance){
+      alert('이미 출석한 응시자입니다');
+      return
+    }
     api.put(`director/exams/${params['no']}/examinees/${examineesData[index].examineeNo}/attendance`)
     .then((({data})=>{
       const newExamineeData = [...examineesData];
@@ -232,13 +236,13 @@ const ExamDetail = () => {
               {examinee.examineeName}
           </div>
             <button 
-              className='director-examinees-list-btn'
+              className={`director-examinees-list-items-btn-${examineesData[index].attendance? 'hidden':'show'}`}
               onClick={()=>{
                 changeAttendance(index);
               }}>
               출석
             </button>
-          <div>{attendanceFormat(examinee.attendanceTime)} {lateAttendance(examinee)}</div>
+          <div className='director-examinees-list-time'>{attendanceFormat(examinee.attendanceTime)} {lateAttendance(examinee)}</div>
           <select 
             className='director-examinees-list-items-select' 
             defaultValue={docFormat(examinee.document)} 
@@ -247,16 +251,16 @@ const ExamDetail = () => {
             <option value="미제출" >미제출</option>
             <option value="제출">제출</option>
           </select>
-            <button 
-            className='director-examinees-list-btn'
-            onClick={()=>handleCompensationModal(examinee.examineeNo, params['no'])}>보상 신청</button>
-            <button 
-              className='director-examinees-list-btn'
-              onClick={()=>handleDocsModal()}
-              >추가 서류</button>
-
-         
-
+          <button 
+          className='director-examinees-list-items-btn'
+          onClick={()=>handleCompensationModal(examinee.examineeNo, params['no'])}>
+            보상신청
+          </button>
+          <button  
+            className='director-examinees-list-items-btn'
+            onClick={()=>handleDocsModal()}>
+              추가 서류
+          </button>
         </li> 
       )
     })},[examineesData,docFormat,handleCompensationModal,
@@ -291,6 +295,7 @@ const ExamDetail = () => {
             <button className='exam-detail-aside-btn'>문의하기</button>
           </div>
         </aside>
+        <div className='exam-detail-examinees-show'>응시자 목록</div>
         <article className='exam-detail-examinees'>
             <div className='exam-detail-examinees-box'>
               <ul className='exam-detail-examinees-list'>
