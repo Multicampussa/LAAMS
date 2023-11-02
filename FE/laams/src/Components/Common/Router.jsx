@@ -16,6 +16,7 @@ import NoticeList from "../Notice/List.jsx";
 import NoticeCreate from "../Notice/Create.jsx";
 import NoticeDetail from "../Notice/Detail.jsx";
 import Chart from '../Manager/Chart/Chart.jsx';
+import CreateErrorReport from '../Director/ErrorReport/CreateErrorReport.jsx';
 const Router = () => {
   return (
     <>
@@ -88,6 +89,12 @@ const Router = () => {
             path='/director/exam/:no' 
             element={
             <PrivateRoute role="director" children={<ExamDetail/>}></PrivateRoute>
+            }
+          />
+          <Route 
+            path='/director/create/error-report' 
+            element={
+            <PrivateRoute role="director" children={<CreateErrorReport/>}></PrivateRoute>
             }
           />
           <Route path='/test' element={<Test/>} />
