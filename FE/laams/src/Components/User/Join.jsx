@@ -18,7 +18,7 @@ const Join = () => {
   const sendEmail = useCallback(()=>{
     axios({
       method: 'post',
-      url: `${process.env.REACT_APP_SPRING_URL}/member/sendemail`,
+      url: `${process.env.REACT_APP_SPRING_URL}/api/v1/member/sendemail`,
       headers:{
         "content-type": "application/json"
       },
