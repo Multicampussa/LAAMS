@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import multicampussa.laams.centerManager.dto.CenterExamDto;
 import multicampussa.laams.centerManager.dto.ConfirmDirectorRequest;
 import multicampussa.laams.centerManager.service.CenterManagerService;
 import multicampussa.laams.global.ApiResponse;
@@ -54,7 +55,7 @@ public class CenterManagerController {
 
     // 센터별 시험 조회
     @ApiOperation(value = "센터 별 시험 월별 및 일별 조회")
-    @GetMapping("exams")
+    @GetMapping("/exams")
     public ResponseEntity<Map<String, Object>> getCenterExamList(@RequestHeader String authorization, @RequestParam int year, @RequestParam int month, @RequestParam(value = "day", defaultValue = "0") int day){
         Map<String, Object> resultMap = new HashMap<>();
         try{
@@ -74,6 +75,27 @@ public class CenterManagerController {
         }
     }
 
-   
+    // 시험별 상세 조회
+    @ApiOperation(value = "시험 별 상세 조회 (감독관 목록)")
+    @GetMapping("/exams/{examNo}")
+    public ResponseEntity<Map<String, Object>> getCenterExam(@RequestHeader String authorization, @PathVariable Long examNo){
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            String token = authorization.replace("Bearer ", "");
+            String authority = jwtTokenProvider.getAuthority(token);
+            String centerManagerId = jwtTokenProvider.getId(token);
+
+            resultMap.put("message","시험 감독관 목록을 성공적으로 조회했습니다.");
+            resultMap.put("data", centerManagerService.getCenterExam(centerManagerId, examNo, authority));
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (IllegalArgumentException e){
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 }
