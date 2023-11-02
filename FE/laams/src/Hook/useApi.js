@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import { useRef } from "react";
 const useApi = () => {
   const user = useSelector(state=>state.User);
-  const api = useRef(axios.create({baseURL:`${process.env.REACT_APP_SPRING_URL}`,headers: { "Content-type": "application/json" }}));
+  const api = useRef(axios.create({baseURL:`${process.env.REACT_APP_SPRING_URL}/api/v1`,headers: { "Content-type": "application/json" }}));
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
