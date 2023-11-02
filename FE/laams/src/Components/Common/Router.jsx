@@ -19,6 +19,7 @@ import Chart from '../Manager/Chart/Chart.jsx';
 import DirectorChat from '../Director/Chat/DirectorChat.jsx';
 import ManagerChat from '../Manager/Chat/ManagerChat.jsx';
 import ManagerRoom from '../Manager/Chat/ManagerRoom.jsx';
+import CreateErrorReport from '../Director/ErrorReport/CreateErrorReport.jsx';
 const Router = () => {
   return (
     <>
@@ -109,6 +110,11 @@ const Router = () => {
             path='/director/chat'
             element={
               <PrivateRoute role="director" children={<DirectorChat/>}></PrivateRoute>
+          }/>
+          <Route 
+            path='/director/create/error-report' 
+            element={
+            <PrivateRoute role="director" children={<CreateErrorReport/>}></PrivateRoute>
             }
           />
           <Route path='/test' element={<Test/>} />
