@@ -45,6 +45,7 @@ const Header = () => {
         <Link key={key++} onClick={handleMenuItem} to="/" className='header-menu-box-item'>보상</Link>,
         <Link key={key++} onClick={handleMenuItem} to="/director/create/error-report" className='header-menu-box-item'>에러리포트</Link>,
         <Link key={key++} onClick={handleMenuItem} to="/update/user" className='header-menu-box-item'>회원 정보</Link>,
+        <Link key={key++} onClick={handleMenuItem} to="/director/chat" className='header-menu-box-item'>채팅</Link>,
         <Link key={key++} onClick={handleMenuItem} to='/director/exam/1' className='header-menu-box-item'>시험 상세</Link>,
         <button key={key++} onClick={logout} className='header-menu-box-item'>로그아웃</button>
         ];
@@ -55,6 +56,7 @@ const Header = () => {
           <Link key={key++} onClick={handleMenuItem} to="/manager/exam" className='header-menu-box-item'>시험일정</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/chart" className='header-menu-box-item'>차트</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/reward" className='header-menu-box-item'>보상</Link>,
+          <Link key={key++} onClick={handleMenuItem} to="/manager/room" className='header-menu-box-item'>채팅</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/error-report" className='header-menu-box-item'>에러리포트</Link>,
           <button key={key++} onClick={logout} className='header-menu-box-item'>로그아웃</button>
         ];
