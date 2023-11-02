@@ -43,7 +43,7 @@ const Header = () => {
         <Link key={key++} onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,
         <Link key={key++} onClick={handleMenuItem} to="/" className='header-menu-box-item'>전체 시험 일정</Link>,
         <Link key={key++} onClick={handleMenuItem} to="/" className='header-menu-box-item'>보상</Link>,
-        <Link key={key++} onClick={handleMenuItem} to="/" className='header-menu-box-item'>에러리포트</Link>,
+        <Link key={key++} onClick={handleMenuItem} to="/director/create/error-report" className='header-menu-box-item'>에러리포트</Link>,
         <Link key={key++} onClick={handleMenuItem} to="/update/user" className='header-menu-box-item'>회원 정보</Link>,
         <Link key={key++} onClick={handleMenuItem} to='/director/exam/1' className='header-menu-box-item'>시험 상세</Link>,
         <button key={key++} onClick={logout} className='header-menu-box-item'>로그아웃</button>
