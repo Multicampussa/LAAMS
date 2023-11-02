@@ -21,7 +21,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/member")
-@Api(tags = "멤버 관련")
+@Api(tags = "멤버 관련 기능")
 public class MemberController {
 
     private final MemberService memberService;

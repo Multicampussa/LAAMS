@@ -22,8 +22,8 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "채팅 메시지 관련")
 @RequestMapping("/api/v1")
+@Api(tags = "채팅 메시지 관련 기능")
 public class MessageController {
 
     private final SimpMessageSendingOperations sendingOperations;
