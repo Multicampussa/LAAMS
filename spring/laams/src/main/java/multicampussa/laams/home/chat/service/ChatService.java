@@ -50,11 +50,12 @@ public class ChatService {
         List<ChatRoom> rooms = chatRepository.findAll();
         for (ChatRoom room : rooms) {
             if (room.getRoomName().contains(directorId)) {
-                return new ChatRoom();
+                ChatRoom chatRoom = ChatRoom.create(room.getRoomName());
+                return chatRoom;
             };
         }
         if (memberDirectorRepository.existsById(directorId)) {
-            roomName = directorId + "'s Room";
+            roomName = directorId;
         } else {
             throw new IllegalArgumentException("해당 유저는 없습니다.");
         }
