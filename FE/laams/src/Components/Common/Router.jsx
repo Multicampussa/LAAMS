@@ -16,6 +16,9 @@ import NoticeList from "../Notice/List.jsx";
 import NoticeCreate from "../Notice/Create.jsx";
 import NoticeDetail from "../Notice/Detail.jsx";
 import Chart from '../Manager/Chart/Chart.jsx';
+import DirectorChat from '../Director/Chat/DirectorChat.jsx';
+import ManagerChat from '../Manager/Chat/ManagerChat.jsx';
+import ManagerRoom from '../Manager/Chat/ManagerRoom.jsx';
 import CreateErrorReport from '../Director/ErrorReport/CreateErrorReport.jsx';
 const Router = () => {
   return (
@@ -78,6 +81,18 @@ const Router = () => {
               <PrivateRoute role="manager" children={<Chart/>}></PrivateRoute>
             }
           />
+          <Route
+            path='/manager/chat'
+            element={
+              <PrivateRoute role="manager" children={<ManagerChat/>}></PrivateRoute>
+            }
+          />
+          <Route
+            path='/manager/room'
+            element={
+              <PrivateRoute role="manager" children={<ManagerRoom/>}></PrivateRoute>
+            }
+          />
           <Route path='/join' element={<Join/>} />
           <Route 
             path='/update/user' 
@@ -91,6 +106,11 @@ const Router = () => {
             <PrivateRoute role="director" children={<ExamDetail/>}></PrivateRoute>
             }
           />
+          <Route
+            path='/director/chat'
+            element={
+              <PrivateRoute role="director" children={<DirectorChat/>}></PrivateRoute>
+          }/>
           <Route 
             path='/director/create/error-report' 
             element={

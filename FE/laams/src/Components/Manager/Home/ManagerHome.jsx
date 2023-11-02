@@ -6,6 +6,8 @@ const ManagerHome = () => {
   const [examList,setExamList] = useState();
   const api = useApi();
   const [curDate,setCurDate] = useState(new Date());
+
+
   const getExamList = useCallback(async(date)=>{
     await api.get(`manager/exam/monthly?year=${date.getFullYear()}&month=${date.getMonth()+1}`)
     .then(({data})=>{
