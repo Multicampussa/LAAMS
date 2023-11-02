@@ -16,6 +16,8 @@ import NoticeList from "../Notice/List.jsx";
 import NoticeCreate from "../Notice/Create.jsx";
 import NoticeDetail from "../Notice/Detail.jsx";
 import Chart from '../Manager/Chart/Chart.jsx';
+import Room from './../Chat/Room';
+import RoomDetail from './../Chat/RoomDetail';
 const Router = () => {
   return (
     <>
@@ -91,6 +93,8 @@ const Router = () => {
             }
           />
           <Route path='/test' element={<Test/>} />
+          <Route path='/room' element={<Room/>} />
+          <Route path='/room/:roomId' element={<RoomDetail/>} />
         </Routes>
       </BrowserRouter>
     </>

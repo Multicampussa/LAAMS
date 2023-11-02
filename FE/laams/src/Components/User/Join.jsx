@@ -18,7 +18,7 @@ const Join = () => {
   const sendEmail = useCallback(()=>{
     axios({
       method: 'post',
-      url: `${process.env.REACT_APP_SPRING_URL}/member/sendemail`,
+      url: `${process.env.REACT_APP_SPRING_URL}/api/v1/member/sendemail`,
       headers:{
         "content-type": "application/json"
       },
@@ -41,7 +41,7 @@ const Join = () => {
   const checkEmailCode = useCallback(()=>{
     axios({
       method: 'post',
-      url: `${process.env.REACT_APP_SPRING_URL}/member/sendemail/verify`,
+      url: `${process.env.REACT_APP_SPRING_URL}/api/v1/member/sendemail/verify`,
       headers:{
         "content-type": "application/json"
       },
@@ -74,7 +74,7 @@ const Join = () => {
     if(isEmailChecked && isPwChecked && checkPwText){
       axios({
         method:'post',
-        url:`${process.env.REACT_APP_SPRING_URL}/member/signup`,
+        url:`${process.env.REACT_APP_SPRING_URL}/api/v1/member/signup`,
         headers:{
           "content-type": "application/json"
         },

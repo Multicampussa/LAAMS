@@ -1,11 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Calendar from './Calendar'
 import useApi from '../../../Hook/useApi';
+import useCreateRoom from '../../../Hook/useCreateRoom';
+import { useSelector } from 'react-redux';
 
 const ManagerHome = () => {
   const [examList,setExamList] = useState();
   const api = useApi();
   const [curDate,setCurDate] = useState(new Date());
+  const createRoom = useCreateRoom();
+  const accessToken = useSelector(state=>state.User.accessToken);
+  useEffect(()=>{
+    if(!accessToken) return;
+    createRoom();
+  },[createRoom,accessToken])
   const getExamList = useCallback(async(date)=>{
     await api.get(`manager/exam/monthly?year=${date.getFullYear()}&month=${date.getMonth()+1}`)
     .then(({data})=>{
