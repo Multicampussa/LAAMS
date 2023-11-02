@@ -1,0 +1,84 @@
+.director-home{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &-container{
+        width: 80%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1%;
+    }
+    &-task{
+        width: 65%;
+        height: 100%;
+        &-title{
+            font-size: 3rem;
+            font-weight: 700;
+            padding: 1rem 0rem 2rem 0rem;
+        }
+        &-calendar{
+            height: 90%;
+        }
+    }
+    &-todo{
+        width: 35%;
+        height: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        &-title{
+            font-size: 3rem;
+            font-weight: 700;
+            padding: 1rem 0rem 2rem 0rem;
+        }
+        &-box{
+            width: 100%;
+            height: 80%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            padding-top: 1rem;
+            border-radius: 1rem;
+            &-btn{
+                width: 90%;
+                height: 5rem;
+                background-color: $color-blue;
+                color: white;
+                font-size: 2rem;
+                border-radius: 1rem;
+                font-weight: 600;
+            }
+        }
+
+    }
+    &-notice{
+        width: 35%;
+        height: 49%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        &-flex{
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            &-title{
+                font-size: 3rem;
+                font-weight: 700;
+            }
+            &-additional{
+                font-size: 2rem;
+                font-weight: 600;
+            }
+        }
+        &-box{
+            width: 100%;
+            height: 80%;
+            background-color: white;
+            border-radius: 1rem;
+        }
+    }
+}
