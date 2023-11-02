@@ -9,6 +9,9 @@ const DirectorHome = () => {
   const [curDate,setCurDate] = useState(new Date());
   const userId = useSelector(state=>state.User.memberId);
   const getDirectorInfo = useCallback(async()=>{
+    if(!userId || !api){
+      return
+    }
     const response = await api.get(`member/info/${userId}`);
     return response.data.data.memberNo;
   },[api,userId])
@@ -19,7 +22,6 @@ const DirectorHome = () => {
     .then(({data})=>{
       const res = {};
       data.data.forEach(e=>{
-        
         const date = new Date(e.examDate);
         if(res[date.getDate()]){
           res[date.getDate()].push({
@@ -102,6 +104,7 @@ const DirectorHome = () => {
             <div className='director-home-notice-box-items'></div> 
           </div>
         </article>
+        <button className='director-home-btn-hidden'>감독관 센터 도착 인증</button>
       </div>
     </section>
   )

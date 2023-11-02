@@ -92,4 +92,40 @@
             border-radius: 1rem;
         }
     }
+    &-btn-hidden{
+        display: none;
+    }
+}
+
+@include mobile{
+    .director-home{
+        overflow-y: hidden;
+        padding: 0;
+        &-container{
+            width: 95%;
+            gap:1rem
+        }
+        &-task{
+            width: 100%;
+            height: 90%;
+            &-title{
+                font-size: 2rem;
+                padding: 1rem 0 0 0;
+                height: 5rem;
+            }
+        }
+        &-btn-hidden{
+            display: inline;
+            width: 100%;
+            height: 4rem;
+            background-color: $color-blue;
+            color: white;
+            font-size: 2rem;
+            border-radius: 1rem;
+            font-weight: 600;
+        }
+        &-notice,&-todo{
+            display: none;
+        }
+    }
 }

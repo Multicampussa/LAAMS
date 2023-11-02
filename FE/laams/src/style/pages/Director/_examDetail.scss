@@ -1,6 +1,6 @@
 .exam-detail{
     width: 100%;
-    height: 100%;
+    height: auto;
     box-sizing: border-box;
     display: flex;
     &-aside{
@@ -21,6 +21,7 @@
             font-size: 2.5rem;
             font-weight: 900;
             color: $color-blue;
+            
             &-box{
                 font-size: 1.5rem;
                 border: 0.1rem solid $color-gray-light;
@@ -58,13 +59,20 @@
             border-radius: 2rem;
             border: 0.1rem solid $color-gray-light;
             display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding-bottom: 2rem;
             justify-content: center;
             align-items: center;
-            overflow-y: auto;
         }
         &-list{
             width: 98%;
-            height: 95%;
+            flex: 1;
+            overflow-y: auto;
+            -ms-overflow-style: none;
+        }
+        &-list::-webkit-scrollbar{
+            display:none;
         }
         &-show{
             display: none;
@@ -72,6 +80,21 @@
     }
 }
 .director-examinees-list{
+    &-title{
+        width: 100%;
+        display: grid;
+        text-align: center;
+        grid-template-columns: repeat(7,1fr);
+        font-size: 2rem;
+        height: 4rem;
+        line-height: 3rem;
+        border-bottom: 0.1rem solid $color-gray-light;
+        box-sizing: border-box;
+        padding: 0.5rem 1%;
+        background-color: $color-black-light;
+        color: $color-white;
+        border-radius: 1rem 1rem 0 0;
+    }
     &-items{
         width: 100%;
         display: grid;
@@ -82,7 +105,7 @@
         line-height: 3rem;
         border-bottom: 0.1rem solid $color-gray-light;
         padding: 0.5rem 0rem;
-        &-title:hover{
+        &-code:hover, &-name:hover{
             cursor: pointer;
             color: $color-blue;
         }
@@ -139,11 +162,6 @@
             }
         }
     }
-    &-items:first-child{
-        background-color: $color-black-light;
-        color: white;
-        border-radius: 1rem 1rem 0rem 0rem;
-    }
     
     &-mobile{
         display: none;
@@ -170,32 +188,40 @@
     }
     .director-examinees-list{
         &-items{
-            font-size: 1.5rem;
+            font-size: 1.4rem;
+            &-btn{
+                height: 3rem;
+                font-size: 1.2rem;             
+            }
         }
-        &-items:first-child{
-            font-size: 1.2rem;
-        }
-        &-btn{
-            height: 3rem;
-            font-size: 1.2rem;             
-        }
+
+        
     }
 }
 
 @include mobile{
     .exam-detail{
-        min-height: 100%;
+        height: 100vh;
         overflow-y: auto;
         background-color: white;
         display: flex;
         flex-direction: column;
         &-aside{
             width: 100%;
-            height: 40rem;
+            height: 45rem;
+            &-title{
+                font-size: 2rem;
+                &-box{
+                    font-size: 1.5rem;
+                }
+            }
+            &-btn{
+                height: 4rem;
+                font-size: 2rem;             
+            }
         }
         &-examinees{
             width: 100%;
-            height: 50rem;
             font-size: 1.5rem;
             display: flex;
             flex-direction: column;
@@ -209,77 +235,80 @@
                 padding: 2rem 1rem;
             }
             &-box{
+                width: 95%;
                 height: 100%;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 border-radius: 1rem;
             }
+            &-list{
+                overflow-y: hidden;
+                
+            }
         }
 
     }
     .director-examinees-list{
-        height: 100%;
+        &-title{
+            display: none;
+        }
         &-items{
-            height: 8rem;
-            display: grid;
-            padding-top: 1.5rem;
-            grid-template-columns: repeat(12,1fr);
-            grid-template-rows: 1fr 1fr;
-            grid-template-areas:
-            'code code code name name name name attendBtn attendBtn time time time'
-            'docs docs docs docs compen compen compen compen addDocs addDocs addDocs addDocs';
-            &-title:first-child{
-                grid-area: code;
-                font-size: 1.7rem;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            justify-content: space-around;
+            height: 15rem;
+            &-code{
+                order: 1;
+                width: 30%;
+                height: 3rem;
+                font-size: 1.5rem;
                 font-weight: 600;
-                padding-left: 1rem;
-                padding-top: 0.3rem;
+                padding: 0;
+                text-align: start;
             }
-            &-title:nth-child(2){
-                grid-area: name;
-                font-size: 1.7rem;
+            &-name{
+                order: 2;
+                width: 30%;
+                height: 3rem;
+                font-size: 1.5rem;
                 font-weight: 600;
-                padding-left: 0.5rem;
-                padding-top: 0.3rem;
+                padding: 0;
+                text-align: start;
+            }
+            &-btn-show, &-btn-hidden{
+                order: 7;
+                width: 97%;
             }
             &-select{
-                width: 99%;
-                grid-area: docs;
-                font-size: 1.2rem;
+                order: 4;
+                width: 97%;
+                
             }
             &-btn:nth-of-type(2){
-                grid-area: compen;
-                border-radius: 0;
-                width: 99%;
-                font-size: 1.2rem;
+                order: 5;
+                width: 47%;
+
             }
             &-btn:nth-of-type(3){
-                grid-area: addDocs;
-                border-radius: 0;
-                font-size: 1.2rem;
-                width: 99%;
-            }
-            &-btn-hidden,
-            &-btn-show {
-              grid-area: attendBtn;
-              height: 2rem;
-              align-self: center;
-              line-height: 1.5rem;
-              font-size: 1rem;
-              width: 100%;
+                order: 6;
+                width: 47%;
             }
             
         }
-        &-items:first-child{
-            display: none;
-        }
-     
         &-time{
-            grid-area: time;
-            font-size: 1.2rem;
-            padding-top: 0.3rem;
+            height: 3rem;
+            width: 30%;
+            order: 3;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: end;
+            padding: 0;
+            
         }
-
+        
     }
 }
+
