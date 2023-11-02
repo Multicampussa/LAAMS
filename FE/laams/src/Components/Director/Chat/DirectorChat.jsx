@@ -28,22 +28,14 @@ const DirectorChat = () => {
     setMessageList((e)=>[...e,`${recv.sender} : ${recv.message}`]);
   },[])
 
-  
-  const connect = useCallback((id,name) =>{
-    if(!id){
-      id = roomId;
-    }
-
-    if(!name){
-      name = roomName;
-    }
+  const connect = useCallback(() =>{
     // pub/sub event
     ws.current.connect({'Authorization': `Bearer ${accessToken}`}, function(frame) {
-      ws.current.subscribe(`/topic/chat/room/${id}`, function(message) {
+      ws.current.subscribe(`/topic/chat/room/${roomId}`, function(message) {
         const recv = JSON.parse(message.body);
         recvMessage(recv);
       });
-      ws.current.send("/app/chat/message", {'Authorization': `Bearer ${accessToken}`}, JSON.stringify({type:'ENTER', roomId:id, sender:name}));
+      ws.current.send("/app/chat/message", {'Authorization': `Bearer ${accessToken}`}, JSON.stringify({type:'ENTER', roomId:roomId, sender:roomName}));
     }, function(error) {
       if(reconnect.current++ <= 5) {
         setTimeout(function() {
@@ -61,11 +53,9 @@ const DirectorChat = () => {
       .then(({data})=>{
         setRoomId(data[0].roomId);
         setRoomName(data[0].roomName);
-        console.log(data[0].roomId);
-        connect(data[0].roomId,data[0].roomName);
       })
       .catch(err=>{console.log(err);});
-  },[api,connect])
+  },[api])
 
   useEffect(()=>{  
     if(!roomId || !roomName) {

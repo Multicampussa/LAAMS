@@ -7,7 +7,7 @@ import Stomp from 'stomp-websocket';
 const ManagerChat = () => {
   const location = useLocation();
   const roomId = location.state.roomId;
-  const roomName = location.state.roomName;
+  // const roomName = location.state.roomName;
   const socket = useRef(new SockJS(`${process.env.REACT_APP_SPRING_URL}/ws/chat`));
   const ws = useRef(new Stomp.over(socket.current));
   const reconnect = useRef(0);
@@ -21,7 +21,7 @@ const ManagerChat = () => {
   const sendMessage = useCallback( ()=> {
     ws.current.send("/app/chat/message", {'Authorization': `Bearer ${accessToken}`}, JSON.stringify({type:'TALK', roomId:roomId, sender:null, message}));
     setMessage("");
-  },[roomName,roomId,message,accessToken]);
+  },[roomId,message,accessToken]);
   const recvMessage = useCallback( (recv)=> {
     // this.messages.unshift({"type":recv.type,"sender":recv.type=='ENTER'?'[알림]':recv.sender,"message":recv.message})
     // axios.get(`${process.env.REACT_APP_SPRING_URL}/room/`+roomId).then(response => console.log("TEST",response));
@@ -34,7 +34,6 @@ const ManagerChat = () => {
     ws.current.connect({'Authorization': `Bearer ${accessToken}`}, function(frame) {
       ws.current.subscribe(`/topic/chat/room/alarm`, function(message) {
         const recv = JSON.parse(message.body);
-        console.log("TEST",recv);
         alert(recv.message);
       });
       ws.current.subscribe(`/topic/chat/room/${roomId}`, function(message) {
@@ -51,7 +50,7 @@ const ManagerChat = () => {
             },10*1000);
         }
     });
-  },[accessToken,recvMessage,roomId,roomName])
+  },[accessToken,recvMessage,roomId])
 
   useEffect(()=>{  
     connect();
