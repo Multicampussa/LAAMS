@@ -8,7 +8,7 @@ const useLogin = ()=> {
   const dispatch = useDispatch();
 
   const login = useCallback((id,password,authority,isChecked)=>{
-    axios.post(`${process.env.REACT_APP_SPRING_URL}/api/v1/member/login`,{id,pw :password, authority: authority})
+    axios.post(`${process.env.REACT_APP_SPRING_URL}/member/login`,{id,pw :password, authority: authority})
       .then(({data})=>{
         if(isChecked){
           localStorage.setItem("id", id)
