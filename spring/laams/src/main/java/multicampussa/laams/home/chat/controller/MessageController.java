@@ -45,12 +45,19 @@ public class MessageController {
                 resultMap.put("message", "권한이 없습니다.");
                 return new ResponseEntity<>(resultMap, HttpStatus.UNAUTHORIZED);
             }
+        } else if (authority.equals("ROLE_MANAGER")) {
+            message.setSender("운영자");
+        } else {
+            resultMap.put("message", "권한이 없습니다.");
+            return new ResponseEntity<>(resultMap, HttpStatus.UNAUTHORIZED);
         }
+
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             message.setMessage(id+"님이 입장하였습니다.");
         }
         System.out.println(message.getMessage());
         sendingOperations.convertAndSend("/topic/chat/room/"+message.getRoomId(), message);
+        sendingOperations.convertAndSend("/topic/chat/room/alarm", message);
         messageService.saveMessage(message);
         resultMap.put("message", "성공적으로 전송되었습니다.");
         return new ResponseEntity<>(resultMap, HttpStatus.OK);

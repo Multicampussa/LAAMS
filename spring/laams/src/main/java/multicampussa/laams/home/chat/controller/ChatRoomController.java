@@ -52,6 +52,8 @@ public class ChatRoomController {
             List<ChatRoom> result = new ArrayList<>();
             result.add(chatService.findByRoomName(id));
             return result;
+        } else if (authority.equals("ROLE_CENTER_MANAGER")) {
+            return new ArrayList<>();
         }
 
         return chatService.findAllRoom();

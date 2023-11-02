@@ -50,8 +50,7 @@ public class ChatService {
         List<ChatRoom> rooms = chatRepository.findAll();
         for (ChatRoom room : rooms) {
             if (room.getRoomName().contains(directorId)) {
-                ChatRoom chatRoom = ChatRoom.create(room.getRoomName());
-                return chatRoom;
+                return room;
             };
         }
         if (memberDirectorRepository.existsById(directorId)) {
