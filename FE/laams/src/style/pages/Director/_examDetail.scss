@@ -1,6 +1,6 @@
 .exam-detail{
     width: 100%;
-    height: auto;
+    height: 100%;
     box-sizing: border-box;
     display: flex;
     &-aside{
@@ -201,7 +201,7 @@
 
 @include mobile{
     .exam-detail{
-        height: 100vh;
+        height: auto;
         overflow-y: auto;
         background-color: white;
         display: flex;
