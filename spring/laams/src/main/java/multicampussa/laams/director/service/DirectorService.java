@@ -461,4 +461,22 @@ public class DirectorService {
     }
 
 
+//    @Transactional
+//    public DirectorAttendanceDto attendanceDirectorHome(Long directorNo, DirectorAttendanceRequestDto directorAttendacneRequestDto, String authority, String directorId) {
+//        if(authority.equals("ROLE_DIRECTOR")){
+//            List<Exam> exams = examRepository.findByDirectorId(directorId);
+//            System.out.println(exams);
+//            System.out.println(directorNo); // 아직 안 씀;
+//            // 시험들 중에서 시험 일자가 오늘인 것, 그중 한시간 이내인 것 찾아서 들고옴
+//            // 그 시험의 센터장 위치랑 감독관 현재 위치랑 비교
+//            // 출석 인증 ?
+//            for(Exam exam : exams){
+//                if(exam.getExamDate().)
+//            }
+//
+//        } else {
+//            throw new IllegalArgumentException("접근 권한이 없습니다.");
+//        }
+//    }
+
 }
