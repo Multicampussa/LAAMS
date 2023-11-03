@@ -20,39 +20,14 @@ const DirectorHome = () => {
     return response.data.data.memberNo;
   },[api,userId])
 
+  // TODO :오늘자의 시험(5개) 조회
   const getTodayExamList = useCallback(async(curDate)=>{
     const directorUserNo = await getDirectorInfo();
     await api.get(`director/${directorUserNo}/exams?year=${curDate.getFullYear()}&month=${curDate.getMonth()+1}&day=${curDate.getDate()}`)
     .then(({data})=>{
-      const res = [];
-      console.log(data)
-      data.data.forEach(e=>{
-        const date = new Date(e.examDate);
-        if(res[date.getDate()]){
-          res[date.getDate()].push({
-            centerName : e.centerName,
-            centerRegion : e.centerRegion,
-            examDate : new Date(e.examDate),
-            examType : e.examType,
-            examLanguage : e.examLanguage
-          });
-        }else{
-          res[date.getDate()]=[{
-            centerName : e.centerName,
-            centerRegion : e.centerRegion,
-            examDate : new Date(e.examDate),
-            examType : e.examType,
-            examLanguage : e.examLanguage
-          }];
-        }
-      });
-      if (res.length>=3){
-        setTodayExamList(res.slice(0,3));
-      }else{
-        setTodayExamList(res)
-      }
-
+      setTodayExamList(data.data.slice(0,5))
     }).catch((err)=>{console.log(err)})
+    
   },[setTodayExamList,api,getDirectorInfo])
 
   const getExamList = useCallback(async(date)=>{
@@ -68,7 +43,8 @@ const DirectorHome = () => {
             centerRegion : e.centerRegion,
             examDate : new Date(e.examDate),
             examType : e.examType,
-            examLanguage : e.examLanguage
+            examLanguage : e.examLanguage,
+            examNo: e.examNo
           });
         }else{
           res[date.getDate()]=[{
@@ -76,25 +52,32 @@ const DirectorHome = () => {
             centerRegion : e.centerRegion,
             examDate : new Date(e.examDate),
             examType : e.examType,
-            examLanguage : e.examLanguage
+            examLanguage : e.examLanguage,
+            examNo: e.examNo
           }];
         }
       });
 
       setExamList(res);
+
     }).catch(err=>console.log(err.response));
   },[api,getDirectorInfo]);
 
   //
   const showTodayExamList = useMemo(()=>{
     if(todayExamList.length===0){
-      return <li>오늘의 일정이 없습니다</li>
+      return <li className='director-home-todo-box-items-text'>오늘의 일정이 없습니다</li>
     }else{
       return todayExamList.map((e,index)=>{
-        return <li>[{e.examType}]{e.centerName}({e.centerRegion})</li>
+
+        return <div className='director-home-todo-box-items'>
+                <div className='director-home-todo-box-items-text'
+                onClick={()=>navigate(`/director/exam/${e.examNo}`)}>[{e.examType}]{e.centerName}</div>
+                <div className='director-home-todo-box-items-text-region'>({e.centerRegion})</div>
+              </div>
       })
     }
-  },[todayExamList])
+  },[todayExamList,navigate])
 
   //TODO : 이전 달 호출
   //FIXME : 데이터 갱신
@@ -128,7 +111,6 @@ const DirectorHome = () => {
     api.get('http://k9d101.p.ssafy.io:8080/api/v1/app/notice/list?count=6&page=1')
     .then(({data})=>{
       setNoticeListData(data.data)
-      console.log(data.data)
     })
     .catch((err)=>{
       console.log(err)
@@ -142,19 +124,19 @@ const DirectorHome = () => {
       return noticeListData.map((notice, index) => {
         const createTime = new Date(notice.createdAt);
         const year = createTime.getFullYear();
-        const month = createTime.getMonth();
-        const day = createTime.getDay();
+        const month = createTime.getMonth()<10? '0'+createTime.getMonth():createTime.getMonth();
+        const day = createTime.getDay() <10? '0' + createTime.getDay():createTime.getDay();
         const hours = createTime.getHours() <10? '0'+createTime.getHours():createTime.getHours();
         const min = createTime.getMinutes() <10? '0'+createTime.getMinutes():createTime.getMinutes(); 
         
         return(
-          <li className='director-home-notice-box-items-list'
+          <div className='director-home-notice-box-items'
           onClick={()=>{
             navigate(`/notice/detail/${notice.noticeNo}`)
           }}>
-            <div className='director-home-notice-box-items-list-title'>{notice.title}</div>
-            <div className='director-home-notice-box-items-list-time'>{year}-{month}-{day} {hours}:{min}</div>
-          </li>
+            <div className='director-home-notice-box-items-title'>{notice.title}</div>
+            <div className='director-home-notice-box-items-time'>{year}-{month}-{day} {hours}:{min}</div>
+          </div>
         )
     })
   }
@@ -180,11 +162,9 @@ const DirectorHome = () => {
           <div className='director-home-todo-title'>오늘 일정</div>
           <div className='director-home-todo-box'>
             <button className='director-home-todo-box-btn'>감독관 센터 도착 인증</button>
-            <ul className='director-home--todo-box-items'>
               {
                 showTodayExamList
               }
-            </ul>
           </div>
         </article>
         <article className='director-home-notice'>
@@ -197,11 +177,9 @@ const DirectorHome = () => {
             >+ 더보기</div>
           </div>
           <div className='director-home-notice-box'>
-            <ul className='director-home-notice-box-items'>
             {
               showNotice
             }  
-            </ul> 
           </div>
         </article>
         <button className='director-home-btn-hidden'>감독관 센터 도착 인증</button>
