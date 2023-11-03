@@ -18,11 +18,13 @@ public class CenterExamListDto {
     private LocalDateTime examDate;
     private String examType;
     private String examLanguage;
+    private int confirmDirectorCnt;
 
-    public CenterExamListDto(Exam exam){
+    public CenterExamListDto(Exam exam, int cntConfirmDirector){
         this.examNo  = exam.getNo();
         this.examDate = exam.getExamDate();
         this.examType = exam.getExamType();
         this.examLanguage = exam.getExamLanguage();
+        this.confirmDirectorCnt = cntConfirmDirector;
     }
 }
