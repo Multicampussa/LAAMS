@@ -9,7 +9,7 @@ const ManagerHome = () => {
 
   const getCalendarData = useCallback(async (date)=>{
     if(!date || !api) return;
-    const {data} = await api.get(`manager/dashboard?year=${date.getFullYear()}&month=${date.getMonth()+1}`)
+    const {data} = await api.get(`manager/dashboard/exam?year=${date.getFullYear()}&month=${date.getMonth()+1}`)
     if(data){
       calendarData.current=data.data;
       return true;
