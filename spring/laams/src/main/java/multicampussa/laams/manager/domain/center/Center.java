@@ -3,10 +3,13 @@ package multicampussa.laams.manager.domain.center;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.centerManager.domain.CenterManager;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,4 +33,6 @@ public class Center extends BaseTimeEntity {
     @Column(length = 200)
     private String region;
 
+    @OneToMany(mappedBy = "center")
+    private List<Director> directors = new ArrayList<>();
 }
