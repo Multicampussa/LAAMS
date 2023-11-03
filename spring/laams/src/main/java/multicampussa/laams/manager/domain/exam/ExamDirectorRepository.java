@@ -22,6 +22,10 @@ public interface ExamDirectorRepository extends JpaRepository<ExamDirector, Long
     @Query("SELECT ed FROM ExamDirector ed WHERE DATE(ed.exam.examDate) = :targetDate AND ed.confirm = false")
     List<ExamDirector> findUnconfirmedByDate(@Param("targetDate") java.sql.Date targetDate);
 
+    // 시험 번호와 confirm이 false인 ExamDirector 조회
+    List<ExamDirector> findByExamNoAndConfirm(Long examNo, Boolean confirm);
+
     @Query("select count(*) from ExamDirector ed where ed.exam.no = :no and ed.confirm = true")
     int countByConfirm(Long no);
+
 }
