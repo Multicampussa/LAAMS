@@ -13,10 +13,10 @@ public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long
     List<ExamExaminee> findByExamNo(Long examNo);
 
     // 출석이 true이고 해당 시험 번호의 응시자 전체 조회
-    List<ExamExaminee> findByAttendanceAndExam(Boolean attendance, Long examNo);
+    List<ExamExaminee> findByExamNoAndAttendance(Long examNo, Boolean attendance);
 
     // 보상대상 여부가 true이고 해당 시험 번호의 응시자 전체 조회
-    List<ExamExaminee> findByCompensationAndExam(Boolean compensation, Long examNo);
+    List<ExamExaminee> findByExamNoAndCompensation(Long examNo, Boolean compensation);
 
     // 보상 대상자가 true인 응시자 전체 조회
     List<ExamExaminee> findByCompensation(Boolean compensation);
