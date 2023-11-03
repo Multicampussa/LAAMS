@@ -1,6 +1,25 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import useApi from './../../../Hook/useApi';
 
 const List = () => {
+  const api = useApi();
+  const [rewardData,setRewardData] = useState([]);
+  useEffect(()=>{
+    if(!api) return;
+    api.get("manager/examinees/compensation")
+      .then(({data})=>{setRewardData(data)})
+      .catch(err=>console.log(err.response));
+  },[api]);
+
+  const rewardItems = useMemo(()=>{
+    if(!rewardData) return;
+    return rewardData.map((e,idx)=><li key={idx} className='manager-reward-list-item'>
+    <div>{e.examNo}</div>
+    <div>{e.examineeCode}</div>
+    <div>{e.examineeName}</div>
+    <div>{e.compensationType}</div>
+  </li>);
+  },[rewardData])
 
   return (
     <section className='list'>
@@ -10,33 +29,14 @@ const List = () => {
       <div className='list-box'>
         <ul>
           <li className='manager-reward-list-item'>
-            <div>No</div>
+            <div>시험 번호</div>
+            <div>수험 번호</div>
             <div>이름</div>
-            <div>수험번호</div>
-            <div>감독관</div>
             <div>보상 유형</div>
           </li>
-          <li className='manager-reward-list-item'>
-            <div>1</div>
-            <div>김철수</div>
-            <div>1</div>
-            <div>김감독</div>
-            <div>지각</div>
-          </li>
-          <li className='manager-reward-list-item'>
-            <div>2</div>
-            <div>박경림</div>
-            <div>2</div>
-            <div>김감독</div>
-            <div>서류미비</div>
-          </li>
-        </ul>
-        <ul className='flex-row-center gap-1'>
-          <li><button>처음</button></li>
-          <li><button>이전</button></li>
-          <li><button>1</button></li>
-          <li><button>다음</button></li>
-          <li><button>끝</button></li>
+          {
+            rewardItems
+          }
         </ul>
       </div>
     </section>

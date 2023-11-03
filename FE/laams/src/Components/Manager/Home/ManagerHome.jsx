@@ -9,7 +9,7 @@ const ManagerHome = () => {
 
   const getCalendarData = useCallback(async (date)=>{
     if(!date || !api) return;
-    const {data} = await api.get(`manager/dashboard?year=${date.getFullYear()}&month=${date.getMonth()+1}`)
+    const {data} = await api.get(`manager/dashboard/exam?year=${date.getFullYear()}&month=${date.getMonth()+1}`)
     if(data){
       calendarData.current=data.data;
       return true;
@@ -26,7 +26,7 @@ const ManagerHome = () => {
   //TODO : 초기화
   useEffect(()=>{
     setDateWithSync(new Date());
-  },[setDateWithSync])
+  },[api,setDateWithSync])
 
   //TODO : 이전 달 호출
   //FIXME : 데이터 갱신

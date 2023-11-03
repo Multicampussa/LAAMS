@@ -75,7 +75,7 @@ const Calendar = ({calendarData,curDate,handleNext,handlePrev}) => {
       temp.push(<div className='calendar-day' key={key++}></div>);
     }
     return temp;
-  },[getLastDate,getFirstDate,curDate,calendarData]);
+  },[getLastDate,getFirstDate,curDate,calendarData,handleCalendarItem]);
 
   return (
     <article className='calendar'>
