@@ -63,4 +63,17 @@ public class ChatService {
         chatRepository.save(chatRoom);
         return chatRoom;
     }
+
+    public ChatRoom createNoticeRoom() {
+        List<ChatRoom> rooms = chatRepository.findAll();
+        for (ChatRoom room : rooms) {
+            if (room.getRoomName().contains("Notice")) {
+                return room;
+            };
+        }
+
+        ChatRoom chatRoom = ChatRoom.create("Notice");
+        chatRepository.save(chatRoom);
+        return chatRoom;
+    }
 }

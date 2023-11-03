@@ -31,7 +31,7 @@ public class MessageController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @MessageMapping("/chat/message")
-    @ApiOperation(value = "채팅방 입장 및 메시지 전송")
+    @ApiOperation(value = "일대일 채팅방 입장 및 메시지 전송")
     public ResponseEntity<Map<String, Object>> enter(ChatMessage message, @Header("Authorization") String authorization) {
         if (authorization == null || !authorization.startsWith("Bearer ")) {
             throw new IllegalArgumentException("토큰이 올바르지 않습니다.");
@@ -58,6 +58,38 @@ public class MessageController {
         }
         System.out.println(message.getMessage());
         sendingOperations.convertAndSend("/topic/chat/room/"+message.getRoomId(), message);
+        sendingOperations.convertAndSend("/topic/chat/room/alarm", message);
+        messageService.saveMessage(message);
+        resultMap.put("message", "성공적으로 전송되었습니다.");
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @MessageMapping("/chat/message/notice")
+    @ApiOperation(value = "전체 채팅방 입장 및 메시지 전송")
+    public ResponseEntity<Map<String, Object>> noticeEnter(ChatMessage message, @Header("Authorization") String authorization) {
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("토큰이 올바르지 않습니다.");
+        }
+
+        String token = authorization.replace("Bearer ", "");
+        String id = jwtTokenProvider.getId(token);
+        String authority = jwtTokenProvider.getAuthority(token);
+        Map<String, Object> resultMap = new HashMap<>();
+        if (authority.equals("ROLE_DIRECTOR")) {
+            resultMap.put("message", "권한이 없습니다.");
+            return new ResponseEntity<>(resultMap, HttpStatus.UNAUTHORIZED);
+        } else if (authority.equals("ROLE_MANAGER")) {
+            message.setSender("운영자");
+        } else {
+            resultMap.put("message", "권한이 없습니다.");
+            return new ResponseEntity<>(resultMap, HttpStatus.UNAUTHORIZED);
+        }
+
+        if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
+            message.setMessage(id+"님이 입장하였습니다.");
+        }
+        System.out.println(message.getMessage());
+        sendingOperations.convertAndSend("/topic/chat/room/notice", message);
         sendingOperations.convertAndSend("/topic/chat/room/alarm", message);
         messageService.saveMessage(message);
         resultMap.put("message", "성공적으로 전송되었습니다.");
