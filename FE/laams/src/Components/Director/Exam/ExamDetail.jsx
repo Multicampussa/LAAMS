@@ -226,22 +226,22 @@ const ExamDetail = () => {
       return (
         <li className='director-examinees-list-items' key={index}>
           <div 
-            className='director-examinees-list-items-title' 
+            className='director-examinees-list-items-code' 
             onClick={()=>handleExamineeModal(examinee.examineeNo,params['no'])}>
               {examinee.examineeCode}
           </div>
           <div 
-            className='director-examinees-list-items-title' 
+            className='director-examinees-list-items-name' 
             onClick={()=>handleExamineeModal(examinee.examineeNo,params['no'])}>
               {examinee.examineeName}
           </div>
-            <button 
-              className={`director-examinees-list-items-btn-${examineesData[index].attendance? 'hidden':'show'}`}
-              onClick={()=>{
-                changeAttendance(index);
-              }}>
-              출석
-            </button>
+          <button 
+            className={`director-examinees-list-items-btn-${examineesData[index].attendance? 'hidden':'show'}`}
+            onClick={()=>{
+              changeAttendance(index);
+            }}>
+            출석
+          </button>
           <div className='director-examinees-list-time'>{attendanceFormat(examinee.attendanceTime)} {lateAttendance(examinee)}</div>
           <select 
             className='director-examinees-list-items-select' 
@@ -298,16 +298,16 @@ const ExamDetail = () => {
         <div className='exam-detail-examinees-show'>응시자 목록</div>
         <article className='exam-detail-examinees'>
             <div className='exam-detail-examinees-box'>
+              <ul className='director-examinees-list-title'>
+                <li>수험번호</li>
+                <li>응시자 이름</li>
+                <li>출결 </li>
+                <li>출결 시간</li>
+                <li>서류</li>
+                <li>보상 신청</li>
+                <li>추가 서류</li>
+              </ul>
               <ul className='exam-detail-examinees-list'>
-                <li className='director-examinees-list-items'>
-                  <div>수험번호</div>
-                  <div>응시자 이름</div>
-                  <div>출결 </div>
-                  <div>출결 시간</div>
-                  <div>서류</div>
-                  <div>보상 신청</div>
-                  <div>추가 서류</div>
-                </li>
                 {
                   examineeInfo
                 }
