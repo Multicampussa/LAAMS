@@ -18,18 +18,24 @@ const List = () => {
   //TODO : 지역목록 저장
   useEffect(()=>{
     if(!centerData) return;
-    setLocationData(Object.keys(centerData).reverse());
+    const res = ["전국",...Object.keys(centerData).reverse()];
+    setLocationData(res);
   },[centerData]);
 
   //TODO : 지역목록이 갱신되었을 때 센터 default value 세팅
   useEffect(()=>{
-    if(!location || !centerData || centerData[location].length === 0) return;
-    setCenter(centerData[location][0].centerName);
+    if(!location || !centerData) return;
+    if(location==="전국"){
+      setCenter("전국");
+    }else{
+      setCenter(centerData[location][0]);
+    }
   },[location,centerData]);
 
   //TODO : 센터 Option List 호출
   const centerItems = useMemo(()=>{
     if(!centerData || !location) return [];
+    if(location==="전국") return [<option>전국</option>];
     if(!centerData[location]) return [];
     return centerData[location].map((e,idx)=><option key={idx}>{e.centerName}</option>);
   },[location,centerData]);
@@ -53,7 +59,7 @@ const List = () => {
   //TODO : 시험일정을 불러옴
   const getExamList = useCallback(async(date)=>{
     await api.get(`manager/exam/daily?year=${date.getFullYear()}&month=${date.getMonth()+1}&day=${date.getDate()}`)
-    .then(({data})=>setData(data)).catch(err=>console.log(err.response));
+    .then(({data})=>setData(data)).catch(err=>`console.log`(err.response));
   },[api]);
 
 
@@ -68,7 +74,7 @@ const List = () => {
   const examItems = useMemo(()=>{
     const res = [];
     data.forEach((e,idx)=>{
-      if(e.centerName === center){
+      if(center === "전국") {
         const curDate = new Date(e.examDate);
         res.push(<li onClick={()=>handleExamItem(e.no)} key={idx} className='manager-exam-list-item'>
           <div>{e.no}</div>
@@ -76,6 +82,16 @@ const List = () => {
           <div>{e.centerName}</div>
           <div>{curDate.getHours()}:{curDate.getMinutes()}</div>
         </li>);
+      }else{
+        if(e.centerName === center){
+          const curDate = new Date(e.examDate);
+          res.push(<li onClick={()=>handleExamItem(e.no)} key={idx} className='manager-exam-list-item'>
+            <div>{e.no}</div>
+            <div>{e.examType} {e.examLanguage}</div>
+            <div>{e.centerName}</div>
+            <div>{curDate.getHours()}:{curDate.getMinutes()}</div>
+          </li>);
+        }
       }
     });
     return res;

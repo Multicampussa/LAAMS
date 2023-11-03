@@ -59,9 +59,63 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     word-break: break-all;
+    display: flex;
+    @include desktop{
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    @include tablet{
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    @include mobile{
+      flex-direction: column;
+      justify-content: space-between;
+    }
     &-title{
       font-size: 1.5rem;
       font-weight: 900;
+    }
+    &-icons{
+      display: flex;
+      @include desktop{
+        flex-direction: row;
+      }
+      @include tablet{
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      @include mobile{
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+    }
+    &-errorreport{
+      width: 2rem;
+      height: 1.7rem;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../../assets/images/errorreport.svg");
+    }
+    &-assignment{
+      width: 2rem;
+      height: 1.7rem;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../../assets/images/assignment.svg");
+    }
+    &-compensation{
+      width: 2rem;
+      height: 1.7rem;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../../assets/images/compensation.svg");
     }
   }
   &-content-4{
