@@ -71,8 +71,8 @@ public class ExamService {
     @Transactional(readOnly = true)
     public ExamDetailResponse getExam(Long no) {
         // 전달 받은 시험번호로 시험 조회
-        Exam exam = examRepository.findById(no)
-                .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(no + "번 시험이 존재하지 않습니다."));
+        Exam exam = examRepository.findByNo(no);
+
         // 시험 번호
         Long examNo = exam.getNo();
 
@@ -86,12 +86,12 @@ public class ExamService {
         List<ExamExaminee> examExamineeList = examExamineeRepository.findByExamNo(examNo);
         int examineeNum = examExamineeList.size();
 
-        // 출석한 응시자 전체 조회
-        List<ExamExaminee> attendeeList = examExamineeRepository.findByAttendance(true);
+        // 시험에 출석한 응시자 전체 조회
+        List<ExamExaminee> attendeeList = examExamineeRepository.findByExamNoAndAttendance(examNo, true);
         int attendanceNum = attendeeList.size();
 
-        // 보상 대상자 전체 조회
-        List<ExamExaminee> compensationList = examExamineeRepository.findByCompensation(true);
+        // 시험의 보상 대상자 전체 조회
+        List<ExamExaminee> compensationList = examExamineeRepository.findByExamNoAndCompensation(examNo, true);
         int compensationNum = compensationList.size();
 
         // 시험 번호로 ExamDirector 조회하고 다시 DirectorListResponse 생성
