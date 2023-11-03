@@ -1,5 +1,6 @@
 package multicampussa.laams.home.chat.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.director.domain.director.Director;
@@ -23,7 +24,8 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/chat")
+@RequestMapping("/api/v1/chat")
+@Api(tags = "채팅방 관련")
 public class ChatRoomController {
 
     private final ChatService chatService;
@@ -39,23 +41,34 @@ public class ChatRoomController {
     // 모든 채팅방 목록 반환
     @GetMapping("/rooms")
     @ResponseBody
-    public List<ChatRoom> room() {
+    @ApiOperation(value = "채팅방 리스트")
+    public List<ChatRoom> room(@ApiIgnore @RequestHeader String authorization) {
+        String token = authorization.replace("Bearer ", "");
+        String authority = jwtTokenProvider.getAuthority(token);
+        String id = jwtTokenProvider.getId(token);
+
+
+        if (authority.equals("ROLE_DIRECTOR")) {
+            List<ChatRoom> result = new ArrayList<>();
+            result.add(chatService.findByRoomName(id));
+            return result;
+        } else if (authority.equals("ROLE_CENTER_MANAGER")) {
+            return new ArrayList<>();
+        }
+
         return chatService.findAllRoom();
     }
 
     // 채팅방 생성
     @PostMapping("/room")
     @ApiOperation(value = "채팅방 생성")
-    public ResponseEntity<Map<String, Object>> createRooms() {
-        List<String> directors = memberService.getDirectors();
+    public ResponseEntity<Map<String, Object>> createRooms(@ApiIgnore @RequestHeader String authorization) {
+        String token = authorization.replace("Bearer ", "");
+        String directorId = jwtTokenProvider.getId(token);
 
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            List<ChatRoom> rooms = new ArrayList<>();
-            for (String directorId : directors) {
-                rooms.add(chatService.createRoom(directorId));
-            }
-            resultMap.put("data", rooms);
+            resultMap.put("data", chatService.createRoom(directorId));
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
             return new ResponseEntity<>(resultMap, HttpStatus.OK);

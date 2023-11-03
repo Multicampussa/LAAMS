@@ -64,6 +64,7 @@ public class ManagerDashboardService {
             List<UnprocessedCompensation> unprocessedCompensations = new ArrayList<>();
 
             // currentDate에 해당하는 ExamExaminee 조회
+            // ExamExaminee에 연결된 시험 날짜가 currentDate이고 isCompensation이 false인
             List<ExamExaminee> examExaminees =
                     examExamineeRepository.findUncompensatedByDate(sqlDate);
 
