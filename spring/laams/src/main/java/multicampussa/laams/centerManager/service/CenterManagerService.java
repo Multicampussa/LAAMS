@@ -44,7 +44,8 @@ public class CenterManagerService {
             List<CenterExamListDto> centerExamListDtos = new ArrayList<>();
             List<Exam> exams = centerRepository.findAllByCenterManagerIdContainingMonthAndDay(centerManagerId, year, month, day);
             for(Exam exam : exams){
-                centerExamListDtos.add(new CenterExamListDto(exam));
+                int cntConfirmDirector = examDirectorRepository.countByConfirm(exam.getNo());
+                centerExamListDtos.add(new CenterExamListDto(exam, cntConfirmDirector));
             }
             return centerExamListDtos;
         } else {

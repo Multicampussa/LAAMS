@@ -25,4 +25,7 @@ public interface ExamDirectorRepository extends JpaRepository<ExamDirector, Long
     // 시험 번호와 confirm이 false인 ExamDirector 조회
     List<ExamDirector> findByExamNoAndConfirm(Long examNo, Boolean confirm);
 
+    @Query("select count(*) from ExamDirector ed where ed.exam.no = :no and ed.confirm = true")
+    int countByConfirm(Long no);
+
 }

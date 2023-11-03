@@ -7,6 +7,7 @@ import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.home.member.dto.MemberDto;
 import multicampussa.laams.home.member.dto.MemberSignUpDto;
 import multicampussa.laams.home.member.dto.MemberUpdateDto;
+import multicampussa.laams.manager.domain.center.Center;
 
 import javax.persistence.*;
 
@@ -33,6 +34,10 @@ public class Director extends BaseTimeEntity {
     private String refreshToken;
     private String verificationCode;
     private Boolean isVerified;
+
+    @ManyToOne
+    @JoinColumn(name = "center_no")
+    private Center center;
 
     public void update(MemberSignUpDto memberSignUpDto, String encodedPassword) {
         this.name = memberSignUpDto.getName();
