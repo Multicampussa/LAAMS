@@ -49,8 +49,10 @@ public class ChatRoomController {
 
         List<ChatRoom> result = new ArrayList<>();
         if (authority.equals("ROLE_DIRECTOR")) {
+            String region = chatService.findRegionByDirector(id);
             result.add(chatService.findByRoomName(id));
             result.add(chatService.findByRoomName("Notice"));
+            result.add(chatService.findByRoomName(region));
             return result;
         } else if (authority.equals("ROLE_CENTER_MANAGER")) {
             return result;
@@ -86,6 +88,23 @@ public class ChatRoomController {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             resultMap.put("data", chatService.createNoticeRoom());
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("code", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 지역별 공지 채팅방 생성
+    @PostMapping("/room/notice/region")
+    @ApiOperation(value = "지역별 공지 채팅방 생성")
+    public ResponseEntity<Map<String, Object>> createNoticeRoomByRegion() {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("data", chatService.createNoticeRoomByRegion());
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
             return new ResponseEntity<>(resultMap, HttpStatus.OK);

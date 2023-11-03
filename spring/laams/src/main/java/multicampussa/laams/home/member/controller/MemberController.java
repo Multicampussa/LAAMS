@@ -68,6 +68,8 @@ public class MemberController {
                 response.put("accessTokenExpireTime", jwtTokenProvider.getTokenExpireTime(accessToken));
                 response.put("refreshTokenExpireTime", jwtTokenProvider.getTokenExpireTime(refreshToken));
                 response.put("authority", jwtTokenProvider.getAuthority(accessToken));
+                response.put("centerNo", jwtTokenProvider.getCenterNo(accessToken));
+                response.put("region", jwtTokenProvider.getRegion(accessToken));
             }
             response.put("code", signInResponse.getStatusCodeValue());
             response.put("status", "success");

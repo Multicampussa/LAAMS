@@ -7,6 +7,8 @@ import multicampussa.laams.home.chat.dto.CreateChatRoomDto;
 import multicampussa.laams.home.chat.repository.ChatRepository;
 import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
+import multicampussa.laams.manager.domain.center.Center;
+import multicampussa.laams.manager.domain.center.CenterRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,8 @@ public class ChatService {
 
     private Map<String, ChatRoom> chatRooms;
     private final ChatRepository chatRepository;
-    private final MemberManagerRepository memberManagerRepository;
     private final MemberDirectorRepository memberDirectorRepository;
+    private final CenterRepository centerRepository;
 
     @PostConstruct
     //의존관계 주입완료되면 실행되는 코드
@@ -44,7 +46,7 @@ public class ChatService {
         return chatRepository.findByRoomName(roomName);
     }
 
-    //채팅방 생성
+    // 채팅방 생성
     public ChatRoom createRoom(String directorId) {
         String roomName;
         List<ChatRoom> rooms = chatRepository.findAll();
@@ -64,6 +66,7 @@ public class ChatService {
         return chatRoom;
     }
 
+    // 전체 공지 채팅방 생성
     public ChatRoom createNoticeRoom() {
         List<ChatRoom> rooms = chatRepository.findAll();
         for (ChatRoom room : rooms) {
@@ -75,5 +78,33 @@ public class ChatService {
         ChatRoom chatRoom = ChatRoom.create("Notice");
         chatRepository.save(chatRoom);
         return chatRoom;
+    }
+
+    // 지역별 공지 채팅방 생성
+    public List<ChatRoom> createNoticeRoomByRegion() {
+        List<Center> centers = centerRepository.findAll();
+
+        Set<String> regionSet = new HashSet<>();
+        for (Center center : centers) {
+            regionSet.add(center.getRegion());
+        }
+
+        List<ChatRoom> chatRooms = new ArrayList<>();
+        for (String region : regionSet) {
+            if (chatRepository.existsByRoomName(region)) {
+                chatRooms.add(chatRepository.findByRoomName(region));
+            } else {
+                ChatRoom chatRoom = ChatRoom.create(region);
+                chatRepository.save(chatRoom);
+                chatRooms.add(chatRoom);
+            }
+        }
+
+        return chatRooms;
+    }
+
+    public String findRegionByDirector(String id) {
+        Center center = centerRepository.findByDirectorId(id);
+        return center.getRegion();
     }
 }
