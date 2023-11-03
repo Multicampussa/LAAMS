@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import Calendar from '../../Common/Calendar/Calendar'
+import Calendar from './Calendar'
 import useApi from '../../../Hook/useApi';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -108,7 +108,7 @@ const DirectorHome = () => {
   },[curDate])
 
   const getNotice = useCallback(()=>{
-    api.get('http://k9d101.p.ssafy.io:8080/api/v1/app/notice/list?count=6&page=1')
+    api.get('app/notice/list?count=6&page=1')
     .then(({data})=>{
       setNoticeListData(data.data)
     })
