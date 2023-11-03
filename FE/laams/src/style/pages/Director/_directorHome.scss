@@ -75,7 +75,7 @@
             display: flex;
             justify-content: space-between;
             padding: 1rem 0rem 2rem 0rem;
-            align-items: end;
+            align-items: flex-end;
             &-title{
                 font-size: 3rem;
                 font-weight: 700;
@@ -84,12 +84,50 @@
                 font-size: 2rem;
                 font-weight: 600;
             }
+            &-additional:hover{
+                cursor: pointer;
+                color: $color-blue;
+            }
         }
         &-box{
             width: 100%;
             flex: 1;
             background-color: white;
             border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &-items{
+                width: 90%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                box-sizing: border-box;
+                padding-bottom: 1rem;
+                &-list{
+                    width: 100%;
+                    justify-content: space-between;
+                    display: flex;
+                    flex-direction: row;
+                    height: 4rem;
+                    line-height: 4rem;
+                    border-bottom: 0.1rem solid $color-gray-light;
+                    
+                    &-title{
+                        font-size: 1.8rem;
+                        font-weight: 600;
+                    }
+                    &-time{
+                        font-size: 1.5rem;
+                    }
+                    
+                }
+                &-list:hover{
+                    cursor: pointer;
+                    color: $color-blue;
+                }
+            }
         }
     }
     &-btn-hidden{

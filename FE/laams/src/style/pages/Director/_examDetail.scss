@@ -162,13 +162,10 @@
             }
         }
     }
-    
     &-mobile{
         display: none;
     }
-
 }
-
 @include tablet{
     .exam-detail{
         &-aside{
@@ -193,9 +190,7 @@
                 height: 3rem;
                 font-size: 1.2rem;             
             }
-        }
-
-        
+        }  
     }
 }
 
@@ -304,7 +299,7 @@
             order: 3;
             font-size: 1.5rem;
             font-weight: 600;
-            text-align: end;
+            text-align: flex-end;
             padding: 0;
             
         }
