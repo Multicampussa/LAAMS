@@ -17,6 +17,10 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
     // 시험 no로 조회
     Exam findByNo(Long examNo);
 
+    // 시험 날짜로 조회
+    @Query("SELECT e FROM Exam e WHERE DATE(e.examDate) = :targetDate")
+    List<Exam> findExamByExamDate(java.sql.Date targetDate);
+
     // 센터 번호로 시험 리스트 만들기
     List<Exam> findByCenterNo(Long centerNo);
 
