@@ -85,12 +85,12 @@ public class ExamService {
         List<ExamExaminee> examExamineeList = examExamineeRepository.findByExamNo(examNo);
         int examineeNum = examExamineeList.size();
 
-        // 출석한 응시자 전체 조회
-        List<ExamExaminee> attendeeList = examExamineeRepository.findByAttendance(true);
+        // 시험에 출석한 응시자 전체 조회
+        List<ExamExaminee> attendeeList = examExamineeRepository.findByAttendanceAndExam(true, examNo);
         int attendanceNum = attendeeList.size();
 
-        // 보상 대상자 전체 조회
-        List<ExamExaminee> compensationList = examExamineeRepository.findByCompensation(true);
+        // 시험의 보상 대상자 전체 조회
+        List<ExamExaminee> compensationList = examExamineeRepository.findByCompensationAndExam(true, examNo);
         int compensationNum = compensationList.size();
 
         // 시험 번호로 ExamDirector 조회하고 다시 DirectorListResponse 생성
