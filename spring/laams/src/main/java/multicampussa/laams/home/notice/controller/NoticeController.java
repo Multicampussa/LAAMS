@@ -1,5 +1,7 @@
 package multicampussa.laams.home.notice.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.notice.dto.*;
@@ -16,11 +18,13 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
+@Api(tags = "공지사항 관련 기능")
 public class NoticeController {
 
     private final NoticeService noticeService;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @ApiOperation(value = "공지사항 생성")
     @PostMapping("/notice/create")
     public ResponseEntity<Map<String, Object>> createNotice(@RequestHeader String authorization, @RequestBody NoticeCreateDto noticeCreateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -41,6 +45,7 @@ public class NoticeController {
         }
     }
 
+    @ApiOperation(value = "공지사항 수정")
     @PutMapping("/notice/update")
     public ResponseEntity<Map<String, Object>> updateNotice(@RequestHeader String authorization, @RequestBody NoticeUpdateDto noticeUpdateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -69,6 +74,7 @@ public class NoticeController {
         }
     }
 
+    @ApiOperation(value = "공지사항 삭제")
     @DeleteMapping("/notice/delete/{noticeNo}")
     public ResponseEntity<Map<String, Object>> deleteNotice(@RequestHeader String authorization, @PathVariable Long noticeNo) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -91,6 +97,7 @@ public class NoticeController {
     }
 
     // 특정 페이지 전체 공지사항 리스트 불러오기
+    @ApiOperation(value = "공지사항 페이지네이션 된 리스트 불러오기")
     @GetMapping("/notice/list")
     public ResponseEntity<Map<String, Object>> getNoticeList(@RequestParam(value = "count", defaultValue = "10") int count, @RequestParam(value = "page", defaultValue = "1") int page) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -110,6 +117,7 @@ public class NoticeController {
     }
 
     // 공지사항 상세조회
+    @ApiOperation(value = "공지사항 상세 조회")
     @GetMapping("/notice/detail/{noticeNo}")
     public ResponseEntity<Map<String, Object>> getNoticeDetail(@PathVariable Long noticeNo) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -129,6 +137,7 @@ public class NoticeController {
     }
 
     // 공지사항 전체 개수 조회
+    @ApiOperation(value = "공지사항 총 개수 조회")
     @GetMapping("/notice/count")
     public ResponseEntity<Map<String, Object>> getNoticeCount() {
         Map<String, Object> resultMap = new HashMap<String, Object>();
