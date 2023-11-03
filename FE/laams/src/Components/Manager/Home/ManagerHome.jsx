@@ -1,46 +1,32 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Calendar from './Calendar'
 import useApi from '../../../Hook/useApi';
 
 const ManagerHome = () => {
-  const [examList,setExamList] = useState();
+  const calendarData = useRef();
   const api = useApi();
-  const [curDate,setCurDate] = useState(new Date());
+  const [curDate,setCurDate] = useState();
 
-
-  const getExamList = useCallback(async(date)=>{
-    await api.get(`manager/exam/monthly?year=${date.getFullYear()}&month=${date.getMonth()+1}`)
-    .then(({data})=>{
-      const res = {};
-      data.forEach(e=>{
-        const date = new Date(e.examDate);
-        if(res[date.getDate()]){
-          res[date.getDate()].push({
-            centerName : e.centerName,
-            examDate : new Date(e.examDate),
-            managerName: e.managerName,
-            examType : e.examType,
-            examLanguage : e.examLanguage
-          });
-        }else{
-          res[date.getDate()]=[{
-            centerName : e.centerName,
-            examDate : new Date(e.examDate),
-            managerName: e.managerName,
-            examType : e.examType,
-            examLanguage : e.examLanguage
-          }];
-        }
-      });
-
-      setExamList(res);
-    }).catch(err=>console.log(err.response));
+  const getCalendarData = useCallback(async (date)=>{
+    if(!date || !api) return;
+    const {data} = await api.get(`manager/dashboard?year=${date.getFullYear()}&month=${date.getMonth()+1}`)
+    if(data){
+      calendarData.current=data.data;
+      return true;
+    }
   },[api]);
 
+  const setDateWithSync = useCallback(async(date)=>{
+    const res = await getCalendarData(date);
+    if(res){
+      setCurDate(date);
+    }
+  },[getCalendarData])
+
+  //TODO : 초기화
   useEffect(()=>{
-    if(!curDate) return;
-    getExamList(curDate);
-  },[getExamList,curDate]);
+    setDateWithSync(new Date());
+  },[setDateWithSync])
 
   //TODO : 이전 달 호출
   //FIXME : 데이터 갱신
@@ -53,8 +39,8 @@ const ManagerHome = () => {
     }else{
       month--;
     }
-    setCurDate(new Date(year,month,1));
-  },[curDate]);
+    setDateWithSync(new Date(year,month,1));
+  },[curDate,setDateWithSync]);
 
   //TODO : 다음달 호출
   //FIXME : 데이터 갱신
@@ -67,12 +53,12 @@ const ManagerHome = () => {
     }else{
       month++;
     }
-    setCurDate(new Date(year,month,1));
-  },[curDate])
+    setDateWithSync(new Date(year,month,1));
+  },[curDate,setDateWithSync])
 
   return (
     <section className='manager-home'>
-      <Calendar handleNext={handleNext} handlePrev={handlePrev} curDate={curDate} examList={examList}></Calendar>
+      <Calendar handleNext={handleNext} handlePrev={handlePrev} curDate={curDate} calendarData={calendarData}></Calendar>
     </section>
   )
 }
