@@ -103,8 +103,32 @@ public class ChatService {
         return chatRooms;
     }
 
+    // 감독관 ID로 해당 감독관이 담당하는 지역 찾기
     public String findRegionByDirector(String id) {
         Center center = centerRepository.findByDirectorId(id);
         return center.getRegion();
+    }
+
+    // 센터별 공지 채팅방 생성
+    public List<ChatRoom> createNoticeRoomByCenter() {
+        List<Center> centers = centerRepository.findAll();
+
+        List<ChatRoom> chatRooms = new ArrayList<>();
+        for (Center center : centers) {
+            if (chatRepository.existsByRoomName(center.getName())) {
+                chatRooms.add(chatRepository.findByRoomName(center.getName()));
+            } else {
+                ChatRoom chatRoom = ChatRoom.create(center.getName());
+                chatRepository.save(chatRoom);
+                chatRooms.add(chatRoom);
+            }
+        }
+
+        return chatRooms;
+    }
+
+    public String findCenterNameByDirector(String id) {
+        Center center = centerRepository.findByDirectorId(id);
+        return center.getName();
     }
 }
