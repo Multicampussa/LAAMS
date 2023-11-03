@@ -71,8 +71,7 @@ public class ExamService {
     @Transactional(readOnly = true)
     public ExamDetailResponse getExam(Long no) {
         // 전달 받은 시험번호로 시험 조회
-        Exam exam = examRepository.findById(no)
-                .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(no + "번 시험이 존재하지 않습니다."));
+        Exam exam = examRepository.findByNo(no);
         // 시험 번호
         Long examNo = exam.getNo();
 
