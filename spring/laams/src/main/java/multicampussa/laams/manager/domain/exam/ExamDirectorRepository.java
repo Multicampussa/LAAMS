@@ -18,7 +18,8 @@ public interface ExamDirectorRepository extends JpaRepository<ExamDirector, Long
     // 시험 no과 감독 no로 조회
     ExamDirector findByExamNoAndDirectorNo(Long examNo, Long directorNo);
 
-    @Query("SELECT ed FROM ExamDirector ed WHERE DATE(ed.createdAt) = :targetDate AND ed.confirm = false")
+    // ExamDirector와 연결된 시험의 날짜와 confirm이 false인 것들 조회
+    @Query("SELECT ed FROM ExamDirector ed WHERE DATE(ed.exam.examDate) = :targetDate AND ed.confirm = false")
     List<ExamDirector> findUnconfirmedByDate(@Param("targetDate") java.sql.Date targetDate);
 
 }
