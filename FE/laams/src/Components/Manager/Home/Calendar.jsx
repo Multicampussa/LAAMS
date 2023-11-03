@@ -1,7 +1,10 @@
 import React, { useCallback, useMemo } from 'react'
+import { useDispatch } from 'react-redux';
+import { setModalShow, setModalType } from '../../../redux/actions/modalAction';
+import { setManagerCalendarDetail } from '../../../redux/actions/managerCalendarDetailAction';
 
 /*
-examList : 한달간 시험목록 (Object)
+calendarData : 확인해야할 목록 (한달) (Object)
   key : day
   value : 해당 날의 시험목록 (List)
 curDate : 현재 날짜
@@ -9,6 +12,7 @@ handleNext : 다음 달 호출 함수
 handlePrev : 이전 달 호출 함수
 */
 const Calendar = ({calendarData,curDate,handleNext,handlePrev}) => {
+  const dispatch = useDispatch();
   //TODO : 해당 달의 첫날 반환
   const getFirstDate = useCallback((date)=>{
     return new Date(date.getFullYear(),(date.getMonth()),1);
@@ -29,6 +33,14 @@ const Calendar = ({calendarData,curDate,handleNext,handlePrev}) => {
     return Math.ceil((currentDate + firstDay) / 7);
   },[curDate,getLastDate,getFirstDate]);
   
+  //TODO : 상세보기 모달 호출
+  const handleCalendarItem = useCallback((idx,date)=>{
+    if(!calendarData){ return;}
+    dispatch(setManagerCalendarDetail({...calendarData.current[idx-1],date}));
+    dispatch(setModalType("manager-calendar-detail"));
+    dispatch(setModalShow(true));
+  },[calendarData,dispatch])
+
   //TODO : 달력 Div를 반환
   const calendarItems = useMemo(()=>{
     let date = curDate;
@@ -44,7 +56,7 @@ const Calendar = ({calendarData,curDate,handleNext,handlePrev}) => {
     for(let i = 1,iEnd=lastDate.getDate(); i <= iEnd; i++){
       const week = (firstDate.getDay()+i)%7;
       
-      temp.push(<div className='calendar-day' key={key++}>
+      temp.push(<div onClick={()=>handleCalendarItem(i,new Date(curDate.getFullYear(),curDate.getMonth(),i))} className='calendar-day' key={key++}>
         <div className={week===0||week===1?"calendar-week-title":'calendar-day-title'}>{i}</div>
         <div className='calendar-day-icons'>
           {
