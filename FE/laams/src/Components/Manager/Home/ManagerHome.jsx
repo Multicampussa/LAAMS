@@ -26,7 +26,7 @@ const ManagerHome = () => {
   //TODO : 초기화
   useEffect(()=>{
     setDateWithSync(new Date());
-  },[setDateWithSync])
+  },[api,setDateWithSync])
 
   //TODO : 이전 달 호출
   //FIXME : 데이터 갱신

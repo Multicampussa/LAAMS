@@ -12,7 +12,10 @@ const useApi = () => {
   api.current.interceptors.request.use(
     async (config)=>{
       if (!user.accessToken) {
-        config.headers.authorization = null;
+        alert("로그인 해주세요!");
+        localStorage.clear();
+        navigate("/");
+        return Promise.reject(401);
       }else{
         if (new Date(user.accessTokenExpireTime) > new Date()) {
           config.headers.authorization = `Bearer ${user.accessToken}`;
