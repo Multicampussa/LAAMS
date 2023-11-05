@@ -82,9 +82,9 @@ const Header = () => {
             <span></span>
             <div className='hidden-text'>MENU</div>
           </button>
-          <Alram />
         </div>
       </header>
+      <Alram />
       <div className={`header-menu-box-${menu}`}>
         {
           menuItems

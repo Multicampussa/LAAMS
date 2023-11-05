@@ -12,9 +12,9 @@ const useApi = () => {
   api.current.interceptors.request.use(
     async (config)=>{
       if (!user.accessToken) {
-        alert("로그인 해주세요!");
         localStorage.clear();
         navigate("/");
+        window.location.reload();
         return Promise.reject(401);
       }else{
         if (new Date(user.accessTokenExpireTime) > new Date()) {
@@ -51,6 +51,7 @@ const useApi = () => {
           alert(response.data.message);
           localStorage.clear();
           navigate("/");
+          window.location.reload();
           return Promise.reject(401);
         case "l002":
           const refreshTokenExpireTime = localStorage.getItem("refreshTokenExpireTime");
