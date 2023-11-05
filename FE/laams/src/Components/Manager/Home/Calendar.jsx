@@ -55,7 +55,6 @@ const Calendar = ({calendarData,curDate,handleNext,handlePrev}) => {
     
     for(let i = 1,iEnd=lastDate.getDate(); i <= iEnd; i++){
       const week = (firstDate.getDay()+i)%7;
-      console.log(calendarData.current);
       temp.push(<div onClick={()=>handleCalendarItem(i,new Date(curDate.getFullYear(),curDate.getMonth(),i))} className='calendar-day' key={key++}>
         <div className={week===0||week===1?"calendar-week-title":'calendar-day-title'}>{i}</div>
         <div className='calendar-day-icons'>
