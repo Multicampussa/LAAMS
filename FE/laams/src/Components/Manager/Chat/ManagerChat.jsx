@@ -29,15 +29,15 @@ const ManagerChat = () => {
     setMessageList((e)=>[...e,`${recv.sender} : ${recv.message}`]);
   },[])
 
+  const disconnect = useCallback(()=>{
+    ws.current.unsubscribe(`/topic/chat/room/${roomId}`);
+  },[roomId]);
+
   
   const connect = useCallback(() =>{
     if(!roomId) return;
     // pub/sub event
     ws.current.connect({'Authorization': `Bearer ${accessToken}`}, function(frame) {
-      ws.current.subscribe(`/topic/chat/room/alarm`, function(message) {
-        const recv = JSON.parse(message.body);
-        // alert(recv.message);
-      });
       ws.current.subscribe(`/topic/chat/room/${roomId}`, function(message) {
         const recv = JSON.parse(message.body);
         recvMessage(recv);
@@ -59,7 +59,10 @@ const ManagerChat = () => {
 
   useEffect(()=>{  
     connect();
-  },[connect]);
+    return ()=>{
+      disconnect();
+    }
+  },[connect,disconnect]);
 
   const messageItems = useMemo(()=>{
     return messageList.map((e,idx)=><li key={idx}>{e}</li>)
