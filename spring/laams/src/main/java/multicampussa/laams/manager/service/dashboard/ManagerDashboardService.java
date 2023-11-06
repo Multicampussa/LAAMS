@@ -127,7 +127,7 @@ public class ManagerDashboardService {
                     boolean allConfirmedFalse = true;
                     for (ExamDirector examDirector : examDirectorList) {
                         // 하나라도 true면 confirm이 false 가정이 틀렸다고 하고 다음 Exam 검증
-                        if (examDirector.getConfirm() == true) {
+                        if (examDirector.getConfirm().equals("승인")) {
                             allConfirmedFalse = false;
                             break;
                         }
