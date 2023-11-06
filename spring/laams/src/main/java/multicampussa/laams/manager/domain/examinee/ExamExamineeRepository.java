@@ -40,7 +40,7 @@ public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long
 //    int countByDocument(Long examNo);
 
     // 생성날짜와 보상여부로 조회
-    @Query("SELECT ee FROM ExamExaminee ee WHERE DATE(ee.exam.examDate) = :targetDate AND ee.compensation = true AND ee.isCompensation = false")
+    @Query("SELECT ee FROM ExamExaminee ee WHERE DATE(ee.exam.examDate) = :targetDate AND ee.compensation = true AND ee.isCompensation = '보상_대기'")
     List<ExamExaminee> findUncompensatedByDate(@Param("targetDate") java.sql.Date targetDate);
 }
 
