@@ -20,6 +20,7 @@ import DirectorChat from '../Director/Chat/DirectorChat.jsx';
 import ManagerChat from '../Manager/Chat/ManagerChat.jsx';
 import ManagerRoom from '../Manager/Chat/ManagerRoom.jsx';
 import CreateErrorReport from '../Director/ErrorReport/CreateErrorReport.jsx';
+import ManagerErrorReport from "../Manager/ErrorReport/Detail.jsx";
 const Router = () => {
   return (
     <>
@@ -67,6 +68,12 @@ const Router = () => {
             path='/manager/error-report'
             element={
               <PrivateRoute role="manager" children={<ManagerErrorReportList/>}></PrivateRoute>
+            }
+          />
+          <Route
+            path='/manager/error-report/:errorreportNo'
+            element={
+              <PrivateRoute role="manager" children={<ManagerErrorReport/>}></PrivateRoute>
             }
           />
           <Route
