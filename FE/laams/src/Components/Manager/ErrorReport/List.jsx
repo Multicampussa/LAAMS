@@ -1,6 +1,30 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import useApi from '../../../Hook/useApi';
+import { Link } from 'react-router-dom';
 
 const List = () => {
+  const [errorReport,setErrorReport] = useState([]);
+  const api = useApi();
+
+  useEffect(()=>{
+    api.get("manager/errorreport")
+      .then(({data})=>setErrorReport(data))
+      .catch((err)=>console.log(err.response));
+  },[api]);
+
+  const errorReportItems = useMemo(()=>{
+    return errorReport.map((e,idx)=>{
+      const errorTime = new Date(e.errorTime);
+      return <Link key={idx} to={`/manager/error-report/${e.errorReportNo}`}>
+      <li className='manager-errorreport-list-item'>
+        <div>{e.errorReportNo}</div>
+        <div>{e.title}</div>
+        <div>{e.errorType}</div>
+        <div>{e.directorName}</div>
+        <div>{`${errorTime.getFullYear()}.${errorTime.getMonth()+1}.${errorTime.getDate()}`}</div>
+      </li></Link>
+    });
+  },[errorReport]);
 
   return (
     <section className='list'>
@@ -9,27 +33,16 @@ const List = () => {
       </div>
       <div className='list-box'>
         <ul>
-          <li className='manager-errorreport-list-item'>
+          <li className='manager-errorreport-list-title'>
             <div>No</div>
             <div>제목</div>
             <div>에러 유형</div>
             <div>감독관</div>
             <div>발생시간</div>
           </li>
-          <li className='manager-errorreport-list-item'>
-            <div>1</div>
-            <div>헤드셋 고장 발생한 에러보고합니다</div>
-            <div>장비오류</div>
-            <div>김철수</div>
-            <div>9:00-10:00</div>
-          </li>
-          <li className='manager-errorreport-list-item'>
-            <div>2</div>
-            <div>헤드셋 고장 발생한 에러보고합니다</div>
-            <div>장비오류</div>
-            <div>김철수</div>
-            <div>9:00-10:00</div>
-          </li>
+          {
+            errorReportItems
+          }
         </ul>
         <ul className='flex-row-center gap-1'>
           <li><button>처음</button></li>

@@ -23,12 +23,16 @@ const List = () => {
 
   const compensationItems = useMemo(()=>{
     if(!compensationData) return;
-    return compensationData.map((e,idx)=><li onClick={()=>handleItem(e.examineeCode)} key={idx} className='manager-compensation-list-item'>
-    <div>{e.examNo}</div>
-    <div>{e.examineeCode}</div>
-    <div>{e.examineeName}</div>
-    <div>{e.compensationType}</div>
-  </li>);
+    return compensationData.map((e,idx)=>{
+      const examDate = new Date(e.examDate);
+      return <li onClick={()=>handleItem(e.examineeCode)} key={idx} className='manager-compensation-list-item'>
+        <div>{e.examNo}</div>
+        <div>{e.examineeCode}</div>
+        <div>{e.examineeName}</div>
+        <div>{e.compensationType}</div>
+        <div>{`${examDate.getFullYear()}.${examDate.getMonth()+1}.${examDate.getDate()}`}</div>
+      </li>
+    });
   },[compensationData,handleItem])
 
   return (
@@ -43,6 +47,7 @@ const List = () => {
             <div>수험 번호</div>
             <div>이름</div>
             <div>보상 유형</div>
+            <div>요청 날짜</div>
           </li>
           {
             compensationItems
