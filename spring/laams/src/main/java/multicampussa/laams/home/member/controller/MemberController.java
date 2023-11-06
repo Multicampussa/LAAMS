@@ -63,16 +63,22 @@ public class MemberController {
             Map<String, Object> response = signInResponse.getBody();
             String authority = jwtTokenProvider.getAuthority(accessToken);
 
-            if (signInResponse.getStatusCodeValue() == 200) {
-                response.put("accessToken", accessToken);
-                response.put("refreshToken", refreshToken);
-                response.put("accessTokenExpireTime", jwtTokenProvider.getTokenExpireTime(accessToken));
-                response.put("refreshTokenExpireTime", jwtTokenProvider.getTokenExpireTime(refreshToken));
-                response.put("authority", authority);
-                if (authority.equals("ROLE_DIRECTOR")) {
-                    response.put("centerNo", jwtTokenProvider.getCenterNo(accessToken));
-                    response.put("region", jwtTokenProvider.getRegion(accessToken));
+            try {
+                if (signInResponse.getStatusCodeValue() == 200) {
+                    response.put("accessToken", accessToken);
+                    response.put("refreshToken", refreshToken);
+                    response.put("accessTokenExpireTime", jwtTokenProvider.getTokenExpireTime(accessToken));
+                    response.put("refreshTokenExpireTime", jwtTokenProvider.getTokenExpireTime(refreshToken));
+                    response.put("authority", authority);
+                    if (authority.equals("ROLE_DIRECTOR")) {
+                        response.put("centerNo", jwtTokenProvider.getCenterNo(accessToken));
+                        response.put("region", jwtTokenProvider.getRegion(accessToken));
+                    }
                 }
+            } catch (Exception e) {
+                response.put("code", HttpStatus.NOT_FOUND.value());
+                response.put("message", "센터가 배정되지 않은 감독관입니다.");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
             response.put("code", signInResponse.getStatusCodeValue());
             response.put("status", "success");
