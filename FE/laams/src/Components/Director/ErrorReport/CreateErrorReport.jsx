@@ -49,7 +49,7 @@ const CreateErrorReport = () => {
             <div className='create-errorreport-text'>에러 리포트</div>
             <div className='create-errorreport-box'>
                 <div className='create-errorreport-box-selects'>
-                <select className='create-errorreport-select' onChange={
+                <select defaultValue="--에러 유형--" className='create-errorreport-select' onChange={
                 e=>{
                     setErrorData(prevState=>({
                         ...prevState,
@@ -57,7 +57,7 @@ const CreateErrorReport = () => {
                     }))
                 }
                 }>
-                    <option selected disabled>--에러 유형--</option>
+                    <option disabled>--에러 유형--</option>
                     <option value="네트워크">네트워크</option>
                     <option value="장비문제">장비 문제</option>
                     <option value="기타">기타</option>

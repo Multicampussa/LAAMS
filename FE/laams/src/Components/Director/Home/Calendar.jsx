@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { useDispatch } from 'react-redux';
-import { setModalShow } from '../../../redux/actions/modalAction';
+import { setModalShow, setModalType } from '../../../redux/actions/modalAction';
+import { setExamList } from '../../../redux/actions/directorCalendarExamListAction';
 
 /*
 examList : 한달간 시험목록 (Object)
@@ -34,8 +35,12 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
 
   // TODO : 달력 아이템 클릭 함수
   const handleExamModal = useCallback((e)=>{
-    console.log(e)
-    // dispatch(setModalType("examinee-detail"));
+    if(!e){
+      dispatch(setExamList([]))
+      return
+    }
+    dispatch(setExamList(e))
+    dispatch(setModalType("director-calendar-detail"));
     dispatch(setModalShow(true));
   },[dispatch])
   
