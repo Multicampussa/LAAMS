@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
 import { setUserClear } from '../../redux/actions/userAction';
+import Alram from './Alram/Alram';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const Header = () => {
     localStorage.clear();
     dispatch(setUserClear(null));
     navigate("/",{replace:true});
+    window.location.reload();
   },[dispatch,navigate]);
   const handleMenuItem = useCallback(()=>{
     setMenu("close");
@@ -80,11 +82,9 @@ const Header = () => {
             <span></span>
             <div className='hidden-text'>MENU</div>
           </button>
-          <button className='header-bell'>
-            <div className='hidden-text'>BELL</div>
-          </button>
         </div>
       </header>
+      <Alram />
       <div className={`header-menu-box-${menu}`}>
         {
           menuItems
