@@ -26,6 +26,22 @@
     gap: 2rem;
     flex-wrap: nowrap;
   }
+  &-assignment{
+    box-sizing: border-box;
+    width: 100%;
+    height: 7rem;
+    padding-left: 7rem;
+    border: 1px solid black;
+    background-image: url("../../../assets/images/assignment.svg");
+    background-repeat: no-repeat;
+    background-size: 4rem;
+    background-position: 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
   &-errorreport{
     box-sizing: border-box;
     width: 100%;
