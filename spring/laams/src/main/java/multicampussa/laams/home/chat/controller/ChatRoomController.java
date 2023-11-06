@@ -25,7 +25,7 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/chat")
-@Api(tags = "채팅방 관련")
+@Api(tags = "채팅방 관련 기능")
 public class ChatRoomController {
 
     private final ChatService chatService;
@@ -47,21 +47,25 @@ public class ChatRoomController {
         String authority = jwtTokenProvider.getAuthority(token);
         String id = jwtTokenProvider.getId(token);
 
-
+        List<ChatRoom> result = new ArrayList<>();
         if (authority.equals("ROLE_DIRECTOR")) {
-            List<ChatRoom> result = new ArrayList<>();
+            String region = chatService.findRegionByDirector(id);
+            String centerName = chatService.findCenterNameByDirector(id);
             result.add(chatService.findByRoomName(id));
+            result.add(chatService.findByRoomName("Notice"));
+            result.add(chatService.findByRoomName(region));
+            result.add(chatService.findByRoomName(centerName));
             return result;
         } else if (authority.equals("ROLE_CENTER_MANAGER")) {
-            return new ArrayList<>();
+            return result;
         }
 
         return chatService.findAllRoom();
     }
 
-    // 채팅방 생성
+    // 일대일 채팅방 생성
     @PostMapping("/room")
-    @ApiOperation(value = "채팅방 생성")
+    @ApiOperation(value = "일대일 채팅방 생성")
     public ResponseEntity<Map<String, Object>> createRooms(@ApiIgnore @RequestHeader String authorization) {
         String token = authorization.replace("Bearer ", "");
         String directorId = jwtTokenProvider.getId(token);
@@ -69,6 +73,57 @@ public class ChatRoomController {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             resultMap.put("data", chatService.createRoom(directorId));
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("code", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 전체 공지 채팅방 생성
+    @PostMapping("/room/notice")
+    @ApiOperation(value = "전체 공지 채팅방 생성")
+    public ResponseEntity<Map<String, Object>> createNoticeRoom() {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("data", chatService.createNoticeRoom());
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("code", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 지역별 공지 채팅방 생성
+    @PostMapping("/room/notice/region")
+    @ApiOperation(value = "지역별 공지 채팅방 생성")
+    public ResponseEntity<Map<String, Object>> createNoticeRoomByRegion() {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("data", chatService.createNoticeRoomByRegion());
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("code", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 센터별 공지 채팅방 생성
+    @PostMapping("/room/notice/center")
+    @ApiOperation(value = "센터별 공지 채팅방 생성")
+    public ResponseEntity<Map<String, Object>> createNoticeRoomByCenter() {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("data", chatService.createNoticeRoomByCenter());
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
