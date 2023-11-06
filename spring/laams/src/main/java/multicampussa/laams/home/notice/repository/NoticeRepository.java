@@ -28,7 +28,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
             "LIMIT 1, 10;", nativeQuery = true)
     List<Test> getNoticeList(@Param("count") int count, @Param("page") int page);
 
-    @Query("select n from Notice n join fetch n.manager order by n.createdAt desc")
+    @Query("select n from Notice n join fetch n.manager where n.isDelete = false order by n.createdAt desc")
     List<Notice> findNoticeWithManagerSortByCreatedAt(Pageable pageable);
     List<Notice> findAll();
 
