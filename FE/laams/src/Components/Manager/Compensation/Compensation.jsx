@@ -23,6 +23,14 @@ const ExamCompensation = () => {
                   <div className='compensation-container-box-item'>김감독</div>
                 </div>
                 <div className='compensation-container-box-row'>
+                  <div className='compensation-container-box-title'>보상 대상</div>
+                  <div className='compensation-container-box-item'>김보상</div>
+                </div>
+                <div className='compensation-container-box-row'>
+                  <div className='compensation-container-box-title'>수험 번호</div>
+                  <div className='compensation-container-box-item'>{examineeNo}</div>
+                </div>
+                <div className='compensation-container-box-row'>
                   <div className='compensation-container-box-title'>장소</div>
                   <div className='compensation-container-box-item'>서울 SSAPIc센터</div>
                 </div>
