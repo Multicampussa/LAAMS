@@ -66,7 +66,11 @@ const DirectorHome = () => {
   //
   const showTodayExamList = useMemo(()=>{
     if(todayExamList.length===0){
-      return <li className='director-home-todo-box-items-text'>오늘의 일정이 없습니다</li>
+      
+      return <div className='director-home-todo-box-items'>
+              <div className='director-home-todo-box-items-text'>오늘의 일정이 없습니다</div>
+            </div>
+
     }else{
       return todayExamList.map((e,index)=>{
 
@@ -143,9 +147,10 @@ const DirectorHome = () => {
   },[noticeListData,navigate])
   
   useEffect(()=>{
+    const today =  new Date();
     if(!curDate) return;
     getExamList(curDate);
-    getTodayExamList(curDate);
+    getTodayExamList(today);
     getNotice();
   },[getNotice,getExamList,curDate,getTodayExamList]);
 
