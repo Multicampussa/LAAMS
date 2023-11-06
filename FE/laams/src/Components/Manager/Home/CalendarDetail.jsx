@@ -1,22 +1,49 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { useSelector } from 'react-redux'
-
+import { useSelector,useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom';
+import { setModalShow, setModalType } from './../../../redux/actions/modalAction';
+import { setExamNo } from './../../../redux/actions/managerExamDetailAction';
+import { setManagerCompensationNo } from '../../../redux/actions/managerCompensationAction';
 const CalendarDetail = () => {
   const calendarData = useSelector(state=>state.ManagerCalendarDetail);
+  const dispatch = useDispatch();
+  const handleClose = useCallback(()=>{
+    dispatch(setModalShow(false));
+  },[dispatch]);
 
-  useEffect(()=>{console.log(calendarData)},[calendarData]);
+  const handleAssignment=useCallback((examNo)=>{
+    dispatch(setExamNo(examNo));
+    dispatch(setModalType("exam-detail"));
+  },[dispatch])
+
+  const handleCompensation=useCallback((compensationNo)=>{
+    dispatch(setManagerCompensationNo(compensationNo));
+    dispatch(setModalType("manager-compensation"));
+  },[dispatch])
 
   const calendarDetailIems = useMemo(()=>{
     const res = [];
     let key = 0;
-    calendarData.dailyDashboardErrorReports.forEach(e=>res.push(<li className='manager-calendar-detail-errorreport' key={key++}>
-      <div className='manager-calendar-detail-item-title'>에러리포트 : {e.title}</div>
-      <div className='manager-calendar-detail-item-name'>{e.directorName}</div>
-    </li>));
-    calendarData.unprocessedCompensations.forEach(e=>res.push(<li className='manager-calendar-detail-compensation' key={key++}>
-      <div className='manager-calendar-detail-item-title'>보상 미처리 : {e.compensationType}</div>
-      <div className='manager-calendar-detail-item-name'>{e.examineeName}</div>
-    </li>))
+    calendarData.unassignedExams.forEach(e=>res.push(
+      <li onClick={()=>handleAssignment(e.examNo)} key={key++} className='manager-calendar-detail-assignment' >
+        <div className='manager-calendar-detail-item-title'>감독관 미배정 : {e.examType}</div>
+        <div className='manager-calendar-detail-item-name'>{`${e.centerName} ${e.centerManagerName}`}</div>
+      </li>
+    ));
+    calendarData.dailyDashboardErrorReports.forEach(e=>res.push(
+      <Link onClick={handleClose} key={key++} to={`/manager/error-report/${e.errorReportNo}`}>
+        <li className='manager-calendar-detail-errorreport' >
+          <div className='manager-calendar-detail-item-title'>에러리포트 : {e.title}</div>
+          <div className='manager-calendar-detail-item-name'>{e.directorName}</div>
+        </li>
+      </Link>
+    ));
+    calendarData.unprocessedCompensations.forEach(e=>res.push(
+      <li onClick={()=>handleCompensation(e.examineeNo)} key={key++} className='manager-calendar-detail-compensation' >
+        <div className='manager-calendar-detail-item-title'>보상 미처리 : {e.compensationType}</div>
+        <div className='manager-calendar-detail-item-name'>{e.examineeName}</div>
+      </li>
+    ))
 
     return res;
   },[calendarData]);
