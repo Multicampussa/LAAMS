@@ -233,10 +233,11 @@ public class DirectorController {
             String token = authorization.replace("Bearer", "");
             String authority = jwtTokenProvider.getAuthority(token);
             String directorId = jwtTokenProvider.getId(token);
+            Long centerNo = jwtTokenProvider.getCenterNo(token);
 
             Long examPk = examNo.get("examNo");
 
-            directorService.requestExamAssignment(examPk, authority, directorId);
+            directorService.requestExamAssignment(examPk, authority, directorId, centerNo);
             resultMap.put("message", "감독관의 시험 배정 요청이 정상적으로 처리 되었습니다.");
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
@@ -291,6 +292,28 @@ public class DirectorController {
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @ApiOperation(value = "감독관 센터 도착 인증 (홈화면)")
+//    @PostMapping("/exams/{directorNo}/attendance/home")
+//    public ResponseEntity<Map<String, Object>> attendanceDirectorHome(@RequestHeader String authorization, @PathVariable Long directorNo, @RequestBody DirectorAttendanceRequestDto directorAttendacneRequestDto){
+//        Map<String, Object> resultMap = new HashMap<>();
+//        try {
+//            String token = authorization.replace("Bearer ", "");
+//            String authority = jwtTokenProvider.getAuthority(token);
+//            String directorId = jwtTokenProvider.getId(token);
+//
+//            DirectorAttendanceDto directorAttendanceDto = directorService.attendanceDirectorHome(directorNo, directorAttendacneRequestDto, authority, directorId);
+//            resultMap.put("data", directorAttendanceDto);
+//            resultMap.put("message", "센터 도착이 인증되었습니다.");
+//            resultMap.put("code", HttpStatus.OK.value());
+//            resultMap.put("status", "success");
+//            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+//        } catch (IllegalArgumentException e) {
+//            resultMap.put("message", e.getMessage());
+//            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+//            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
 
 }

@@ -48,7 +48,14 @@ public class ExamExaminee extends BaseTimeEntity {
 
     private String compensationReason;
 
-    private Boolean isCompensation = false;
+    public enum CompensationStatus {
+        보상_대기,
+        보상_승인,
+        보상_거절
+    };
+
+    @Enumerated(EnumType.STRING)
+    private CompensationStatus isCompensation = CompensationStatus.보상_대기;
 
     private String imageUrl;
 
@@ -77,9 +84,10 @@ public class ExamExaminee extends BaseTimeEntity {
 
 
     // 보상 신청
-    public void setCompensation(CompensationApplyDto compensationApplyDto) {
+    public void setCompensation(CompensationApplyDto compensationApplyDto, boolean compensation) {
         this.compensationType = compensationApplyDto.getCompensationType();
         this.compensationReason = compensationApplyDto.getCompensationReason();
+        this.compensation = compensation;
     }
 
     // 서류 제출 확인

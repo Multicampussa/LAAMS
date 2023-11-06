@@ -10,6 +10,8 @@ import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import multicampussa.laams.home.member.service.UserDetailsServiceImpl;
 import multicampussa.laams.centerManager.domain.CenterManagerRepository;
+import multicampussa.laams.manager.domain.center.Center;
+import multicampussa.laams.manager.domain.center.CenterRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,16 +28,26 @@ public class JwtTokenProvider {
     private final MemberDirectorRepository memberDirectorRepository;
     private final MemberManagerRepository memberManagerRepository;
     private final CenterManagerRepository centerManagerRepository;
+    private final CenterRepository centerRepository;
 
     private String secretKey = "s1s2a3f4y@"; // 비밀키
     private long validityInMilliseconds = 3600000; // 1 hour
 
-    public String createAccessToken(String id, String authority, Long memberId) {
+    public String createAccessToken(String id, String authority, Long memberNo) {
 
         // email과 권한 정보 claims에 담기
         Claims claims = Jwts.claims().setSubject(id);
-        claims.put("memberId", memberId);
+        claims.put("memberNo", memberNo);
         claims.put("authority", authority);
+        if (authority.equals("ROLE_DIRECTOR")) {
+            Center center = centerRepository.findByDirectorId(id);
+            if (center != null) {
+                claims.put("centerNo", center.getNo());
+                claims.put("region", center.getRegion());
+            } else {
+                throw new IllegalArgumentException("센터가 배정되지 않은 감독관입니다.");
+            }
+        }
 
         // 만료 시간 계산
         Date now = new Date();
@@ -64,7 +76,7 @@ public class JwtTokenProvider {
 
     // 토큰으로 MemberNo 추출
     public Long getMemberNo(String token) {
-        return Long.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("memberId").toString());
+        return Long.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("memberNo").toString());
     }
 
     // 토큰으로 ID 추출
@@ -75,6 +87,14 @@ public class JwtTokenProvider {
 
     public String getAuthority(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("authority").toString();
+    }
+
+    public Long getCenterNo(String token) {
+        return Long.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("centerNo").toString());
+    }
+
+    public String getRegion(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("region").toString();
     }
 
     // 토큰 유효성 검사

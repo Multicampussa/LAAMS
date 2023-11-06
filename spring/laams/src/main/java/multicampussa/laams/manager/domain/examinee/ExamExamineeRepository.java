@@ -12,10 +12,13 @@ public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long
     // 시험_응시자 엔티티에서 시험 no에 해당하는 응시자 전체 조회
     List<ExamExaminee> findByExamNo(Long examNo);
 
-    // 출석이 true인 응시자 전체 조회
-    List<ExamExaminee> findByAttendance(Boolean attendance);
+    // 출석이 true이고 해당 시험 번호의 응시자 전체 조회
+    List<ExamExaminee> findByExamNoAndAttendance(Long examNo, Boolean attendance);
 
-    // 보상대상 여부가 true인 응시자 전체 조회
+    // 보상대상 여부가 true이고 해당 시험 번호의 응시자 전체 조회
+    List<ExamExaminee> findByExamNoAndCompensation(Long examNo, Boolean compensation);
+
+    // 보상 대상자가 true인 응시자 전체 조회
     List<ExamExaminee> findByCompensation(Boolean compensation);
 
     // 시험 응시자 상세 조회
@@ -37,7 +40,7 @@ public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long
 //    int countByDocument(Long examNo);
 
     // 생성날짜와 보상여부로 조회
-    @Query("SELECT ee FROM ExamExaminee ee WHERE DATE(ee.createdAt) = :targetDate AND ee.compensation = true AND ee.isCompensation = false")
+    @Query("SELECT ee FROM ExamExaminee ee WHERE DATE(ee.exam.examDate) = :targetDate AND ee.compensation = true AND ee.isCompensation = '보상_대기'")
     List<ExamExaminee> findUncompensatedByDate(@Param("targetDate") java.sql.Date targetDate);
 }
 

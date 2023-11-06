@@ -48,7 +48,8 @@ public class ExamService {
         // 입력 받은 매니저 번호로 시험 담당 매니저 호출
         Manager responsibleManager = managerRepository.findById(request.getManagerNo())
                 .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getManagerNo() + "번 매니저는 존재하지 않습니다."));
-        examRepository.save(new Exam(existingCenter, request.getExamDate(), responsibleManager, request.getRunningTime(), request.getExamType(), request.getExamLanguage()));
+        examRepository.save(new Exam(existingCenter, request.getExamDate(), responsibleManager,
+                request.getRunningTime(), request.getExamType(), request.getExamLanguage(), request.getMaxDirector()));
 
         return ResponseEntity.ok("시험이 성공적으로 생성되었습니다");
     }
@@ -71,8 +72,8 @@ public class ExamService {
     @Transactional(readOnly = true)
     public ExamDetailResponse getExam(Long no) {
         // 전달 받은 시험번호로 시험 조회
-        Exam exam = examRepository.findById(no)
-                .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(no + "번 시험이 존재하지 않습니다."));
+        Exam exam = examRepository.findByNo(no);
+
         // 시험 번호
         Long examNo = exam.getNo();
 
@@ -86,12 +87,12 @@ public class ExamService {
         List<ExamExaminee> examExamineeList = examExamineeRepository.findByExamNo(examNo);
         int examineeNum = examExamineeList.size();
 
-        // 출석한 응시자 전체 조회
-        List<ExamExaminee> attendeeList = examExamineeRepository.findByAttendance(true);
+        // 시험에 출석한 응시자 전체 조회
+        List<ExamExaminee> attendeeList = examExamineeRepository.findByExamNoAndAttendance(examNo, true);
         int attendanceNum = attendeeList.size();
 
-        // 보상 대상자 전체 조회
-        List<ExamExaminee> compensationList = examExamineeRepository.findByCompensation(true);
+        // 시험의 보상 대상자 전체 조회
+        List<ExamExaminee> compensationList = examExamineeRepository.findByExamNoAndCompensation(examNo, true);
         int compensationNum = compensationList.size();
 
         // 시험 번호로 ExamDirector 조회하고 다시 DirectorListResponse 생성
@@ -135,7 +136,8 @@ public class ExamService {
         Manager manager = managerRepository.findById(request.getNewManagerNo())
                 .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getNewManagerNo() + "번 매니저는 존재하지 않습니다."));
 
-        existingExam.updateExamInfo(existingCenter, request.getNewExamDate(), manager, request.getNewRunningTime(), request.getNewExamType());
+        existingExam.updateExamInfo(existingCenter, request.getNewExamDate(), manager, request.getNewRunningTime(),
+                request.getNewExamType(), request.getNewMaxDirector());
     }
 
     // 시험 삭제

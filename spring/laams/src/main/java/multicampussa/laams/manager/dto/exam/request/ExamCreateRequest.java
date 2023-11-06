@@ -13,4 +13,5 @@ public class ExamCreateRequest {
     private int runningTime;
     private String examType;
     private String examLanguage;
+    private int maxDirector;
 }
