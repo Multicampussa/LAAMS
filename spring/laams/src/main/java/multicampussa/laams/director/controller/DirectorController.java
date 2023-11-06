@@ -233,10 +233,11 @@ public class DirectorController {
             String token = authorization.replace("Bearer", "");
             String authority = jwtTokenProvider.getAuthority(token);
             String directorId = jwtTokenProvider.getId(token);
+            Long centerNo = jwtTokenProvider.getCenterNo(token);
 
             Long examPk = examNo.get("examNo");
 
-            directorService.requestExamAssignment(examPk, authority, directorId);
+            directorService.requestExamAssignment(examPk, authority, directorId, centerNo);
             resultMap.put("message", "감독관의 시험 배정 요청이 정상적으로 처리 되었습니다.");
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");

@@ -140,7 +140,7 @@ public class MessageController {
         String token = authorization.replace("Bearer ", "");
         String id = jwtTokenProvider.getId(token);
         String authority = jwtTokenProvider.getAuthority(token);
-        Long centerNo = Long.parseLong(jwtTokenProvider.getCenterNo(token));
+        Long centerNo = jwtTokenProvider.getCenterNo(token);
 
         Map<String, Object> resultMap = new HashMap<>();
         if (authority.equals("ROLE_DIRECTOR")) {
