@@ -28,4 +28,6 @@ public interface ExamDirectorRepository extends JpaRepository<ExamDirector, Long
     @Query("select count(*) from ExamDirector ed where ed.exam.no = :no and ed.confirm = true")
     int countByConfirm(Long no);
 
+    @Query("select count(*) from ExamDirector ed where ed.exam.no = :examNo and ed.director.id = :directorId")
+    int findByExamNoAndDirectorId(Long examNo, String directorId);
 }
