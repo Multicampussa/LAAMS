@@ -11,5 +11,5 @@ public class NoticeCreateDto {
     private String title;
     private String content;
 //    private String memberId;
-    private String imagePath;
+//    private String attachFile;
 }

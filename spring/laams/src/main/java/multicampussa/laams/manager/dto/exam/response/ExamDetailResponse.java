@@ -19,6 +19,7 @@ public class ExamDetailResponse {
     private int examineeNum;  // 총 응시자 수
     private int attendanceNum; // 출석자 수
     private int compensationNum;  // 보상 대상자 수
+    private int maxDirector;
     private List<DirectorListResponse> directors;  // 시험 담당 감독관 리스트
 
     public ExamDetailResponse(Center center, Exam exam, int examineeNum, int attendanceNum, int compensationNum, List<DirectorListResponse> directors) {
@@ -30,6 +31,7 @@ public class ExamDetailResponse {
         this.examineeNum = examineeNum;
         this.attendanceNum = attendanceNum;
         this.compensationNum = compensationNum;
+        this.maxDirector = exam.getMaxDirector();
         this.directors = directors;
     }
 }

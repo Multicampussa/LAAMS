@@ -18,7 +18,8 @@ public class NoticeDetailResDto {
 
     private String title;
     private String content;
-    private String imagePath;
+    private String attachFile;
+    private String fileName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -28,7 +29,7 @@ public class NoticeDetailResDto {
         this.managerNo = notice.getManager().getNo();
         this.title = notice.getTitle();
         this.content = notice.getContent();
-        this.imagePath = notice.getImagePath();
+        this.attachFile = notice.getAttachFile();
         this.createdAt = notice.getCreatedAt();
         this.updatedAt = notice.getUpdatedAt();
     }

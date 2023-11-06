@@ -16,7 +16,7 @@ public class CenterExamDto {
 
 //    private Long examDirectorNo;
     private String examDirectorName;
-    private boolean confirm;
+    private ExamDirector.Confirm confirm;
 
     public CenterExamDto(ExamDirector examDirector) {
         this.examDirectorName = examDirector.getDirector().getName();

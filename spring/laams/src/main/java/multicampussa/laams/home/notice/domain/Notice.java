@@ -7,8 +7,10 @@ import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.home.notice.dto.NoticeCreateDto;
 import multicampussa.laams.home.notice.dto.NoticeUpdateDto;
 import multicampussa.laams.manager.domain.manager.Manager;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,24 +27,42 @@ public class Notice extends BaseTimeEntity {
     @Column(length = 10000)
     private String content;
 
-    private String imagePath;
+    // 첨부파일 S3 경로
+    @Column(length = 1000)
+    private String attachFile = "";
+
+    // 첨부파일 명
+    private String fileName = "";
+
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="manager_no")
     private Manager manager;
 
+    private boolean isDelete = false;
+
     public void toEntity(NoticeCreateDto noticeCreateDto, Manager manager) {
         this.title = noticeCreateDto.getTitle();
         this.content = noticeCreateDto.getContent();
         this.manager = manager;
-        this.imagePath = noticeCreateDto.getImagePath();
     }
 
     public void update(NoticeUpdateDto noticeUpdateDto) {
         this.title = noticeUpdateDto.getTitle();
         this.content = noticeUpdateDto.getContent();
-        this.imagePath = noticeUpdateDto.getImagePath();
+    }
+
+    public void delete() {
+        this.isDelete = true;
+    }
+
+    public void setAttachFileUrl(String attachFileUrl) {
+        this.attachFile = attachFileUrl;
+    }
+
+    public void setFileName(String attachFileName) {
+        this.fileName = attachFileName;
     }
 
 
@@ -52,7 +72,7 @@ public class Notice extends BaseTimeEntity {
                 "no=" + no +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", imagePath='" + imagePath + '\'' +
+                ", attachFile='" + attachFile + '\'' +
                 ", createdAt=" + getCreatedAt() + '\'' +
                 ", updatedAt=" + getUpdatedAt() + '\'' +
                 '}';

@@ -59,6 +59,27 @@ spring:
     port: ENC(v1zBzKJHhtr3Vigt8qnxRQ==)
     password: END(so/mouY4p4lkQV0jvBhjuw32MFr3LR0P)
 
+  servlet:
+    multipart:
+      enabled: true # 멀티파트 업로드 지원여부 (default: true)
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+
 server:
   servlet:
     context-path: /
+
+cloud:
+  aws:
+    s3:
+      endpoint: https://kr.object.ncloudstorage.com
+      bucket: laams
+    credentials:
+      access-key: 8scKCA8RIIv7UmfxCDud
+      secret-key: Ijm4NfDuwt6fTeDrUT0mdOH1KTQdRY00xHhvKOF1
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
