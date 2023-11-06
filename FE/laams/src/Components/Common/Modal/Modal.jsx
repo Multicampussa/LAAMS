@@ -7,6 +7,7 @@ import ExamCompensation from '../../Director/Exam/ExamCompensation.jsx';
 import ExamineeDetail from '../../Director/Exam/ExamineeDetail.jsx';
 import ExamDocs from '../../Director/Exam/ExamDocs.jsx';
 import CalendarDetail from '../../Manager/Home/CalendarDetail.jsx';
+import DirectorCalendarDetail from '../../Director/Home/DirectorCalendarDetail.jsx';
 import ManagerCompensation from "../../Manager/Compensation/Compensation.jsx";
 const Modal = () => {
   const show = useSelector(state=>state.Modal.show);
@@ -40,6 +41,9 @@ const Modal = () => {
         break
       case "exam-docs":
         setComponent(<ExamDocs/>);
+        break
+      case "director-calendar-detail":
+        setComponent(<DirectorCalendarDetail/>);
         break
       default:
         break;
