@@ -41,8 +41,12 @@ public class JwtTokenProvider {
         claims.put("authority", authority);
         if (authority.equals("ROLE_DIRECTOR")) {
             Center center = centerRepository.findByDirectorId(id);
-            claims.put("centerNo", center.getNo());
-            claims.put("region", center.getRegion());
+            if (center != null) {
+                claims.put("centerNo", center.getNo());
+                claims.put("region", center.getRegion());
+            } else {
+                throw new IllegalArgumentException("센터가 배정되지 않은 감독관입니다.");
+            }
         }
 
         // 만료 시간 계산

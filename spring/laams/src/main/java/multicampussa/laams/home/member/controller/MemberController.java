@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -57,7 +58,15 @@ public class MemberController {
 
             // 토큰 발급
             Long memberId = userInfo.getMemberNo();
-            String accessToken = jwtTokenProvider.createAccessToken(id, loginRequestDto.getAuthority(), memberId);
+            String accessToken;
+            try {
+                accessToken = jwtTokenProvider.createAccessToken(id, loginRequestDto.getAuthority(), memberId);
+            } catch (Exception e) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", e.getMessage());
+                response.put("code", HttpStatus.NOT_FOUND.value());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
             String refreshToken = jwtTokenProvider.createRefreshToken(id);
             ResponseEntity<Map<String, Object>> signInResponse = memberService.signIn(loginRequestDto, refreshToken);
             Map<String, Object> response = signInResponse.getBody();
