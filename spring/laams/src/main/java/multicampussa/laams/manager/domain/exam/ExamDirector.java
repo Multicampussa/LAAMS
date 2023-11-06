@@ -26,7 +26,15 @@ public class ExamDirector extends BaseTimeEntity {
     private Director director;
 
     private Boolean directorAttendance = false;
-    private Boolean confirm = false;
+
+    public enum Confirm {
+        대기,
+        승인,
+        거절
+    };
+
+    @Enumerated(EnumType.STRING)
+    private Confirm confirm = null;
 
     public void setExam(Exam exam, Director director) {
         this.exam = exam;
@@ -41,7 +49,7 @@ public class ExamDirector extends BaseTimeEntity {
 //        this.director = director;
 //    }
     public void confirmDirector() {
-        this.confirm = true;
+        this.confirm = Confirm.valueOf("승인");
     }
 
 }
