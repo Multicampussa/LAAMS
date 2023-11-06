@@ -382,8 +382,8 @@ public class DirectorService {
                         if(compensationApplyDto.getCompensationType().isEmpty()){
                             throw new IllegalArgumentException("보상타입이 없습니다.");
                         }
-
-                        examExaminee.setCompensation(compensationApplyDto);
+                        boolean compensation = true;
+                        examExaminee.setCompensation(compensationApplyDto, compensation);
                         examExamineeRepository.save(examExaminee);
                     }
                     else {

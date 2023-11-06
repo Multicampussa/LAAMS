@@ -77,9 +77,10 @@ public class ExamExaminee extends BaseTimeEntity {
 
 
     // 보상 신청
-    public void setCompensation(CompensationApplyDto compensationApplyDto) {
+    public void setCompensation(CompensationApplyDto compensationApplyDto, boolean compensation) {
         this.compensationType = compensationApplyDto.getCompensationType();
         this.compensationReason = compensationApplyDto.getCompensationReason();
+        this.compensation = compensation;
     }
 
     // 서류 제출 확인
