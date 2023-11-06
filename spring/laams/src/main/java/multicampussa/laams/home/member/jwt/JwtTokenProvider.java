@@ -35,14 +35,15 @@ public class JwtTokenProvider {
 
     public String createAccessToken(String id, String authority, Long memberNo) {
 
-        Center center = centerRepository.findByDirectorId(id);
-
         // email과 권한 정보 claims에 담기
         Claims claims = Jwts.claims().setSubject(id);
         claims.put("memberNo", memberNo);
         claims.put("authority", authority);
-        claims.put("centerNo", center.getNo());
-        claims.put("region", center.getRegion());
+        if (authority.equals("ROLE_DIRECTOR")) {
+            Center center = centerRepository.findByDirectorId(id);
+            claims.put("centerNo", center.getNo());
+            claims.put("region", center.getRegion());
+        }
 
         // 만료 시간 계산
         Date now = new Date();

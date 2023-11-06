@@ -127,6 +127,7 @@ public class ChatService {
         return chatRooms;
     }
 
+    // 감독관 ID로 센터 이름 찾기
     public String findCenterNameByDirector(String id) {
         Center center = centerRepository.findByDirectorId(id);
         return center.getName();

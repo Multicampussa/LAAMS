@@ -63,7 +63,7 @@ public class ChatRoomController {
         return chatService.findAllRoom();
     }
 
-    // 채팅방 생성
+    // 일대일 채팅방 생성
     @PostMapping("/room")
     @ApiOperation(value = "일대일 채팅방 생성")
     public ResponseEntity<Map<String, Object>> createRooms(@ApiIgnore @RequestHeader String authorization) {

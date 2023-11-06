@@ -61,15 +61,18 @@ public class MemberController {
             String refreshToken = jwtTokenProvider.createRefreshToken(id);
             ResponseEntity<Map<String, Object>> signInResponse = memberService.signIn(loginRequestDto, refreshToken);
             Map<String, Object> response = signInResponse.getBody();
+            String authority = jwtTokenProvider.getAuthority(accessToken);
 
             if (signInResponse.getStatusCodeValue() == 200) {
                 response.put("accessToken", accessToken);
                 response.put("refreshToken", refreshToken);
                 response.put("accessTokenExpireTime", jwtTokenProvider.getTokenExpireTime(accessToken));
                 response.put("refreshTokenExpireTime", jwtTokenProvider.getTokenExpireTime(refreshToken));
-                response.put("authority", jwtTokenProvider.getAuthority(accessToken));
-                response.put("centerNo", jwtTokenProvider.getCenterNo(accessToken));
-                response.put("region", jwtTokenProvider.getRegion(accessToken));
+                response.put("authority", authority);
+                if (authority.equals("ROLE_DIRECTOR")) {
+                    response.put("centerNo", jwtTokenProvider.getCenterNo(accessToken));
+                    response.put("region", jwtTokenProvider.getRegion(accessToken));
+                }
             }
             response.put("code", signInResponse.getStatusCodeValue());
             response.put("status", "success");
