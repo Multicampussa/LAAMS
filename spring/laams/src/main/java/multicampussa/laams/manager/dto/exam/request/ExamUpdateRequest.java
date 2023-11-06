@@ -12,4 +12,5 @@ public class ExamUpdateRequest {
     private Long newManagerNo;
     private int newRunningTime;
     private String newExamType;
+    private int newMaxDirector;
 }
