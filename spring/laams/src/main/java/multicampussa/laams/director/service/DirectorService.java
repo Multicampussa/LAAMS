@@ -330,23 +330,38 @@ public class DirectorService {
     // 감독관 시험 배정 요청
     // 요청 한 번 했으면 더 안되게 만들어야함
     @Transactional
-    public void requestExamAssignment(Long examNo, String authority, String directorId) {
+    public void requestExamAssignment(Long examNo, String authority, String directorId, Long centerNo) {
         System.out.println(directorId);
         if(authority.equals("ROLE_DIRECTOR")){
-            Exam exam = examRepository.findById(examNo).orElse(null);
+            // 자기 센터 시험만 신청 가능하니까
+            List<Exam> exams = examRepository.findByCenterNo(centerNo);
             Director director = directorRepository.findById(directorId);
-            // 시험 있으면 배정 요청(
-            if(exam != null){
-                ExamDirector examDirector = new ExamDirector();
-                examDirector.setExam(exam, director);
-                examDirectorRepository.save(examDirector);
+            if(exams == null) {
+                throw new IllegalArgumentException("현재 센터에 시험이 없습니다.");
+            }else {
+                // 시험 있으면 배정 요청
+                boolean examFound = false;
+                for (Exam exam : exams){
+                    if(exam.getNo() == examNo){
+                        int assignedExamDirector = examDirectorRepository.findByExamNoAndDirectorId(examNo, directorId);
+                        if(assignedExamDirector == 0){
+                            ExamDirector examDirector = new ExamDirector();
+                            examDirector.setExam(exam, director);
+                            examDirectorRepository.save(examDirector);
+                            examFound = true;
+                            break;
+                        } else {
+                            throw new IllegalArgumentException("이미 배정 요청한 시험입니다.");
+                        }
+                    }else{
+                        continue;
+                    }
+                }
+                if(!examFound){
+                    throw new IllegalArgumentException("현재 센터에는 이 시험이 없습니다.");
+                }
             }
-            else {
-                throw new IllegalArgumentException("해당 시험은 없습니다.");
-            }
-
-        }
-        else{
+        } else{
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
     }
@@ -464,19 +479,62 @@ public class DirectorService {
 //    @Transactional
 //    public DirectorAttendanceDto attendanceDirectorHome(Long directorNo, DirectorAttendanceRequestDto directorAttendacneRequestDto, String authority, String directorId) {
 //        if(authority.equals("ROLE_DIRECTOR")){
-//            List<Exam> exams = examRepository.findByDirectorId(directorId);
-//            System.out.println(exams);
+//            List<Exam> exams = examRepository.findByDirectorID(directorId);
+//            for(Exam exam : exams){
+//                System.out.println(exam.getExamDate());
+//            }
 //            System.out.println(directorNo); // 아직 안 씀;
-//            // 시험들 중에서 시험 일자가 오늘인 것, 그중 한시간 이내인 것 찾아서 들고옴
+//            // 시험들 중에서 시험 일자가 오늘인 것, 그 중 현재 시간 이후의 시험 중 가장 빠른 시험
 //            // 그 시험의 센터장 위치랑 감독관 현재 위치랑 비교
 //            // 출석 인증 ?
+//            LocalDateTime now = LocalDateTime.now();
+//            LocalDateTime closestExamTime = null;
+//            Exam closestExam = null;
+//
 //            for(Exam exam : exams){
-//                if(exam.getExamDate().)
+//                LocalDateTime examDate = exam.getExamDate();
+////                System.out.println(examDate);
+////                LocalDateTime currentDate = now.toLocalDate().atStartOfDay(); // 현재 날짜와 시간
+//
+//                // 오늘 시험 중 현재 시간 이후 중 가장 빠른 시험 찾기
+//                if (examDate.isAfter(now) && (closestExamTime == null || examDate.isBefore(closestExamTime)) && !examDate.toLocalDate().isAfter(now.toLocalDate()))  {
+//                    closestExamTime = examDate;
+//                    closestExam = exam;
+//                }
+//
+//                if(closestExam != null) {
+//                    // 그 시험의 센터장 위치랑 감독관 현재 위치랑 비교
+//                    Double directorLatitude = directorAttendacneRequestDto.getLatitude();
+//                    Double directorLongitude = directorAttendacneRequestDto.getLongitude();
+//                    if(directorLatitude != null && directorLongitude != null) {
+//
+//                        Double centerLatitude = exam.getCenter().getLatitude();
+//                        Double centerLongitude = exam.getCenter().getLongitude();
+//
+//                        // 거리 계산
+//                        Double dist = LocationDistance.distance(directorLatitude, directorLongitude ,centerLatitude, centerLongitude, "meter");
+//                        if(dist > 500) { // 500m 초과이면
+//                            throw new IllegalArgumentException("아직 멀어요...");
+//                        }
+//                        else {
+//                            Boolean directorAttendance = true;
+//                            DirectorAttendanceDto directorAttendanceDto = new DirectorAttendanceDto(directorAttendance);
+//
+////                            currentExamDirector.updateAttendance(directorAttendanceDto);
+//                            // 이거 해야함....
+//                            return directorAttendanceDto;
+//                        }
+//                    }
+//                } else {
+//                    continue;
+//                }
+//
 //            }
 //
 //        } else {
 //            throw new IllegalArgumentException("접근 권한이 없습니다.");
 //        }
+//        return null;
 //    }
 
 }

@@ -85,8 +85,8 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("authority").toString();
     }
 
-    public String getCenterNo(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("centerNo").toString();
+    public Long getCenterNo(String token) {
+        return Long.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("centerNo").toString());
     }
 
     public String getRegion(String token) {
