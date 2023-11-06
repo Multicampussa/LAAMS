@@ -56,7 +56,7 @@ public class CenterManagerController {
     // 센터별 시험 조회
     @ApiOperation(value = "센터 별 시험 월별 및 일별 조회")
     @GetMapping("/exams")
-    public ResponseEntity<Map<String, Object>> getCenterExamList(@RequestHeader String authorization, @RequestParam int year, @RequestParam int month, @RequestParam(value = "day", defaultValue = "0") int day){
+    public ResponseEntity<Map<String, Object>> getCenterExamList(@ApiIgnore @RequestHeader String authorization, @RequestParam int year, @RequestParam int month, @RequestParam(value = "day", defaultValue = "0") int day){
         Map<String, Object> resultMap = new HashMap<>();
         try{
             String token  = authorization.replace("Bearer ", "");
