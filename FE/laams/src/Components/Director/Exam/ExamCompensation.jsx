@@ -56,7 +56,7 @@ const ExamCompensation = () => {
                 <div className='compensation-container-box-title'>
                     내용
                 </div>
-                <textarea className='compensation-container-box-input-l' 
+                <textarea className='compensation-container-box-textarea' 
                 onChange={e=>handleText(e)} value={compensationData['content'] || ''}
                 />          
             </div>

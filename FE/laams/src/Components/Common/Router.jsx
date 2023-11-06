@@ -6,7 +6,7 @@ import PublicRoute from './PublicRoute.jsx';
 import ManagerHome from '../Manager/Home/ManagerHome.jsx';
 import ManagerExamList from '../Manager/Exam/List.jsx';
 import ManagerExamDetail from "../Manager/Exam/Detail.jsx";
-import ManagerRewardList from "../Manager/Reward/List.jsx";
+import ManagerCompensationList from "../Manager/Compensation/List.jsx";
 import ManagerErrorReportList from "../Manager/ErrorReport/List.jsx"
 import Join from '../User/Join.jsx';
 import UpdateUser from '../User/UpdateUser.jsx';
@@ -70,9 +70,9 @@ const Router = () => {
             }
           />
           <Route
-            path='/manager/reward'
+            path='/manager/compensation'
             element={
-              <PrivateRoute role="manager" children={<ManagerRewardList/>}></PrivateRoute>
+              <PrivateRoute role="manager" children={<ManagerCompensationList/>}></PrivateRoute>
             }
           />
           <Route
