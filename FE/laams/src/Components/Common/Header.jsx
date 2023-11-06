@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
 import { setUserClear } from '../../redux/actions/userAction';
+import Alram from './Alram/Alram';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const Header = () => {
     localStorage.clear();
     dispatch(setUserClear(null));
     navigate("/",{replace:true});
+    window.location.reload();
   },[dispatch,navigate]);
   const handleMenuItem = useCallback(()=>{
     setMenu("close");
@@ -55,7 +57,7 @@ const Header = () => {
           <Link key={key++} onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/exam" className='header-menu-box-item'>시험일정</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/chart" className='header-menu-box-item'>차트</Link>,
-          <Link key={key++} onClick={handleMenuItem} to="/manager/reward" className='header-menu-box-item'>보상</Link>,
+          <Link key={key++} onClick={handleMenuItem} to="/manager/compensation" className='header-menu-box-item'>보상</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/room" className='header-menu-box-item'>채팅</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/error-report" className='header-menu-box-item'>에러리포트</Link>,
           <button key={key++} onClick={logout} className='header-menu-box-item'>로그아웃</button>
@@ -80,11 +82,9 @@ const Header = () => {
             <span></span>
             <div className='hidden-text'>MENU</div>
           </button>
-          <button className='header-bell'>
-            <div className='hidden-text'>BELL</div>
-          </button>
         </div>
       </header>
+      <Alram />
       <div className={`header-menu-box-${menu}`}>
         {
           menuItems

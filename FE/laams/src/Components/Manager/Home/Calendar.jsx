@@ -55,7 +55,6 @@ const Calendar = ({calendarData,curDate,handleNext,handlePrev}) => {
     
     for(let i = 1,iEnd=lastDate.getDate(); i <= iEnd; i++){
       const week = (firstDate.getDay()+i)%7;
-      
       temp.push(<div onClick={()=>handleCalendarItem(i,new Date(curDate.getFullYear(),curDate.getMonth(),i))} className='calendar-day' key={key++}>
         <div className={week===0||week===1?"calendar-week-title":'calendar-day-title'}>{i}</div>
         <div className='calendar-day-icons'>
@@ -63,7 +62,7 @@ const Calendar = ({calendarData,curDate,handleNext,handlePrev}) => {
             calendarData.current && calendarData.current[i-1].dailyDashboardErrorReports.length ? <div className='calendar-day-errorreport'><div className='hidden-text'>에러리포트</div></div> : null
           }
           {
-            calendarData.current && calendarData.current[i-1].unprocessedAssignments.length ? <div className='calendar-day-assignment'><div className='hidden-text'>감독관 미할당</div></div> : null
+            calendarData.current && calendarData.current[i-1].unassignedExams.length ? <div className='calendar-day-assignment'><div className='hidden-text'>감독관 미할당</div></div> : null
           }
           {
             calendarData.current && calendarData.current[i-1].unprocessedCompensations.length ? <div className='calendar-day-compensation'><div className='hidden-text'>보상</div></div> : null
@@ -75,7 +74,7 @@ const Calendar = ({calendarData,curDate,handleNext,handlePrev}) => {
       temp.push(<div className='calendar-day' key={key++}></div>);
     }
     return temp;
-  },[getLastDate,getFirstDate,curDate,calendarData]);
+  },[getLastDate,getFirstDate,curDate,calendarData,handleCalendarItem]);
 
   return (
     <article className='calendar'>

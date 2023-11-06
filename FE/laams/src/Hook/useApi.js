@@ -12,7 +12,10 @@ const useApi = () => {
   api.current.interceptors.request.use(
     async (config)=>{
       if (!user.accessToken) {
-        config.headers.authorization = null;
+        localStorage.clear();
+        navigate("/");
+        window.location.reload();
+        return Promise.reject(401);
       }else{
         if (new Date(user.accessTokenExpireTime) > new Date()) {
           config.headers.authorization = `Bearer ${user.accessToken}`;
@@ -48,6 +51,7 @@ const useApi = () => {
           alert(response.data.message);
           localStorage.clear();
           navigate("/");
+          window.location.reload();
           return Promise.reject(401);
         case "l002":
           const refreshTokenExpireTime = localStorage.getItem("refreshTokenExpireTime");

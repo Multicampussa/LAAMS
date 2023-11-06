@@ -44,6 +44,12 @@
     flex-direction: row;
     @include flex(row)
   }
+  &-wrap{
+    flex-wrap: wrap;
+  }
+  &-nowrap{
+    flex-wrap: nowrap;
+  }
 
   &-scrolly{
     display: flex;

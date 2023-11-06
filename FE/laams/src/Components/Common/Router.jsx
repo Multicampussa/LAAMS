@@ -6,7 +6,7 @@ import PublicRoute from './PublicRoute.jsx';
 import ManagerHome from '../Manager/Home/ManagerHome.jsx';
 import ManagerExamList from '../Manager/Exam/List.jsx';
 import ManagerExamDetail from "../Manager/Exam/Detail.jsx";
-import ManagerRewardList from "../Manager/Reward/List.jsx";
+import ManagerCompensationList from "../Manager/Compensation/List.jsx";
 import ManagerErrorReportList from "../Manager/ErrorReport/List.jsx"
 import Join from '../User/Join.jsx';
 import UpdateUser from '../User/UpdateUser.jsx';
@@ -20,6 +20,7 @@ import DirectorChat from '../Director/Chat/DirectorChat.jsx';
 import ManagerChat from '../Manager/Chat/ManagerChat.jsx';
 import ManagerRoom from '../Manager/Chat/ManagerRoom.jsx';
 import CreateErrorReport from '../Director/ErrorReport/CreateErrorReport.jsx';
+import ManagerErrorReport from "../Manager/ErrorReport/Detail.jsx";
 const Router = () => {
   return (
     <>
@@ -70,9 +71,15 @@ const Router = () => {
             }
           />
           <Route
-            path='/manager/reward'
+            path='/manager/error-report/:errorreportNo'
             element={
-              <PrivateRoute role="manager" children={<ManagerRewardList/>}></PrivateRoute>
+              <PrivateRoute role="manager" children={<ManagerErrorReport/>}></PrivateRoute>
+            }
+          />
+          <Route
+            path='/manager/compensation'
+            element={
+              <PrivateRoute role="manager" children={<ManagerCompensationList/>}></PrivateRoute>
             }
           />
           <Route

@@ -61,13 +61,18 @@ const DirectorChat = () => {
       .catch(err=>{console.log(err);});
   },[api])
 
+  const disconnect = useCallback(()=>{
+    ws.current.unsubscribe(`/topic/chat/room/${roomId}`);
+  },[roomId]);
+
   useEffect(()=>{
     if(!roomId || !roomName) {
       getRoomData();
     }else{
       connect();
     }
-  },[roomName,roomId,connect,getRoomData]);
+    return disconnect();
+  },[roomName,roomId,disconnect,connect,getRoomData]);
 
   const messageItems = useMemo(()=>{
     return messageList.map((e,idx)=><li key={idx}>{e}</li>)

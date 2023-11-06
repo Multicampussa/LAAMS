@@ -1,7 +1,10 @@
 @import "abstracts/variables";
 @import "abstracts/mixins";
 
+
+@import "base/base";
 @import "base/reset";
+
 
 @import "layout/header";
 @import "layout/modal";
@@ -15,7 +18,7 @@
 
 @import "pages/Manager/managerHome";
 @import "pages/Manager/examlist";
-@import "pages/Manager/rewradList";
+@import "pages/Manager/compensationList";
 @import "pages/Manager/errorReportList";
 @import "pages/Manager/chart";
 
@@ -28,14 +31,15 @@
 @import "pages/Notice/create";
 @import "pages/Notice/detail";
 
-@import "base/base";
 
 @import "font/font";
 
+
+@import "component/Manager/managerExamDetail";
+@import "component/Manager/managerCalendarDetail";
+
 @import "component/examCreate";
 @import "component/calendar";
-@import "component/managerExamDetail";
 @import "component/examCompensation";
 @import "component/examineeDetail";
 @import "component/examDocs";
-@import "component/managerCalendarDetail";
