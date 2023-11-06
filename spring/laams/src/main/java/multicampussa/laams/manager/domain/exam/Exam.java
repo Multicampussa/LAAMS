@@ -38,6 +38,7 @@ public class Exam extends BaseTimeEntity {
     @OneToMany(mappedBy = "exam")
     private List<ExamDirector> examDirector;
 
+    private int maxDirector = 2;
 
     public Exam(Center center, LocalDateTime examDate, Manager manager, int runningTime, String examType, String examLanguage) {
         this.center = center;
@@ -48,11 +49,16 @@ public class Exam extends BaseTimeEntity {
         this.examLanguage = examLanguage;
     }
 
-    public void updateExamInfo(Center center, LocalDateTime examDate, Manager manager, int runningTime, String examType) {
+    public Exam(Center existingCenter, LocalDateTime examDate, Manager responsibleManager, int runningTime, String examType, String examLanguage, int maxDirector) {
+        super();
+    }
+
+    public void updateExamInfo(Center center, LocalDateTime examDate, Manager manager, int runningTime, String examType, int maxDirector) {
         this.center = center;
         this.examDate = examDate;
         this.manager = manager;
         this.runningTime = runningTime;
         this.examType = examType;
+        this.maxDirector = maxDirector;
     }
 }
