@@ -4,13 +4,23 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
+import multicampussa.laams.home.notice.domain.Notice;
 import multicampussa.laams.home.notice.dto.*;
 import multicampussa.laams.home.notice.service.NoticeService;
+import multicampussa.laams.home.notice.service.S3Service;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +34,11 @@ public class NoticeController {
     private final NoticeService noticeService;
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final S3Service s3Service;
+
     @ApiOperation(value = "공지사항 생성")
     @PostMapping("/notice/create")
-    public ResponseEntity<Map<String, Object>> createNotice(@RequestHeader String authorization, @RequestBody NoticeCreateDto noticeCreateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
+    public ResponseEntity<Map<String, Object>> createNotice(@RequestHeader String authorization, @RequestPart(value = "dto") NoticeCreateDto noticeCreateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
             String token  = authorization.replace("Bearer ", "");
@@ -47,7 +59,7 @@ public class NoticeController {
 
     @ApiOperation(value = "공지사항 수정")
     @PutMapping("/notice/update")
-    public ResponseEntity<Map<String, Object>> updateNotice(@RequestHeader String authorization, @RequestBody NoticeUpdateDto noticeUpdateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
+    public ResponseEntity<Map<String, Object>> updateNotice(@RequestHeader String authorization, @RequestPart(value = "dto") NoticeUpdateDto noticeUpdateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
         BaseResultDTO resultDTO = new BaseResultDTO();
@@ -62,7 +74,7 @@ public class NoticeController {
             Long memberNo = jwtTokenProvider.getMemberNo(token);
             String authority = jwtTokenProvider.getAuthority(token);
 
-            boolean result = noticeService.updateNotice(noticeUpdateDto, memberNo, authority, file);
+            boolean result = noticeService.updateNotice(noticeUpdateDto, authority, file);
 
             resultMap.put("message", "성공적으로 수정하였습니다.");
             resultMap.put("status", HttpStatus.OK.value());
@@ -75,7 +87,7 @@ public class NoticeController {
     }
 
     @ApiOperation(value = "공지사항 삭제")
-    @DeleteMapping("/notice/delete/{noticeNo}")
+    @PutMapping("/notice/delete/{noticeNo}")
     public ResponseEntity<Map<String, Object>> deleteNotice(@RequestHeader String authorization, @PathVariable Long noticeNo) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
@@ -134,6 +146,20 @@ public class NoticeController {
             resultMap.put("status", HttpStatus.BAD_REQUEST.value());
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
         }
+    }
+
+
+    @ApiOperation(value = "공지사항 첨부파일 다운로드")
+    @GetMapping("/notice/download/{fileName}")
+    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String fileName) throws IOException {
+        InputStream fileInputStream = noticeService.downloadFile(fileName).getBody().getInputStream();
+
+        // 파일을 스트림으로 전송하고 다운로드 가능하도록 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", fileName);
+
+        return new ResponseEntity<>(new InputStreamResource(fileInputStream), headers, HttpStatus.OK);
     }
 
     // 공지사항 전체 개수 조회

@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NoticeUpdateDto {
-    private Long managerNo;
+//    private Long managerNo;
     private Long noticeNo;
     private String title;
     private String content;

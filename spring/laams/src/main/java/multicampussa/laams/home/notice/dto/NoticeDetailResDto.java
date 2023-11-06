@@ -19,6 +19,7 @@ public class NoticeDetailResDto {
     private String title;
     private String content;
     private String attachFile;
+    private String fileName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
