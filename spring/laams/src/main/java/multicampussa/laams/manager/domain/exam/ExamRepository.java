@@ -67,6 +67,6 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
     List<DashboardExamineeDto> getCenterExamineeMonthCount(@Param("year") int year, @Param("month") int month);
 
     // 감독관 아이디로 현재 감독하는 시험들 찾기
-//    @Query("select ed.exam from ExamDirector ed where ed.director.id = :directorId and ed.confirm = true")
-//    List<Exam> findByDirectorId(String directorId);
+    @Query("select ed.exam from ExamDirector ed where ed.director.id = :directorId and ed.confirm = true")
+    List<Exam> findByDirectorId(@Param("directorId") String directorId);
 }
