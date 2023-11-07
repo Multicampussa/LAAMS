@@ -5,12 +5,14 @@ import ManagerExamDetail from "./managerExamDetailReducer";
 import ExamineeDetail from "./examineeDetailReducer";
 import ManagerCalendarDetail from "./managerCalendarDetailReducer";
 import ManagerCompensation from "./managerCompensationReducer";
+import ManagerChat from "./managerChatReducer";
 const rootReducer = combineReducers({
   User,
   Modal,
   ManagerExamDetail,
   ExamineeDetail,
   ManagerCalendarDetail,
-  ManagerCompensation
+  ManagerCompensation,
+  ManagerChat
 });
 export default rootReducer;

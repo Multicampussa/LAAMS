@@ -26,7 +26,8 @@ const DirectorChat = () => {
     // this.messages.unshift({"type":recv.type,"sender":recv.type=='ENTER'?'[알림]':recv.sender,"message":recv.message})
     // axios.get(`${process.env.REACT_APP_SPRING_URL}/room/`+roomId).then(response => console.log("TEST",response));
     setMessageList((e)=>[...e,`${recv.sender} : ${recv.message}`]);
-  },[])
+    console.log("보내져!!!",roomId)
+  },[roomId])
 
   const connect = useCallback(() =>{
     // pub/sub event
@@ -60,9 +61,9 @@ const DirectorChat = () => {
       .catch(err=>{console.log(err);});
   },[api])
 
-  const disconnect = useCallback(()=>{
-    ws.current.unsubscribe(`/topic/chat/room/${roomId}`);
-  },[roomId]);
+  // const disconnect = useCallback(()=>{
+  //   ws.current.unsubscribe(`/topic/chat/room/${roomId}`);
+  // },[roomId]);
 
   useEffect(()=>{
     if(!roomId || !roomName) {
@@ -71,10 +72,6 @@ const DirectorChat = () => {
       connect();
     }
   },[roomName,roomId,connect,getRoomData]);
-
-  useEffect(()=>{
-    window.addEventListener('beforeunload', disconnect);
-  },[disconnect])
 
   const messageItems = useMemo(()=>{
     return messageList.map((e,idx)=><li key={idx}>{e}</li>)
