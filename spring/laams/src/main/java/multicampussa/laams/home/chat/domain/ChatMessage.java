@@ -25,4 +25,6 @@ public class ChatMessage {
     private String sender;
     //내용
     private String message;
+    //채팅방 이름
+    private String roomName;
 }

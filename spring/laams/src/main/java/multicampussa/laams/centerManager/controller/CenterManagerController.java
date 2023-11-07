@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.centerManager.dto.CenterExamDto;
 import multicampussa.laams.centerManager.dto.ConfirmDirectorRequest;
+import multicampussa.laams.centerManager.dto.DirectorAssignmentRequestListResponse;
 import multicampussa.laams.centerManager.service.CenterManagerService;
 import multicampussa.laams.global.ApiResponse;
 import multicampussa.laams.global.CustomExceptions;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Api(tags = "센터매니저 관련 기능")
@@ -53,10 +55,67 @@ public class CenterManagerController {
 
     }
 
+    // 센터 매니저의 감독관 신청 거절
+    @ApiOperation(value = "센터 매니저의 감독관 신청 거절")
+    @PutMapping("/deny")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "x번 감독관의 y번 시험 승인을 거절했습니다.", response = ConfirmDirectorRequest.class),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "잘못된 요청"),
+    })
+    public ResponseEntity<ApiResponse<String>> denyDirector(
+            @ApiIgnore @RequestHeader String authorization,
+            @RequestBody ConfirmDirectorRequest request) {
+        String token = authorization.replace("Bearer", "");
+        String authority = jwtTokenProvider.getAuthority(token);
+        if (authority.equals("ROLE_CENTER_MANAGER")) {
+            centerManagerService.denyDirector(request);
+            return new ResponseEntity<>(
+                    new ApiResponse<>(
+                            "success",
+                            HttpStatus.OK.value(),
+                            request.getDirectorNo() + "번 감독관의" + request.getExamNo() + "번 시험 거절을 완료했습니다."
+                    ),
+                    HttpStatus.OK);
+        } else {
+            throw new CustomExceptions.UnauthorizedException("접근 권한이 없습니다.");
+        }
+    }
+
+    // 특정 시험의 감독관 요청 리스트
+    @ApiOperation(value = "특정 시험의 감독관 요청 목록")
+    @GetMapping("/exam/{examNo}/director/assignment")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "감독관의 시험 배정 요청 리스트를 조회했습니다.",
+                    response = DirectorAssignmentRequestListResponse.class),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "잘못된 요청"),
+    })
+    public ResponseEntity<ApiResponse<List<DirectorAssignmentRequestListResponse>>> getDirectorAssignmentRequestList(
+            @ApiIgnore @RequestHeader String authorization,
+            @PathVariable Long examNo) {
+        String token = authorization.replace("Bearer", "");
+        String authority = jwtTokenProvider.getAuthority(token);
+        if (authority.equals("ROLE_CENTER_MANAGER")) {
+            List<DirectorAssignmentRequestListResponse> response = centerManagerService.getDirectorAssignmentRequestList(examNo);
+            return new ResponseEntity<>(
+                    new ApiResponse<>(
+                            "success",
+                            HttpStatus.OK.value(),
+                            response
+                    ),
+                    HttpStatus.OK);
+        } else {
+            throw new CustomExceptions.UnauthorizedException("접근 권한이 없습니다.");
+        }
+    }
+
     // 센터별 시험 조회
     @ApiOperation(value = "센터 별 시험 월별 및 일별 조회")
     @GetMapping("/exams")
-    public ResponseEntity<Map<String, Object>> getCenterExamList(@ApiIgnore @RequestHeader String authorization, @RequestParam int year, @RequestParam int month, @RequestParam(value = "day", defaultValue = "0") int day){
+    public ResponseEntity<Map<String, Object>> getCenterExamList(
+            @ApiIgnore @RequestHeader String authorization,
+            @RequestParam int year,
+            @RequestParam int month,
+            @RequestParam(value = "day", defaultValue = "0") int day){
         Map<String, Object> resultMap = new HashMap<>();
         try{
             String token  = authorization.replace("Bearer ", "");

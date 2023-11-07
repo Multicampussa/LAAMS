@@ -28,7 +28,7 @@ public class DirectorController {
 //        return directorService.getExamList(directorNo);
 //    }
 
-    @ApiOperation(value = "시험 월별 조회 및 일별 조회")
+    @ApiOperation(value = "시험 월별 조회 및 일별 조회 (캘린더용)")
     @GetMapping("/{directorNo}/exams")
     public ResponseEntity<Map<String, Object>> getExamMonthDayList(@RequestHeader String authorization, @PathVariable Long directorNo, @RequestParam int year, @RequestParam int month, @RequestParam(value = "day", defaultValue = "0") int day){
         Map<String, Object> resultMap = new HashMap<>();
@@ -315,5 +315,26 @@ public class DirectorController {
 //        }
 //    }
 
+    @ApiOperation(value = "내가 속한 센터에 내가 아직 신청 요청 안 보내고, 꽉 차지 않는 시험 + 내가 신청했지만 승인 안된 시험 목록")
+    @GetMapping("/exams/unapproved")
+    public ResponseEntity<Map<String, Object>> UnappliedAndUnapprovedExamList(@RequestHeader String authorization, @RequestParam int year, @RequestParam int month, @RequestParam(value = "day", defaultValue = "0") int day) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            String token  = authorization.replace("Bearer ", "");
+            String authority = jwtTokenProvider.getAuthority(token);
+            String directorId = jwtTokenProvider.getId(token);
+            Long centerNo = jwtTokenProvider.getCenterNo(token);
+
+            resultMap.put("message","시험을 성공적으로 조회했습니다.");
+            resultMap.put("data", directorService.unappliedAndUnapprovedExamList(authority, directorId, centerNo, year, month, day));
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            resultMap.put("message", e.getMessage());
+            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }
