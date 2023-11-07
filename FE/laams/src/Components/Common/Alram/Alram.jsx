@@ -10,14 +10,18 @@ const Alram = () => {
   const alramMessage = useRef([]);
   const accessToken = useSelector(state=>state.User.accessToken);
   const [showAlram,setShowAlram] = useState(false);
-
+  const authority = useSelector(state=>state.User.authority);
   const alramItems = useMemo(()=>{
-    if(showAlram){
-      return alramMessage.current.filter(e=>e.type!=="ENTER").map((e,idx)=><li className='header-bell-item' key={idx}>{e.sender}:{e.message}</li>)
-    }else{
-      return alramMessage.current.filter(e=>e.type!=="ENTER").map((e,idx)=><li className='header-bell-item' key={idx}>{e.sender}:{e.message}</li>)
+    switch(authority){
+      case "ROLE_DIRECTOR":
+        return alramMessage.current.filter(e=>e.type!=="ENTER" && e.sender === "운영자").map((e,idx)=><li className='header-bell-item' key={idx}>{e.sender}:{e.message}</li>)
+      case "ROLE_MNANAGER":
+        return alramMessage.current.filter(e=>e.type!=="ENTER"  && e.sender !== "운영자").map((e,idx)=><li className='header-bell-item' key={idx}>{e.sender}:{e.message}</li>)
+      default:
+        break;
     }
-  },[showAlram])
+    if(showAlram){}
+  },[showAlram,authority])
 
   const handleAlramBtn = useCallback(()=>{
     setShowAlram(e=>!e);

@@ -59,10 +59,11 @@ const ManagerChat = () => {
 
   useEffect(()=>{  
     connect();
-    return ()=>{
-      disconnect();
-    }
-  },[connect,disconnect]);
+  },[connect]);
+
+  useEffect(()=>{
+    window.addEventListener('beforeunload', disconnect);
+  },[disconnect]);
 
   const messageItems = useMemo(()=>{
     return messageList.map((e,idx)=><li key={idx}>{e}</li>)
