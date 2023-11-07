@@ -55,6 +55,9 @@ public class ChatRoomController {
             result.add(chatService.findByRoomName("Notice"));
             result.add(chatService.findByRoomName(region));
             result.add(chatService.findByRoomName(centerName));
+            if (chatService.isTesting(id)) {
+                result.add(chatService.findByRoomName("Now"));
+            }
             return result;
         } else if (authority.equals("ROLE_CENTER_MANAGER")) {
             return result;
@@ -124,6 +127,23 @@ public class ChatRoomController {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             resultMap.put("data", chatService.createNoticeRoomByCenter());
+            resultMap.put("code", HttpStatus.OK.value());
+            resultMap.put("status", "success");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            resultMap.put("message", e.getMessage());
+            resultMap.put("code", HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 현재 진행중인 시험 공지 채팅방 생성
+    @PostMapping("/room/notice/now")
+    @ApiOperation(value = "현재 진행중인 시험 공지 채팅방 생성")
+    public ResponseEntity<Map<String, Object>> createNoticeRoomForNow() {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("data", chatService.createNoticeRoomForNow());
             resultMap.put("code", HttpStatus.OK.value());
             resultMap.put("status", "success");
             return new ResponseEntity<>(resultMap, HttpStatus.OK);

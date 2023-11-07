@@ -43,4 +43,8 @@ public class CenterService {
 
         return new CenterMonthlyExamCountsResponse(centerNo,centerName, numberOfExam);
     }
+
+    public Long getCenterNo(String roomName) {
+        return centerRepository.findByName(roomName).get().getNo();
+    }
 }
