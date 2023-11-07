@@ -19,4 +19,5 @@ public interface DirectorRepository extends JpaRepository<Director, Long> {
     List<Exam> findAllByDirectorNoContainingMonthAndDay(@Param("directorNo") Long directorNo, @Param("year") Integer year, @Param("month") Integer month, @Param("day") Integer day);
 
     Director findById(String directorId);
+
 }

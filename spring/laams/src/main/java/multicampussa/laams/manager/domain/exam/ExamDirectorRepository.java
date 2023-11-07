@@ -34,4 +34,12 @@ public interface ExamDirectorRepository extends JpaRepository<ExamDirector, Long
 
     @Query("select count(*) from ExamDirector ed where ed.exam.no = :examNo and ed.director.id = :directorId")
     int findByExamNoAndDirectorId(Long examNo, String directorId);
+
+    // 현재 이 시험에 이 감독관이 시험 배정 요청을 했는지 (했으면 0 안했으면 1)
+    @Query("select case when count(*) > 0 then false else true end from ExamDirector ed where ed.exam.no = :examNo and ed.director.id = :directorId")
+    boolean findByDirectorIdAndExam(Long examNo, String directorId);
+
+    // 배정 요청했을 때의 시험 감독관 찾기
+    @Query("select ed from ExamDirector ed where ed.director.id = :directorId and ed.exam.no = :examNo")
+    ExamDirector findByDirectorAndExam(String directorId, Long examNo);
 }

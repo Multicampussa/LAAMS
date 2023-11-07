@@ -479,7 +479,7 @@ public class DirectorService {
 //    @Transactional
 //    public DirectorAttendanceDto attendanceDirectorHome(Long directorNo, DirectorAttendanceRequestDto directorAttendacneRequestDto, String authority, String directorId) {
 //        if(authority.equals("ROLE_DIRECTOR")){
-//            List<Exam> exams = examRepository.findByDirectorID(directorId);
+//            List<Exam> exams = examRepository.findByDirectorId(directorId);
 //            for(Exam exam : exams){
 //                System.out.println(exam.getExamDate());
 //            }
@@ -493,7 +493,7 @@ public class DirectorService {
 //
 //            for(Exam exam : exams){
 //                LocalDateTime examDate = exam.getExamDate();
-////                System.out.println(examDate);
+//                System.out.println(examDate);
 ////                LocalDateTime currentDate = now.toLocalDate().atStartOfDay(); // 현재 날짜와 시간
 //
 //                // 오늘 시험 중 현재 시간 이후 중 가장 빠른 시험 찾기
@@ -501,8 +501,9 @@ public class DirectorService {
 //                    closestExamTime = examDate;
 //                    closestExam = exam;
 //                }
-//
+////                boolean flag = false;
 //                if(closestExam != null) {
+//                    System.out.println(closestExam.getExamType());
 //                    // 그 시험의 센터장 위치랑 감독관 현재 위치랑 비교
 //                    Double directorLatitude = directorAttendacneRequestDto.getLatitude();
 //                    Double directorLongitude = directorAttendacneRequestDto.getLongitude();
@@ -537,4 +538,42 @@ public class DirectorService {
 //        return null;
 //    }
 
+    // 내가 속한 센터에 내가 아직 신청 요청 안 보내고, 꽉 차지 않는 시험 +
+    // 내가 신청했지만 승인 안된 시험 목록
+    @Transactional
+    public List<UnappliedAndUnapprovedExamListDto> unappliedAndUnapprovedExamList(String authority, String directorId, Long centerNo, int year, int month, int day) {
+        if (authority.equals("ROLE_DIRECTOR")) {
+
+            List<UnappliedAndUnapprovedExamListDto> unappliedAndUnapprovedExamListDtos = new ArrayList<>();
+            // 내가 속한 센터이 시험들
+            List<Exam> centerExams = examRepository.findByCenterNoContainingDate(centerNo, year, month, day);
+
+            for(Exam exam : centerExams){
+                int cntConfirmDirector = examDirectorRepository.countByConfirm(exam.getNo());
+                // 감독관이 시험 배정 요청 했는지 (했으면 0, 안했으면 1)
+                boolean unapplied = examDirectorRepository.findByDirectorIdAndExam(exam.getNo(), directorId);
+                if(unapplied) {
+                    // 현재 시험에서 배정 요청이 승인된 감독관 수
+                    int confirmedDirectorCnt = examDirectorRepository.countByConfirm(exam.getNo());
+
+                    // 최대 배정 가능한 감독관 수와 비교해서 배정이 가능하면(꽉 차지 않았으면)
+                    if(exam.getMaxDirector() > confirmedDirectorCnt) {
+                        unappliedAndUnapprovedExamListDtos.add(new UnappliedAndUnapprovedExamListDto(exam, "미배치", cntConfirmDirector));
+                    }
+                } else {
+                    // 배정 요청했을 때의 현재 시험 감독관 찾기
+                    ExamDirector currentExamDirector = examDirectorRepository.findByDirectorAndExam(directorId, exam.getNo());
+
+                    // 승인이 안됨
+                    if(currentExamDirector.getConfirm().toString().equals("대기") || currentExamDirector.getConfirm().toString().equals("거절")) {
+                        unappliedAndUnapprovedExamListDtos.add(new UnappliedAndUnapprovedExamListDto(exam, currentExamDirector.getConfirm().toString(), cntConfirmDirector));
+                    }
+                }
+            }
+            return unappliedAndUnapprovedExamListDtos;
+
+        } else {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+    }
 }
