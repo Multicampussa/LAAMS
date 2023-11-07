@@ -60,7 +60,9 @@ public class MessageController {
         }
         System.out.println(message.getMessage());
         sendingOperations.convertAndSend("/topic/chat/room/"+message.getRoomId(), message);
-        sendingOperations.convertAndSend("/topic/chat/room/alarm", message);
+        if (authority.equals("ROLE_DIRECTOR")) {
+            sendingOperations.convertAndSend("/topic/chat/room/alarm", message);
+        }
         messageService.saveMessage(message);
         resultMap.put("code", HttpStatus.OK.value());
         resultMap.put("message", "성공적으로 전송되었습니다.");
@@ -92,7 +94,6 @@ public class MessageController {
         }
         System.out.println(message.getMessage());
         sendingOperations.convertAndSend("/topic/chat/room/notice-all", message);
-        sendingOperations.convertAndSend("/topic/chat/room/alarm", message);
         messageService.saveMessage(message);
         resultMap.put("code", HttpStatus.OK.value());
         resultMap.put("message", "성공적으로 전송되었습니다.");
@@ -126,7 +127,6 @@ public class MessageController {
         }
         System.out.println(message.getMessage());
         sendingOperations.convertAndSend("/topic/chat/room/notice-" + region, message);
-        sendingOperations.convertAndSend("/topic/chat/room/alarm", message);
         messageService.saveMessage(message);
         resultMap.put("code", HttpStatus.OK.value());
         resultMap.put("message", "성공적으로 전송되었습니다.");
@@ -160,7 +160,6 @@ public class MessageController {
         }
         System.out.println(message.getMessage());
         sendingOperations.convertAndSend("/topic/chat/room/notice-c" + centerNo, message);
-        sendingOperations.convertAndSend("/topic/chat/room/alarm", message);
         messageService.saveMessage(message);
         resultMap.put("code", HttpStatus.OK.value());
         resultMap.put("message", "성공적으로 전송되었습니다.");
@@ -193,7 +192,6 @@ public class MessageController {
         }
         System.out.println(message.getMessage());
         sendingOperations.convertAndSend("/topic/chat/room/notice-now", message);
-        sendingOperations.convertAndSend("/topic/chat/room/alarm", message);
         messageService.saveMessage(message);
         resultMap.put("code", HttpStatus.OK.value());
         resultMap.put("message", "성공적으로 전송되었습니다.");
