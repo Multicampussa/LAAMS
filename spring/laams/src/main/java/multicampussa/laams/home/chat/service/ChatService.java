@@ -9,11 +9,14 @@ import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import multicampussa.laams.manager.domain.center.Center;
 import multicampussa.laams.manager.domain.center.CenterRepository;
+import multicampussa.laams.manager.domain.exam.Exam;
+import multicampussa.laams.manager.domain.exam.ExamRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -25,6 +28,7 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final MemberDirectorRepository memberDirectorRepository;
     private final CenterRepository centerRepository;
+    private final ExamRepository examRepository;
 
     @PostConstruct
     //의존관계 주입완료되면 실행되는 코드
@@ -131,5 +135,33 @@ public class ChatService {
     public String findCenterNameByDirector(String id) {
         Center center = centerRepository.findByDirectorId(id);
         return center.getName();
+    }
+
+    // 현재 진행중인 시험 공지 채팅방 생성
+    public List<ChatRoom> createNoticeRoomForNow() {
+        List<ChatRoom> chatRooms = new ArrayList<>();
+        if (!chatRepository.existsByRoomName("Now")) {
+            ChatRoom chatRoom = ChatRoom.create("Now");
+            chatRepository.save(chatRoom);
+            chatRooms.add(chatRoom);
+        } else {
+            chatRooms.add(chatRepository.findByRoomName("Now"));
+        }
+
+        return chatRooms;
+    }
+
+    // 해당 감독관이 감독 진행중인 시험이 있는지
+    public boolean isTesting(String id) {
+        List<Exam> exams = examRepository.findByDirectorId(id);
+
+        for (Exam exam : exams) {
+            if (exam.getExamDate().isBefore(LocalDateTime.now()) &&
+                    (exam.getExamDate().plusMinutes(exam.getRunningTime())).isAfter(LocalDateTime.now())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
