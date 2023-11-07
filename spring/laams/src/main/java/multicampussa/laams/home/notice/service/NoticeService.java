@@ -86,7 +86,7 @@ public class NoticeService {
     }
 
     @Transactional
-    public boolean updateNotice(NoticeUpdateDto noticeUpdateDto, String authority, MultipartFile file) {
+    public boolean updateNotice(NoticeUpdateDto noticeUpdateDto, String authority, MultipartFile file) throws Exception {
 
         boolean result = true;
 
@@ -103,73 +103,78 @@ public class NoticeService {
         Long noticeNo = noticeUpdateDto.getNoticeNo();
         Notice notice = noticeRepository.findById(noticeNo).get();
 
-//        Manager manager = new Manager();
-//        Manager manager = managerRepository.findById(memberId).get();
+        notice.update(noticeUpdateDto);
 
-//        if (managerRepository.existsById(memberNo)) {
-            notice.update(noticeUpdateDto);
-
-            String attachFileUrl = "";
-            String fileName = "";
-
-            // 생성 시 사진 첨부, 수정 시 새로운 사진으로 변경
-            if (notice.getAttachFile() != null && file != null) {
-                // S3에 올라가있는거 지우기
-                // 저장된 파일이름 불러오고
-                // 그 파일 이름 넣어서 s3에서 삭제
-                fileName = notice.getFileName();
-                s3Service.deleteFile(fileName);
+        String attachFileUrl = "";
+        String fileName = "";
+        System.out.println("파일명 : "+ notice.getAttachFile());
+        System.out.println("파일명 비었나요? : "+ notice.getAttachFile().isEmpty());
+        System.out.println("추가 첨부파일" + file);
 
 
-                // 새로운 파일을 S3에 추가
-                attachFileUrl = s3Service.saveFile(file);
-                // 문자열을 "com/"을 기준으로 분할
-                String[] parts = attachFileUrl.split("com/");
+        // 생성 시 사진 첨부, 수정 시 새로운 사진으로 변경
+        if (!notice.getAttachFile().isEmpty() && file != null) {
+            // S3에 올라가있는거 지우기
+            // 저장된 파일이름 불러오고
+            // 그 파일 이름 넣어서 s3에서 삭제
+            fileName = notice.getFileName();
+            System.out.println("11111111");
+            s3Service.deleteFile(fileName);
 
-                // 분할된 문자열 중 두 번째 부분 가져오기 (두 번째 부분은 "com/" 이후의 부분)
-                String parsedString = parts[1];
-                fileName = parsedString;
-            }
-            // 생성 시 사진 첨부, 수정 시 기존 사진 그대로
-            if (notice.getAttachFile() != null && file == null) {
-                attachFileUrl = notice.getAttachFile();
-                fileName = notice.getFileName();
-            }
-            // 생성 시 사진 없음, 수정 시 사진 첨부
-            if (notice.getAttachFile() == null && file != null) {
-                attachFileUrl = s3Service.saveFile(file);
-                // 문자열을 "com/"을 기준으로 분할
-                String[] parts = attachFileUrl.split("com/");
 
-                // 분할된 문자열 중 두 번째 부분 가져오기 (두 번째 부분은 "com/" 이후의 부분)
-                String parsedString = parts[1];
-                fileName = parsedString;
+            // 새로운 파일을 S3에 추가
+            attachFileUrl = s3Service.saveFile(file);
+            // 문자열을 "com/"을 기준으로 분할
+            String[] parts = attachFileUrl.split("com/");
 
-            }
-            // 생성 시 사진 없음, 수정 시에도 없음
-            if (notice.getAttachFile() == null && file == null) {
-                attachFileUrl = "";
-                fileName = "";
-            }
+            // 분할된 문자열 중 두 번째 부분 가져오기 (두 번째 부분은 "com/" 이후의 부분)
+            String parsedString = parts[1];
+            fileName = parsedString;
 
             notice.setAttachFileUrl(attachFileUrl);
             notice.setFileName(fileName);
-            noticeRepository.save(notice);
+        }
+        // 생성 시 사진 첨부, 수정 시 사진 삭제
+        if (!notice.getAttachFile().isEmpty() && file == null) {
+            fileName = notice.getFileName();
+            System.out.println("2222222222");
+            s3Service.deleteFile(fileName);
+            fileName = "";
 
-//        } else {
-//            result = false;
-//            throw new IllegalArgumentException(memberNo + "가 없습니다");
-//        }
-//
-//        if (findMangerById.isEmpty()) {
-//        } else {
-//        }
+            notice.setAttachFileUrl(attachFileUrl);
+            notice.setFileName(fileName);
+
+
+        }
+        // 생성 시 사진 없음, 수정 시 사진 첨부
+        if  (notice.getAttachFile().isEmpty() && file != null) {
+            attachFileUrl = s3Service.saveFile(file);
+            // 문자열을 "com/"을 기준으로 분할
+            String[] parts = attachFileUrl.split("com/");
+
+            // 분할된 문자열 중 두 번째 부분 가져오기 (두 번째 부분은 "com/" 이후의 부분)
+            String parsedString = parts[1];
+            fileName = parsedString;
+
+            notice.setAttachFileUrl(attachFileUrl);
+            notice.setFileName(fileName);
+
+        }
+        // 생성 시 사진 없음, 수정 시에도 없음
+        if (notice.getAttachFile().isEmpty() && file == null) {
+            attachFileUrl = "";
+            fileName = "";
+        }
+
+//        notice.setAttachFileUrl(attachFileUrl);
+//        notice.setFileName(fileName);
+        noticeRepository.save(notice);
 
         return result;
     }
 
     @Transactional
-    public boolean deleteNotice(Long noticeNo, Long memberNo, String authority) {
+    public boolean deleteNotice(Long noticeNo, String authority) {
 
         boolean result = true;
 
@@ -200,7 +205,7 @@ public class NoticeService {
     }
 
     // 첨부파일 다운 받기
-    public ResponseEntity<UrlResource> downloadFile(String originalFilename) {
+    public ResponseEntity<UrlResource> downloadFile(String originalFilename) throws IOException{
         return s3Service.downloadFile(originalFilename);
     }
 

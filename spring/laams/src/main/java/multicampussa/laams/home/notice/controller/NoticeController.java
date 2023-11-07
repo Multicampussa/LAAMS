@@ -2,7 +2,9 @@ package multicampussa.laams.home.notice.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.notice.domain.Notice;
 import multicampussa.laams.home.notice.dto.*;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -29,6 +32,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 @Api(tags = "공지사항 관련 기능")
+@Slf4j
 public class NoticeController {
 
     private final NoticeService noticeService;
@@ -82,7 +86,11 @@ public class NoticeController {
         } catch (IllegalArgumentException e) {
             resultMap.put("message", e.getMessage());
             resultMap.put("status", HttpStatus.BAD_REQUEST.value());
+            log.error(e.getMessage());
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return  null;
         }
     }
 
@@ -92,10 +100,10 @@ public class NoticeController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
             String token  = authorization.replace("Bearer ", "");
-            Long memberNo = jwtTokenProvider.getMemberNo(token);
+//            Long memberNo = jwtTokenProvider.getMemberNo(token);
             String authority = jwtTokenProvider.getAuthority(token);
 
-            boolean result = noticeService.deleteNotice(noticeNo, memberNo, authority);
+            boolean result = noticeService.deleteNotice(noticeNo, authority);
 
             resultMap.put("message", "성공적으로 삭제하였습니다.");
             resultMap.put("status", HttpStatus.OK.value());
@@ -151,16 +159,44 @@ public class NoticeController {
 
     @ApiOperation(value = "공지사항 첨부파일 다운로드")
     @GetMapping("/notice/download/{fileName}")
-    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String fileName) throws IOException {
-        InputStream fileInputStream = noticeService.downloadFile(fileName).getBody().getInputStream();
+    public ResponseEntity<?> downloadFile(@PathVariable String fileName) {
 
-        // 파일을 스트림으로 전송하고 다운로드 가능하도록 헤더 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", fileName);
+        try {
+            // 파일을 스트림으로 전송하고 다운로드 가능하도록 헤더 설정
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", fileName);
 
-        return new ResponseEntity<>(new InputStreamResource(fileInputStream), headers, HttpStatus.OK);
+            InputStream fileInputStream = noticeService.downloadFile(fileName).getBody().getInputStream();
+            return new ResponseEntity<>(new InputStreamResource(fileInputStream), headers, HttpStatus.OK);
+        } catch (IOException e) {
+            // 예외 발생 시, 사용자에게 에러 메시지를 반환
+            return new ResponseEntity<>("NOT_FOUND_FILE", HttpStatus.NOT_FOUND);
+        }
     }
+
+
+//    @ApiOperation(value = "공지사항 첨부파일 다운로드")
+//    @GetMapping("/notice/download/{fileName}")
+//    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String fileName) throws NotFoundException {
+//
+//        // 파일을 스트림으로 전송하고 다운로드 가능하도록 헤더 설정
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//        headers.setContentDispositionFormData("attachment", fileName);
+//
+//        InputStream fileInputStream = null;
+//        try {
+//            fileInputStream = noticeService.downloadFile(fileName).getBody().getInputStream();
+//        } catch (IOException e) {
+//            // Empty File InputStream
+//            InputStream emptyInputStream = new ByteArrayInputStream(new byte[0]);
+//            InputStreamResource emptyInputStreamResource = new InputStreamResource(emptyInputStream);
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(emptyInputStreamResource);
+//        }
+//
+//        return new ResponseEntity<>(new InputStreamResource(fileInputStream), headers, HttpStatus.OK);
+//    }
 
     // 공지사항 전체 개수 조회
     @ApiOperation(value = "공지사항 총 개수 조회")
