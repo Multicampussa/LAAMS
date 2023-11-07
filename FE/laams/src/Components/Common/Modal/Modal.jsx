@@ -9,6 +9,7 @@ import ExamDocs from '../../Director/Exam/ExamDocs.jsx';
 import CalendarDetail from '../../Manager/Home/CalendarDetail.jsx';
 import DirectorCalendarDetail from '../../Director/Home/DirectorCalendarDetail.jsx';
 import ManagerCompensation from "../../Manager/Compensation/Compensation.jsx";
+import CenterCalendarDetail from '../../CenterManager/CenterCalendarDetail.jsx';
 const Modal = () => {
   const show = useSelector(state=>state.Modal.show);
   const type = useSelector(state=>state.Modal.type);
@@ -44,6 +45,9 @@ const Modal = () => {
         break
       case "director-calendar-detail":
         setComponent(<DirectorCalendarDetail/>);
+        break
+      case "center-calendar-detail":
+        setComponent(<CenterCalendarDetail/>);
         break
       default:
         break;

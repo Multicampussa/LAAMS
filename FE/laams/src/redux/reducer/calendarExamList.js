@@ -2,12 +2,12 @@ const init = {
     examList : []
   };
   
-const directorCalendarExamListReducer = (state = init, action)=>{
+const calendarExamListReducer = (state = init, action)=>{
 switch (action.type) {
-    case "directorCalendarExamList":
+    case "calendarExamList":
         return { ...state, examList: action.payload};
     default:
         return state;
 }
 }
-export default directorCalendarExamListReducer;
+export default calendarExamListReducer;
