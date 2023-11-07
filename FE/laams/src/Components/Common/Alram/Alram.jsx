@@ -15,7 +15,7 @@ const Alram = () => {
     switch(authority){
       case "ROLE_DIRECTOR":
         return alramMessage.current.filter(e=>e.type!=="ENTER" && e.sender === "운영자").map((e,idx)=><li className='header-bell-item' key={idx}>{e.sender}:{e.message}</li>)
-      case "ROLE_MNANAGER":
+      case "ROLE_MANAGER":
         return alramMessage.current.filter(e=>e.type!=="ENTER"  && e.sender !== "운영자").map((e,idx)=><li className='header-bell-item' key={idx}>{e.sender}:{e.message}</li>)
       default:
         break;
