@@ -34,7 +34,7 @@ public class ExamDirector extends BaseTimeEntity {
     };
 
     @Enumerated(EnumType.STRING)
-    private Confirm confirm = null;
+    private Confirm confirm = Confirm.대기;
 
     public void setExam(Exam exam, Director director) {
         this.exam = exam;

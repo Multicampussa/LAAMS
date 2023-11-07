@@ -66,7 +66,9 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
             "group by e.center")
     List<DashboardExamineeDto> getCenterExamineeMonthCount(@Param("year") int year, @Param("month") int month);
 
-    // 감독관 아이디로 현재 감독하는 시험들 찾기
-//    @Query("select ed.exam from ExamDirector ed where ed.director.id = :directorId and ed.confirm = true")
-//    List<Exam> findByDirectorId(String directorId);
+    @Query("select e from Exam e where e.center.no = :centerNo " +
+            "and year(e.examDate) = :year and month(e.examDate) = :month and (day(e.examDate) = :day OR :day = 0) " +
+            "order by e.examDate asc")
+    List<Exam> findByCenterNoContainingDate(Long centerNo, int year, int month, int day);
+
 }
