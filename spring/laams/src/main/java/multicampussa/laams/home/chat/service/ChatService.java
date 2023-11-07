@@ -37,15 +37,12 @@ public class ChatService {
     }
 
     //채팅방 불러오기
-    public List<ChatRoom> findSearchRoom(String region, String centerName) {
+    public List<ChatRoom> findSearchRoom(String directorId, String centerName) {
         List<ChatRoom> result = new ArrayList<>();
         if (centerName != null) {
             result.add(chatRepository.findByRoomName(centerName));
-        } else if (region != null) {
-            List<Center> centers = centerRepository.findByRegion(region);
-            for (Center center : centers) {
-                result.add(chatRepository.findByRoomName(center.getName()));
-            }
+        } else if (directorId != null) {
+            result.add(chatRepository.findByRoomName(directorId));
         } else {
             result = chatRepository.findAll();
         }
