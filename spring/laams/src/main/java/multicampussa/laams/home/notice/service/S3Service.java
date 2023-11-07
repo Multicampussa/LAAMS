@@ -68,7 +68,7 @@ public class S3Service {
 
 
     // 첨부파일 다운로드
-    public ResponseEntity<UrlResource> downloadFile(String originalFilename) {
+    public ResponseEntity<UrlResource> downloadFile(String originalFilename) throws IOException {
         UrlResource urlResource = new UrlResource(amazonS3Client.getUrl(bucket, originalFilename));
 
         String contentDisposition = "attachment; filename=\"" +  originalFilename + "\"";

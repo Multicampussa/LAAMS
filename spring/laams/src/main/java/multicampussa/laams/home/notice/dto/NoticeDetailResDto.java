@@ -30,6 +30,7 @@ public class NoticeDetailResDto {
         this.title = notice.getTitle();
         this.content = notice.getContent();
         this.attachFile = notice.getAttachFile();
+        this.fileName = notice.getFileName();
         this.createdAt = notice.getCreatedAt();
         this.updatedAt = notice.getUpdatedAt();
     }
