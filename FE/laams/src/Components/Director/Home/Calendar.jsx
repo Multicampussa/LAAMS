@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { useDispatch } from 'react-redux';
 import { setModalShow, setModalType } from '../../../redux/actions/modalAction';
-import { setExamList } from '../../../redux/actions/calendarExamListAction';
+import { setExamDate, setExamList } from '../../../redux/actions/calendarExamListAction';
 
 /*
 examList : 한달간 시험목록 (Object)
@@ -34,14 +34,15 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
   const dispatch = useDispatch();
 
   // TODO : 달력 아이템 클릭 함수
-  const handleExamModal = useCallback((e)=>{
-    if(!e){
-      dispatch(setExamList([]))
-      return
+  const handleExamModal = useCallback((e,i,curDate)=>{
+    if (!e) {
+      dispatch(setExamList([]));
+    } else {
+      dispatch(setExamList(e));
     }
-    dispatch(setExamList(e))
     dispatch(setModalType("director-calendar-detail"));
     dispatch(setModalShow(true));
+    dispatch(setExamDate({year:curDate.getFullYear(), month: curDate.getMonth()+1, day: i}))
   },[dispatch])
   
   //TODO : 달력 Div를 반환
@@ -58,7 +59,7 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
       const week = (firstDate.getDay()+i)%7;
       temp.push(<div 
         onClick={()=>{
-        handleExamModal(examList[i])
+        handleExamModal(examList[i],i,curDate)
       }} className='calendar-day' key={key++}>
         <div className={week===0||week===1?"calendar-week-title":'calendar-day-title'}>{i}</div>
         {
