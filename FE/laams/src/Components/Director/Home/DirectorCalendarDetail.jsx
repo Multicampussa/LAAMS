@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { setModalShow } from '../../../redux/actions/modalAction';
 
 const DirectorCalendarDetail = () => {
-  const examList = useSelector(state => state.DirectorCalendarExamList.examList);
+  const examList = useSelector(state => state.CalendarExamList.examList);
   const [isClicked, setIsClicked] = useState({1:true, 2:false});
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,6 +37,10 @@ const DirectorCalendarDetail = () => {
         
     }
   },[examList,isClicked, examTimeFormat, navigate, dispatch])
+
+  useEffect(()=>{
+    console.log(examList)
+  },[])
 
   return (
     <section className='director-calendar-detail'> 

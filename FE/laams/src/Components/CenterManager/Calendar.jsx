@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { useDispatch } from 'react-redux';
-import { setModalShow, setModalType } from '../../../redux/actions/modalAction';
-import { setExamList } from '../../../redux/actions/calendarExamListAction';
+import { setExamList } from '../../redux/actions/calendarExamListAction';
+import { setModalShow, setModalType } from '../../redux/actions/modalAction';
 
 /*
 examList : 한달간 시험목록 (Object)
@@ -39,9 +39,9 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
       dispatch(setExamList([]))
       return
     }
-    dispatch(setExamList(e))
-    dispatch(setModalType("director-calendar-detail"));
+    dispatch(setExamList(e));
     dispatch(setModalShow(true));
+    dispatch(setModalType("center-calendar-detail"));
   },[dispatch])
   
   //TODO : 달력 Div를 반환

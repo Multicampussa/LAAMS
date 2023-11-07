@@ -1,4 +1,4 @@
 export const setExamList = (payload) => ({
-    type: "directorCalendarExamList",
+    type: "calendarExamList",
     payload
   });
