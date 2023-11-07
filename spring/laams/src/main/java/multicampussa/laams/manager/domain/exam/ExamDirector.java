@@ -52,5 +52,9 @@ public class ExamDirector extends BaseTimeEntity {
         this.confirm = Confirm.valueOf("승인");
     }
 
+    public void denyDirector() {
+        this.confirm = Confirm.valueOf("거절");
+    }
+
 }
 

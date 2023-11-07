@@ -39,6 +39,17 @@ public class CenterManagerService {
     }
 
     @Transactional
+    public void denyDirector(ConfirmDirectorRequest request) {
+        ExamDirector examDirector =
+                examDirectorRepository.findByExamNoAndDirectorNo(request.getExamNo(), request.getDirectorNo());
+        if (examDirector == null) {
+            throw new CustomExceptions.ExamDirectorNotFoundException("해당 시험을 신청한 감독관이 없습니다.");
+        }
+        examDirector.denyDirector();
+    }
+
+
+    @Transactional
     public List<CenterExamListDto> getCenterExamList(String centerManagerId, int year, int month, int day, String authority){
         if(authority.equals("ROLE_CENTER_MANAGER")){
             List<CenterExamListDto> centerExamListDtos = new ArrayList<>();
@@ -76,4 +87,6 @@ public class CenterManagerService {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
     }
+
+
 }
