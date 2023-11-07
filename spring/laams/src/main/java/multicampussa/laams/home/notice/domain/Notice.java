@@ -32,6 +32,7 @@ public class Notice extends BaseTimeEntity {
     private String attachFile = "";
 
     // 첨부파일 명
+    @Column(length = 1000)
     private String fileName = "";
 
 
