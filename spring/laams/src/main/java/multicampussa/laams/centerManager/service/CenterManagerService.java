@@ -6,6 +6,7 @@ import multicampussa.laams.centerManager.domain.CenterManagerRepository;
 import multicampussa.laams.centerManager.dto.CenterExamDto;
 import multicampussa.laams.centerManager.dto.CenterExamListDto;
 import multicampussa.laams.centerManager.dto.ConfirmDirectorRequest;
+import multicampussa.laams.centerManager.dto.DirectorAssignmentRequestListResponse;
 import multicampussa.laams.director.dto.director.ExamMonthDayListDto;
 import multicampussa.laams.global.CustomExceptions;
 import multicampussa.laams.manager.domain.center.Center;
@@ -37,6 +38,31 @@ public class CenterManagerService {
         }
         examDirector.confirmDirector();
     }
+
+    @Transactional
+    public void denyDirector(ConfirmDirectorRequest request) {
+        ExamDirector examDirector =
+                examDirectorRepository.findByExamNoAndDirectorNo(request.getExamNo(), request.getDirectorNo());
+        if (examDirector == null) {
+            throw new CustomExceptions.ExamDirectorNotFoundException("해당 시험을 신청한 감독관이 없습니다.");
+        }
+        examDirector.denyDirector();
+    }
+
+    @Transactional
+    public List<DirectorAssignmentRequestListResponse> getDirectorAssignmentRequestList(Long examNo) {
+        List<ExamDirector> examDirectors = examDirectorRepository.findUnconfirmed(examNo);
+        if (examDirectors == null) {
+            throw new CustomExceptions.ExamDirectorNotFoundException("해당 시험을 신청한 감독관이 없습니다.");
+        }
+        System.out.println(examDirectors);
+        List<DirectorAssignmentRequestListResponse> responses = new ArrayList<>();
+        for (ExamDirector examDirector : examDirectors) {
+            responses.add(new DirectorAssignmentRequestListResponse(examDirector));
+        }
+        return responses;
+    }
+
 
     @Transactional
     public List<CenterExamListDto> getCenterExamList(String centerManagerId, int year, int month, int day, String authority){

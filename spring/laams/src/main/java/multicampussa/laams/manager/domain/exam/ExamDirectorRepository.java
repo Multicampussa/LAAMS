@@ -15,6 +15,10 @@ public interface ExamDirectorRepository extends JpaRepository<ExamDirector, Long
     // 시험 no로 ExamDirector 조회
     List<ExamDirector> findByExamNo(Long examNo);
 
+    // 시험 no로 confrim이 대기인 것들 조회
+    @Query("SELECT ed FROM ExamDirector ed WHERE ed.exam.no = :examNo AND ed.confirm = '대기'")
+    List<ExamDirector> findUnconfirmed(@Param("examNo") Long examNo);
+
     // 시험 no과 감독 no로 조회
     ExamDirector findByExamNoAndDirectorNo(Long examNo, Long directorNo);
 
