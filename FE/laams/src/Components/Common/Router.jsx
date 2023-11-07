@@ -21,6 +21,7 @@ import ManagerChat from '../Manager/Chat/ManagerChat.jsx';
 import ManagerRoom from '../Manager/Chat/ManagerRoom.jsx';
 import CreateErrorReport from '../Director/ErrorReport/CreateErrorReport.jsx';
 import ManagerErrorReport from "../Manager/ErrorReport/Detail.jsx";
+import CenterHome from '../CenterManager/CenterHome.jsx';
 const Router = () => {
   return (
     <>
@@ -122,6 +123,12 @@ const Router = () => {
             path='/director/create/error-report' 
             element={
             <PrivateRoute role="director" children={<CreateErrorReport/>}></PrivateRoute>
+            }
+          />
+          <Route
+            path='/centermanager'
+            element={
+              <PrivateRoute role="centermanager" children={<CenterHome/>}></PrivateRoute>
             }
           />
           <Route path='/test' element={<Test/>} />
