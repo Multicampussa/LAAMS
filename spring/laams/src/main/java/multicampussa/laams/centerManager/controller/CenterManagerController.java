@@ -52,6 +52,30 @@ public class CenterManagerController {
         }
 
     }
+    // 센터 매니저의 감독관 신청 거절
+    @ApiOperation(value = "센터 매니저의 감독관 신청 거절")
+    @PutMapping("/deny")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "x번 감독관의 y번 시험 승인을 거절했습니다.", response = ConfirmDirectorRequest.class),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "잘못된 요청"),
+    })
+    public ResponseEntity<ApiResponse<String>> denyDirector(
+            @RequestBody ConfirmDirectorRequest request, @ApiIgnore @RequestHeader String authorization) {
+        String token = authorization.replace("Bearer", "");
+        String authority = jwtTokenProvider.getAuthority(token);
+        if (authority.equals("ROLE_CENTER_MANAGER")) {
+            centerManagerService.denyDirector(request);
+            return new ResponseEntity<>(
+                    new ApiResponse<>(
+                            "success",
+                            HttpStatus.OK.value(),
+                            request.getDirectorNo() + "번 감독관의" + request.getExamNo() + "번 시험 거절을 완료했습니다."
+                    ),
+                    HttpStatus.OK);
+        } else {
+            throw new CustomExceptions.UnauthorizedException("접근 권한이 없습니다.");
+        }
+    }
 
     // 센터별 시험 조회
     @ApiOperation(value = "센터 별 시험 월별 및 일별 조회")
