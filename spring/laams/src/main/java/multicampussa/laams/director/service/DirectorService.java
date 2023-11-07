@@ -496,8 +496,8 @@ public class DirectorService {
 //                System.out.println(examDate);
 ////                LocalDateTime currentDate = now.toLocalDate().atStartOfDay(); // 현재 날짜와 시간
 //
-//                // 오늘 시험 중 현재 시간 이후 중 가장 빠른 시험 찾기
-//                if (examDate.isAfter(now) && (closestExamTime == null || examDate.isBefore(closestExamTime)) && !examDate.toLocalDate().isAfter(now.toLocalDate()))  {
+//                // 오늘 시험 중 현재 시간 이후 중 가장 빠른 시험 찾기(그 시험의 시작 시간까지)
+//                if (examDate.isAfter(now) && (examDate.isBefore(closestExamTime) || examDate.equals(closestExamTime)) && !examDate.toLocalDate().isAfter(now.toLocalDate()))  {
 //                    closestExamTime = examDate;
 //                    closestExam = exam;
 //                }
