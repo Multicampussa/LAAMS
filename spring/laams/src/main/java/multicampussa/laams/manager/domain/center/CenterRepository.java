@@ -24,4 +24,5 @@ public interface CenterRepository extends JpaRepository<Center, Long> {
     @Query(value = "SELECT c FROM Center c JOIN c.director d WHERE d.id = :id")
     Center findByDirectorId(@Param("id") String id);
 
+    List<Center> findByRegion(String region);
 }

@@ -42,19 +42,19 @@ public class ChatRoomController {
     @GetMapping("/rooms")
     @ResponseBody
     @ApiOperation(value = "채팅방 리스트")
-    public List<ChatRoom> room(@ApiIgnore @RequestHeader String authorization) {
+    public List<ChatRoom> room(@RequestParam(required = false) String region, @RequestParam(required = false) String centerName, @ApiIgnore @RequestHeader String authorization) {
         String token = authorization.replace("Bearer ", "");
         String authority = jwtTokenProvider.getAuthority(token);
         String id = jwtTokenProvider.getId(token);
 
         List<ChatRoom> result = new ArrayList<>();
         if (authority.equals("ROLE_DIRECTOR")) {
-            String region = chatService.findRegionByDirector(id);
-            String centerName = chatService.findCenterNameByDirector(id);
+            String regionByDirector = chatService.findRegionByDirector(id);
+            String centerNameByDirector = chatService.findCenterNameByDirector(id);
             result.add(chatService.findByRoomName(id));
             result.add(chatService.findByRoomName("Notice"));
-            result.add(chatService.findByRoomName(region));
-            result.add(chatService.findByRoomName(centerName));
+            result.add(chatService.findByRoomName(regionByDirector));
+            result.add(chatService.findByRoomName(centerNameByDirector));
             if (chatService.isTesting(id)) {
                 result.add(chatService.findByRoomName("Now"));
             }
@@ -63,7 +63,7 @@ public class ChatRoomController {
             return result;
         }
 
-        return chatService.findAllRoom();
+        return chatService.findSearchRoom(region, centerName);
     }
 
     // 일대일 채팅방 생성

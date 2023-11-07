@@ -37,9 +37,19 @@ public class ChatService {
     }
 
     //채팅방 불러오기
-    public List<ChatRoom> findAllRoom() {
-        //채팅방 최근 생성 순으로 반환
-        List<ChatRoom> result = chatRepository.findAll();
+    public List<ChatRoom> findSearchRoom(String region, String centerName) {
+        List<ChatRoom> result = new ArrayList<>();
+        if (centerName != null) {
+            result.add(chatRepository.findByRoomName(centerName));
+        } else if (region != null) {
+            List<Center> centers = centerRepository.findByRegion(region);
+            for (Center center : centers) {
+                result.add(chatRepository.findByRoomName(center.getName()));
+            }
+        } else {
+            result = chatRepository.findAll();
+        }
+
         Collections.reverse(result);
 
         return result;
