@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.home.chat.domain.ChatMessage;
 import multicampussa.laams.home.chat.domain.ChatRoom;
+import multicampussa.laams.home.chat.dto.SaveMessage;
 import multicampussa.laams.home.chat.service.ChatService;
 import multicampussa.laams.home.chat.service.MessageService;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
@@ -203,7 +204,7 @@ public class MessageController {
     @GetMapping("/room/{roomId}")
     @ResponseBody
     @ApiOperation(value = "채팅 내역 조회")
-    public List<ChatMessage> roomInfo(@PathVariable String roomId) {
+    public List<SaveMessage> roomInfo(@PathVariable String roomId) {
         return messageService.getMessages(roomId);
     }
 }
