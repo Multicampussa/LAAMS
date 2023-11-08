@@ -60,7 +60,7 @@ const useApi = () => {
             navigate("/");
             window.alert("토큰이 만료되어 자동으로 로그아웃 되었습니다");
           }else{
-            await axios.post(`${process.env.REACT_APP_SPRING_URL}/member/refresh`,{},
+            await axios.post(`${process.env.REACT_APP_SPRING_URL}/api/v1/member/refresh`,{},
               {
                 headers: {Authorization: "Bearer "+localStorage.getItem("refreshToken"),},
               }
