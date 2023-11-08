@@ -467,7 +467,11 @@ public class DirectorService {
                                     Boolean directorAttendance = true;
                                     DirectorAttendanceDto directorAttendanceDto = new DirectorAttendanceDto(directorAttendance);
 
-                                    currentExamDirector.updateAttendance(directorAttendanceDto);
+                                    if(currentExamDirector.getDirectorAttendance() != true) {
+                                        currentExamDirector.updateAttendance(directorAttendanceDto);
+                                    } else {
+                                        throw new IllegalArgumentException(exam.getNo() + "번 시험은 이미 도착 인증을 했습니다.");
+                                    }
                                     return directorAttendanceDto;
                                 }
                             } else {
@@ -534,11 +538,16 @@ public class DirectorService {
                             throw new IllegalArgumentException("아직 멀어요...");
                         }
                         else {
+                            System.out.println(closestExam.getNo());
                             Boolean directorAttendance = true;
                             DirectorAttendanceDto directorAttendanceDto = new DirectorAttendanceDto(directorAttendance);
 
                             ExamDirector currentExamDirector = examDirectorRepository.findByDirectorAndExam(directorId, closestExam.getNo());
-                            currentExamDirector.updateAttendance(directorAttendanceDto);
+                            if(currentExamDirector.getDirectorAttendance() != true) {
+                                currentExamDirector.updateAttendance(directorAttendanceDto);
+                            } else {
+                                throw new IllegalArgumentException(closestExam.getNo() + "번 시험은 이미 도착 인증을 했습니다.");
+                            }
 
                             return directorAttendanceDto;
                         }
