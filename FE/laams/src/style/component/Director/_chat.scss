@@ -3,18 +3,8 @@
   background-color: $color-white;
   border: 0.1rem solid $color-gray-light;
   border-radius:  0 0 1rem 1rem;
-  @include desktop{
-    width: 30vw;
-    height: 50vh;
-  }
-  @include tablet{
-    width: 100vw;
-    height: 50vh;
-  }
-  @include mobile{
-    width: 100vw;
-    height: 80vh;
-  }
+  width: 100%;
+  height: 100%;
   &-aside{
     width: 30%;
     height: 100%;

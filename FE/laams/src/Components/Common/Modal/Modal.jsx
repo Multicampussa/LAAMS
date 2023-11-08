@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {setModalShow} from "../../../redux/actions/modalAction.js";
+import {setModalShow, setModalType} from "../../../redux/actions/modalAction.js";
 import ExamCreate from "../../Manager/Exam/Create/ExamCreate.jsx"
 import ExamDetail from "../../Manager/Exam/Detail.jsx";
 import ExamCompensation from '../../Director/Exam/ExamCompensation.jsx';
@@ -11,6 +11,7 @@ import DirectorCalendarDetail from '../../Director/Home/DirectorCalendarDetail.j
 import ManagerCompensation from "../../Manager/Compensation/Compensation.jsx";
 import DirectorChat from './../../Director/Chat/DirectorChat';
 import CenterCalendarDetail from '../../CenterManager/CenterCalendarDetail.jsx';
+import ManagerChat from '../../Manager/Chat/ManagerChat.jsx';
 const Modal = () => {
   const show = useSelector(state=>state.Modal.show);
   const type = useSelector(state=>state.Modal.type);
@@ -19,6 +20,8 @@ const Modal = () => {
 
   const closeModal = useCallback(()=>{
     dispatch(setModalShow(false));
+    dispatch(setModalType(null));
+    setComponent(null);
   },[dispatch]);
 
   useEffect(()=>{
@@ -28,6 +31,9 @@ const Modal = () => {
         break;
       case "manager-compensation":
         setComponent(<ManagerCompensation/>)
+        break;
+      case "manager-chat":
+        setComponent(<ManagerChat/>)
         break;
       case "director-chat":
         setComponent(<DirectorChat/>);

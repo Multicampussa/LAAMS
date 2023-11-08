@@ -41,7 +41,13 @@ const Header = () => {
     setMenu("close");
     dispatch(setModalType("director-chat"));
     dispatch(setModalShow(true));
-  },[dispatch])
+  },[dispatch]);
+
+  const handleManagerChat = useCallback(()=>{
+    setMenu("close");
+    dispatch(setModalType("manager-chat"));
+    dispatch(setModalShow(true));
+  },[dispatch]);
 
   const menuItems = useMemo(()=>{
     let res = [];
@@ -65,7 +71,7 @@ const Header = () => {
           <Link key={key++} onClick={handleMenuItem} to="/manager/exam" className='header-menu-box-item'>시험일정</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/chart" className='header-menu-box-item'>차트</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/compensation" className='header-menu-box-item'>보상</Link>,
-          <Link key={key++} onClick={handleMenuItem} to="/manager/room" className='header-menu-box-item'>채팅</Link>,
+          <div key={key++} onClick={handleManagerChat} className='header-menu-box-item'>채팅</div>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/error-report" className='header-menu-box-item'>에러리포트</Link>,
           <button key={key++} onClick={logout} className='header-menu-box-item'>로그아웃</button>
         ];
@@ -84,7 +90,7 @@ const Header = () => {
         break;
     }
     return res;
-  },[user,handleMenuItem,logout,handleDirectorChat])
+  },[user,handleMenuItem,logout,handleDirectorChat,handleManagerChat])
 
   return (
     <>

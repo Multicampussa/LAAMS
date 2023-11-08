@@ -9,8 +9,8 @@ const Alarm = () => {
   const socket = useRef(new SockJS(`${process.env.REACT_APP_SPRING_URL}/ws/chat`));
   const ws = useRef(new Stomp.over(socket.current));
   const reconnect = useRef(0);
-  const [alarmMessage,setAlarmMessage] = useState([]);
   const accessToken = useSelector(state=>state.User.accessToken);
+  const [alarmMessage,setAlarmMessage] = useState([]);
   const [showAlarm,setShowAlarm] = useState(false);
   const authority = useSelector(state=>state.User.authority);
   const api = useApi();
@@ -38,14 +38,6 @@ const Alarm = () => {
     setShowAlarm(e=>!e);
   },[]);
 
-  const managerDisconnect = useCallback(()=>{
-    ws.current.unsubscribe(`/topic/chat/room/alarm`);
-  },[]);
-
-  const directorDisconnect = useCallback(()=>{
-    ws.current.unsubscribe(`/topic/chat/room/alarm`);
-  },[]);
-
   const managerConnect = useCallback(()=>{
     ws.current.connect({'Authorization': `Bearer ${accessToken}`}, function(frame) {
       ws.current.subscribe(`/topic/chat/room/alarm`, function(message) {
@@ -71,8 +63,8 @@ const Alarm = () => {
 
   //TODO : 감독관 채팅입력시 소켓으로 전달
   useEffect(()=>{
-    if(!directorChat || directorChat==="" || !directorRoom.current) return;
-    ws.current.send("/app/chat/message", {'Authorization': `Bearer ${accessToken}`}, JSON.stringify({type:'TALK', roomId:directorRoom.current.roomId, sender:directorRoom.current.roomName, roomName:directorRoom.current.roomName, message:directorChat}));
+    if(!directorChat || directorChat==="" || !directorRoom.current || directorRoom.current[0] === null) return;
+    ws.current.send("/app/chat/message", {'Authorization': `Bearer ${accessToken}`}, JSON.stringify({type:'TALK', roomId:directorRoom.current[0].roomId, sender:directorRoom.current[0].roomName, roomName:directorRoom.current[0].roomName, message:directorChat}));
   },[directorChat,accessToken]);
 
 
@@ -84,20 +76,42 @@ const Alarm = () => {
         const res = await api.post("chat/room");
         if(res){
           data[0]=res.data.data;
-          directorRoom.current = res.data.data;
+          directorRoom.current = data;
           ws.current.subscribe(`/topic/chat/room/${res.data.data.roomId}`, function(message) {
+            const recv = JSON.parse(message.body);
+            console.log(recv);
+          });
+          ws.current.subscribe(`/topic/chat/room/notice-all`, function(message) {
+            const recv = JSON.parse(message.body);
+            console.log(recv);
+          });
+          ws.current.subscribe(`/topic/chat/room/notice-${data[2].roomName}`, function(message) {
+            const recv = JSON.parse(message.body);
+            console.log(recv);
+          });
+          ws.current.subscribe(`/topic/chat/room/notice-${data[3].roomName}`, function(message) {
             const recv = JSON.parse(message.body);
             console.log(recv);
           });
         }
       }else{
-        directorRoom.current = data[0];
-        for(let i = 0; i < data.length; i++){
-          ws.current.subscribe(`/topic/chat/room/${data[i].roomId}`, function(message) {
-            const recv = JSON.parse(message.body);
-            console.log(recv);
-          });
-        }
+        directorRoom.current = data;
+        ws.current.subscribe(`/topic/chat/room/${data[0].roomId}`, function(message) {
+          const recv = JSON.parse(message.body);
+          console.log(recv);
+        });
+        ws.current.subscribe(`/topic/chat/room/notice-all`, function(message) {
+          const recv = JSON.parse(message.body);
+          console.log(recv);
+        });
+        ws.current.subscribe(`/topic/chat/room/notice-${data[2].roomName}`, function(message) {
+          const recv = JSON.parse(message.body);
+          console.log(recv);
+        });
+        ws.current.subscribe(`/topic/chat/room/notice-${data[3].roomName}`, function(message) {
+          const recv = JSON.parse(message.body);
+          console.log(recv);
+        });
       }
     }, function(error) {
       if(reconnect.current++ <= 5) {
@@ -127,17 +141,10 @@ const Alarm = () => {
   },[managerConnect,directorConnect,authority]);
 
   useEffect(()=>{
-    switch(authority){
-      case "ROLE_DIRECTOR":
-        window.addEventListener("beforeunload",directorDisconnect);
-        break;
-      case "ROLE_MANAGER":
-        window.addEventListener("beforeunload",managerDisconnect);
-        break;
-      default:
-        break;
+    return ()=>{
+      ws.current.disconnect();
     }
-  },[managerDisconnect,directorDisconnect,authority])
+  },[authority])
 
   const handleCleanBtn = useCallback(()=>{
     setAlarmMessage([]);
