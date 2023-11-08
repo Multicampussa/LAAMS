@@ -36,6 +36,9 @@ const Home = () => {
           case "ROLE_MANAGER":
             navigate("/manager");
           break;
+          case "ROLE_CENTER_MANAGER":
+            navigate('/centermanager');
+          break
         }
       }else{
         alert("권한이 설정되지 않았습니다!");

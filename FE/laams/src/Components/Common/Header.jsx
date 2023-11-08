@@ -70,6 +70,12 @@ const Header = () => {
           <button key={key++} onClick={logout} className='header-menu-box-item'>로그아웃</button>
         ];
         break;
+      case "ROLE_CENTER_MANAGER":
+        res= [
+          <Link key={key++}  onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,
+          <button key={key++} onClick={logout} className='header-menu-box-item'>로그아웃</button>
+        ]
+        break
       default:
         res = [
           <Link key={key++}  onClick={handleMenuItem} to="/notice" className='header-menu-box-item'>공지사항</Link>,

@@ -30,6 +30,11 @@ const PrivateRoute = ({role, children }) => {
             isAllow=true;
           }
           break;
+        case "centermanager":
+          if(user.authority==="ROLE_CENTER_MANAGER"){
+            isAllow = true;
+          }
+          break;
         default:
           break;
       }
