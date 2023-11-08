@@ -4,19 +4,27 @@
     display: flex;
     flex-direction: column;
     gap: 2%;
+    &-date{
+        width: 90%;
+        font-size: 2rem;
+        position: absolute;
+        top:1rem;
+        font-weight: 500;
+        display: flex;
+        gap: 1rem;
+    }
     &-tab{
         width: 100%;
-        height: 6rem;
+        height: 4rem;
         display: flex;
-        font-size: 3rem;
+        font-size: 2rem;
         text-align: center;
-        line-height: 6rem;
+        line-height: 4rem;
         font-weight: 500;
         &-true{
             width: 50%;
             background-color: $color-blue;
             color: $color-white;
-
         }
         &-false{
             width: 50%;
@@ -54,7 +62,13 @@
             border-radius: 0.5rem 0.5rem 0 0;
             color: white;
         }
-        &-false-task, &-false-request{
+        &-true-label{
+            font-size: 1.2rem;
+            font-weight: 400;
+            padding-top: 1rem;
+            box-sizing: border-box;
+        }
+        &-false-task, &-false-request, &-false-label{
             display: none;
         }
         &-task-items{
@@ -63,11 +77,40 @@
             grid-template-columns: 2fr 1fr 1fr;
             text-align: center;
             padding: 0.5rem 0;
+            box-sizing: border-box;
             border-bottom: 0.1rem solid $color-gray-light;
             &-title:hover{
                 cursor: pointer;
                 color: $color-blue
             }
+        }
+        &-task-none{
+            font-size: 2rem;
+            text-align: center;
+        }
+        &-request-items{
+            text-align: center;
+            font-size: 1.5rem;
+            display: grid;
+            padding: 0.5rem 0;
+            box-sizing: border-box;
+            border-bottom: 0.1rem solid $color-gray-light;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            &-btn-true{
+                width: 80%;
+                text-align: center;
+                background-color: $color-blue;
+                color: white;
+                border-radius: 0.5rem;
+                height: 2.5rem;
+                justify-self: center;
+            }
+            &-btn-false{
+                display: none;
+            }
+        }
+        &-input{
+            appearance: auto;
         }
     }
 }

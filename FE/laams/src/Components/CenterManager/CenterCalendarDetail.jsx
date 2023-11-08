@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
+import useApi from './../../Hook/useApi';
 
 const CenterCalendarDetail = () => {
   const examList = useSelector(state=>state.CalendarExamList.examList)
@@ -7,10 +8,22 @@ const CenterCalendarDetail = () => {
   const [examNo, setExamNo] = useState();
   const [isShow, setIsShow] = useState(false);
   const isModalOpen = useSelector(state=>state.Modal.show)
-  // FIXME : 이후 api 연결 필요
-  const [requestList, setRequestList] = useState(["감독관 김철수","감독관 한철수","감독관 최철수","감독관 김응애","감독관 김화수","감독관 히히수","감독관 이철수","감독관 김감독","감독관 김응수"
-  ]);
+  const [requestList, setRequestList] = useState([]);
+  const api = useApi();
+  const examDate = useSelector(state=>state.CalendarExamList.examDate)
 
+
+  //TODO : 특정 시험 요청 목록 조회
+
+  const getRequestList = useCallback((index)=>{
+    api.get(`centermanager/exam/${examList[index].examNo}/director/assignment`)
+    .then((res)=>{
+      console.log(res)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  },[api,examList])
   // TODO : 시험 일정 선택 핸들러 함수
   const handleIsChecked = useCallback((index)=>{
     const newIsChecked = [...isChecked]
@@ -43,20 +56,20 @@ const CenterCalendarDetail = () => {
     }
         return examList.map((exam,index)=>{
             return <li className={`modal-item-${isChecked[index]? 'active':'deactive'}`}
-            onClick={()=>{handleIsChecked(index);}}>{exam.examType}</li>
+            onClick={()=>{handleIsChecked(index); getRequestList(index);}}>{exam.examType}</li>
         })
-    },[examList,isChecked, handleIsChecked])
+    },[examList,isChecked, handleIsChecked, getRequestList])
   
-    // TODO : 날짜 형식 수정
-  const dateFormat = useCallback((date)=>{
-    if(!date){
-      return
-    }
-    const examDate = date.toString();
-    const month = examDate.substr(4,3) 
-    const day = examDate.substr(8,2) 
-    return month + '. '+ day;
-  },[])
+  //   // TODO : 날짜 형식 수정
+  // const dateFormat = useCallback((date)=>{
+  //   if(!date){
+  //     return
+  //   }
+  //   const newDate = new Date(date);
+  //   const month = newDate.getMonth()+1 < 10? '0' + newDate.getMonth()+1: newDate.getMonth()+1;
+  //   const day = newDate.getDay() < 10? '0' + newDate.getDay(): newDate.getDay();
+  //   return month + '월 '+ day + '일';
+  // },[])
 
   // TODO : 감독 요청 조회
   const showRequestList = useMemo(()=>{
@@ -72,7 +85,7 @@ const CenterCalendarDetail = () => {
   return (
     <section className='center-calendar-detail'>
       <div className='center-calendar-detail-tab'>
-      <div className='center-calendar-detail-tab-date'>{examList? dateFormat(examList[0].examDate):null}</div>
+      <div className='center-calendar-detail-tab-date'>{examDate['month']}월 {examDate['day']}일</div>
         <div className='center-calendar-detail-tab-exam'>시험 일정</div>
         <div className='center-calendar-detail-tab-request'>감독 요청</div>
       </div>
