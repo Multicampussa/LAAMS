@@ -4,8 +4,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import multicampussa.laams.centerManager.dto.ConfirmDirectorRequest;
+import multicampussa.laams.global.CustomExceptions;
+import multicampussa.laams.home.member.jwt.JwtTokenProvider;
+import multicampussa.laams.manager.dto.examinee.request.ExamineeCompensationDenyRequest;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeCreateRequest;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeUpdateRequest;
+import multicampussa.laams.manager.dto.examinee.request.ExamineeCompensationConfirmRequest;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationDetailResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationListResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeResponse;
@@ -13,6 +18,7 @@ import multicampussa.laams.manager.service.examinee.ManagerExamineeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,9 +29,11 @@ import java.util.Map;
 public class ManagerExamineeController {
 
     private final ManagerExamineeService examineeService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public ManagerExamineeController(ManagerExamineeService examineeService) {
+    public ManagerExamineeController(ManagerExamineeService examineeService, JwtTokenProvider jwtTokenProvider) {
         this.examineeService = examineeService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     // 응시자 생성
@@ -43,6 +51,61 @@ public class ManagerExamineeController {
         resultMap.put("code", HttpStatus.OK.value());
         resultMap.put("status", "success");
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    // 보상 승인
+    @ApiOperation(value = "운영자의 보상 신청 승인")
+    @PutMapping("/api/v1/manager/compensation/confirm")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(
+                    code = 200, message = "x번 응시자의 y번 시험의 보상 승인을 완료했습니다."),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "잘못된 요청"),
+    })
+    public ResponseEntity<multicampussa.laams.global.ApiResponse<String>> confirmCompensation(
+            @ApiIgnore @RequestHeader String authorization,
+            @RequestBody ExamineeCompensationConfirmRequest request
+    ) {
+        String token = authorization.replace("Bearer", "");
+        String authority = jwtTokenProvider.getAuthority(token);
+        if (authority.equals("ROLE_MANAGER")) {
+            examineeService.confirmCompensation(request);
+            return new ResponseEntity<>(
+                    new multicampussa.laams.global.ApiResponse<>(
+                            "success",
+                            HttpStatus.OK.value(),
+                            request.getExamineeNo() + "번 응시자의" + request.getExamNo() + "번 시험의 보상 승인을 완료했습니다."
+                    ),
+                    HttpStatus.OK);
+        } else {
+            throw new CustomExceptions.UnauthorizedException("접근 권한이 없습니다.");
+        }
+    }
+
+    // 보상 거절
+    @ApiOperation(value = "운영자의 보상 신청 거절")
+    @PutMapping("/api/v1/manager/compensation/deny")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "x번 응시자의 y번 시험 보상 승인을 거절했습니다."),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "잘못된 요청"),
+    })
+    public ResponseEntity<multicampussa.laams.global.ApiResponse<String>> denyCompensation(
+            @ApiIgnore @RequestHeader String authorization,
+            @RequestBody ExamineeCompensationDenyRequest request
+    ) {
+        String token = authorization.replace("Bearer", "");
+        String authority = jwtTokenProvider.getAuthority(token);
+        if (authority.equals("ROLE_MANAGER")) {
+            examineeService.denyConfirm(request);
+            return new ResponseEntity<>(
+                    new multicampussa.laams.global.ApiResponse<>(
+                            "success",
+                            HttpStatus.OK.value(),
+                            request.getExamineeNo() + "번 응시자의" + request.getExamNo() + "번 시험의 보상 거절을 완료했습니다."
+                    ),
+                    HttpStatus.OK);
+        } else {
+            throw new CustomExceptions.UnauthorizedException("접근 권한이 없습니다.");
+        }
     }
 
     // 응시자 목록 조회
