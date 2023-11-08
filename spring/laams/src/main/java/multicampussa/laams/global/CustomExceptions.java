@@ -39,4 +39,8 @@ public class CustomExceptions {
     public static class UnauthorizedException extends RuntimeException {
         public UnauthorizedException(String message) {super(message);}
     }
+
+    public static class ExamExamineeNotFoundException extends RuntimeException {
+        public ExamExamineeNotFoundException(String message) {super(message);}
+    }
 }

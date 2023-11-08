@@ -64,7 +64,8 @@ public class CenterManagerController {
     })
     public ResponseEntity<ApiResponse<String>> denyDirector(
             @ApiIgnore @RequestHeader String authorization,
-            @RequestBody ConfirmDirectorRequest request) {
+            @RequestBody ConfirmDirectorRequest request
+    ) {
         String token = authorization.replace("Bearer", "");
         String authority = jwtTokenProvider.getAuthority(token);
         if (authority.equals("ROLE_CENTER_MANAGER")) {
