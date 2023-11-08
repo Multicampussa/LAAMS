@@ -60,7 +60,7 @@ const DirectorCalendarDetail = () => {
             return <div className='director-calendar-detail-box-task-none' >감독을 맡은 시험이 없습니다</div>
         }
         return examList.map((exam,index)=>{
-            return  <li className='director-calendar-detail-box-task-items'>
+            return  <li className='director-calendar-detail-box-task-items' key={index}>
                         <div className='director-calendar-detail-box-task-items-title'
                             onClick={()=>{
                                 navigate(`/director/exam/${exam.examNo}`);
@@ -78,7 +78,7 @@ const DirectorCalendarDetail = () => {
         if (isChecked){
             return requestList.map((req,index)=>{
                 if(req.currentConfirm==='미배치'){
-                    return  <li li className='director-calendar-detail-box-request-items'>
+                    return  <li li className='director-calendar-detail-box-request-items' key={index}>
                                 <div>{req.examType}-{req.examLanguage}</div>
                                 <div>{examTimeFormat(req.examDate)}</div>
                                 <div>{examTimeFormat(req.endExamDate)}</div>
@@ -92,7 +92,7 @@ const DirectorCalendarDetail = () => {
         }
         // 배치 가능 + 거절/대기 조회
         return  requestList.map((req, index)=>{
-            return  <li li className='director-calendar-detail-box-request-items'>
+            return  <li li className='director-calendar-detail-box-request-items' key={index}>
                         <div>{req.examType}-{req.examLanguage}</div>
                         <div>{examTimeFormat(req.examDate)}</div>
                         <div>{examTimeFormat(req.endExamDate)}</div>

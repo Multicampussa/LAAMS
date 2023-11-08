@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import useApi from '../../../Hook/useApi';
 import { useParams } from 'react-router-dom';
 import { setModalShow, setModalType } from './../../../redux/actions/modalAction';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setExamineeNo } from '../../../redux/actions/examineeDetailAction';
 import { setExamNo } from '../../../redux/actions/managerExamDetailAction';
 import { useGeoLocation } from './../../../Hook/useGeolocation';
@@ -14,6 +14,18 @@ const ExamDetail = () => {
   const [examineesData, setExamineesData] = useState([]);
   const api = useApi();
   const geolocation = useGeoLocation();
+  const userId = useSelector(state=>state.User.memberId);
+  const [directorAttendance, setDirectorAttendance] = useState(false);
+  
+  // TODO : 감독관 정보 조회
+  const getDirectorInfo = useCallback(async()=>{
+    if(!userId || !api){
+      return
+    }
+    const response = await api.get(`member/info/${userId}`);
+    return response.data.data.memberNo;
+  },[api,userId])
+
   
 // TODO : 시험 상세 정보 조회
   const getExam = useCallback(async()=>{
@@ -33,15 +45,31 @@ const ExamDetail = () => {
     })
   },[api,params])
 
-  // TODO : 현재 위치 정보 콘솔에 찍기
+  // TODO : 현재 위치 정보 얻어옴
   const getLocation = useCallback(async()=>{
     try{
       const location = await geolocation();
-      console.log(location);
+      return location
     }catch(err){
       alert(err.message);
     }
   },[geolocation])
+
+  //TODO : 감독관 센터 도착 인증 요청
+  const directorAttend = useCallback(async()=>{
+    const location = await getLocation();
+    const directorUserNo = await getDirectorInfo();
+    await api.post(`director/exams/${params['no']}/${directorUserNo}/attendance`,
+      {latitude: location['latitude'], longitude:location['longitude']})
+      // {latitude: 37.5884628, longitude:127.062636})
+    .then(({data})=>{
+      setDirectorAttendance(true);
+      console.log(data)
+    })
+    .catch((err)=>{
+      alert('센터 인근에서 인증해주세요')
+    })
+  },[api, getDirectorInfo,params,getLocation])
 
   //TODO : 서류 제출 변경
   const updateDocs = useCallback((index, e)=>{
@@ -276,13 +304,13 @@ const ExamDetail = () => {
             <div className='exam-detail-aside-title-box'>
               <p>{examData['centerName']}</p>
               <p>{getTime(examData['examDate'],examData['runningTime'])[0]} ~ {getTime(examData['examDate'],examData['runningTime'])[1]} ({examData['runningTime']}분)</p>
-              {/* FIXME : api 연결 필요 */}
-              <p>감독관 센터 도착 완료</p>
+               {directorAttendance? <p className={`exam-detail-aside-title-box-${directorAttendance}`}>감독관 센터 도착 완료</p>
+               :<p className={`exam-detail-aside-title-box-${directorAttendance}`}>센터 도착 인증을 해주세요</p>}          
             </div>
             <button 
             className='exam-detail-aside-btn'
             onClick={()=>{
-              getLocation()
+              directorAttend()
             }}
             >감독관 센터 도착 인증</button>
             <div className='exam-detail-aside-title'>응시자 현황</div>

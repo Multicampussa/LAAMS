@@ -74,7 +74,7 @@ const DirectorHome = () => {
     }else{
       return todayExamList.map((e,index)=>{
 
-        return <div className='director-home-todo-box-items'>
+        return <div className='director-home-todo-box-items' key={index}>
                 <div className='director-home-todo-box-items-text'
                 onClick={()=>navigate(`/director/exam/${e.examNo}`)}>[{e.examType}]{e.centerName}</div>
                 <div className='director-home-todo-box-items-text-region'>({e.centerRegion})</div>
@@ -137,7 +137,8 @@ const DirectorHome = () => {
           <div className='director-home-notice-box-items'
           onClick={()=>{
             navigate(`/notice/detail/${notice.noticeNo}`)
-          }}>
+          }}
+          key={index}>
             <div className='director-home-notice-box-items-title'>{notice.title}</div>
             <div className='director-home-notice-box-items-time'>{year}-{month}-{day} {hours}:{min}</div>
           </div>
