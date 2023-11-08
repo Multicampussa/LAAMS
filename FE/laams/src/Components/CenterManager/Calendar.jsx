@@ -37,9 +37,9 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
   const handleExamModal = useCallback((e,i,curDate)=>{
     if(!e){
       dispatch(setExamList([]))
-      return
+    }else{
+      dispatch(setExamList(e));
     }
-    dispatch(setExamList(e));
     dispatch(setModalShow(true));
     dispatch(setExamDate({year: curDate.getFullYear(), month: curDate.getMonth()+1, day:i}))
     dispatch(setModalType("center-calendar-detail"));
