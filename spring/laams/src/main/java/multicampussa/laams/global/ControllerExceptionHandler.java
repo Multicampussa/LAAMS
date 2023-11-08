@@ -62,4 +62,12 @@ public class ControllerExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse("UnauthorizedException", ex.getMessage());
         return new ResponseEntity<>(new ApiResponse<>("error", HttpStatus.UNAUTHORIZED.value(), errorResponse), HttpStatus.UNAUTHORIZED);
     }
+
+    // 시험에 등록된 응시자 없음
+    @ExceptionHandler(CustomExceptions.ExamExamineeNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ApiResponse<ErrorResponse>> ExamExamineeNotFoundException(CustomExceptions.ExamExamineeNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("ExamExamineeNotFoundException", ex.getMessage());
+        return new ResponseEntity<>(new ApiResponse<>("error", HttpStatus.UNAUTHORIZED.value(), errorResponse), HttpStatus.UNAUTHORIZED);
+    }
 }

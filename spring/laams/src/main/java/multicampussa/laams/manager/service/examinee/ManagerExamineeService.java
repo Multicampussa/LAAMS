@@ -1,10 +1,13 @@
 package multicampussa.laams.manager.service.examinee;
 
+import multicampussa.laams.global.CustomExceptions;
 import multicampussa.laams.manager.domain.exam.ExamDirectorRepository;
 import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
 import multicampussa.laams.manager.domain.examinee.Examinee;
 import multicampussa.laams.manager.domain.examinee.ExamineeRepository;
+import multicampussa.laams.manager.dto.examinee.request.ExamineeCompensationConfirmRequest;
+import multicampussa.laams.manager.dto.examinee.request.ExamineeCompensationDenyRequest;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeCreateRequest;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeUpdateRequest;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationDetailResponse;
@@ -34,6 +37,28 @@ public class ManagerExamineeService {
     @Transactional
     public void saveExaminee(ExamineeCreateRequest request) {
         examineeRepository.save(new Examinee(request));
+    }
+
+    // 응시자 보상 승인
+    @Transactional
+    public void confirmCompensation(ExamineeCompensationConfirmRequest request) {
+        ExamExaminee examExaminee =
+                examExamineeRepository.findByExamNoAndExamineeNo(request.getExamNo(), request.getExamineeNo());
+        if (examExaminee == null) {
+            throw new CustomExceptions.ExamExamineeNotFoundException("해당 시험에 등록된 응시자가 존재하지 않습니다.");
+        }
+        examExaminee.confirmCompensation();
+    }
+
+    // 응시자 보상 거절
+    @Transactional
+    public void denyConfirm(ExamineeCompensationDenyRequest request) {
+        ExamExaminee examExaminee =
+                examExamineeRepository.findByExamNoAndExamineeNo(request.getExamNo(), request.getExamineeNo());
+        if (examExaminee == null) {
+            throw new CustomExceptions.ExamExamineeNotFoundException("해당 시험에 등록된 응시자가 존재하지 않습니다.");
+        }
+        examExaminee.denyCompensation();
     }
 
     // 응시자 목록 조회
@@ -89,5 +114,4 @@ public class ManagerExamineeService {
                 .orElseThrow(IllegalArgumentException::new);
         examineeRepository.delete(examinee);
     }
-
 }

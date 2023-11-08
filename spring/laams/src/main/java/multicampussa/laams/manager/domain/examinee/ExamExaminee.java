@@ -42,10 +42,13 @@ public class ExamExaminee extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private DocumentStatus document = DocumentStatus.서류_제출_대기;
 
+    // 보상 대상 여부
     private Boolean compensation = false;
 
+    // 보상 타입(지각, 서류미비 등)
     private String compensationType;
 
+    // 보상 이유
     private String compensationReason;
 
     public enum CompensationStatus {
@@ -54,6 +57,7 @@ public class ExamExaminee extends BaseTimeEntity {
         보상_거절
     };
 
+    // 보상 상태(대기, 승인, 거절)
     @Enumerated(EnumType.STRING)
     private CompensationStatus isCompensation = CompensationStatus.보상_대기;
 
@@ -88,6 +92,16 @@ public class ExamExaminee extends BaseTimeEntity {
         this.compensationType = compensationApplyDto.getCompensationType();
         this.compensationReason = compensationApplyDto.getCompensationReason();
         this.compensation = compensation;
+    }
+
+    // 보상 승인
+    public void confirmCompensation() {
+        this.isCompensation = CompensationStatus.보상_승인;
+    }
+
+    // 보상 거절
+    public void denyCompensation() {
+        this.isCompensation = CompensationStatus.보상_거절;
     }
 
     // 서류 제출 확인
