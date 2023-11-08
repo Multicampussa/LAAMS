@@ -600,4 +600,34 @@ public class DirectorService {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
     }
+
+    // 내가 속한 센터에서 신청이 가능한 시험 목록
+    @Transactional
+    public List<PossibleToApplyExamListDto> possibleToApplyExamList(String authority, String directorId, Long centerNo, int year, int month, int day) {
+        if (authority.equals("ROLE_DIRECTOR")) {
+
+            List<PossibleToApplyExamListDto> possibleToApplyExamListDtos = new ArrayList<>();
+            // 내가 속한 센터의 시험들
+            List<Exam> centerExams = examRepository.findByCenterNoContainingDate(centerNo, year, month, day);
+
+            for(Exam exam : centerExams){
+                int cntConfirmDirector = examDirectorRepository.countByConfirm(exam.getNo());
+                // 감독관이 시험 배정 요청 했는지 (했으면 0, 안했으면 1)
+                boolean unapplied = examDirectorRepository.findByDirectorIdAndExam(exam.getNo(), directorId);
+                if(unapplied) {
+                    // 현재 시험에서 배정 요청이 승인된 감독관 수
+                    int confirmedDirectorCnt = examDirectorRepository.countByConfirm(exam.getNo());
+
+                    // 최대 배정 가능한 감독관 수와 비교해서 배정이 가능하면(꽉 차지 않았으면)
+                    if(exam.getMaxDirector() > confirmedDirectorCnt) {
+                        possibleToApplyExamListDtos.add(new PossibleToApplyExamListDto(exam, cntConfirmDirector));
+                    }
+                }
+            }
+            return possibleToApplyExamListDtos;
+
+        } else {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+    }
 }
