@@ -7,6 +7,7 @@ import ManagerCalendarDetail from "./managerCalendarDetailReducer";
 import DirectorCalendarExamList from "./directorCalendarExamList";
 import ManagerCompensation from "./managerCompensationReducer";
 import ManagerChat from "./managerChatReducer";
+import DirectorChat from "./directorChatReducer";
 const rootReducer = combineReducers({
   User,
   Modal,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   ExamineeDetail,
   ManagerCalendarDetail,
   ManagerCompensation,
-  ManagerChat
+  ManagerChat,
+  DirectorChat
 });
 export default rootReducer;
