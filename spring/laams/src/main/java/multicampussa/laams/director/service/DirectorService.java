@@ -17,6 +17,7 @@ import org.joda.time.LocalTime;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -445,28 +446,35 @@ public class DirectorService {
                     // 현재 이 시험을 감독하는 사람인지
                     if(currentExamDirector != null){
 
-                        if(directorAttendanceRequestDto.getLatitude() != null && directorAttendanceRequestDto.getLongitude() != null) {
-                            Double directorLatitude = directorAttendanceRequestDto.getLatitude();
-                            Double directorLongitude = directorAttendanceRequestDto.getLongitude();
-
-                            Double centerLatitude = exam.getCenter().getLatitude();
-                            Double centerLongitude = exam.getCenter().getLongitude();
-
-                            // 거리 계산
-                            Double dist = LocationDistance.distance(directorLatitude, directorLongitude ,centerLatitude, centerLongitude, "meter");
-                            if(dist > 500) { // 500m 초과이면
-                                throw new IllegalArgumentException("아직 멀어요...");
-                            }
-                            else {
-                                Boolean directorAttendance = true;
-                                DirectorAttendanceDto directorAttendanceDto = new DirectorAttendanceDto(directorAttendance);
-
-                                currentExamDirector.updateAttendance(directorAttendanceDto);
-                                return directorAttendanceDto;
-                            }
+                        LocalDateTime now = LocalDateTime.now();
+                        Duration duration = Duration.between(now, exam.getExamDate());
+                        if(duration.toHours() >= 1) {
+                            throw new IllegalArgumentException("시험 시작 시간 한시간 전부터 출석 인증이 가능합니다");
                         } else {
-                            throw new IllegalArgumentException("값이 없어요! 위도 경도 주세요!");
+                            if(directorAttendanceRequestDto.getLatitude() != null && directorAttendanceRequestDto.getLongitude() != null) {
+                                Double directorLatitude = directorAttendanceRequestDto.getLatitude();
+                                Double directorLongitude = directorAttendanceRequestDto.getLongitude();
+
+                                Double centerLatitude = exam.getCenter().getLatitude();
+                                Double centerLongitude = exam.getCenter().getLongitude();
+
+                                // 거리 계산
+                                Double dist = LocationDistance.distance(directorLatitude, directorLongitude ,centerLatitude, centerLongitude, "meter");
+                                if(dist > 500) { // 500m 초과이면
+                                    throw new IllegalArgumentException("아직 멀어요...");
+                                }
+                                else {
+                                    Boolean directorAttendance = true;
+                                    DirectorAttendanceDto directorAttendanceDto = new DirectorAttendanceDto(directorAttendance);
+
+                                    currentExamDirector.updateAttendance(directorAttendanceDto);
+                                    return directorAttendanceDto;
+                                }
+                            } else {
+                                throw new IllegalArgumentException("값이 없어요! 위도 경도 주세요!");
+                            }
                         }
+
                     } else {
                         throw new IllegalArgumentException("현재 시험을 감독하는 사람이 아닙니다.");
                     }
@@ -508,12 +516,10 @@ public class DirectorService {
                     }
                 }
 
-                Long timeDifferece = ChronoUnit.HOURS.between(now, closestExamTime);
-                if(timeDifferece > 1) {
+                Duration duration = Duration.between(now, closestExamTime);
+                if(duration.toHours() >= 1) {
                     throw new IllegalArgumentException("시험 시작 시간 한시간 전부터 출석 인증이 가능합니다");
                 } else {
-
-                    System.out.println(closestExam.getNo());
 
                     if(directorAttendacneRequestDto.getLatitude() != null && directorAttendacneRequestDto.getLongitude() != null) {
                         Double directorLatitude = directorAttendacneRequestDto.getLatitude();
