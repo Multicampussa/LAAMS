@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { setModalShow, setModalType } from './../../../redux/actions/modalAction';
@@ -46,7 +46,7 @@ const CalendarDetail = () => {
     ))
 
     return res;
-  },[calendarData]);
+  },[calendarData,handleCompensation,handleClose,handleAssignment]);
 
   const getDayFormat = useCallback((date)=>{
     switch(date){

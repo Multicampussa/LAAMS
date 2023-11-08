@@ -3,7 +3,8 @@ import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
 import { setUserClear } from '../../redux/actions/userAction';
-import Alram from './Alram/Alram';
+import Alarm from './Alarm/Alarm';
+import { setModalShow, setModalType } from './../../redux/actions/modalAction';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,18 @@ const Header = () => {
     }
   },[navigate,user]);
 
+  const handleDirectorChat = useCallback(()=>{
+    setMenu("close");
+    dispatch(setModalType("director-chat"));
+    dispatch(setModalShow(true));
+  },[dispatch]);
+
+  const handleManagerChat = useCallback(()=>{
+    setMenu("close");
+    dispatch(setModalType("manager-chat"));
+    dispatch(setModalShow(true));
+  },[dispatch]);
+
   const menuItems = useMemo(()=>{
     let res = [];
     let key = 0;
@@ -47,7 +60,7 @@ const Header = () => {
         <Link key={key++} onClick={handleMenuItem} to="/" className='header-menu-box-item'>보상</Link>,
         <Link key={key++} onClick={handleMenuItem} to="/director/create/error-report" className='header-menu-box-item'>에러리포트</Link>,
         <Link key={key++} onClick={handleMenuItem} to="/update/user" className='header-menu-box-item'>회원 정보</Link>,
-        <Link key={key++} onClick={handleMenuItem} to="/director/chat" className='header-menu-box-item'>채팅</Link>,
+        <div key={key++} onClick={handleDirectorChat} className='header-menu-box-item'>채팅</div>,
         <Link key={key++} onClick={handleMenuItem} to='/director/exam/1' className='header-menu-box-item'>시험 상세</Link>,
         <button key={key++} onClick={logout} className='header-menu-box-item'>로그아웃</button>
         ];
@@ -58,7 +71,7 @@ const Header = () => {
           <Link key={key++} onClick={handleMenuItem} to="/manager/exam" className='header-menu-box-item'>시험일정</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/chart" className='header-menu-box-item'>차트</Link>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/compensation" className='header-menu-box-item'>보상</Link>,
-          <Link key={key++} onClick={handleMenuItem} to="/manager/room" className='header-menu-box-item'>채팅</Link>,
+          <div key={key++} onClick={handleManagerChat} className='header-menu-box-item'>채팅</div>,
           <Link key={key++} onClick={handleMenuItem} to="/manager/error-report" className='header-menu-box-item'>에러리포트</Link>,
           <button key={key++} onClick={logout} className='header-menu-box-item'>로그아웃</button>
         ];
@@ -77,7 +90,7 @@ const Header = () => {
         break;
     }
     return res;
-  },[user,handleMenuItem,logout])
+  },[user,handleMenuItem,logout,handleDirectorChat,handleManagerChat])
 
   return (
     <>
@@ -90,7 +103,7 @@ const Header = () => {
           </button>
         </div>
       </header>
-      <Alram />
+      <Alarm />
       <div className={`header-menu-box-${menu}`}>
         {
           menuItems
