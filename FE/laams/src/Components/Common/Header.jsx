@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
 import { setUserClear } from '../../redux/actions/userAction';
-import Alram from './Alram/Alram';
+import Alarm from './Alarm/Alarm';
 import { setModalShow, setModalType } from './../../redux/actions/modalAction';
 
 const Header = () => {
@@ -97,7 +97,7 @@ const Header = () => {
           </button>
         </div>
       </header>
-      <Alram />
+      <Alarm />
       <div className={`header-menu-box-${menu}`}>
         {
           menuItems

@@ -1,27 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import useApi from './../../../Hook/useApi';
+import React, { useCallback, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { setDirectorChat } from './../../../redux/actions/directorChatAction';
 
 const DirectorChat = () => {
-  const api = useApi();
   const [menu,setMenu] = useState("All");
-  const [noticeAll,setNoticeAll] = useState();
-  const [noticeRegion,setNoticeRegion] = useState();
-  const [noticeCenter,setNoticeCenter]  = useState();
-  const [noticeNow,setNoticeNow] = useState();
-  useEffect(()=>{
-    api.post("chat/room/notice")
-      .then(({data})=>{
-        setNoticeAll(data["notice-all"]);
-        setNoticeRegion(data["noticeByRegion"]);
-        setNoticeCenter(data["noticeByCenter"]);
-        setNoticeNow(data["noticeForNow"]);
-      })
-      .catch(err=>console.log(err));
-  },[api]);
-
+  const [chat,setChat] = useState("");
+  const dispatch = useDispatch();
+  const handleChat = useCallback((e)=>{
+    setChat(e.target.value);
+  },[]);
+  const handleSend = useCallback(()=>{
+    dispatch(setDirectorChat(chat));
+  },[chat,dispatch]);
   return (
     <section className='director-chat'>
-      
+      <input value={chat} onChange={handleChat}/><button onClick={handleSend}>입력</button>
     </section>
   )
 }

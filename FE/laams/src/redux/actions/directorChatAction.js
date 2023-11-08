@@ -1,4 +1,4 @@
-export const setDirectorRoom = (payload) => ({
-  type: "director-room",
+export const setDirectorChat = (payload) => ({
+  type: "chat",
   payload
 });
