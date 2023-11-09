@@ -42,7 +42,7 @@ public class ChatRoomController {
     @GetMapping("/rooms")
     @ResponseBody
     @ApiOperation(value = "채팅방 리스트")
-    public List<ChatRoom> room(@RequestParam(required = false) String region, @RequestParam(required = false) String centerName, @ApiIgnore @RequestHeader String authorization) {
+    public List<ChatRoom> room(@RequestParam(required = false) String directorId, @RequestParam(required = false) String centerName, @RequestParam(defaultValue = "false") boolean isNow, @ApiIgnore @RequestHeader String authorization) {
         String token = authorization.replace("Bearer ", "");
         String authority = jwtTokenProvider.getAuthority(token);
         String id = jwtTokenProvider.getId(token);
@@ -63,7 +63,7 @@ public class ChatRoomController {
             return result;
         }
 
-        return chatService.findSearchRoom(region, centerName);
+        return chatService.findSearchRoom(directorId, centerName, isNow);
     }
 
     // 일대일 채팅방 생성

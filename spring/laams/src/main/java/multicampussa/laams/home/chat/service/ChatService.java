@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -37,14 +38,20 @@ public class ChatService {
     }
 
     //채팅방 불러오기
-    public List<ChatRoom> findSearchRoom(String directorId, String centerName) {
+    public List<ChatRoom> findSearchRoom(String directorId, String centerName, boolean isNow) {
         List<ChatRoom> result = new ArrayList<>();
         if (centerName != null) {
-            result.add(chatRepository.findByRoomName(centerName));
+            result.add(chatRepository.findByRoomNameContaining(centerName));
         } else if (directorId != null) {
-            result.add(chatRepository.findByRoomName(directorId));
+            result.add(chatRepository.findByRoomNameContaining(directorId));
         } else {
             result = chatRepository.findAll();
+        }
+
+        if (isNow) {
+            result = result.stream()
+                    .filter(chatRoom -> isTesting(chatRoom.getRoomName()))
+                    .collect(Collectors.toList());
         }
 
         Collections.reverse(result);
