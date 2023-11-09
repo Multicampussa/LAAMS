@@ -41,11 +41,11 @@ public class ChatService {
 
     //채팅방 불러오기
     public List<ChatRoom> findSearchRoom(String directorId, String centerName, boolean isNow) {
-        List<ChatRoom> result = new ArrayList<>();
+        List<ChatRoom> result;
         if (centerName != null) {
-            result.add(chatRepository.findByRoomNameContaining(centerName));
+            result = chatRepository.findByRoomNameContaining(centerName);
         } else if (directorId != null) {
-            result.add(chatRepository.findByRoomNameContaining(directorId));
+            result = chatRepository.findByRoomNameContaining(directorId);
         } else {
             result = chatRepository.findAll();
         }
