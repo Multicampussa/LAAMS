@@ -9,7 +9,7 @@ const useLogin = ()=> {
 
   const login = useCallback((id,password,authority,isChecked)=>{
     axios.post(`${process.env.REACT_APP_SPRING_URL}/api/v1/member/login`,{id,pw :password, authority: authority})
-      .then(({data})=>{
+      .then( ({data})=>{
         if(isChecked){
           localStorage.setItem("id", id)
         }else{
@@ -23,6 +23,13 @@ const useLogin = ()=> {
         localStorage.setItem("refreshToken",data.refreshToken);
         console.log(data);
         setIsLogin(true);
+        if(data.authority === "ROLE_DIRECTOR"){
+          axios.post(`${process.env.REACT_APP_SPRING_URL}/api/v1/chat/room`,{},
+            {
+              headers: {Authorization: "Bearer "+data.accessToken,},
+            }
+          );
+        }
       }).catch(err=>alert(err.response.data.message));
   },[dispatch])
 

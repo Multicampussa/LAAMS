@@ -90,7 +90,7 @@ const NoticeCenter = ({data}) => {
     </option>)
   },[centerData]);
 
-    //TODO : 지역Option 생성
+    //TODO : 센터Option 생성
     const centerItem = useMemo(()=>{
       if(!centerData||!region)return[];
       return centerData[region].map((e,idx)=><option value={JSON.stringify(e)} key={idx}>

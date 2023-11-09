@@ -46,7 +46,7 @@ const NoticeAll = ({data}) => {
   },[accessToken]);
 
   const disconnect = useCallback(()=>{
-    ws.current.unsubscribe(`sub-0`);
+    ws.current.disconnect();
   },[]);
 
   useEffect(()=>{
