@@ -1,13 +1,18 @@
 package multicampussa.laams.manager.domain.examinee;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long> {
+
+    // 페이징 처리
+    @Query("SELECT ee FROM ExamExaminee ee WHERE ee.compensationStatus = :status")
+    Page<ExamExaminee> findAllByStatus(@Param("status") ExamExaminee.CompensationValue status, Pageable pageable);
 
     // 시험_응시자 엔티티에서 시험 no에 해당하는 응시자 전체 조회
     List<ExamExaminee> findByExamNo(Long examNo);
@@ -40,7 +45,7 @@ public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long
 //    int countByDocument(Long examNo);
 
     // 생성날짜와 보상여부로 조회
-    @Query("SELECT ee FROM ExamExaminee ee WHERE DATE(ee.exam.examDate) = :targetDate AND ee.compensation = true AND ee.isCompensation = '보상_대기'")
+    @Query("SELECT ee FROM ExamExaminee ee WHERE DATE(ee.exam.examDate) = :targetDate AND ee.compensation = true AND ee.compensationStatus = '보상_대기'")
     List<ExamExaminee> findUncompensatedByDate(@Param("targetDate") java.sql.Date targetDate);
 }
 

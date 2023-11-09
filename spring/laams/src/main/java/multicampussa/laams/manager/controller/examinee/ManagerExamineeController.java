@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponses;
 import multicampussa.laams.centerManager.dto.ConfirmDirectorRequest;
 import multicampussa.laams.global.CustomExceptions;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
+import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeCompensationDenyRequest;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeCreateRequest;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeUpdateRequest;
@@ -15,6 +16,7 @@ import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationDet
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationListResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeResponse;
 import multicampussa.laams.manager.service.examinee.ManagerExamineeService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -106,6 +108,12 @@ public class ManagerExamineeController {
         } else {
             throw new CustomExceptions.UnauthorizedException("접근 권한이 없습니다.");
         }
+    }
+
+    // 페이징 처리된 응시자 보상 상태 조회
+    @GetMapping("/api/v1/manager/examinees/compensationStatus")
+    public Page<ExamineeCompensationListResponse> getPagedExaminees(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String status) {
+        return examineeService.getPagedExaminees(pageNumber, pageSize, status);
     }
 
     // 응시자 목록 조회
