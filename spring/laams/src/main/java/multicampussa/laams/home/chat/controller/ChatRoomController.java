@@ -51,7 +51,7 @@ public class ChatRoomController {
         if (authority.equals("ROLE_DIRECTOR")) {
             String regionByDirector = chatService.findRegionByDirector(id);
             String centerNameByDirector = chatService.findCenterNameByDirector(id);
-            result.add(chatService.findByRoomName(id));
+            result.add(chatService.findByPrivateRoomName(id));
             result.add(chatService.findByRoomName("Notice"));
             result.add(chatService.findByRoomName(regionByDirector));
             result.add(chatService.findByRoomName(centerNameByDirector));
