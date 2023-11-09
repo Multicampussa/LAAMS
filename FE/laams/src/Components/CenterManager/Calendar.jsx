@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo } from 'react'
-import { useDispatch } from 'react-redux';
-import { setExamDate, setExamList } from '../../redux/actions/calendarExamListAction';
+import React, { useCallback, useEffect, useMemo} from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { setExamDate, setExamList, setMonthExamList } from '../../redux/actions/calendarExamListAction';
 import { setModalShow, setModalType } from '../../redux/actions/modalAction';
 
 /*
@@ -13,6 +13,7 @@ handlePrev : 이전 달 호출 함수
 */
 
 const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
+  const monthExamList = useSelector(state=>state.CalendarExamList.monthExamList)
   //TODO : 해당 달의 첫날 반환
   const getFirstDate = useCallback((date)=>{
     return new Date(date.getFullYear(),(date.getMonth()),1);
@@ -37,14 +38,33 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
   const handleExamModal = useCallback((e,i,curDate)=>{
     if(!e){
       dispatch(setExamList([]))
-    }else{
-      dispatch(setExamList(e));
+      return
     }
+    dispatch(setExamList(e));
     dispatch(setModalShow(true));
     dispatch(setExamDate({year: curDate.getFullYear(), month: curDate.getMonth()+1, day:i}))
     dispatch(setModalType("center-calendar-detail"));
   },[dispatch])
-  
+
+  useEffect(()=>{
+    dispatch(setMonthExamList(examList));
+  },[dispatch,examList,monthExamList])
+
+  // TODO : 미배정된 시험이 있을 경우 캘린더 색 변경
+  const isDirectorEmpty = useCallback((date) => {
+    let empty = false;
+    if(monthExamList && monthExamList[date]){
+      const examListForDate = monthExamList[date];
+      examListForDate.forEach(exam=>{
+        if(!exam.confirmDirectorCnt){
+            empty = true;     
+        } 
+      })
+      return empty;
+    }
+    return false; 
+  }, [monthExamList]);
+
   //TODO : 달력 Div를 반환
   const calendarItems = useMemo(()=>{
     const temp = [];
@@ -59,12 +79,14 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
       const week = (firstDate.getDay()+i)%7;
       temp.push(<div 
         onClick={()=>{
-        handleExamModal(examList[i],i,curDate)
+        handleExamModal(examList[i],i,curDate);
+        isDirectorEmpty(i);
       }} className='calendar-day' key={key++}>
         <div className={week===0||week===1?"calendar-week-title":'calendar-day-title'}>{i}</div>
         {
           examList && examList[i]? 
-              <div className='calendar-day-assignment'><div className='hidden-text'>감독관 미할당</div></div>  
+              <div
+               className={`calendar-day-assignment-${isDirectorEmpty(i)}`}><div className='hidden-text'>감독관 미할당</div></div>
           : null
         }
       </div>);
@@ -73,7 +95,7 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
       temp.push(<div className='calendar-day' key={key++}></div>);
     }
     return temp;
-  },[getLastDate,getFirstDate,curDate,examList,handleExamModal]);
+  },[getLastDate,getFirstDate,curDate,examList,handleExamModal,isDirectorEmpty]);
 
   return (
     <article className='calendar'>

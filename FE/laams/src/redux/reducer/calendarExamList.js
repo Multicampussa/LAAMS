@@ -1,6 +1,7 @@
 const init = {
     examList : [],
-    examDate : []
+    examDate : [],
+    monthExamList : []
   };
   
 const calendarExamListReducer = (state = init, action)=>{
@@ -9,6 +10,8 @@ switch (action.type) {
         return { ...state, examList: action.payload};
     case "calendarExamDate":
         return { ...state, examDate: action.payload};
+    case "monthExamList":
+        return { ...state, monthExamList: action.payload};
     default:
         return state;
 }

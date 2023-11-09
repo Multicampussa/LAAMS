@@ -103,3 +103,18 @@
     }
 
 }
+
+.calendar-day-assignment-true{
+    width: 2rem;
+    height: 1.7rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url("../../../assets/images/examIconBlue.svg");
+}
+.calendar-day-assignment-false{
+    width: 2rem;
+    height: 1.7rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url("../../../assets/images/assignment.svg");
+}

@@ -1,15 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import useApi from './../../Hook/useApi';
+import { setExamList, setMonthExamList } from '../../redux/actions/calendarExamListAction';
 
 const CenterCalendarDetail = () => {
   const examList = useSelector(state=>state.CalendarExamList.examList)
+  const dispatch = useDispatch();
   const [isChecked,setIsChecked] = useState([])
   const [isShow, setIsShow] = useState(false);
   const isModalOpen = useSelector(state=>state.Modal.show)
   const [requestList, setRequestList] = useState([]);
   const api = useApi();
   const examDate = useSelector(state=>state.CalendarExamList.examDate)
+  const monthExamList = useSelector(state=>state.CalendarExamList.monthExamList)
 
   //TODO : 특정 시험 요청 목록 조회 로직
   const getRequestList = useCallback((index)=>{
@@ -40,12 +43,14 @@ const CenterCalendarDetail = () => {
     setIsChecked(newIsChecked);
   },[isChecked])
 
+  
   useEffect(() => {
     if (!isModalOpen) {
       setIsChecked([]);
       setIsShow(false);
       setRequestList([]);
     }
+
   }, [isModalOpen]);
 
   // TODO : 요청 승인 API
@@ -53,19 +58,33 @@ const CenterCalendarDetail = () => {
     api.put('centermanager/confirm', {examNo: examNo, directorNo: directorNo})
     .then((res)=>{
       const newReqList = [...requestList]
-      newReqList[index].isConfirm = '승인'
+      newReqList.splice(index,1)
       setRequestList(newReqList)
+      // examList에서 examNo와 일치하는 시험을 찾아서 해당 시험의 인덱스를 얻는다
+      const examIndex = examList.findIndex(exam => exam.examNo === examNo)
+      if (examIndex !== -1) {
+        // examIndex를 이용하여 해당 시험의 confirmDirectorCnt 값을 업데이트한다
+        const newExamList = [...examList]
+        newExamList[examIndex].confirmDirectorCnt += 1
+        dispatch(setExamList(newExamList));
+      }
+      const newMonthExamList = {...monthExamList}
+      newMonthExamList[examDate['day']][examIndex].confirmDirectorCnt += 1
+      dispatch(setMonthExamList(newMonthExamList))
+
     })
     .catch((err)=>{
       console.log(err)
     })
-  },[api,requestList])
+  },[api,requestList,examList,dispatch,monthExamList,examDate])
+
+
   // TODO : 요청 거절 API
   const requestDeny = useCallback((directorNo, examNo, index)=>{
     api.put('centermanager/deny', {examNo: examNo, directorNo: directorNo})
     .then((res)=>{
       const newReqList = [...requestList]
-      newReqList[index].isConfirm = '거절'
+      newReqList.splice(index,1)
       setRequestList(newReqList)
     })
     .catch((err)=>{

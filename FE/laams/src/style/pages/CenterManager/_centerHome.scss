@@ -90,8 +90,6 @@
                 }
             }
             }
-
-
         }
 
     }
@@ -127,6 +125,7 @@
             flex: 1;
             background-color: white;
             display: flex;
+            overflow-y: auto;
             flex-direction: column;
             justify-content: center;
             align-items: center;
