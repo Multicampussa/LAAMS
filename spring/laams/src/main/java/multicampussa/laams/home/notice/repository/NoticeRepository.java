@@ -32,6 +32,6 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
     List<Notice> findNoticeWithManagerSortByCreatedAt(Pageable pageable);
     List<Notice> findAll();
 
-    @Query("select count(*) from Notice")
+    @Query("select count(*) from Notice n where n.isDelete = false")
     int getTheNumberOfNotice();
 }
