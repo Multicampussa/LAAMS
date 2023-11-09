@@ -118,3 +118,71 @@
     background-repeat: no-repeat;
     background-image: url("../../../assets/images/assignment.svg");
 }
+
+.modal-item-active-full{
+    width: 100%;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    box-sizing: border-box;
+    border: 0.1rem solid $color-gray-light;
+    cursor: pointer;
+    flex: 0 0 auto;
+    background-color: rgb(215, 215, 215);
+    color: $color-white;
+    font-size: 1.5rem;
+    font-weight: 900;
+    background-image: url("../../../assets/images/check.svg");
+    background-repeat: no-repeat;
+    background-position: right 1rem top 1.5rem;
+
+}
+.modal-item-deactive-full{
+    background-color:  rgb(218, 218, 218);
+    color: $color-black;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    box-sizing: border-box;
+    border: 0.1rem solid $color-gray-light;
+    cursor: pointer;
+    flex: 0 0 auto;
+    font-size: 1.5rem;
+    font-weight: 900;
+    
+}
+.modal-item-active-notFull{
+    width: 100%;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    box-sizing: border-box;
+    border: 0.1rem solid $color-gray-light;
+    cursor: pointer;
+    flex: 0 0 auto;
+    background-color: $color-black-light;
+    color: $color-white;
+    font-size: 1.5rem;
+    font-weight: 900;
+    background-image: url("../../../assets/images/check.svg");
+    background-repeat: no-repeat;
+    background-position: right 1rem top 1.5rem;
+}
+.modal-item-deactive-notFull{
+    background-color: $color-white;
+    color: $color-black;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    box-sizing: border-box;
+    border: 0.1rem solid $color-gray-light;
+    cursor: pointer;
+    flex: 0 0 auto;
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+

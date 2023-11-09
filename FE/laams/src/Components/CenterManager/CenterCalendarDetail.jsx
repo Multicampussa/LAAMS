@@ -43,15 +43,6 @@ const CenterCalendarDetail = () => {
     setIsChecked(newIsChecked);
   },[isChecked])
 
-  
-  useEffect(() => {
-    if (!isModalOpen) {
-      setIsChecked([]);
-      setIsShow(false);
-      setRequestList([]);
-    }
-
-  }, [isModalOpen]);
 
   // TODO : 요청 승인 API
   const requestApprove = useCallback((directorNo, examNo, index)=>{
@@ -98,7 +89,10 @@ const CenterCalendarDetail = () => {
         return <li className=''>시험 일정이 없습니다</li>
     }
         return examList.map((exam,index)=>{
-            return <li className={`modal-item-${isChecked[index]? 'active':'deactive'}`}
+            const isFull = exam.maxDirector <= exam.confirmDirectorCnt;
+            const title = isFull ? '더이상 감독 배치를 할 수 없습니다' : '';
+            return <li className={`modal-item-${isChecked[index]? 'active':'deactive'}-${isFull? 'full':'notFull'}`}
+            title={title}
             onClick={()=>{handleIsChecked(index); getRequestList(index);}}>{exam.examType}</li>
         })
     },[examList,isChecked, handleIsChecked, getRequestList])
@@ -121,6 +115,15 @@ const CenterCalendarDetail = () => {
             </li>
     })
   },[requestList, requestApprove, requestDeny]) 
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      setIsChecked([]);
+      setIsShow(false);
+      setRequestList([]);
+    }
+
+  }, [isModalOpen,examList]);
   return (
     <section className='center-calendar-detail'>
       <div className='center-calendar-detail-tab'>

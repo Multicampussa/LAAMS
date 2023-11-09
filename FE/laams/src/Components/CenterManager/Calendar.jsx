@@ -76,6 +76,7 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
     }
 
     for(let i = 1,iEnd=lastDate.getDate(); i <= iEnd; i++){
+      const title = isDirectorEmpty(i)? '감독이 미배치된 시험이 있습니다':'시험 일정'
       const week = (firstDate.getDay()+i)%7;
       temp.push(<div 
         onClick={()=>{
@@ -86,6 +87,7 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
         {
           examList && examList[i]? 
               <div
+               title = {title}
                className={`calendar-day-assignment-${isDirectorEmpty(i)}`}><div className='hidden-text'>감독관 미할당</div></div>
           : null
         }
