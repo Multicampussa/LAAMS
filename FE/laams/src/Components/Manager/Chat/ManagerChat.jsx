@@ -53,7 +53,7 @@ const ManagerChat = () => {
         <div onClick={()=>setMenu("notice-all")} className={`director-chat-aside-menu${menu === "notice-all" ? "open":"close"}`}>전체 공지</div>
         <div onClick={()=>setMenu("noticeByRegion")} className={`director-chat-aside-menu${menu === "noticeByRegion" ? "open":"close"}`}>지역 공지</div>
         <div onClick={()=>setMenu("noticeByCenter")} className={`director-chat-aside-menu${menu === "noticeByCenter" ? "open":"close"}`}>센터 공지</div>
-        <div onClick={()=>setMenu("noticeForNow")} className={`director-chat-aside-menu${menu === "noticeForNow" ? "open":"close"}`}>실시간 감독관 공지</div>
+        <div onClick={()=>setMenu("noticeForNow")} className={`director-chat-aside-menu${menu === "noticeForNow" ? "open":"close"}`}>실시간 공지</div>
         <div onClick={()=>setMenu("director")} className={`director-chat-aside-menu${menu === "director" ? "open":"close"}`}>감독관</div>
       </article>
       <article className='director-chat-wrap'>{component}</article>
