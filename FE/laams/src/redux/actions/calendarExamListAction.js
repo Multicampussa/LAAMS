@@ -7,3 +7,8 @@ export const setExamDate = (payload) => ({
   type: "calendarExamDate",
   payload
 });
+
+export const setMonthExamList = (payload) => ({
+  type: "monthExamList",
+  payload
+});

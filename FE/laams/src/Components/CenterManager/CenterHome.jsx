@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useApi from '../../Hook/useApi';
-import { useSelector } from 'react-redux';
 import Calendar from './Calendar';
+import { useSelector } from 'react-redux';
 
 const CenterHome = () => {
   const [examList,setExamList] = useState();
@@ -11,6 +11,7 @@ const CenterHome = () => {
   const [curDate,setCurDate] = useState(new Date());
   const [todayExamList, setTodayExamList] = useState([]);
   const [noticeListData, setNoticeListData] = useState([]);
+
 
   // TODO :오늘자의 시험(5개) 조회
   const getTodayExamList = useCallback(async(curDate)=>{
@@ -30,21 +31,21 @@ const CenterHome = () => {
         const date = new Date(e.examDate);
         if(res[date.getDate()]){
           res[date.getDate()].push({
-            centerName : e.centerName,
-            centerRegion : e.centerRegion,
             examDate : new Date(e.examDate),
             examType : e.examType,
             examLanguage : e.examLanguage,
-            examNo: e.examNo
+            examNo: e.examNo,
+            maxDirector: e.maxDirector,
+            confirmDirectorCnt: e.confirmDirectorCnt
           });
         }else{
           res[date.getDate()]=[{
-            centerName : e.centerName,
-            centerRegion : e.centerRegion,
             examDate : new Date(e.examDate),
             examType : e.examType,
             examLanguage : e.examLanguage,
-            examNo: e.examNo
+            examNo: e.examNo,
+            maxDirector: e.maxDirector,
+            confirmDirectorCnt: e.confirmDirectorCnt
           }];
         }
       });
@@ -53,6 +54,7 @@ const CenterHome = () => {
 
     }).catch(err=>console.log(err.response));
   },[api]);
+  
 
   //
   const showTodayExamList = useMemo(()=>{

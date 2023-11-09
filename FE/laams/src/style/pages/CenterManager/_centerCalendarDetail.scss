@@ -68,13 +68,121 @@
             width: 100%;
             height: 5rem;
             line-height: 5rem;
-            padding-left: 2rem;
             box-sizing: border-box;
             border: 0.1rem solid $color-gray-light;
-            flex: 0 0 auto;
+            padding: 0 2rem;
             font-size: 1.5rem;
             font-weight: 600;
+            display: grid;
+            align-items: center;
+            text-align: center;
+            grid-template-columns: 1fr 1fr 1fr;
+            &-none{
+                text-align: center;
+                padding-top: 1rem;
+            }
+            &-btn{
+                display: flex;
+                justify-content: space-around;
+                &-approve{
+                    width: 45%;
+                    height: 3rem;
+                    background-color: $color-blue;
+                    color: white;
+                    border-radius: 0.5rem;
+                }
+                &-deny{
+                    height: 3rem;
+                    width: 45%;
+                    background-color: rgb(244, 75, 75);
+                    color: white;
+                    border-radius: 0.5rem;
+                }
+            }
         }
     }
 
 }
+
+.calendar-day-assignment-true{
+    width: 2rem;
+    height: 1.7rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url("../../../assets/images/examIconBlue.svg");
+}
+.calendar-day-assignment-false{
+    width: 2rem;
+    height: 1.7rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url("../../../assets/images/assignment.svg");
+}
+
+.modal-item-active-full{
+    width: 100%;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    box-sizing: border-box;
+    border: 0.1rem solid $color-gray-light;
+    cursor: pointer;
+    flex: 0 0 auto;
+    background-color: rgb(215, 215, 215);
+    color: $color-white;
+    font-size: 1.5rem;
+    font-weight: 900;
+    background-image: url("../../../assets/images/check.svg");
+    background-repeat: no-repeat;
+    background-position: right 1rem top 1.5rem;
+
+}
+.modal-item-deactive-full{
+    background-color:  rgb(218, 218, 218);
+    color: $color-black;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    box-sizing: border-box;
+    border: 0.1rem solid $color-gray-light;
+    cursor: pointer;
+    flex: 0 0 auto;
+    font-size: 1.5rem;
+    font-weight: 900;
+    
+}
+.modal-item-active-notFull{
+    width: 100%;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    box-sizing: border-box;
+    border: 0.1rem solid $color-gray-light;
+    cursor: pointer;
+    flex: 0 0 auto;
+    background-color: $color-black-light;
+    color: $color-white;
+    font-size: 1.5rem;
+    font-weight: 900;
+    background-image: url("../../../assets/images/check.svg");
+    background-repeat: no-repeat;
+    background-position: right 1rem top 1.5rem;
+}
+.modal-item-deactive-notFull{
+    background-color: $color-white;
+    color: $color-black;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    box-sizing: border-box;
+    border: 0.1rem solid $color-gray-light;
+    cursor: pointer;
+    flex: 0 0 auto;
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
