@@ -41,13 +41,7 @@
     }
 
   }
-  &-noticeall{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  &-noticecenter{
+  &-noticeall,&-noticeregion,&-noticecenter{
     width: 100%;
     height: 100%;
     display: flex;
