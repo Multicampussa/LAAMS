@@ -241,6 +241,7 @@ const ExamDetail = () => {
     .then((({data})=>{
       const newExamineeData = [...examineesData];
       newExamineeData[index].attendanceTime = data.data.attendanceTime;
+      newExamineeData[index].attendance = 1;
       setExamineesData(newExamineeData);
     }))
     .catch((err)=>{
