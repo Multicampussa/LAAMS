@@ -41,7 +41,7 @@ public class NoticeController {
     private final S3Service s3Service;
 
     @ApiOperation(value = "공지사항 생성")
-    @PostMapping(value="/notice/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/notice/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> createNotice(@RequestHeader String authorization, @RequestPart(value = "dto") NoticeCreateDto noticeCreateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
@@ -62,7 +62,7 @@ public class NoticeController {
     }
 
     @ApiOperation(value = "공지사항 수정")
-    @PutMapping(value="/notice/update",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value="/notice/update",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> updateNotice(@RequestHeader String authorization, @RequestPart(value = "dto") NoticeUpdateDto noticeUpdateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
