@@ -1,4 +1,4 @@
-package multicampussa.laams.manager.service.examinee;
+package multicampussa.laams.director.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
