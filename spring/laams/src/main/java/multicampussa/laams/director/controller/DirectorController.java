@@ -7,9 +7,11 @@ import multicampussa.laams.director.dto.director.*;
 import multicampussa.laams.director.service.DirectorService;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.director.service.ImageUploadService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -60,6 +62,58 @@ public class DirectorController {
             return "이미지 업로드 실패: " + e.getMessage();
         }
     }
+
+
+    // 얼굴 일치 비교
+    @PostMapping(value = "/comparison")
+    public ResponseEntity<String> comparePhoto(
+            @RequestPart("existing_photo") MultipartFile existingPhoto,
+            @RequestPart("new_photo") MultipartFile newPhoto,
+            @RequestParam("applicant_name") String applicantName,
+            @RequestParam("applicant_no") String applicantNo
+    ) {
+        try {
+            // 스프링부트에서 장고 API 호출
+            String djangoApiUrl = "http://127.0.0.1:8000/api/v1/comparison";
+
+            // 필요한 헤더 설정 등 필요에 따라 커스터마이징
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            // 파일 및 기타 데이터를 MultiValueMap에 넣기
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("existing_photo", new HttpEntity<>(existingPhoto.getBytes(), getMultipartHeaders(existingPhoto)));
+            body.add("new_photo", new HttpEntity<>(newPhoto.getBytes(), getMultipartHeaders(newPhoto)));
+            body.add("applicant_name", applicantName);
+            body.add("applicant_no", applicantNo);
+
+            HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
+
+            // RestTemplate을 사용하여 장고 API 호출
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.exchange(
+                    djangoApiUrl,
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
+
+            // 장고 API의 응답을 그대로 프론트엔드로 전달
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        } catch (Exception e) {
+            // 예외 처리, 필요에 따라 로깅 등 추가
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+        }
+    }
+
+    // 파일 헤더 설정을 위한 메서드
+    private HttpHeaders getMultipartHeaders(MultipartFile file) throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf(file.getContentType()));
+        headers.setContentDispositionFormData(file.getName(), file.getOriginalFilename());
+        return headers;
+    }
+
 
 
     @ApiOperation(value = "시험 월별 조회 및 일별 조회 (캘린더용)")
