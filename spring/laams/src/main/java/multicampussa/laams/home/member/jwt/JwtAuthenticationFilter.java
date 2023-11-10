@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
             if (token != null) {
                 if (jwtTokenProvider.getAuthority(token).equals("ROLE_EXAMINEE")) {
-                    if (!path.startsWith("/api/v1/examinee") && !path.startsWith("/api/v1/member/login/examinee")){
+                    if (!path.startsWith("/api/v1/examinee")){
                         sendErrorResponse((HttpServletResponse) res, "관리자만 접근 가능합니다.", "a001");
                         return;
                     }
