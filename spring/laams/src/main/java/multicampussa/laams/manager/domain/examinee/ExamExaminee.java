@@ -51,7 +51,7 @@ public class ExamExaminee extends BaseTimeEntity {
     // 보상 이유
     private String compensationReason;
 
-    public enum CompensationStatus {
+    public enum CompensationValue {
         보상_대기,
         보상_승인,
         보상_거절
@@ -59,11 +59,7 @@ public class ExamExaminee extends BaseTimeEntity {
 
     // 보상 상태(대기, 승인, 거절)
     @Enumerated(EnumType.STRING)
-    private CompensationStatus isCompensation = CompensationStatus.보상_대기;
-
-    private String imageUrl;
-
-    private String imageReason;
+    private CompensationValue compensationStatus = CompensationValue.보상_대기;
 
     private LocalDateTime attendanceTime = null;
 
@@ -96,12 +92,12 @@ public class ExamExaminee extends BaseTimeEntity {
 
     // 보상 승인
     public void confirmCompensation() {
-        this.isCompensation = CompensationStatus.보상_승인;
+        this.compensationStatus = CompensationValue.보상_승인;
     }
 
     // 보상 거절
     public void denyCompensation() {
-        this.isCompensation = CompensationStatus.보상_거절;
+        this.compensationStatus = CompensationValue.보상_거절;
     }
 
     // 서류 제출 확인

@@ -40,17 +40,14 @@ public class Exam extends BaseTimeEntity {
 
     private int maxDirector = 2;
 
-    public Exam(Center center, LocalDateTime examDate, Manager manager, int runningTime, String examType, String examLanguage) {
+    public Exam(Center center, LocalDateTime examDate, Manager manager, int runningTime, String examType, String examLanguage, int maxDirector) {
         this.center = center;
         this.examDate = examDate;
         this.manager = manager;
         this.runningTime = runningTime;
         this.examType = examType;
         this.examLanguage = examLanguage;
-    }
-
-    public Exam(Center existingCenter, LocalDateTime examDate, Manager responsibleManager, int runningTime, String examType, String examLanguage, int maxDirector) {
-        super();
+        this.maxDirector = maxDirector;
     }
 
     public void updateExamInfo(Center center, LocalDateTime examDate, Manager manager, int runningTime, String examType, int maxDirector) {
