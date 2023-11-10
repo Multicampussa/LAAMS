@@ -31,13 +31,13 @@ public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long
     @Query(value = "SELECT count(ee) FROM ExamExaminee ee WHERE ee.exam.no = :examNo")
     int countByExamineeNo(Long examNo);
 
-    // 시험 출결 여부 카운트
-    @Query(value = "SELECT count(ee) FROM ExamExaminee ee WHERE ee.exam.no = :examNo AND ee.attendance = true")
+    // 시험 출결 여부 카운트(지각 안하고 제시간에 온 응시자들)
+    @Query(value = "SELECT count(ee) FROM ExamExaminee ee WHERE ee.exam.no = :examNo AND ee.attendance = true And ee.attendanceTime < ee.exam.examDate")
     int countByAttendance(Long examNo);
 
     // 시험 서류 지참 카운트
-//    @Query(value = "SELECT count(ee) FROM ExamExaminee ee WHERE ee.exam.no = :examNo AND ee.document = true")
-//    int countByDocument(Long examNo);
+    @Query(value = "SELECT count(ee) FROM ExamExaminee ee WHERE ee.exam.no = :examNo AND ee.document = '서류_제출_완료'")
+    int countByDocument(Long examNo);
 
     // 생성날짜와 보상여부로 조회
     @Query("SELECT ee FROM ExamExaminee ee WHERE DATE(ee.exam.examDate) = :targetDate AND ee.compensation = true AND ee.isCompensation = '보상_대기'")
