@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long> {
@@ -49,5 +50,7 @@ public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long
     // 생성날짜와 보상여부로 조회
     @Query("SELECT ee FROM ExamExaminee ee WHERE DATE(ee.exam.examDate) = :targetDate AND ee.compensation = true AND ee.compensationStatus = '보상_대기'")
     List<ExamExaminee> findUncompensatedByDate(@Param("targetDate") java.sql.Date targetDate);
+
+    Optional<ExamExaminee> findByExamineeCode(String examineeCode);
 }
 
