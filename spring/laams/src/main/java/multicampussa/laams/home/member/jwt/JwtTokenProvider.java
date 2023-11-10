@@ -64,6 +64,25 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String createAccessTokenForExamExaminee(String code, String birth) {
+
+        // email과 권한 정보 claims에 담기
+        Claims claims = Jwts.claims().setSubject(code);
+        claims.put("birth", birth);
+        claims.put("authority", "ROLE_EXAMINEE");
+
+        // 만료 시간 계산
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now) // 토큰 발급 시간
+                .setExpiration(validity) // 만료 시간
+                .signWith(SignatureAlgorithm.HS256, secretKey) // 비밀키를 HS256 방식으로 암호화
+                .compact();
+    }
+
     public Authentication getAuthentication(String token) {
         // 토큰을 통해 유저 정보 가져오기
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getId(token));
