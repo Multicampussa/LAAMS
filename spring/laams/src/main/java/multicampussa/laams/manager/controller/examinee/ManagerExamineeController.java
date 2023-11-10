@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,23 +114,33 @@ public class ManagerExamineeController {
     }
 
     //이미지 업로드
-    @PostMapping("/api/v1/manager/examinees/upload")
-    public String uploadImage(
-            @RequestParam("file") MultipartFile file,
+    @PostMapping(value = "/api/v1/manager/examinees/upload",
+            consumes = "multipart/form-data")
+    public String uploadImages(
+            @RequestPart(value = "files") List<MultipartFile> files,
             @RequestParam("imageReason") String imageReason,
             @RequestParam("examNo") Long examNo,
             @RequestParam("examineeNo") Long examineeNo
     ) {
         try {
-            byte[] imageBytes = file.getBytes();
-            String imageName = file.getOriginalFilename();
-            String imageUrl = imageUploadService.uploadImageToS3(imageBytes, imageName, examNo, examineeNo, imageReason);
+            for (MultipartFile file : files) {
+                byte[] imageBytes = file.getBytes();
+                String imageName = file.getOriginalFilename();
+                imageUploadService.uploadImageToS3(file, imageBytes, imageName, examNo, examineeNo, imageReason);
+            }
 
             return "이미지 업로드 및 저장 성공!";
+        } catch (IOException e) {
+            // 파일 데이터를 읽어오는 과정에서 오류가 발생한 경우의 처리
+            e.printStackTrace(); // 또는 로깅 등을 활용하여 예외를 기록
+            return "이미지 업로드 실패: 파일 데이터를 읽어오는 도중 오류 발생";
         } catch (Exception e) {
+            // 그 외의 예외 상황에 대한 처리
+            e.printStackTrace(); // 또는 로깅 등을 활용하여 예외를 기록
             return "이미지 업로드 실패: " + e.getMessage();
         }
     }
+
 
     // 페이징 처리된 응시자 보상 상태 조회
     @GetMapping("/api/v1/manager/examinees/compensationStatus")

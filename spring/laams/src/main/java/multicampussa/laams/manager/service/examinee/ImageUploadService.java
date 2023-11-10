@@ -3,6 +3,7 @@ package multicampussa.laams.manager.service.examinee;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.manager.domain.examinee.*;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
@@ -30,7 +32,7 @@ public class ImageUploadService {
         this.examExamineeRepository = examExamineeRepository;
     }
 
-    public String uploadImageToS3(byte[] imageBytes, String imageName, Long examNo, Long examineeNo, String imageReason) {
+    public String uploadImageToS3(MultipartFile file, byte[] imageBytes, String imageName, Long examNo, Long examineeNo, String imageReason) {
         // 시험_응시자 객체 불러오기
         ExamExaminee examInfo = examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo);
 
@@ -47,17 +49,21 @@ public class ImageUploadService {
         String bucketName = "laams";
         String key = "images/" + formattedExamDate + "/" + examineeCode + "/" + imageName; // 경로 설정
 
+        // 메타 데이터 설정(설정해주지 않으면 url 접속 시 바로 다운로드됨)
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(file.getContentType());
+
         PutObjectRequest putObjectRequest =
-                new PutObjectRequest(bucketName, key, new ByteArrayInputStream(imageBytes), null);
+                new PutObjectRequest(bucketName, key, new ByteArrayInputStream(imageBytes), metadata);
         putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
 
         s3Client.putObject(putObjectRequest);
 
-        String imageUrl = "https://" + bucketName + "kr.object.ncloudstorage.com/" + key;
+        String imageUrl = s3Client.getResourceUrl(bucketName, key);
 
         Image image = new Image();
-        image.setImageUrl(imageUrl);
-        image.setImageReason(imageReason);
+        image.uploadImage(examInfo, imageUrl, imageReason);
+
         imageRepository.save(image);
 
         return imageUrl;

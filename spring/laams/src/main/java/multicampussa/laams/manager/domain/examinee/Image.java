@@ -30,4 +30,10 @@ public class Image extends BaseTimeEntity {
     public void setImageReason(String imageReason) {
         this.imageReason = imageReason;
     }
+
+    public void uploadImage(ExamExaminee examExaminee, String imageUrl, String imageReason) {
+        this.examExaminee = examExaminee;
+        this.imageUrl = imageUrl;
+        this.imageReason = imageReason;
+    }
 }
