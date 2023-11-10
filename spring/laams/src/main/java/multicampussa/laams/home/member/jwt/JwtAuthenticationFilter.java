@@ -44,7 +44,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 !path.startsWith("/swagger-ui") &&
                 !path.startsWith("/swagger-resources") &&
                 !path.startsWith("/v3/api-docs") &&
-                !path.startsWith("/v2/api-docs")) {
+                !path.startsWith("/v2/api-docs") &&
+                !path.startsWith("/")) {
 
 
             if (token != null) {
