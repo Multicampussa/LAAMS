@@ -6,11 +6,15 @@ import lombok.RequiredArgsConstructor;
 import multicampussa.laams.director.dto.director.*;
 import multicampussa.laams.director.service.DirectorService;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
+import multicampussa.laams.director.service.ImageUploadService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -21,12 +25,42 @@ public class DirectorController {
 
     private final DirectorService directorService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final ImageUploadService imageUploadService;
 
     // 시험 목록 조회
 //    @GetMapping("/{directorNo}/exams")
 //    public List<ExamListDto> getExams(@PathVariable Long directorNo){
 //        return directorService.getExamList(directorNo);
 //    }
+
+    //이미지 업로드
+    @PostMapping(value = "/examinees/upload",
+            consumes = "multipart/form-data")
+    public String uploadImages(
+            @RequestPart(value = "files") List<MultipartFile> files,
+            @RequestParam("imageReason") String imageReason,
+            @RequestParam("examNo") Long examNo,
+            @RequestParam("examineeNo") Long examineeNo
+    ) {
+        try {
+            for (MultipartFile file : files) {
+                byte[] imageBytes = file.getBytes();
+                String imageName = file.getOriginalFilename();
+                imageUploadService.uploadImageToS3(file, imageBytes, imageName, examNo, examineeNo, imageReason);
+            }
+
+            return "이미지 업로드 및 저장 성공!";
+        } catch (IOException e) {
+            // 파일 데이터를 읽어오는 과정에서 오류가 발생한 경우의 처리
+            e.printStackTrace(); // 또는 로깅 등을 활용하여 예외를 기록
+            return "이미지 업로드 실패: 파일 데이터를 읽어오는 도중 오류 발생";
+        } catch (Exception e) {
+            // 그 외의 예외 상황에 대한 처리
+            e.printStackTrace(); // 또는 로깅 등을 활용하여 예외를 기록
+            return "이미지 업로드 실패: " + e.getMessage();
+        }
+    }
+
 
     @ApiOperation(value = "시험 월별 조회 및 일별 조회 (캘린더용)")
     @GetMapping("/{directorNo}/exams")
@@ -139,47 +173,6 @@ public class DirectorController {
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
-    
-//    @ApiOperation(value = "응시자 출석(응시자용) - 출석시간 업데이트")
-//    @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendanceTime")
-//    public ResponseEntity<Map<String, Object>> updateAttendanceTime(@PathVariable Long examNo, @PathVariable Long examineeNo){
-//        Map<String, Object> resultMap = new HashMap<>();
-//        try{
-//            UpdateAttendanceDto updateAttendanceDto = directorService.updateAttendanceTime(examNo, examineeNo);
-//            resultMap.put("data", updateAttendanceDto);
-//            resultMap.put("message", "출석시간이 업데이트 되었습니다.");
-//            resultMap.put("code", HttpStatus.OK.value());
-//            resultMap.put("status", "success");
-//            return new ResponseEntity<>(resultMap, HttpStatus.OK);
-//        }catch (IllegalArgumentException e){
-//            resultMap.put("message", e.getMessage());
-//            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
-//            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
-//    @ApiOperation(value = "응시자 출결 확인")
-//    @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendance")
-//    public ResponseEntity<Map<String, Object>> checkAttendance(@RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo){
-//        Map<String, Object> resultMap = new HashMap<>();
-//        try {
-//            String token  = aㅔuthorization.replace("Bearer ", "");
-//            String authority = jwtTokenProvider.getAuthority(token);
-//            String directorId = jwtTokenProvider.getId(token);
-//
-//            CheckAttendanceDto checkAttendanceDto = directorService.checkAttendance(examNo, examineeNo, authority, directorId);
-//            resultMap.put("data", checkAttendanceDto);
-//            resultMap.put("message", "응시자의 출결이 확인되었습니다.");
-//            resultMap.put("code", HttpStatus.OK.value());
-//            resultMap.put("status", "success");
-//            return new ResponseEntity<>(resultMap, HttpStatus.OK);
-//
-//        }catch (IllegalArgumentException e){
-//            resultMap.put("message", e.getMessage());
-//            resultMap.put("status", HttpStatus.BAD_REQUEST.value());
-//            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
-//        }
-//    }
 
     @ApiOperation(value = "출석 확인")
     @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendance")
