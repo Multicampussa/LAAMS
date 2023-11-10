@@ -128,8 +128,9 @@ const ExamDetail = () => {
   },[dispatch])
 
   //TODO : 응시자 추가 서류 모달 띄우기
-  const handleDocsModal = useCallback((examineeNo)=>{
+  const handleDocsModal = useCallback((examineeNo,examNo)=>{
     dispatch(setExamineeNo(examineeNo));
+    dispatch(setExamNo(examNo));
     dispatch(setModalShow(true));
     dispatch(setModalType("exam-docs"));
   },[dispatch])
@@ -301,7 +302,7 @@ const ExamDetail = () => {
           </button>
           <button  
             className='director-examinees-list-items-btn'
-            onClick={()=>handleDocsModal()}>
+            onClick={()=>handleDocsModal(examinee.examineeNo, params['no'])}>
               추가 서류
           </button>
         </li> 
