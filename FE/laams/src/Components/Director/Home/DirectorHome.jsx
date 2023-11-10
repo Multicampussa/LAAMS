@@ -46,6 +46,7 @@ const DirectorHome = () => {
             centerName : e.centerName,
             centerRegion : e.centerRegion,
             examDate : new Date(e.examDate),
+            endExamDate : new Date(e.endExamDate),
             examType : e.examType,
             examLanguage : e.examLanguage,
             examNo: e.examNo
@@ -55,6 +56,7 @@ const DirectorHome = () => {
             centerName : e.centerName,
             centerRegion : e.centerRegion,
             examDate : new Date(e.examDate),
+            endExamDate : new Date(e.endExamDate),
             examType : e.examType,
             examLanguage : e.examLanguage,
             examNo: e.examNo

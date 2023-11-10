@@ -15,6 +15,7 @@ const DirectorCalendarDetail = () => {
   const [requestList, setRequestList] = useState([]);
   const isModalOpen = useSelector(state=>state.Modal.show)
   
+  // TODO : 날짜 형식 조정
   const examTimeFormat = useCallback((date)=>{
     const examDate = new Date(date);
     const hours = examDate.getHours() <10? '0'+examDate.getHours():examDate.getHours();
@@ -22,6 +23,7 @@ const DirectorCalendarDetail = () => {
     return hours + ':' + min
   },[])
 
+  // TODO : 감독 배정 요청 보내는 API
   const sendRequest = useCallback((examNo,index)=>{
     api.post('director/exams/request', {'examNo':examNo})
     .then(({data})=>{
@@ -66,7 +68,7 @@ const DirectorCalendarDetail = () => {
                                 navigate(`/director/exam/${exam.examNo}`);
                                 dispatch(setModalShow(false))}}>{exam.examType}-{exam.examLanguage}</div>
                         <div>{examTimeFormat(exam.examDate)}</div>
-                        <div>{examTimeFormat(exam.examDate)}</div>
+                        <div>{examTimeFormat(exam.endExamDate)}</div>
                     </li>
         })
     }
