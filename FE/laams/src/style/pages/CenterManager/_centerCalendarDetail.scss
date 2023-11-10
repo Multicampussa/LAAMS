@@ -101,7 +101,6 @@
             }
         }
     }
-
 }
 
 .calendar-day-assignment-true{
@@ -169,7 +168,8 @@
     font-weight: 900;
     background-image: url("../../../assets/images/check.svg");
     background-repeat: no-repeat;
-    background-position: right 1rem top 1.5rem;
+    background-position: right 1rem top 1.7rem;
+    background-size: 10%;
 }
 .modal-item-deactive-notFull{
     background-color: $color-white;
@@ -184,5 +184,23 @@
     flex: 0 0 auto;
     font-size: 1.5rem;
     font-weight: 900;
+}
+
+@include mobile{
+    .modal-item-active-full, .modal-item-deactive-full, .modal-item-active-notFull,.modal-item-deactive-notFull{
+        text-align: start;
+        padding-left: 1rem;
+    }
+    .center-calendar-detail{
+        &-box{
+            &-request{
+                &-items{
+                    &-none{
+                        font-size: 1.5rem;
+                    }
+                }
+            }
+        }
+    }
 }
 

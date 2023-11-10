@@ -19,7 +19,7 @@
     &-box{
       box-sizing: border-box;
       width: 50%;
-      height: 60%;
+      height: 40rem;
       background-color: $color-white;
       border-radius: 2rem;
       display: flex;
@@ -67,7 +67,6 @@
 
         }
       }
-
     }
     &-tab:hover{
       cursor: pointer;
@@ -88,11 +87,11 @@
     }
     &-logo{
       width: 50%;
-      height: 100%;
+      height: 90%;
       background-image: url("../../../assets/images/logo.svg");
       background-repeat: no-repeat;
       background-position: center;
-      background-size: 70%;
+      background-size: contain;
     }
     &-input::placeholder{
       font-size: 2rem;
@@ -182,6 +181,7 @@
   }
   @include mobile {
     @include mobile-home()
+
   }
   @include tablet{
     @include mobile-home()
