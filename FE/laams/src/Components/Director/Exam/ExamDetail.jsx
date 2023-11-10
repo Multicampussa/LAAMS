@@ -67,7 +67,11 @@ const ExamDetail = () => {
       console.log(data)
     })
     .catch((err)=>{
-      alert('센터 인근에서 인증해주세요')
+      if(err.response.data.message.includes('이미')){
+        alert('해당 시험은 이미 인증되었습니다')
+      }else{
+        alert(err.response.data.message)
+      }
     })
   },[api, getDirectorInfo,params,getLocation])
 
@@ -148,6 +152,16 @@ const ExamDetail = () => {
   return [formatTime(testStartTime), formatTime(testEndTime)];
   },[])
 
+  //TODO : 응시자 현황 조회
+  const getStatus = useCallback(async()=>{
+    api.get(`director/exams/${params['no']}/status`)
+    .then(({data})=>{
+      setDirectorAttendance(data.data.directorAttendance);
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  },[params,api])
   
   //TODO : 출석 시간 형식 조정
   const attendanceFormat = useCallback((time)=>{
@@ -176,7 +190,8 @@ const ExamDetail = () => {
   useEffect(()=>{
     getExaminees()
     getExam()
-  },[getExaminees,getExam])
+    getStatus()
+  },[getStatus,getExaminees,getExam])
 
   // TODO : 출석 인원수 체크
   const attendanceCnt = useCallback(()=>{
