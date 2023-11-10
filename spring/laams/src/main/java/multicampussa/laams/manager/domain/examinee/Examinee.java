@@ -3,6 +3,7 @@ package multicampussa.laams.manager.domain.examinee;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeCreateRequest;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Examinee {
+public class Examinee extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

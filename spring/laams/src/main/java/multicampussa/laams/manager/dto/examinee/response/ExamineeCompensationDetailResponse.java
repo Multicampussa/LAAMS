@@ -16,8 +16,6 @@ public class ExamineeCompensationDetailResponse {
     private LocalDateTime examDate;
     private String examType;
     private LocalDateTime createdAt;
-    private String imageUrl;
-    private String imageReason;
 
     public ExamineeCompensationDetailResponse(ExamExaminee examExaminee) {
         this.examineeNo = examExaminee.getExaminee().getNo();
@@ -28,8 +26,6 @@ public class ExamineeCompensationDetailResponse {
         this.examDate = examExaminee.getExam().getExamDate();
         this.examType = examExaminee.getExam().getExamType();
         this.createdAt = examExaminee.getCreatedAt();
-        this.imageUrl = examExaminee.getImageUrl();
-        this.imageReason = examExaminee.getImageReason();
     }
 
 }
