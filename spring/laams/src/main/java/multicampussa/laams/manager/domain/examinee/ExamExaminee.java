@@ -31,8 +31,6 @@ public class ExamExaminee extends BaseTimeEntity {
     @Column(unique = true)
     private String examineeCode;
 
-    private String birth;
-
     private String refreshToken;
 
     private Boolean attendance = false;
