@@ -45,12 +45,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 !path.startsWith("/swagger-resources") &&
                 !path.startsWith("/v3/api-docs") &&
                 !path.startsWith("/v2/api-docs") &&
-                !path.startsWith("/")) {
+                !path.startsWith("/api/v1/examinee") &&
+                !path.startsWith("/ws/chat")) {
 
 
             if (token != null) {
                 if (jwtTokenProvider.getAuthority(token).equals("ROLE_EXAMINEE")) {
-                    if (!path.startsWith("/api/v1/examinee")){
+                    if (!path.startsWith("ap1/v1/examinee/attendance")) {
                         sendErrorResponse((HttpServletResponse) res, "관리자만 접근 가능합니다.", "a001");
                         return;
                     }
