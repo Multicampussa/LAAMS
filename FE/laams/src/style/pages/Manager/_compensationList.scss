@@ -1,4 +1,13 @@
 .manager-compensation-list{
+  position: relative;
+  &-select{
+    position: absolute;
+    top: -5rem;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   &-item{
     display: grid;
     grid-template-columns: 1fr 2fr 2fr 1fr 1fr;
