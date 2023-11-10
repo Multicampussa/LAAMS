@@ -33,6 +33,12 @@
                 align-items: center;
                 gap: 1rem;
                 font-weight: 600;
+                &-true{
+                    color: $color-blue;
+                }
+                &-false{
+                    color: $color-red;
+                }
             }
         }
         &-btn{

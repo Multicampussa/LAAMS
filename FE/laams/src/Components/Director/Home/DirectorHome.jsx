@@ -3,15 +3,19 @@ import Calendar from './Calendar'
 import useApi from '../../../Hook/useApi';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useGeoLocation } from '../../../Hook/useGeolocation';
 const DirectorHome = () => {
 
   const [examList,setExamList] = useState();
   const api = useApi();
   const navigate = useNavigate();
+  const geolocation = useGeoLocation();
   const [curDate,setCurDate] = useState(new Date());
   const [todayExamList, setTodayExamList] = useState([]);
   const [noticeListData, setNoticeListData] = useState([]);
   const userId = useSelector(state=>state.User.memberId);
+
+  //TODO : 감독관 NO 얻어오는 요청 API
   const getDirectorInfo = useCallback(async()=>{
     if(!userId || !api){
       return
@@ -42,6 +46,7 @@ const DirectorHome = () => {
             centerName : e.centerName,
             centerRegion : e.centerRegion,
             examDate : new Date(e.examDate),
+            endExamDate : new Date(e.endExamDate),
             examType : e.examType,
             examLanguage : e.examLanguage,
             examNo: e.examNo
@@ -51,6 +56,7 @@ const DirectorHome = () => {
             centerName : e.centerName,
             centerRegion : e.centerRegion,
             examDate : new Date(e.examDate),
+            endExamDate : new Date(e.endExamDate),
             examType : e.examType,
             examLanguage : e.examLanguage,
             examNo: e.examNo
@@ -63,7 +69,7 @@ const DirectorHome = () => {
     }).catch(err=>console.log(err.response));
   },[api,getDirectorInfo]);
 
-  //
+  //TODO : 오늘 시험 리스트
   const showTodayExamList = useMemo(()=>{
     if(todayExamList.length===0){
       
@@ -74,7 +80,7 @@ const DirectorHome = () => {
     }else{
       return todayExamList.map((e,index)=>{
 
-        return <div className='director-home-todo-box-items'>
+        return <div className='director-home-todo-box-items' key={index}>
                 <div className='director-home-todo-box-items-text'
                 onClick={()=>navigate(`/director/exam/${e.examNo}`)}>[{e.examType}]{e.centerName}</div>
                 <div className='director-home-todo-box-items-text-region'>({e.centerRegion})</div>
@@ -111,6 +117,7 @@ const DirectorHome = () => {
     setCurDate(new Date(year,month,1));
   },[curDate])
 
+  //TODO : 공지사항 (상위 6개) 얻어오는 API
   const getNotice = useCallback(()=>{
     api.get('/notice/list?count=6&page=1')
     .then(({data})=>{
@@ -121,6 +128,8 @@ const DirectorHome = () => {
     })
   },[api])
 
+
+  // TODO : 공지사항 리스트
   const showNotice = useMemo(()=>{
     if(!noticeListData){
       return <li>공지사항이 없습니다</li>
@@ -137,7 +146,8 @@ const DirectorHome = () => {
           <div className='director-home-notice-box-items'
           onClick={()=>{
             navigate(`/notice/detail/${notice.noticeNo}`)
-          }}>
+          }}
+          key={index}>
             <div className='director-home-notice-box-items-title'>{notice.title}</div>
             <div className='director-home-notice-box-items-time'>{year}-{month}-{day} {hours}:{min}</div>
           </div>
@@ -145,6 +155,35 @@ const DirectorHome = () => {
     })
   }
   },[noticeListData,navigate])
+
+  // TODO : 현재 위치 정보 얻어옴
+  const getLocation = useCallback(async()=>{
+    try{
+      const location = await geolocation();
+      return location
+    }catch(err){
+      alert(err.message);
+    }
+  },[geolocation])
+
+  // TODO : 감독관 센터 도착 요청 API 연동
+  const handleDirectorAttend = useCallback(async()=>{
+    const location = await getLocation();
+    api.post('director/exams/attendance/home',
+    {latitude: location['latitude'], longitude:location['longitude']})
+    // {latitude: 37.5884628, longitude:127.062636})
+    .then(({data})=>{
+      alert('센터 도착이 완료되었습니다')
+    })
+    .catch((err)=>{
+      if(err.response.data.message.includes('이미')){
+        alert('해당 시험에 이미 출석을 했습니다')
+      }else{
+        alert(err.response.data.message)
+      }
+
+    })
+  },[api,getLocation])
   
   useEffect(()=>{
     const today =  new Date();
@@ -166,7 +205,8 @@ const DirectorHome = () => {
         <article className='director-home-todo'>
           <div className='director-home-todo-title'>오늘 일정</div>
           <div className='director-home-todo-box'>
-            <button className='director-home-todo-box-btn'>감독관 센터 도착 인증</button>
+            <button className='director-home-todo-box-btn'
+              onClick={()=>handleDirectorAttend()}>감독관 센터 도착 인증</button>
               {
                 showTodayExamList
               }

@@ -96,15 +96,8 @@ const updateUserInfo = useCallback(()=>{
   // TODO : 이메일 전송 로직
   //FIXME : 중복코드 수정 및 useAPI활용필요
   const sendEmail = useCallback(()=>{
-    axios({
-      method: 'post',
-      url: `${process.env.REACT_APP_SPRING_URL}/member/sendemail`,
-      headers:{
-        "content-type": "application/json"
-      },
-      data:{
-        email : userData['email']
-      }
+    api.post('/member/sendemail', {
+      email: userData['email']
     })
     .then(()=>{
       setEmailValidText('인증번호가 이메일로 전송되었습니다')
@@ -115,20 +108,13 @@ const updateUserInfo = useCallback(()=>{
       setEmailValidText('이메일을 확인해주세요')
       emailTextRef.current.style.color = "red";
     })
-  },[userData])
+  },[userData,api])
 
   // TODO : 전송된 인증코드 확인 로직
   const checkEmailCode = useCallback(()=>{
-    axios({
-      method: 'post',
-      url: `${process.env.REACT_APP_SPRING_URL}/member/sendemail/verify`,
-      headers:{
-        "content-type": "application/json"
-      },
-      data:{
-        code: userData['emailCode'],
-        email: userData['email']
-      }
+    api.post('/member/sendemail/verify', {
+      code: userData['emailCode'],
+      email: userData['email']
     })
     .then(()=>{
       setEmailValidText('올바른 인증번호입니다.');
@@ -145,7 +131,7 @@ const updateUserInfo = useCallback(()=>{
       setIsEmailChecked(false);
       emailTextRef.current.style.color = "red";
     })
-  },[userData])
+  },[userData,api])
 
   // TODO: 비밀번호 정규식 확인 로직
   const checkPwReg = useCallback((e)=>{
