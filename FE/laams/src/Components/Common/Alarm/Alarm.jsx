@@ -85,18 +85,18 @@ const Alarm = () => {
             const recv = JSON.parse(message.body);
             console.log(recv);
           });
-          ws.current.subscribe(`/topic/chat/room/notice-${data[2].roomName}`, function(message) {
+          ws.current.subscribe(`/topic/chat/room/notice-${data[2]?.roomName}`, function(message) {
             const recv = JSON.parse(message.body);
             console.log(recv);
           });
-          ws.current.subscribe(`/topic/chat/room/notice-${data[3].roomName}`, function(message) {
+          ws.current.subscribe(`/topic/chat/room/notice-${data[3]?.roomName}`, function(message) {
             const recv = JSON.parse(message.body);
             console.log(recv);
           });
         }
       }else{
         directorRoom.current = data;
-        ws.current.subscribe(`/topic/chat/room/${data[0].roomId}`, function(message) {
+        ws.current.subscribe(`/topic/chat/room/${data[0]?.roomId}`, function(message) {
           const recv = JSON.parse(message.body);
           console.log(recv);
         });
@@ -104,11 +104,11 @@ const Alarm = () => {
           const recv = JSON.parse(message.body);
           console.log(recv);
         });
-        ws.current.subscribe(`/topic/chat/room/notice-${data[2].roomName}`, function(message) {
+        ws.current.subscribe(`/topic/chat/room/notice-${data[2]?.roomName}`, function(message) {
           const recv = JSON.parse(message.body);
           console.log(recv);
         });
-        ws.current.subscribe(`/topic/chat/room/notice-${data[3].roomName}`, function(message) {
+        ws.current.subscribe(`/topic/chat/room/notice-${data[3]?.roomName}`, function(message) {
           const recv = JSON.parse(message.body);
           console.log(recv);
         });
