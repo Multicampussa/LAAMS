@@ -1,6 +1,13 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react'
+import Capture from './Capture';
+import { useDispatch, useSelector } from 'react-redux';
+import useApi from '../../../../Hook/useApi';
+import { setModalShow, setModalType } from '../../../../redux/actions/modalAction';
 
 const ExamDocs = () => {
+  const dispatch = useDispatch();
+  const examineeNo = useSelector(state=>state.ExamineeDetail.examineeNo);
+  const examNo = useSelector(state=>state.ManagerExamDetail.examNo);
   const slideIdx = useRef(1);
   const slideMaxIdx = useRef(1);
   const docsBox = useRef();
@@ -8,6 +15,8 @@ const ExamDocs = () => {
   const [imageFiles,setImageFiles] = useState([]);
   const [mode,setMode] = useState("slider-submit");
   const [addMode,setAddMode] = useState("close");
+  const [reason,setReason] = useState();
+  const api = useApi();
   const handleSlidePrev = useCallback(()=>{
     if(slideIdx.current <= 1) return;
     slideIdx.current-=1;
@@ -30,16 +39,32 @@ const ExamDocs = () => {
   },[]);
 
   const articles= useMemo(()=>{
-    return images.map(e=>{
-      return <article className='exam-docs-article'>
+    return images.map((e,idx)=>{
+      return <article key={idx} className='exam-docs-article'>
         <img className='exam-docs-article-image' src={e} alt='' />
       </article>
     })
   },[images])
 
   const handleSubmit = useCallback(()=>{
-    console.log(imageFiles);
-  },[imageFiles])
+    const formData = new FormData();
+    imageFiles.forEach(e=>formData.append("files",e));
+    formData.append("imageReason",reason);
+    formData.append("examNo",examNo);
+    formData.append("examineeNo",examineeNo );
+    api({
+      url:"director/examinees/upload",
+      method:"post",
+      data:formData,
+      headers:{
+        "Content-Type":"multipart/form-data"
+      }
+    }).then(({data})=>{
+      alert(data);
+      dispatch(setModalType(null));
+      dispatch(setModalShow(false));
+    }).catch(err=>console.log(err));
+  },[imageFiles,reason,examineeNo,examNo])
 
   return (
     <section className='exam-docs'>
@@ -48,6 +73,7 @@ const ExamDocs = () => {
           <div className='exam-docs-container-title'>
             추가 서류 제출
           </div>
+          <input onChange={e=>setReason(e.target.value)} className='exam-docs-reason' placeholder='추가서류 제출사유를 작성해주세요' />
           <button onClick={handleSlidePrev} className='exam-docs-prev'><div className='hidden-text'>이전</div></button>
           <button onClick={handleSlideNext} className='exam-docs-next'><div className='hidden-text'>다음</div></button>
           <article className={`exam-docs-add-box${addMode}`}>
@@ -66,16 +92,7 @@ const ExamDocs = () => {
           </div>
           <button onClick={handleSubmit} className='exam-docs-btn'>추가서류 제출</button>
         </div>
-        <div className='exam-docs-capture'>
-          <div className='exam-docs-container-title'>
-            추가 서류 제출
-          </div>
-          <div className='exam-docs-box'>
-            
-          </div>
-          <input/>
-          <button onClick={()=>setMode("slider-submit")} className='exam-docs-btn'>사진 캡처</button>
-        </div>
+        <Capture mode={mode} setImages={setImages} slideMaxIdx={slideMaxIdx} setMode={setMode} setImageFiles={setImageFiles} />
       </div>
     </section>
   )
