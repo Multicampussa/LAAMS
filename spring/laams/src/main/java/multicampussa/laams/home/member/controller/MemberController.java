@@ -108,7 +108,7 @@ public class MemberController {
             String code = loginRequestDto.getExamineeCode();
             try{
                 memberService.isPresentExamExaminee(loginRequestDto);
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("message", e.getMessage());
                 response.put("code", HttpStatus.NOT_FOUND.value());
@@ -142,7 +142,7 @@ public class MemberController {
             response.put("status", "success");
 
             return new ResponseEntity<>(response, signInResponse.getStatusCode());
-        } catch (AuthenticationException e) {
+        } catch (Exception e) {
             Map<String, Object> response = new HashMap<>();
             response.put("message", "수험번호 또는 생년월일이 일치하지 않습니다.");
             response.put("code", HttpStatus.UNAUTHORIZED.value());

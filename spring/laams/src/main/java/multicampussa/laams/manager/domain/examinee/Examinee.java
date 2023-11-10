@@ -36,6 +36,8 @@ public class Examinee extends BaseTimeEntity {
 
     private int point;
 
+    private String birth;
+
     public Examinee(ExamineeCreateRequest examineeCreateRequest) {
         this.id = examineeCreateRequest.getId();
         this.pw = examineeCreateRequest.getPw();
