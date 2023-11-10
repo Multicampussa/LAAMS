@@ -9,6 +9,9 @@ import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import multicampussa.laams.centerManager.domain.CenterManager;
 import multicampussa.laams.centerManager.domain.CenterManagerRepository;
+import multicampussa.laams.manager.domain.exam.Exam;
+import multicampussa.laams.manager.domain.examinee.ExamExaminee;
+import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
 import multicampussa.laams.manager.domain.manager.Manager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +19,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.InvalidIsolationLevelException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
@@ -33,6 +37,7 @@ public class MemberService {
     private final MemberManagerRepository memberManagerRepository;
     private final CenterManagerRepository centerManagerRepository;
     private final RedisUtil redisUtil;
+    private final ExamExamineeRepository examExamineeRepository;
     private final Random random = new SecureRandom();
 
     // 회원가입
@@ -609,11 +614,31 @@ public class MemberService {
         return memberManagerRepository.existsById(id) || memberDirectorRepository.existsById(id) || centerManagerRepository.existsById(id);
     }
 
+    // 응시자 정보가 일치하는지 확인하는 로직
+    public void isPresentExamExaminee(ExamExamineeLoginRequestDto loginRequestDto) {
+        ExamExaminee examExaminee = examExamineeRepository.findByExamineeCode(loginRequestDto.getExamineeCode())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 수험번호입니다."));
+
+        if (!examExaminee.getBirth().equals(loginRequestDto.getBirth())) {
+            throw new IllegalArgumentException("수험자 정보가 일치하지 않습니다.");
+        }
+    }
+
     public List<String> getDirectors() {
         List<String> directors = new ArrayList<>();
         for (Director director : memberDirectorRepository.findAll()) {
             directors.add(director.getId());
         }
         return directors;
+    }
+
+    // 로그인 및 토큰 발급
+    public ResponseEntity<Map<String, Object>> signInForExamExaminee(ExamExamineeLoginRequestDto loginRequestDto, String refreshToken) {
+        Map<String, Object> response = new HashMap<>();
+        ExamExaminee examExaminee = examExamineeRepository.findByExamineeCode(loginRequestDto.getExamineeCode()).get();
+        examExaminee.updateRefreshToken(refreshToken);
+        examExamineeRepository.save(examExaminee);
+        response.put("message", "로그인에 성공하였습니다.");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
