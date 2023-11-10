@@ -5,7 +5,7 @@ import ExamCreate from "../../Manager/Exam/Create/ExamCreate.jsx"
 import ExamDetail from "../../Manager/Exam/Detail.jsx";
 import ExamCompensation from '../../Director/Exam/ExamCompensation.jsx';
 import ExamineeDetail from '../../Director/Exam/ExamineeDetail.jsx';
-import ExamDocs from '../../Director/Exam/ExamDocs.jsx';
+import ExamDocs from '../../Director/Exam/DOCS/ExamDocs.jsx';
 import CalendarDetail from '../../Manager/Home/CalendarDetail.jsx';
 import DirectorCalendarDetail from '../../Director/Home/DirectorCalendarDetail.jsx';
 import ManagerCompensation from "../../Manager/Compensation/Compensation.jsx";
