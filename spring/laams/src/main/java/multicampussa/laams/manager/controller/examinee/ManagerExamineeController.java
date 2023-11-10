@@ -4,10 +4,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import multicampussa.laams.centerManager.dto.ConfirmDirectorRequest;
 import multicampussa.laams.global.CustomExceptions;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
-import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeCompensationDenyRequest;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeCreateRequest;
 import multicampussa.laams.manager.dto.examinee.request.ExamineeUpdateRequest;
@@ -15,11 +13,13 @@ import multicampussa.laams.manager.dto.examinee.request.ExamineeCompensationConf
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationDetailResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationListResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeResponse;
+import multicampussa.laams.manager.service.examinee.ImageUploadService;
 import multicampussa.laams.manager.service.examinee.ManagerExamineeService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
@@ -32,10 +32,12 @@ public class ManagerExamineeController {
 
     private final ManagerExamineeService examineeService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final ImageUploadService imageUploadService;
 
-    public ManagerExamineeController(ManagerExamineeService examineeService, JwtTokenProvider jwtTokenProvider) {
+    public ManagerExamineeController(ManagerExamineeService examineeService, JwtTokenProvider jwtTokenProvider, ImageUploadService imageUploadService) {
         this.examineeService = examineeService;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.imageUploadService = imageUploadService;
     }
 
     // 응시자 생성
@@ -107,6 +109,25 @@ public class ManagerExamineeController {
                     HttpStatus.OK);
         } else {
             throw new CustomExceptions.UnauthorizedException("접근 권한이 없습니다.");
+        }
+    }
+
+    //이미지 업로드
+    @PostMapping("/api/v1/manager/examinees/upload")
+    public String uploadImage(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("imageReason") String imageReason,
+            @RequestParam("examNo") Long examNo,
+            @RequestParam("examineeNo") Long examineeNo
+    ) {
+        try {
+            byte[] imageBytes = file.getBytes();
+            String imageName = file.getOriginalFilename();
+            String imageUrl = imageUploadService.uploadImageToS3(imageBytes, imageName, examNo, examineeNo, imageReason);
+
+            return "이미지 업로드 및 저장 성공!";
+        } catch (Exception e) {
+            return "이미지 업로드 실패: " + e.getMessage();
         }
     }
 

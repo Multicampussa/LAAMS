@@ -61,10 +61,6 @@ public class ExamExaminee extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private CompensationValue compensationStatus = CompensationValue.보상_대기;
 
-    private String imageUrl;
-
-    private String imageReason;
-
     private LocalDateTime attendanceTime = null;
 
 
