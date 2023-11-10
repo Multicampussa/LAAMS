@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import useApi from '../../../Hook/useApi';
 import { useSelector } from 'react-redux';
+import { useMemo } from 'react';
 
 const Detail = () => {
   const api = useApi();
@@ -27,6 +28,16 @@ const Detail = () => {
       getData(examNo);
     }
   },[examNo,api]);
+
+  //TODO : 감독관 목록 반환
+  const directorItems = useMemo(()=>{
+    if(!data) return [];
+    return data.directors.map((e,idx)=><li className='manager-exam-detail-director-item' key={idx}>
+      <div>{e.directorName}</div>
+      <div>{e.directorAttendance ? "출근" : "결근"}</div>
+      <div>{e.directorPhoneNum}</div>
+    </li>)
+  },[data])
   return (
     <div className='manager-exam-detail'>
       <div className='manager-exam-detail-info'>
@@ -53,8 +64,10 @@ const Detail = () => {
           <div>출근</div>
           <div>연락처</div>
         </div>
-        <ul className='manager-exam-detail-director-item'>
-          <li></li>
+        <ul className='manager-exam-detail-director-box'>
+          {
+            directorItems
+          }
         </ul>
       </div>
     </div>
