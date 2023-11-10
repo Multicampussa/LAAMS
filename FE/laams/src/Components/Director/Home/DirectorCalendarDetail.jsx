@@ -15,6 +15,7 @@ const DirectorCalendarDetail = () => {
   const [requestList, setRequestList] = useState([]);
   const isModalOpen = useSelector(state=>state.Modal.show)
   
+  // TODO : 날짜 형식 조정
   const examTimeFormat = useCallback((date)=>{
     const examDate = new Date(date);
     const hours = examDate.getHours() <10? '0'+examDate.getHours():examDate.getHours();
@@ -22,6 +23,7 @@ const DirectorCalendarDetail = () => {
     return hours + ':' + min
   },[])
 
+  // TODO : 감독 배정 요청 보내는 API
   const sendRequest = useCallback((examNo,index)=>{
     api.post('director/exams/request', {'examNo':examNo})
     .then(({data})=>{
@@ -60,13 +62,13 @@ const DirectorCalendarDetail = () => {
             return <div className='director-calendar-detail-box-task-none' >감독을 맡은 시험이 없습니다</div>
         }
         return examList.map((exam,index)=>{
-            return  <li className='director-calendar-detail-box-task-items'>
+            return  <li className='director-calendar-detail-box-task-items' key={index}>
                         <div className='director-calendar-detail-box-task-items-title'
                             onClick={()=>{
                                 navigate(`/director/exam/${exam.examNo}`);
                                 dispatch(setModalShow(false))}}>{exam.examType}-{exam.examLanguage}</div>
                         <div>{examTimeFormat(exam.examDate)}</div>
-                        <div>{examTimeFormat(exam.examDate)}</div>
+                        <div>{examTimeFormat(exam.endExamDate)}</div>
                     </li>
         })
     }
@@ -78,7 +80,7 @@ const DirectorCalendarDetail = () => {
         if (isChecked){
             return requestList.map((req,index)=>{
                 if(req.currentConfirm==='미배치'){
-                    return  <li li className='director-calendar-detail-box-request-items'>
+                    return  <li li className='director-calendar-detail-box-request-items' key={index}>
                                 <div>{req.examType}-{req.examLanguage}</div>
                                 <div>{examTimeFormat(req.examDate)}</div>
                                 <div>{examTimeFormat(req.endExamDate)}</div>
@@ -92,7 +94,7 @@ const DirectorCalendarDetail = () => {
         }
         // 배치 가능 + 거절/대기 조회
         return  requestList.map((req, index)=>{
-            return  <li li className='director-calendar-detail-box-request-items'>
+            return  <li li className='director-calendar-detail-box-request-items' key={index}>
                         <div>{req.examType}-{req.examLanguage}</div>
                         <div>{examTimeFormat(req.examDate)}</div>
                         <div>{examTimeFormat(req.endExamDate)}</div>
