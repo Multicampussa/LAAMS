@@ -1,0 +1,92 @@
+spring:
+  datasource:
+    driver-class-name: ENC(sjlqxCVFpyNWKD/vjlhrtpateI8ptocSVOba6EJtiqYf/C6V1vRwOw==)
+    url: ENC(QhZoF+5/4nRzDpCPQWIHdXnkA4vcgaRu1gtDGvTQi/a7ZPaF25XCTw==)
+    username: ENC(cYB2Olb6VXWi5jHFUIsl4w==)
+    password: ENC(9cdu1LZgayPrMOBofUI9yg==)
+    hikari:
+      maximumPoolSize: 3
+
+  data:
+    mongodb:
+      uri: ENC(5dL8gU6NWJ/VS67CDUIBbUMvvv1l+83kIkP6ZuNtTJKII0/i+py+5g==)
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  mail:
+    host: ENC(d6WPZJ8tU+jagrMsobC8dyb+Y4lIXhpT)
+    port: ENC(rz5xBjOa42ZQgmh49IJ3lQ==)
+    username: ENC(rL5BS6PCrTZ5IAJqBlXEEKI1HmjeXEoIiiyG56bix18=)
+    password: ENC(+FD8zxyH8mWCMPdtQOLqL7P6TFhDqjSLlPI//XQelNo=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+
+  freemarker:
+    cache: false
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+
+  redis:
+    host: ENC(fQWwlcv7RQvGG3JDBL9NDchSFa5g13j/)
+    port: ENC(v1zBzKJHhtr3Vigt8qnxRQ==)
+    password: END(so/mouY4p4lkQV0jvBhjuw32MFr3LR0P)
+
+  servlet:
+    multipart:
+      enabled: true # 멀티파트 업로드 지원여부 (default: true)
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+
+server:
+  servlet:
+    context-path: /
+
+cloud:
+  aws:
+    s3:
+      endpoint: https://kr.object.ncloudstorage.com
+      bucket: laams
+    credentials:
+      access-key: 8scKCA8RIIv7UmfxCDud
+      secret-key: Ijm4NfDuwt6fTeDrUT0mdOH1KTQdRY00xHhvKOF1
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
