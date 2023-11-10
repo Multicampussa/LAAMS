@@ -13,6 +13,9 @@ import multicampussa.laams.manager.dto.examinee.request.ExamineeUpdateRequest;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationDetailResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeCompensationListResponse;
 import multicampussa.laams.manager.dto.examinee.response.ExamineeResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,6 +71,30 @@ public class ManagerExamineeService {
                 .map(ExamineeResponse::new)  // mpa 메서드 사용하여 각 스트림 요소에 ExamineeResponse 생성자 호출 및 Examinee 엔티티를 ExamineeResponse로 변환
                 .collect(Collectors.toList());  // map 메서드로 생성된 ExamineeResponse 객체를 다시 리스트로 수집
 
+    }
+
+    // 페이징 처리된 시험 응시자 조회
+    @Transactional(readOnly = true)
+    public Page<ExamineeCompensationListResponse> getPagedExaminees(int pageNumber, int pageSize, String status) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        ExamExaminee.CompensationValue enumStatus;
+        if ("보상_대기".equals(status)) {
+            enumStatus = ExamExaminee.CompensationValue.보상_대기;
+        } else if ("보상_승인".equals(status)) {
+            enumStatus = ExamExaminee.CompensationValue.보상_승인;
+        } else {
+            enumStatus = ExamExaminee.CompensationValue.보상_거절;
+        }
+        Page<ExamExaminee> examExamineesPage  = examExamineeRepository.findAllByStatus(enumStatus, pageable);
+        Page<ExamineeCompensationListResponse> response = examExamineesPage.map(this::convertToDto);
+        return response;
+
+    }
+
+    // ExamExaminee를 ExamineeCompensationListResponse로 변환하는 로직
+    public ExamineeCompensationListResponse convertToDto(ExamExaminee examExaminee) {
+        ExamineeCompensationListResponse dto = new ExamineeCompensationListResponse(examExaminee);
+        return dto;
     }
 
     // 보상대상자 목록 조회

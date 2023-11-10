@@ -3,8 +3,10 @@ package multicampussa.laams.home.chat.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import multicampussa.laams.home.chat.domain.ChatRoom;
+import multicampussa.laams.home.chat.domain.PrivateChatRoom;
 import multicampussa.laams.home.chat.dto.CreateChatRoomDto;
 import multicampussa.laams.home.chat.repository.ChatRepository;
+import multicampussa.laams.home.chat.repository.PrivateChatRepository;
 import multicampussa.laams.home.member.repository.MemberDirectorRepository;
 import multicampussa.laams.home.member.repository.MemberManagerRepository;
 import multicampussa.laams.manager.domain.center.Center;
@@ -18,33 +20,40 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ChatService {
 
-    private Map<String, ChatRoom> chatRooms;
     private final ChatRepository chatRepository;
     private final MemberDirectorRepository memberDirectorRepository;
     private final CenterRepository centerRepository;
     private final ExamRepository examRepository;
+    private final PrivateChatRepository privateChatRepository;
 
     @PostConstruct
     //의존관계 주입완료되면 실행되는 코드
     private void init() {
-        chatRooms = new LinkedHashMap<>();
+        Map<String, ChatRoom> chatRooms = new LinkedHashMap<>();
     }
 
     //채팅방 불러오기
-    public List<ChatRoom> findSearchRoom(String directorId, String centerName) {
-        List<ChatRoom> result = new ArrayList<>();
+    public List<ChatRoom> findSearchRoom(String directorId, String centerName, boolean isNow) {
+        List<ChatRoom> result;
         if (centerName != null) {
-            result.add(chatRepository.findByRoomName(centerName));
+            result = chatRepository.findByRoomNameContaining(centerName);
         } else if (directorId != null) {
-            result.add(chatRepository.findByRoomName(directorId));
+            result = chatRepository.findByRoomNameContaining(directorId);
         } else {
             result = chatRepository.findAll();
+        }
+
+        if (isNow) {
+            result = result.stream()
+                    .filter(chatRoom -> isTesting(chatRoom.getRoomName()))
+                    .collect(Collectors.toList());
         }
 
         Collections.reverse(result);
@@ -57,24 +66,29 @@ public class ChatService {
         return chatRepository.findByRoomName(roomName);
     }
 
+    //개인채팅방 하나 불러오기
+    public PrivateChatRoom findByPrivateRoomName(String roomName) {
+        return privateChatRepository.findByRoomName(roomName);
+    }
+
     // 채팅방 생성
-    public ChatRoom createRoom(String directorId) {
+    public PrivateChatRoom createRoom(String directorId) {
         String roomName;
-        List<ChatRoom> rooms = chatRepository.findAll();
-        for (ChatRoom room : rooms) {
-            if (room.getRoomName().contains(directorId)) {
-                return room;
-            };
+        if (privateChatRepository.existsByRoomName(directorId)) {
+            return privateChatRepository.findByRoomName(directorId);
         }
+
         if (memberDirectorRepository.existsById(directorId)) {
             roomName = directorId;
         } else {
             throw new IllegalArgumentException("해당 유저는 없습니다.");
         }
 
-        ChatRoom chatRoom = ChatRoom.create(roomName);
-        chatRepository.save(chatRoom);
-        return chatRoom;
+        PrivateChatRoom privateChatRoom = PrivateChatRoom.create(roomName);
+        privateChatRoom.setDirectorName(memberDirectorRepository.findById(directorId).get().getName());
+        privateChatRepository.save(privateChatRoom);
+
+        return privateChatRoom;
     }
 
     // 전체 공지 채팅방 생성

@@ -137,93 +137,25 @@ public class DirectorService {
 
     // 시험 현황 조회
     @Transactional
-    public ExamStatusDto getExamStatus(Long examNo, String authority) {
+    public ExamStatusDto getExamStatus(Long examNo, String authority, String directorId) {
         if(authority.equals("ROLE_DIRECTOR")){
             Exam exam = examRepository.findById(examNo)
                     .orElseThrow(() -> new IllegalArgumentException("해당 시험은 없습니다."));
 
             int examineeCnt = examExamineeRepository.countByExamineeNo(examNo);
             int attendanceCnt = examExamineeRepository.countByAttendance(examNo);
-//        int documentCnt = examExamineeRepository.countByDocument(examNo);
+            int documentCnt = examExamineeRepository.countByDocument(examNo);
 
-            return new ExamStatusDto(examineeCnt, attendanceCnt);
+            // 감독관 자신의 시험 출석 조회 여부(했으면 1, 안했으면 0)
+            boolean directorAttendance = examDirectorRepository.findByDirectorIdAndExamNo(directorId, examNo);
+
+            return new ExamStatusDto(examineeCnt, attendanceCnt, documentCnt, directorAttendance);
         }
         else{
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
 
     }
-
-    // 응시자 출석 시간 업데이트 (응시자 지각여부 판단)
-//    @ Transactional
-//    public UpdateAttendanceDto updateAttendanceTime(Long examNo, Long examineeNo) {
-//
-//        Optional<Exam> exam = examRepository.findById(examNo);
-//        System.out.println(examNo);
-//        if(exam.isPresent()){
-//            Optional<ExamExaminee> examExaminee = Optional.ofNullable(examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo));
-//            if(examExaminee.isEmpty()){
-//                throw new IllegalArgumentException("해당 시험의 응시자가 아닙니다.");
-//            }else {
-//                // 출석 시간 업데이트
-//                examExaminee.get().updateAttendanceTime(LocalDateTime.now());
-//                examExamineeRepository.save(examExaminee.get());
-//
-//                return new UpdateAttendanceDto(examineeNo, LocalDateTime.now());
-//            }
-//        } else {
-//            throw new IllegalArgumentException("해당 시험은 없습니다.");
-//        }
-//    }
-
-    // 응시자 출석 확인
-//    @Transactional
-//    public CheckAttendanceDto checkAttendance(Long examNo, Long examineeNo, String authority, String directorId) {
-//        if(authority.equals("ROLE_DIRECTOR")){
-//            Optional<Exam> exam = examRepository.findById(examNo);
-//            if(exam.isPresent()){
-//                List<ExamDirector> examDirectors = exam.get().getExamDirector();
-//                boolean isDirectorExists = examDirectors.stream()
-//                        .anyMatch(examDirector -> examDirector.getDirector().getId().equals(directorId));
-//                if(isDirectorExists){
-//                    Optional<ExamExaminee> examExaminee = Optional.ofNullable(examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo));
-//                    if(examExaminee.isEmpty()){
-//                        throw new IllegalArgumentException("해당 시험의 응시자가 아닙니다.");
-//                    }else {
-//                        // 응시자의 출석 시간과 시험 시작 시간 비교
-//                        LocalDateTime examineeAttendanceTime =examExaminee.get().getAttendanceTime();
-//                        LocalDateTime examStartTime = exam.get().getExamDate();
-//                        // 응시자의 출석 시간이 더 빠름(지각x)
-//                        if(examineeAttendanceTime.isBefore(examStartTime)){
-//                            Boolean attendance = true;
-//                            Boolean compensation = false;
-//                            String compensationType = null;
-//
-//                            CheckAttendanceDto checkAttendanceDto = new CheckAttendanceDto(attendance, compensation, compensationType);
-//                            examExaminee.get().updateAttendace(checkAttendanceDto);
-//                            return checkAttendanceDto;
-//                        }else{
-//                            Boolean attendance = true;
-//                            Boolean compensation = true;
-//                            String compensationType = "지각";
-//
-//                            CheckAttendanceDto checkAttendanceDto = new CheckAttendanceDto(attendance, compensation, compensationType);
-//                            examExaminee.get().updateAttendace(checkAttendanceDto);
-//                            return checkAttendanceDto;
-//                        }
-//                    }
-//                } else {
-//                    throw new IllegalArgumentException("감독 권한이 없는 사람입니다.");
-//                }
-//            } else {
-//                throw new IllegalArgumentException("해당 시험은 없습니다.");
-//            }
-//        }
-//        else{
-//            throw new IllegalArgumentException("접근 권한이 없습니다.");
-//        }
-//
-//    }
 
     // 출석 확인
     @Transactional
@@ -461,7 +393,7 @@ public class DirectorService {
                                 // 거리 계산
                                 Double dist = LocationDistance.distance(directorLatitude, directorLongitude ,centerLatitude, centerLongitude, "meter");
                                 if(dist > 500) { // 500m 초과이면
-                                    throw new IllegalArgumentException("아직 멀어요...");
+                                    throw new IllegalArgumentException("센터 거리 500m내에서 인증해 주세요.");
                                 }
                                 else {
                                     Boolean directorAttendance = true;
@@ -475,10 +407,9 @@ public class DirectorService {
                                     return directorAttendanceDto;
                                 }
                             } else {
-                                throw new IllegalArgumentException("값이 없어요! 위도 경도 주세요!");
+                                throw new IllegalArgumentException("위치를 인식할 수 없습니다.");
                             }
                         }
-
                     } else {
                         throw new IllegalArgumentException("현재 시험을 감독하는 사람이 아닙니다.");
                     }
@@ -535,7 +466,7 @@ public class DirectorService {
                         // 거리 계산
                         Double dist = LocationDistance.distance(directorLatitude, directorLongitude ,centerLatitude, centerLongitude, "meter");
                         if(dist > 500) { // 500m 초과이면
-                            throw new IllegalArgumentException("아직 멀어요...");
+                            throw new IllegalArgumentException("센터 거리 500m내에서 인증해 주세요.");
                         }
                         else {
                             System.out.println(closestExam.getNo());
@@ -552,10 +483,9 @@ public class DirectorService {
                             return directorAttendanceDto;
                         }
                     } else {
-                        throw new IllegalArgumentException("값이 없어요! 위도 경도 주세요!");
+                        throw new IllegalArgumentException("위치를 인식할 수 없습니다.");
                     }
                 }
-
             }
         } else {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
