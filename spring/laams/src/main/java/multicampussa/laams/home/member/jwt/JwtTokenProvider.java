@@ -66,7 +66,7 @@ public class JwtTokenProvider {
 
     public String createAccessTokenForExamExaminee(String code, String birth) {
 
-        // email과 권한 정보 claims에 담기
+        // 수험번호와 권한 정보 claims에 담기
         Claims claims = Jwts.claims().setSubject(code);
         claims.put("birth", birth);
         claims.put("authority", "ROLE_EXAMINEE");

@@ -28,11 +28,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         String path = httpRequest.getRequestURI();
         String token = jwtTokenProvider.resolveToken(httpRequest);
 
-//        if (path.startsWith("/admin") && !path.startsWith("/admin/member/login")){
-//            if (!jwtTokenProvider.getIsManager(token)) {
-//                throw new NotAdminException("관리자만 접근 가능합니다.");
-//            }
-//        }
 
         if (!path.startsWith("/api/v1/member/login") &&
                 !path.startsWith("/api/v1/member/signup") &&
@@ -41,10 +36,25 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 !path.startsWith("/api/v1/member/sendemail") &&
                 !path.startsWith("/api/v1/member/refresh") &&
                 !path.startsWith("/api/v1/member/encodedpassword") &&
-                !path.startsWith("/")) {
+                !path.startsWith("/csrf") &&
+                !path.startsWith("/webjars") &&
+                !path.startsWith("/assets") &&
+                !path.startsWith("/images") &&
+                !path.startsWith("/error") &&
+                !path.startsWith("/swagger-ui") &&
+                !path.startsWith("/swagger-resources") &&
+                !path.startsWith("/v3/api-docs") &&
+                !path.startsWith("/v2/api-docs")) {
 
 
             if (token != null) {
+                if (jwtTokenProvider.getAuthority(token).equals("ROLE_EXAMINEE")) {
+                    if (!path.startsWith("/api/v1/examinee") && !path.startsWith("/api/v1/member/login/examinee")){
+                        sendErrorResponse((HttpServletResponse) res, "관리자만 접근 가능합니다.", "a001");
+                        return;
+                    }
+                }
+
                 try {
                     jwtTokenProvider.validateToken(token);
                 } catch (Exception e) {
