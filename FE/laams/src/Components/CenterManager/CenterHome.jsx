@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useApi from '../../Hook/useApi';
 import Calendar from './Calendar';
-import { useSelector } from 'react-redux';
 
 const CenterHome = () => {
   const [examList,setExamList] = useState();
@@ -67,7 +66,7 @@ const CenterHome = () => {
     }else{
       return todayExamList.map((e,index)=>{
 
-        return <div className='center-home-todo-box-items'>
+        return <div className='center-home-todo-box-items' key={index}>
                 <div className='center-home-todo-box-items-text'
                 onClick={()=>navigate(`/center/exam/${e.examNo}`)}>[{e.examType}]{e.centerName}</div>
                 <div className='center-home-todo-box-items-text-region'>({e.centerRegion})</div>
@@ -128,7 +127,7 @@ const CenterHome = () => {
           <div className='center-home-notice-box-items'
           onClick={()=>{
             navigate(`/notice/detail/${notice.noticeNo}`)
-          }}>
+          }} key={index}>
             <div className='center-home-notice-box-items-title'>{notice.title}</div>
             <div className='center-home-notice-box-items-time'>{year}-{month}-{day} {hours}:{min}</div>
           </div>

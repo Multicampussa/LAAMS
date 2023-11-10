@@ -93,6 +93,7 @@ const CenterCalendarDetail = () => {
             const title = isFull ? '더이상 감독 배치를 할 수 없습니다' : '';
             return <li className={`modal-item-${isChecked[index]? 'active':'deactive'}-${isFull? 'full':'notFull'}`}
             title={title}
+            key={index}
             onClick={()=>{handleIsChecked(index); getRequestList(index);}}>{exam.examType}</li>
         })
     },[examList,isChecked, handleIsChecked, getRequestList])
