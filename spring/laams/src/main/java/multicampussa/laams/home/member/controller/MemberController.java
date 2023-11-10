@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -54,7 +53,7 @@ public class MemberController {
             // 아이디와 비밀번호 인증
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, loginRequestDto.getPw()));
 
-            MemberDto userInfo = memberService.UserInfo(loginRequestDto.getId());
+            MemberDto userInfo = memberService.UserInfo(id);
 
             // 토큰 발급
             Long memberId = userInfo.getMemberNo();
@@ -97,6 +96,55 @@ public class MemberController {
             Map<String, Object> response = new HashMap<>();
             System.out.println(e.getMessage());
             response.put("message", "아이디 또는 비밀번호가 일치하지 않습니다.");
+            response.put("code", HttpStatus.UNAUTHORIZED.value());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
+
+    @PostMapping("/login/examinee")
+    @ApiOperation(value = "응시자 로그인 및 토큰 발급")
+    public ResponseEntity<Map<String, Object>> loginForExamExaminee(@RequestBody ExamExamineeLoginRequestDto loginRequestDto) {
+        try {
+            String code = loginRequestDto.getExamineeCode();
+            try{
+                memberService.isPresentExamExaminee(loginRequestDto);
+            } catch (Exception e) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", e.getMessage());
+                response.put("code", HttpStatus.NOT_FOUND.value());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+
+            // 토큰 발급
+            String accessToken;
+            try {
+                accessToken = jwtTokenProvider.createAccessTokenForExamExaminee(code, loginRequestDto.getBirth());
+            } catch (Exception e) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", e.getMessage());
+                response.put("code", HttpStatus.NOT_FOUND.value());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+            String refreshToken = jwtTokenProvider.createRefreshToken(code);
+            ResponseEntity<Map<String, Object>> signInResponse = memberService.signInForExamExaminee(loginRequestDto, refreshToken);
+            Map<String, Object> response = signInResponse.getBody();
+            String authority = jwtTokenProvider.getAuthority(accessToken);
+
+            if (signInResponse.getStatusCodeValue() == 200) {
+                response.put("accessToken", accessToken);
+                response.put("refreshToken", refreshToken);
+                response.put("accessTokenExpireTime", jwtTokenProvider.getTokenExpireTime(accessToken));
+                response.put("refreshTokenExpireTime", jwtTokenProvider.getTokenExpireTime(refreshToken));
+                response.put("authority", authority);
+            }
+
+            response.put("code", signInResponse.getStatusCodeValue());
+            response.put("status", "success");
+
+            return new ResponseEntity<>(response, signInResponse.getStatusCode());
+        } catch (AuthenticationException e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "수험번호 또는 생년월일이 일치하지 않습니다.");
             response.put("code", HttpStatus.UNAUTHORIZED.value());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
