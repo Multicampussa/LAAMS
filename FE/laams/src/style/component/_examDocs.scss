@@ -1,57 +1,197 @@
-.exam-docs{
+.exam-docs {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  &-capture {
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center;
-    &-container{
-        width: 90%;
-        height: 90%;
-        display: flex;
-        flex-direction: column;
-        gap: 3rem;
-        &-title{
-            width: 100%;
-            text-align: center;
-            box-sizing: border-box;
-            padding: 1rem;
-            background-color: $color-black-light;
-            color: white;
-            font-size: 2rem;
-            font-weight: 700;
-        }
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  &-container {
+    flex-shrink: 0;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+
+    &-title {
+      width: 100%;
+      text-align: center;
+      box-sizing: border-box;
+      padding: 1rem;
+      background-color: $color-black-light;
+      color: white;
+      font-size: 2rem;
+      font-weight: 700;
     }
-    &-box{
+  }
+
+  &-prev {
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    top: calc(50% - 2.5rem);
+    width: 5rem;
+    height: 5rem;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("../../assets/images/Prev.svg");
+  }
+  &-next {
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    top: calc(50% - 2.5rem);
+    width: 5rem;
+    height: 5rem;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("../../assets/images/Next.svg");
+  }
+  &-slide {
+    &-btn {
+      z-index: 1;
+      width: 100%;
+      position: absolute;
+      left: 0;
+      bottom: 50%;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  &-article {
+    width: 100%;
+    height: 100%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    background-color: $color-white-light;
+    display: flex;
+    justify-content: center;
+    &-image{
+      max-width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+  &-article:last-child {
+    background-image: url("../../assets/images/Add.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+  }
+
+  &-slider {
+    display: flex;
+    width: 100%;
+    height: 100%;
+
+    will-change: transform;
+    transition-property: transform;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-out;
+
+    &-submit {
+      display: flex;
+      width: 100%;
+      height: 100%;
+
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.1s;
+      transition-timing-function: ease-out;
+      transform: translateX(0);
+    }
+
+    &-capture {
+      display: flex;
+      width: 100%;
+      height: 100%;
+
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.1s;
+      transition-timing-function: ease-out;
+      transform: translateX(-100%);
+    }
+  }
+  &-box {
+    width: 100%;
+    flex: 1;
+    border-top: 0.1rem solid $color-gray-light;
+    border-bottom: 0.1rem solid $color-gray-light;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    &-image {
+      width: 100%;
+      height: 60%;
+    }
+    &-file {
+      display: flex;
+      width: 100%;
+      height: 30%;
+      &-input {
         width: 100%;
-        height: 80%;
-        border-top: 0.1rem solid $color-gray-light;
-        border-bottom: 0.1rem solid $color-gray-light;
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-        padding-top: 4rem;
-        overflow-y: auto;
-        &-image{
-            width: 100%;
-            height: 60%;
-        }
-        &-file{
-            display: flex;
-            width: 100%;
-            height: 30%;
-            &-input{
-                width: 100%;
-            }
-        }
+      }
+    }
+  }
+  &-btn {
+    width: 100%;
+    height: 6rem;
+    background-color: $color-blue;
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  &-add{
+    &-close{
+      position: absolute;
+      right: 2rem;
+      top: 2rem;
+      background-image: url("../../assets/images/CloseWhite.svg");
+      background-repeat: no-repeat;
+      width: 2rem;
+      height: 2rem;
+    }
+    &-boxclose{
+      display: none;
+    }
+    &-boxopen{
+      position: absolute;
+      box-sizing: border-box;
+      padding: 0 10%;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: flex;
+      background-color: rgba(0,0,0,0.8
+      );
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
     }
     &-btn{
-        width: 100%;
-        height: 6rem;
-        background-color: $color-blue;
-        border-radius: 0.5rem;
-        color: white;
-        font-size: 2rem;
-        font-weight: 600;
+      width: 100%;
+      height: 8rem;
+      line-height: 8rem;
+      font-weight: 900;
+      background-color: $color-blue;
+      color: $color-white;
+      font-size: 2.5rem;
+      border-radius: 1rem;
+      text-align: center;
     }
-    
-
+    &-btn:hover{
+      background-color: $color-red;
+    }
+  }
+}
+#exam-docs-add-image{
+  display: none;
 }
