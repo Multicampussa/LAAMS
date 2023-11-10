@@ -137,16 +137,19 @@ public class DirectorService {
 
     // 시험 현황 조회
     @Transactional
-    public ExamStatusDto getExamStatus(Long examNo, String authority) {
+    public ExamStatusDto getExamStatus(Long examNo, String authority, String directorId) {
         if(authority.equals("ROLE_DIRECTOR")){
             Exam exam = examRepository.findById(examNo)
                     .orElseThrow(() -> new IllegalArgumentException("해당 시험은 없습니다."));
 
             int examineeCnt = examExamineeRepository.countByExamineeNo(examNo);
             int attendanceCnt = examExamineeRepository.countByAttendance(examNo);
-//        int documentCnt = examExamineeRepository.countByDocument(examNo);
+            int documentCnt = examExamineeRepository.countByDocument(examNo);
 
-            return new ExamStatusDto(examineeCnt, attendanceCnt);
+            // 감독관 자신의 시험 출석 조회 여부(했으면 1, 안했으면 0)
+            boolean directorAttendance = examDirectorRepository.findByDirectorIdAndExamNo(directorId, examNo);
+
+            return new ExamStatusDto(examineeCnt, attendanceCnt, documentCnt, directorAttendance);
         }
         else{
             throw new IllegalArgumentException("접근 권한이 없습니다.");

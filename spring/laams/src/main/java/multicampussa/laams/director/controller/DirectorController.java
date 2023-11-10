@@ -123,9 +123,9 @@ public class DirectorController {
         try {
             String token  = authorization.replace("Bearer ", "");
             String authority = jwtTokenProvider.getAuthority(token);
-//            String directorId = jwtTokenProvider.getId(token);
+            String directorId = jwtTokenProvider.getId(token);
 
-            ExamStatusDto examStatusDto = directorService.getExamStatus(examNo, authority);
+            ExamStatusDto examStatusDto = directorService.getExamStatus(examNo, authority, directorId);
 
             resultMap.put("message","시험 응시자의 현황을 성공적으로 조회했습니다.");
             resultMap.put("data", examStatusDto);
