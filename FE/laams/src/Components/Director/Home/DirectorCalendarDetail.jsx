@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { setModalShow } from '../../../redux/actions/modalAction';
 import useApi from './../../../Hook/useApi';
+import { setExamList } from '../../../redux/actions/calendarExamListAction';
 
 const DirectorCalendarDetail = () => {
   const examList = useSelector(state => state.CalendarExamList.examList);
@@ -14,6 +15,28 @@ const DirectorCalendarDetail = () => {
   const examDate = useSelector(state=>state.CalendarExamList.examDate)
   const [requestList, setRequestList] = useState([]);
   const isModalOpen = useSelector(state=>state.Modal.show)
+
+  const userId = useSelector(state=>state.User.memberId);
+
+  //TODO : 감독관 NO 얻어오는 요청 API
+  const getDirectorInfo = useCallback(async()=>{
+    if(!userId || !api){
+      return
+    }
+    const response = await api.get(`member/info/${userId}`);
+    return response.data.data.memberNo;
+  },[api,userId])
+
+  // TODO :오늘자의 시험 조회 API
+  const getTodayExamList = useCallback(async(examDate)=>{
+    const directorUserNo = await getDirectorInfo();
+    await api.get(`director/${directorUserNo}/exams?year=${examDate['year']}&month=${examDate['month']}&day=${examDate['day']}`)
+    .then(({data})=>{
+      dispatch(setExamList(data.data))
+    }).catch((err)=>{console.log(err)})
+    
+  },[dispatch,api,getDirectorInfo])
+
   
   // TODO : 날짜 형식 조정
   const examTimeFormat = useCallback((date)=>{
@@ -48,12 +71,11 @@ const DirectorCalendarDetail = () => {
   },[api])
 
   useEffect(()=>{
-    getRequestList(examDate)
     if(!isModalOpen){
         setIsChecked(false)
         setIsClicked({1:true, 2:false})
     }
-  },[getRequestList, examDate,isModalOpen,examList])
+  },[examDate,isModalOpen,examList])
 
   //TODO : tab 선택에 따른 일정 및 요청 내역 반환
   const showExamList = useMemo(()=>{
@@ -114,9 +136,15 @@ const DirectorCalendarDetail = () => {
                 배치 가능 시험만 조회</label></div>
         <div className='director-calendar-detail-tab'>
             <div className={`director-calendar-detail-tab-${isClicked[1]}`}
-                onClick={()=>setIsClicked({1:true, 2:false})}>감독 일정</div>
+                onClick={()=>{
+                    setIsClicked({1:true, 2:false});
+                    getTodayExamList(examDate);
+                }}>감독 일정</div>
             <div className={`director-calendar-detail-tab-${isClicked[2]}`}
-                onClick={()=>setIsClicked({1: false, 2:true})}>감독 요청 내역</div>
+                onClick={()=>{
+                    setIsClicked({1: false, 2:true});
+                    getRequestList(examDate);
+                    }}>감독 요청 내역</div>
         </div>
         <div className='director-calendar-detail-box'>
             <ul>
