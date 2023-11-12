@@ -68,12 +68,11 @@ const CenterHome = () => {
 
         return <div className='center-home-todo-box-items' key={index}>
                 <div className='center-home-todo-box-items-text'
-                onClick={()=>navigate(`/center/exam/${e.examNo}`)}>[{e.examType}]{e.centerName}</div>
-                <div className='center-home-todo-box-items-text-region'>({e.centerRegion})</div>
+                >[{e.examType}]{e.centerName}</div>
               </div>
       })
     }
-  },[todayExamList,navigate])
+  },[todayExamList])
 
   //TODO : 이전 달 호출
   //FIXME : 데이터 갱신
