@@ -100,7 +100,7 @@ const NoticeCenter = ({data}) => {
 
   //TODO : 메시지 li 생성
   const messageItems = useMemo(()=>{
-    return messageList.reverse().map((e,idx)=><li key={idx} className='manager-chat-noticeitem'>
+    return [...messageList].reverse().map((e,idx)=><li key={idx} className='manager-chat-noticeitem'>
       <div className='manager-chat-noticeitem-sender'>{e.sender}</div>
       <div className='manager-chat-noticeitem-message'>{e.message}</div>
     </li>);

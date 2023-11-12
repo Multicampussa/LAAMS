@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import useApi from '../../../Hook/useApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setModalShow, setModalType } from './../../../redux/actions/modalAction';
-import { setManagerCompensationExamNo, setManagerCompensationIsResetList, setManagerCompensationNo } from './../../../redux/actions/managerCompensationAction';
+import { setManagerCompensationExamNo, setManagerCompensationNo } from './../../../redux/actions/managerCompensationAction';
 
 const List = () => {
   const api = useApi();
