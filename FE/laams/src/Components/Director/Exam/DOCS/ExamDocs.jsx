@@ -64,7 +64,7 @@ const ExamDocs = () => {
       dispatch(setModalType(null));
       dispatch(setModalShow(false));
     }).catch(err=>console.log(err));
-  },[imageFiles,reason,examineeNo,examNo])
+  },[imageFiles,reason,examineeNo,examNo,api,dispatch])
 
   return (
     <section className='exam-docs'>
