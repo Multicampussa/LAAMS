@@ -14,7 +14,8 @@ const Time = ({setType,data}) => {
       "examLanguage": data.language.name,
       "examType": data.test.name,
       "managerNo": 1,
-      "runningTime": parseInt(data.testTime)
+      "runningTime": parseInt(data.testTime),
+      "maxDirector":parseInt(data.maxDirector)
     }).then(({data})=>{
       alert(data.data);
       dispatch(setModalShow(false));
@@ -52,6 +53,8 @@ const Time = ({setType,data}) => {
         <div>
           <label className='exam-create-subtitle'>시험 시간<input className='exam-create-testTime' defaultValue={data.testTime} onChange={(e)=>data.testTime=e.target.value} type='number' min="30" max="240"/></label>
         </div>
+        <div className='exam-create-title'>감독관</div>
+        <label className='exam-create-subtitle'>최대 감독관 수<input className='exam-create-testTime' min="2" defaultValue="2" onChange={(e)=>data.maxDirector=e.target.value} type='number'/></label>
       </div>
       <div className='flex-row-sb-center'>
         <button className='modal-btn-half' onClick={handlePrev}>이전</button>

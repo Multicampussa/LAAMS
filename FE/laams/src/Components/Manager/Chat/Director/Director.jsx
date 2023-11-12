@@ -43,7 +43,7 @@ const Director = ({reset}) => {
   },[]);
 
   const roomItems = useMemo(()=>{
-    return room.map((e,idx)=><li onClick={()=>handleRoomItem(e)} key={idx}>{e.roomName}</li>)
+    return room.map((e,idx)=><li className='manager-chat-room' onClick={()=>handleRoomItem(e)} key={idx}>{e.roomName}</li>)
   },[room,handleRoomItem])
 
   useEffect(()=>{
@@ -77,7 +77,7 @@ const Director = ({reset}) => {
     <>
       {
         main?main:
-        <div>
+        <div className='manager-chat-room-wrap'>
           <div className='flex-row'>
             <select onChange={e=>setRegion(e.target.value)}>
               <option>전국</option>
@@ -87,7 +87,7 @@ const Director = ({reset}) => {
               {centerItem}
             </select>
           </div>
-          <ul>
+          <ul className='manager-chat-room-box'>
             {roomItems}
           </ul>
         </div>

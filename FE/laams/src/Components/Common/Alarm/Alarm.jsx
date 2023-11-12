@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import SockJS from 'sockjs-client';
 import Stomp from 'stomp-websocket';
 import useApi from '../../../Hook/useApi';
@@ -14,7 +14,6 @@ const Alarm = () => {
   const [showAlarm,setShowAlarm] = useState(false);
   const authority = useSelector(state=>state.User.authority);
   const api = useApi();
-  const directorChat = useSelector(state=>state.DirectorChat.chat);
   const alarmItems = useMemo(()=>{
     let temp = [];
     switch(authority){
@@ -43,7 +42,6 @@ const Alarm = () => {
       ws.current.subscribe(`/topic/chat/room/alarm`, function(message) {
         const recv = JSON.parse(message.body);
         recv.read = false;
-        // alarmMessage.push(recv);
         setAlarmMessage(e=>[...e,recv]);
       });
     }, function(error) {
@@ -60,14 +58,6 @@ const Alarm = () => {
     });
   },[accessToken]);
 
-
-  //TODO : 감독관 채팅입력시 소켓으로 전달
-  useEffect(()=>{
-    if(!directorChat || directorChat==="" || !directorRoom.current || directorRoom.current[0] === null) return;
-    ws.current.send("/app/chat/message", {'Authorization': `Bearer ${accessToken}`}, JSON.stringify({type:'TALK', roomId:directorRoom.current[0].roomId, sender:directorRoom.current[0].roomName, roomName:directorRoom.current[0].roomName, message:directorChat}));
-  },[directorChat,accessToken]);
-
-
   //TODO : 감독관 소켓 연결
   const directorConnect = useCallback(()=>{
     ws.current.connect({'Authorization': `Bearer ${accessToken}`}, async function(frame) {
@@ -79,38 +69,38 @@ const Alarm = () => {
           directorRoom.current = data;
           ws.current.subscribe(`/topic/chat/room/${res.data.data.roomId}`, function(message) {
             const recv = JSON.parse(message.body);
-            console.log(recv);
+            setAlarmMessage(e=>[...e,recv]);
           });
           ws.current.subscribe(`/topic/chat/room/notice-all`, function(message) {
             const recv = JSON.parse(message.body);
-            console.log(recv);
+            setAlarmMessage(e=>[...e,recv]);
           });
           ws.current.subscribe(`/topic/chat/room/notice-${data[2]?.roomName}`, function(message) {
             const recv = JSON.parse(message.body);
-            console.log(recv);
+            setAlarmMessage(e=>[...e,recv]);
           });
-          ws.current.subscribe(`/topic/chat/room/notice-${data[3]?.roomName}`, function(message) {
+          ws.current.subscribe(`/topic/chat/room/${data[3]?.roomId}`, function(message) {
             const recv = JSON.parse(message.body);
-            console.log(recv);
+            setAlarmMessage(e=>[...e,recv]);
           });
         }
       }else{
         directorRoom.current = data;
         ws.current.subscribe(`/topic/chat/room/${data[0]?.roomId}`, function(message) {
           const recv = JSON.parse(message.body);
-          console.log(recv);
+          setAlarmMessage(e=>[...e,recv]);
         });
         ws.current.subscribe(`/topic/chat/room/notice-all`, function(message) {
           const recv = JSON.parse(message.body);
-          console.log(recv);
+          setAlarmMessage(e=>[...e,recv]);
         });
         ws.current.subscribe(`/topic/chat/room/notice-${data[2]?.roomName}`, function(message) {
           const recv = JSON.parse(message.body);
-          console.log(recv);
+          setAlarmMessage(e=>[...e,recv]);
         });
         ws.current.subscribe(`/topic/chat/room/notice-${data[3]?.roomName}`, function(message) {
           const recv = JSON.parse(message.body);
-          console.log(recv);
+          setAlarmMessage(e=>[...e,recv]);
         });
       }
     }, function(error) {
