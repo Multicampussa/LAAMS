@@ -3,10 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { setModalShow } from '../../../redux/actions/modalAction';
 import useApi from './../../../Hook/useApi';
-import { setExamList } from '../../../redux/actions/calendarExamListAction';
 
 const DirectorCalendarDetail = () => {
-  const examList = useSelector(state => state.CalendarExamList.examList);
+  const [examList, setExamList] = useState([])
   const [isClicked, setIsClicked] = useState({1:true, 2:false});
   const [isChecked, setIsChecked] = useState(false)
   const navigate = useNavigate();
@@ -32,10 +31,10 @@ const DirectorCalendarDetail = () => {
     const directorUserNo = await getDirectorInfo();
     await api.get(`director/${directorUserNo}/exams?year=${examDate['year']}&month=${examDate['month']}&day=${examDate['day']}`)
     .then(({data})=>{
-      dispatch(setExamList(data.data))
+      setExamList(data.data)
     }).catch((err)=>{console.log(err)})
     
-  },[dispatch,api,getDirectorInfo])
+  },[api,getDirectorInfo])
 
   
   // TODO : 날짜 형식 조정
@@ -71,11 +70,12 @@ const DirectorCalendarDetail = () => {
   },[api])
 
   useEffect(()=>{
+    getTodayExamList(examDate);
     if(!isModalOpen){
         setIsChecked(false)
         setIsClicked({1:true, 2:false})
     }
-  },[examDate,isModalOpen,examList])
+  },[examDate,isModalOpen, getTodayExamList])
 
   //TODO : tab 선택에 따른 일정 및 요청 내역 반환
   const showExamList = useMemo(()=>{
