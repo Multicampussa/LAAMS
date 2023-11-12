@@ -77,10 +77,10 @@ const Calendar = ({examList,curDate,handleNext,handlePrev}) => {
 
   return (
     <article className='calendar'>
-      <div className='calendar-title'>
-        <button onClick={handlePrev} className='calendar-prev'><div className='hidden-text'>이전 달</div></button>
+      <div className='director-home-calendar-title'>
+        <button onClick={handlePrev} className='director-home-calendar-prev'><div className='hidden-text'>이전 달</div></button>
         <div>{curDate.getFullYear()}년 {curDate.getMonth()+1}월</div>
-        <button onClick={handleNext} className='calendar-next'><div className='hidden-text'>다음 달</div></button>
+        <button onClick={handleNext} className='director-home-calendar-next'><div className='hidden-text'>다음 달</div></button>
       </div>
       <ul className='calendar-date'>
         <li className='calendar-date-item'>일</li>

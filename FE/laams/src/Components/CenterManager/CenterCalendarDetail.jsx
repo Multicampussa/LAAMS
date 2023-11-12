@@ -1,18 +1,28 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useApi from './../../Hook/useApi';
-import { setExamList, setMonthExamList } from '../../redux/actions/calendarExamListAction';
+import {setMonthExamList } from '../../redux/actions/calendarExamListAction';
 
 const CenterCalendarDetail = () => {
-  const examList = useSelector(state=>state.CalendarExamList.examList)
+  const [examList, setExamList] = useState([]);
   const dispatch = useDispatch();
-  const [isChecked,setIsChecked] = useState([])
+  const [isChecked,setIsChecked] = useState([]);
   const [isShow, setIsShow] = useState(false);
-  const isModalOpen = useSelector(state=>state.Modal.show)
+  const isModalOpen = useSelector(state=>state.Modal.show);
   const [requestList, setRequestList] = useState([]);
   const api = useApi();
-  const examDate = useSelector(state=>state.CalendarExamList.examDate)
-  const monthExamList = useSelector(state=>state.CalendarExamList.monthExamList)
+  const examDate = useSelector(state=>state.CalendarExamList.examDate);
+  const monthExamList = useSelector(state=>state.CalendarExamList.monthExamList);
+
+  // TODO : 해당 날짜의 시험 목록 API
+  const getExamList = useCallback(async(curDate)=>{
+    
+    await api.get(`centermanager/exams?year=${curDate['year']}&month=${curDate['month']}&day=${curDate['day']}`)
+    .then(({data})=>{
+      setExamList(data.data)
+    }).catch((err)=>{console.log(err)})
+    
+  },[api])
 
   //TODO : 특정 시험 요청 목록 조회 로직
   const getRequestList = useCallback((index)=>{
@@ -118,13 +128,14 @@ const CenterCalendarDetail = () => {
   },[requestList, requestApprove, requestDeny]) 
 
   useEffect(() => {
+    getExamList(examDate)
     if (!isModalOpen) {
       setIsChecked([]);
       setIsShow(false);
       setRequestList([]);
     }
 
-  }, [isModalOpen,examList]);
+  }, [isModalOpen,examList,getExamList,examDate]);
   return (
     <section className='center-calendar-detail'>
       <div className='center-calendar-detail-tab'>
