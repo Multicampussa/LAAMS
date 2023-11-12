@@ -3,6 +3,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    &-calendar-title{
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2.5rem;
+        font-weight: 900;
+        gap: 2rem;
+        top: -5.5rem;
+        right: 0rem;
+        
+    }
+    &-calendar-prev{
+        width: 3rem;
+        height: 3rem;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-image: url("../../../assets/images/iconamoon_arrow-left-2-duotone.svg");
+    }
+    &-calendar-next{
+        width: 3rem;
+        height: 3rem;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-image: url("../../../assets/images/iconamoon_arrow-right-2-duotone.svg");
+    }
     &-container{
         width: 80%;
         height: 100%;
@@ -27,6 +53,7 @@
         }
         &-calendar{
             flex: 1;
+            position: relative;
         }
     }
     &-todo{
@@ -177,6 +204,9 @@
     .director-home-todo-box-btn{
         font-size: 1.5rem;
     }
+    .director-home-container{
+        width: 98%;
+    }
 }
 
 @include mobile{
@@ -186,6 +216,15 @@
         &-container{
             width: 95%;
             gap:1rem
+        }
+        &-calendar-title{
+            font-size: 2rem;
+            top: -4rem;
+            font-weight: 700;
+        }
+        &-calendar-prev, &-calendar-next{
+            width: 2rem;
+            height: 2rem;
         }
         &-task{
             width: 100%;
