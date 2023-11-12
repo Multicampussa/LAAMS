@@ -2,6 +2,7 @@ package multicampussa.laams.home.chat.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.home.chat.domain.ChatRoom;
 import multicampussa.laams.home.chat.domain.PrivateChatRoom;
 import multicampussa.laams.home.chat.dto.CreateChatRoomDto;
@@ -41,13 +42,22 @@ public class ChatService {
 
     //채팅방 불러오기
     public List<ChatRoom> findSearchRoom(String directorId, String centerName, boolean isNow) {
-        List<ChatRoom> result;
+        List<ChatRoom> result = new ArrayList<>();
+
         if (centerName != null) {
-            result = chatRepository.findByRoomNameContaining(centerName);
+            Long centerNo = centerRepository.findByName(centerName).get().getNo();
+            List<Director> directors = memberDirectorRepository.findByCenterNo(centerNo);
+            for (Director director : directors) {
+                result.add(chatRepository.findByRoomName(director.getId()));
+            }
         } else if (directorId != null) {
             result = chatRepository.findByRoomNameContaining(directorId);
         } else {
             result = chatRepository.findAll();
+        }
+
+        while (result.remove(null)) {
+
         }
 
         if (isNow) {
