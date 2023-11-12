@@ -11,6 +11,7 @@ const ManagerChat = () => {
   const [menu,setMenu] = useState("notice-all");
   const [noticeData,setNoticData] = useState();
   const [component,setComponent] = useState(null);
+  const [reset,setReset] = useState(false);
 
   useEffect(()=>{
     api.post("chat/room/notice")
@@ -40,12 +41,12 @@ const ManagerChat = () => {
         setComponent(<NoticeNow  data={noticeData[menu]}/>);
         break;
       case"director":
-        setComponent(<Director  data={noticeData[menu]}/>);
+        setComponent(<Director reset={reset} data={noticeData[menu]}/>);
         break;
       default:
         break;
     }
-  },[menu,noticeData]);
+  },[menu,noticeData,reset]);
 
   return (
     <section className='director-chat'>
@@ -54,7 +55,7 @@ const ManagerChat = () => {
         <div onClick={()=>setMenu("noticeByRegion")} className={`director-chat-aside-menu${menu === "noticeByRegion" ? "open":"close"}`}>지역 공지</div>
         <div onClick={()=>setMenu("noticeByCenter")} className={`director-chat-aside-menu${menu === "noticeByCenter" ? "open":"close"}`}>센터 공지</div>
         <div onClick={()=>setMenu("noticeForNow")} className={`director-chat-aside-menu${menu === "noticeForNow" ? "open":"close"}`}>실시간 공지</div>
-        <div onClick={()=>setMenu("director")} className={`director-chat-aside-menu${menu === "director" ? "open":"close"}`}>감독관</div>
+        <div onClick={()=>{setMenu("director");setReset(e=>!e)}} className={`director-chat-aside-menu${menu === "director" ? "open":"close"}`}>감독관</div>
       </article>
       <article className='director-chat-wrap'>{component}</article>
     </section>

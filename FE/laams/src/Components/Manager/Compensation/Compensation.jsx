@@ -45,7 +45,7 @@ const ExamCompensation = () => {
       dispatch(setModalType(null));
       dispatch(setModalShow(false));
     }).catch(err=>console.log(err));
-  },[examineeNo,examNo,api])
+  },[examineeNo,examNo,api,dispatch])
   return (
     <section className='compensation'>
         <div className='compensation-container'>
