@@ -37,7 +37,8 @@ const Area1 = styled.div`
   margin: 30px auto 0;
 `
 const Area2 = styled.div`
-  width: 100%;
+  margin: 0 auto;
+  width: 980px;
   height: 235px;
   margin-top: 10px;
   display: flex;
