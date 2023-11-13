@@ -1,18 +1,24 @@
 package multicampussa.laams.director.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.director.dto.director.*;
 import multicampussa.laams.director.service.DirectorService;
+import multicampussa.laams.global.ApiResponse;
+import multicampussa.laams.global.CustomExceptions;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.director.service.ImageUploadService;
+import org.bson.json.JsonObject;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -65,44 +71,32 @@ public class DirectorController {
 
 
     // 얼굴 일치 비교
+    @ApiOperation(value = "얼굴 일치 비교")
     @PostMapping(value = "/comparison")
-    public ResponseEntity<String> comparePhoto(
-            @RequestPart("existing_photo") MultipartFile existingPhoto,
-            @RequestPart("new_photo") MultipartFile newPhoto,
-            @RequestParam("applicant_name") String applicantName,
-            @RequestParam("applicant_no") String applicantNo
+    public ResponseEntity<ApiResponse<String>> comparePhoto(
+            @ApiIgnore @RequestHeader String authorization,
+            @RequestPart("existingPhoto") MultipartFile existingPhoto,
+            @RequestPart("newPhoto") MultipartFile newPhoto,
+            @RequestParam("examineeName") String applicantName,
+            @RequestParam("examineeNo") String applicantNo
     ) {
-        try {
-            // 스프링부트에서 장고 API 호출
-            String djangoApiUrl = "http://127.0.0.1:8000/api/v1/comparison";
-
-            // 필요한 헤더 설정 등 필요에 따라 커스터마이징
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-            // 파일 및 기타 데이터를 MultiValueMap에 넣기
-            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-            body.add("existing_photo", new HttpEntity<>(existingPhoto.getBytes(), getMultipartHeaders(existingPhoto)));
-            body.add("new_photo", new HttpEntity<>(newPhoto.getBytes(), getMultipartHeaders(newPhoto)));
-            body.add("applicant_name", applicantName);
-            body.add("applicant_no", applicantNo);
-
-            HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
-
-            // RestTemplate을 사용하여 장고 API 호출
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response = restTemplate.exchange(
-                    djangoApiUrl,
-                    HttpMethod.POST,
-                    entity,
-                    String.class
+        String token = authorization.replace("Bearer", "");
+        String authority = jwtTokenProvider.getAuthority(token);
+        if (authority.equals("ROLE_DIRECTOR")) {
+            String result = directorService.compareFace(
+                    existingPhoto,
+                    newPhoto,
+                    applicantName,
+                    applicantNo
             );
 
-            // 장고 API의 응답을 그대로 프론트엔드로 전달
-            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
-        } catch (Exception e) {
-            // 예외 처리, 필요에 따라 로깅 등 추가
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+            return new ResponseEntity<>(new ApiResponse<>(
+                    "success",
+                    HttpStatus.OK.value(),
+                    result), HttpStatus.OK);
+
+        } else {
+            throw new CustomExceptions.UnauthorizedException("접근 권한이 없습니다.");
         }
     }
 

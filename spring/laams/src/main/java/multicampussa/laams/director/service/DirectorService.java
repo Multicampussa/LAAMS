@@ -1,5 +1,7 @@
 package multicampussa.laams.director.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.director.domain.errorReport.ErrorReport;
@@ -7,6 +9,8 @@ import multicampussa.laams.director.dto.director.*;
 import multicampussa.laams.director.dto.errorReport.ErrorReportCreateDto;
 import multicampussa.laams.director.repository.DirectorRepository;
 import multicampussa.laams.director.repository.errorReport.ErrorReportRepository;
+import multicampussa.laams.global.ApiResponse;
+import multicampussa.laams.global.CustomExceptions;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamDirector;
 import multicampussa.laams.manager.domain.exam.ExamDirectorRepository;
@@ -14,9 +18,11 @@ import multicampussa.laams.manager.domain.exam.ExamRepository;
 import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
 import org.joda.time.LocalTime;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +32,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import multicampussa.laams.director.service.LocationDistance;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.joda.time.LocalTime.*;
 
@@ -38,6 +48,77 @@ public class DirectorService {
     private final ExamExamineeRepository examExamineeRepository;
     private final ExamDirectorRepository examDirectorRepository;
     private final ErrorReportRepository errorReportRepository;
+
+
+    // 파일 헤더 설정을 위한 메서드
+    private HttpHeaders getMultipartHeaders(MultipartFile file) throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf(file.getContentType()));
+        headers.setContentDispositionFormData(file.getName(), file.getOriginalFilename());
+        return headers;
+    }
+
+    // 얼굴 일치 비교
+    public String compareFace(
+            MultipartFile existingPhoto,
+            MultipartFile newPhoto,
+            String applicantName,
+            String applicantNo ) {
+
+        try {
+            // 스프링부트에서 장고 API 호출
+            String djangoApiUrl = "http://127.0.0.1:8000/api/v1/comparison";
+
+            // 필요한 헤더 설정 등 필요에 따라 커스터마이징
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            // 파일 및 기타 데이터를 MultiValueMap에 넣기
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("existingPhoto", new HttpEntity<>(existingPhoto.getBytes(), getMultipartHeaders(existingPhoto)));
+            body.add("newPhoto", new HttpEntity<>(newPhoto.getBytes(), getMultipartHeaders(newPhoto)));
+            body.add("applicantName", applicantName);
+            body.add("applicantNo", applicantNo);
+
+            HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
+
+            // RestTemplate을 사용하여 장고 API 호출
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.exchange(
+                    djangoApiUrl,
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
+
+            String data = response.getBody();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+
+            JsonNode jsonNode = objectMapper.readTree(data);
+
+            // 데이터 파싱 부분
+            double matchRate = jsonNode.get(0).asDouble();
+            int percentage = (int) (matchRate);
+
+            double normalCriteria = 0.6;
+            boolean normalPass = jsonNode.get(1).asDouble() < normalCriteria;
+            String normalResult = normalPass ? "통과" : "미통과";
+
+            double strictCriteria = 0.5;
+            boolean strictPass = jsonNode.get(1).asDouble() < strictCriteria;
+            String strictResult = strictPass ? "통과" : "미통과";
+
+            // jsonData에 넣을 문자열 생성
+            String jsonData = String.format("일치율: %d%%, 정상적 기준: %s, 엄격한 기준: %s", percentage, normalResult, strictResult);
+
+            return jsonData;
+
+        } catch (Exception e) {
+            throw new CustomExceptions.FaceCompareException("이미지와 요청 쿼리를 확인하세요.");
+        }
+    }
 
     // 감독관 시험 월별, 일별 조회
     @Transactional
