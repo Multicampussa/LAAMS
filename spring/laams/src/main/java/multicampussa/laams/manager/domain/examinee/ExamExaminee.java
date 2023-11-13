@@ -113,5 +113,8 @@ public class ExamExaminee extends BaseTimeEntity {
         this.compensationType = checkDocumentDto.getCompensationType();
     }
 
-
+    // 응시자 출석
+    public void setAttendance(boolean attendacne) {
+        this.attendance = attendacne;
+    }
 }
