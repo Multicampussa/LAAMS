@@ -23,7 +23,7 @@ const NoticeCenter = ({data}) => {
   const connect = useCallback(()=>{
     ws.current.connect({'Authorization': `Bearer ${accessToken}`}, function(frame) {
       isConnect.current=true;
-      ws.current.subscribe(`/topic/chat/room/notice-${center.centerName}`, function(message) {
+      ws.current.subscribe(`/topic/chat/room/notice-${JSON.parse(center).centerName}`, function(message) {
         const recv = JSON.parse(message.body);
         recv.read = false;
         setMessageList(e=>[...e,recv]);
