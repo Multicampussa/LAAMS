@@ -43,4 +43,9 @@ public class CustomExceptions {
     public static class ExamExamineeNotFoundException extends RuntimeException {
         public ExamExamineeNotFoundException(String message) {super(message);}
     }
+
+    // 얼굴 비교 오류
+    public static class FaceCompareException extends RuntimeException {
+        public FaceCompareException(String message) {super(message);}
+    }
 }

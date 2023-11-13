@@ -70,4 +70,12 @@ public class ControllerExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse("ExamExamineeNotFoundException", ex.getMessage());
         return new ResponseEntity<>(new ApiResponse<>("error", HttpStatus.UNAUTHORIZED.value(), errorResponse), HttpStatus.UNAUTHORIZED);
     }
+
+    // 얼굴 비교 오류
+    @ExceptionHandler(CustomExceptions.FaceCompareException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiResponse<ErrorResponse>> FaceCompareException(CustomExceptions.FaceCompareException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("FaceCompareException", ex.getMessage());
+        return new ResponseEntity<>(new ApiResponse<>("error", HttpStatus.BAD_REQUEST.value(), errorResponse), HttpStatus.BAD_REQUEST);
+    }
 }
