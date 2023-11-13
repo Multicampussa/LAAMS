@@ -1,6 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
+
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <Wrap>
       <LoginImg></LoginImg>
@@ -15,7 +18,7 @@ const Home = () => {
             <BirthLabelText>비밀번호</BirthLabelText> 
             <BirthInput placeholder='생년월일을 입력해주세요'></BirthInput>
           </BirthLabel>
-          <LoginBtn>시험 입장</LoginBtn>
+          <LoginBtn onClick={()=>navigate("/exam/wait")}>시험 입장</LoginBtn>
         </LoginBox>
       </LoginContainer>
     </Wrap>
