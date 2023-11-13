@@ -619,11 +619,12 @@ public class MemberService {
         ExamExaminee examExaminee = examExamineeRepository.findByExamineeCode(loginRequestDto.getExamineeCode())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 수험번호입니다."));
 
-        if (!examExaminee.getBirth().equals(loginRequestDto.getBirth())) {
+        if (!examExaminee.getExaminee().getBirth().equals(loginRequestDto.getBirth())) {
             throw new IllegalArgumentException("수험자 정보가 일치하지 않습니다.");
         }
     }
 
+    // 모든 감독관의 ID를 뽑아오는 로직
     public List<String> getDirectors() {
         List<String> directors = new ArrayList<>();
         for (Director director : memberDirectorRepository.findAll()) {

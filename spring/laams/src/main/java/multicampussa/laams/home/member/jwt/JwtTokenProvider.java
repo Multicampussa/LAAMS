@@ -66,9 +66,10 @@ public class JwtTokenProvider {
 
     public String createAccessTokenForExamExaminee(String code, String birth) {
 
-        // email과 권한 정보 claims에 담기
+        // 수험번호와 권한 정보 claims에 담기
         Claims claims = Jwts.claims().setSubject(code);
         claims.put("birth", birth);
+        claims.put("code", code);
         claims.put("authority", "ROLE_EXAMINEE");
 
         // 만료 시간 계산
@@ -117,6 +118,14 @@ public class JwtTokenProvider {
 
     public String getRegion(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("region").toString();
+    }
+
+    public String getBirth(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("birth").toString();
+    }
+
+    public String getCode(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("code").toString();
     }
 
     // 토큰 유효성 검사

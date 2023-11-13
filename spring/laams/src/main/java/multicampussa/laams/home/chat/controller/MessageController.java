@@ -140,7 +140,6 @@ public class MessageController {
         String token = authorization.replace("Bearer ", "");
         String id = jwtTokenProvider.getId(token);
         String authority = jwtTokenProvider.getAuthority(token);
-        Long centerNo = centerService.getCenterNo(message.getRoomName());
 
         Map<String, Object> resultMap = new HashMap<>();
         if (authority.equals("ROLE_DIRECTOR")) {
@@ -159,7 +158,7 @@ public class MessageController {
             message.setMessage(id+"님이 입장하였습니다.");
         }
         System.out.println(message.getMessage());
-        sendingOperations.convertAndSend("/topic/chat/room/notice-c" + centerNo, message);
+        sendingOperations.convertAndSend("/topic/chat/room/notice-" + message.getRoomName(), message);
         messageService.saveMessage(message);
         resultMap.put("code", HttpStatus.OK.value());
         resultMap.put("message", "성공적으로 전송되었습니다.");
