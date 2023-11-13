@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Photo Comparison</title>
+</head>
+<body>
+    <h1>Photo Comparison</h1>
+
+    <form method="post" action="{% url 'api:comparison' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="existing_photo">Photo 1:</label>
+        <input type="file" name="existing_photo" id="existing_photo" accept="image/*" required>
+        <br>
+        <label for="new_photo">Photo 2:</label>
+        <input type="file" name="new_photo" id="new_photo" accept="image/*" required>
+        <br>
+        <label for="applicant_name">Applicant Name:</label>
+        <input type="text" name="applicant_name" id="applicant_name" required>
+        <br>
+        <label for="applicant_no">Applicant Number:</label>
+        <input type="text" name="applicant_no" id="applicant_no" required>
+        <br>
+        <button type="submit">Compare Photos</button>
+    </form>
+
+    {% if photo1_url and photo2_url %}
+    <h2>Comparison Results</h2>
+    <p>Photo 1 URL: {{ photo1_url }}</p>
+    <p>Photo 2 URL: {{ photo2_url }}</p>
+    {% endif %}
+
+</body>
+</html>
