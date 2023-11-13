@@ -46,8 +46,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 !path.startsWith("/v3/api-docs") &&
                 !path.startsWith("/v2/api-docs") &&
                 !path.startsWith("/api/v1/examinee") &&
-                !path.startsWith("/ws/chat") &&
-                !path.startsWith("/")) {
+                !path.startsWith("/ws/chat")) {
 
 
             if (token != null) {
