@@ -85,6 +85,6 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
     @Query(value="SELECT c.name as center, c.region, e.exam_date, e.running_time, e.`no` as exam \n" +
             "from exam e\n" +
             "left join center c on e.center_no = c.`no`\n" +
-            "where DATE_ADD(e.exam_date, INTERVAL e.running_time MINUTE) > now() and now() > e.exam_date", nativeQuery = true)
+            "where DATE_ADD(e.exam_date, INTERVAL e.running_time MINUTE) > DATE_ADD(NOW(), INTERVAL 9 HOUR) and DATE_ADD(NOW(), INTERVAL 9 HOUR) > e.exam_date", nativeQuery = true)
     List<Exam> findOngoingExam();
 }
