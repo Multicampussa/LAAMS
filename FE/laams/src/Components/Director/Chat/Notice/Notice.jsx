@@ -14,7 +14,6 @@ const Notice = ({menu,data}) => {
   const [messageList,setMessageList] = useState([]);
   const api = useApi();
   const isConnect = useRef(false);
-  const centerData = useCenter();
 
   //TODO : 소켓 연결
   const connect = useCallback((menu,room)=>{
