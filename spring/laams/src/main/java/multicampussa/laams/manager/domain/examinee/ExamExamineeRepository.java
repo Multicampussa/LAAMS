@@ -52,5 +52,14 @@ public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long
     List<ExamExaminee> findUncompensatedByDate(@Param("targetDate") java.sql.Date targetDate);
 
     Optional<ExamExaminee> findByExamineeCode(String examineeCode);
+
+    @Query(value = "select count(*) from ExamExaminee ee where ee.exam.no = :examNO")
+    int getTheNumberOfApplicants(Long examNo);
+
+    @Query(value = "select count(*) from ExamExaminee ee where ee.exam.no = :examNO and ee.attendance=true")
+    int getTheNumberOfParticipants(Long examNo);
+
+    @Query(value = "select count(*) from ExamExaminee ee where ee.exam.no = :examNO and ee.compensation=true")
+    int getTheNumberOfCompensation(Long examNo);
 }
 
