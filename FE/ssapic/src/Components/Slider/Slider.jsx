@@ -27,7 +27,7 @@ const Slider = () => {
     if(!isSlideStop){
       timer.current = setInterval(()=>{
         setSlideIdx(e=>(e+1)%images.current.length);
-      },[3*1000]);
+      },[2*1000]);
     }else{
       clearInterval(timer.current);
     }
