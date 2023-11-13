@@ -1,16 +1,24 @@
 package multicampussa.laams.director.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.director.dto.director.*;
 import multicampussa.laams.director.service.DirectorService;
+import multicampussa.laams.global.ApiResponse;
+import multicampussa.laams.global.CustomExceptions;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.director.service.ImageUploadService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.bson.json.JsonObject;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -60,6 +68,46 @@ public class DirectorController {
             return "이미지 업로드 실패: " + e.getMessage();
         }
     }
+
+
+    // 얼굴 일치 비교
+    @ApiOperation(value = "얼굴 일치 비교")
+    @PostMapping(value = "/comparison")
+    public ResponseEntity<ApiResponse<String>> comparePhoto(
+            @ApiIgnore @RequestHeader String authorization,
+            @RequestPart("existingPhoto") MultipartFile existingPhoto,
+            @RequestPart("newPhoto") MultipartFile newPhoto,
+            @RequestParam("examineeName") String applicantName,
+            @RequestParam("examineeNo") String applicantNo
+    ) {
+        String token = authorization.replace("Bearer", "");
+        String authority = jwtTokenProvider.getAuthority(token);
+        if (authority.equals("ROLE_DIRECTOR")) {
+            String result = directorService.compareFace(
+                    existingPhoto,
+                    newPhoto,
+                    applicantName,
+                    applicantNo
+            );
+
+            return new ResponseEntity<>(new ApiResponse<>(
+                    "success",
+                    HttpStatus.OK.value(),
+                    result), HttpStatus.OK);
+
+        } else {
+            throw new CustomExceptions.UnauthorizedException("접근 권한이 없습니다.");
+        }
+    }
+
+    // 파일 헤더 설정을 위한 메서드
+    private HttpHeaders getMultipartHeaders(MultipartFile file) throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf(file.getContentType()));
+        headers.setContentDispositionFormData(file.getName(), file.getOriginalFilename());
+        return headers;
+    }
+
 
 
     @ApiOperation(value = "시험 월별 조회 및 일별 조회 (캘린더용)")
