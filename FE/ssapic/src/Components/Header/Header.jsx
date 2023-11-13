@@ -34,7 +34,7 @@ const Header = () => {
   )
 }
 
-const Wrap = styled.div`
+const Wrap = styled.header`
   margin: 0 auto;
   width: 980px;
   height: 96px;
