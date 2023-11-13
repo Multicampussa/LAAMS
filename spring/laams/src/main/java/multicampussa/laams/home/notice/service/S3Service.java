@@ -35,7 +35,7 @@ public class S3Service {
 //            String originalFilename = file.getOriginalFilename();
 
             // 파일명 중복 안되게 랜덤으로 이름 붙여줌
-            String fileName = createFileName(file.getOriginalFilename());
+            String fileName = "notice/" + createFileName(file.getOriginalFilename());
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(file.getSize());
