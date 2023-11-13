@@ -46,11 +46,11 @@
       background-color: $color-blue;
       color: $color-white;
       font-weight: 900;
-
+      flex-shrink: 0;
     }
     &-boxclose{
       position: absolute;
-      z-index: 0;
+      z-index: 1;
       top: 5rem;
       right: 0;
       display: flex;
@@ -67,14 +67,19 @@
       padding: 0 1rem 1rem 1rem;
       border-radius: 0 0 1rem 1rem;
       border: 0.1rem solid $color-gray-light;
+
+      max-height: 20rem;
+      overflow-y: auto;
     }
     &-boxopen{
       position: absolute;
       top: 5rem;
       right: 0;
-      z-index: 0;
+      z-index: 1;
       display: flex;
       flex-direction: column;
+      max-height: 20rem;
+      overflow-y: auto;
 
       will-change: transform;
       transition-property: transform;
@@ -98,6 +103,7 @@
       @include mobile{
         width: 50vw;
       }
+      flex-shrink: 0;
       font-size: 1.5rem;
       height: 4rem;
       line-height: 4rem;
