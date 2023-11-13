@@ -14,6 +14,7 @@ import multicampussa.laams.manager.domain.examinee.ExamineeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -79,4 +80,18 @@ public class ExamineeService {
         examExamineeRepository.save(new ExamExaminee(examinee, exam, examineeCode));
     }
 
+    public void updateExamineeAttendance(String authority, String examineeCode) {
+        if(authority.equals("ROLE_EXAMINEE")){
+            ExamExaminee examExaminee = examExamineeRepository.findByExamineeCode(examineeCode).orElse(null);
+            if(examExaminee != null) {
+                boolean attendacne = true;
+                examExaminee.setAttendance(attendacne);
+                examExamineeRepository.save(examExaminee);
+            } else {
+                throw new IllegalArgumentException("없는 응시자 코드입니다.");
+            }
+        }else{
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+    }
 }
