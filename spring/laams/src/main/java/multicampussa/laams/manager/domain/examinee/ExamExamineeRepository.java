@@ -53,13 +53,13 @@ public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long
 
     Optional<ExamExaminee> findByExamineeCode(String examineeCode);
 
-    @Query(value = "select count(*) from ExamExaminee ee where ee.exam.no = :examNO")
+    @Query(value = "select count(*) from ExamExaminee ee where ee.exam.no = :examNo")
     int getTheNumberOfApplicants(Long examNo);
 
-    @Query(value = "select count(*) from ExamExaminee ee where ee.exam.no = :examNO and ee.attendance=true")
+    @Query(value = "select count(*) from ExamExaminee ee where ee.exam.no = :examNo and ee.attendance=true")
     int getTheNumberOfParticipants(Long examNo);
 
-    @Query(value = "select count(*) from ExamExaminee ee where ee.exam.no = :examNO and ee.compensation=true")
+    @Query(value = "select count(*) from ExamExaminee ee where ee.exam.no = :examNo and ee.compensation=true")
     int getTheNumberOfCompensation(Long examNo);
 }
 
