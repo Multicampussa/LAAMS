@@ -1,36 +1,59 @@
-//package multicampussa.laams.home.dashboard.service;
-//
-//import lombok.RequiredArgsConstructor;
-//import multicampussa.laams.home.dashboard.dto.RealTimeDashboardResDto;
-//import multicampussa.laams.manager.domain.center.CenterRepository;
-//import multicampussa.laams.manager.domain.exam.Exam;
-//import multicampussa.laams.manager.domain.exam.ExamRepository;
-//import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//
-//@Service
-//@RequiredArgsConstructor
-//public class RealtimeDashboardService {
-//
-//    public final CenterRepository centerRepository;
-//    public final ExamRepository examRepository;
-//    public final ExamExamineeRepository examExamineeRepository;
-//
-//    public Map<String, Object> getRealTimeExamStatus(String authority) {
-//        Map<String, Object> realtimeExamMap = new HashMap<String, Object>();
-//        // 응시자는 대시보드 조회할 수 없음(감독관, 센터관리자, 운영자 다 봐도 될 듯)
-//        if (authority.equals("ROLE_EXAMINEE")) {
-//            throw new IllegalArgumentException("대시보드 조회 권한이 없습니다.");
-//        }
-//        // 현재 진행중인 시험 리스트 조회
-//        List<Exam> exams = examRepository.
-//
-//        List<RealTimeDashboardResDto>
-//
-//    }
-//
-//}
+package multicampussa.laams.home.dashboard.service;
+
+import lombok.RequiredArgsConstructor;
+import multicampussa.laams.home.dashboard.dto.RealTimeDashboardDto;
+import multicampussa.laams.home.dashboard.dto.RealTimeDashboardResDto;
+import multicampussa.laams.manager.domain.center.CenterRepository;
+import multicampussa.laams.manager.domain.exam.Exam;
+import multicampussa.laams.manager.domain.exam.ExamRepository;
+import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
+import multicampussa.laams.manager.dto.dashboard.response.DashboardErrorReport;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+@RequiredArgsConstructor
+public class RealtimeDashboardService {
+
+    public final CenterRepository centerRepository;
+    public final ExamRepository examRepository;
+    public final ExamExamineeRepository examExamineeRepository;
+
+    public List<RealTimeDashboardDto> getRealTimeExamStatus(String authority) {
+        // 응시자는 대시보드 조회할 수 없음(감독관, 센터관리자, 운영자 다 봐도 될 듯)
+        if (authority.equals("ROLE_EXAMINEE")) {
+            throw new IllegalArgumentException("대시보드 조회 권한이 없습니다.");
+        }
+        List<RealTimeDashboardDto> realTimeDashboards = new ArrayList<>();
+
+        // 현재 진행중인 시험 리스트 조회
+        List<Exam> exams = examRepository.findOngoingExam();
+
+        // exams 순회하면서 쿼리 3번 호출
+        for(Exam exam : exams) {
+            // 해당 시험 접수인원 조회
+            int applicants = examExamineeRepository.getTheNumberOfApplicants(exam.getNo());
+            // 해당 시험 응시인원 조회
+            int participants = examExamineeRepository.getTheNumberOfParticipants(exam.getNo());
+            // 해당 시험 응시율
+            float attendanceRate = Math.round(participants / applicants);
+            // 해당 시험 보상 신청수
+            int compensation = examExamineeRepository.getTheNumberOfCompensation(exam.getNo());
+
+            RealTimeDashboardDto realTimeDashboard = new RealTimeDashboardDto();
+            realTimeDashboard.toEntity(exam, applicants, participants, attendanceRate, compensation);
+
+            realTimeDashboards.add(realTimeDashboard);
+        }
+
+        return realTimeDashboards;
+
+
+
+    }
+
+}
