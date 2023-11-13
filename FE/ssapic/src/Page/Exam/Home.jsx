@@ -105,7 +105,7 @@ const LoginBtn = styled.button`
 const LoginImg = styled.div`
   width: 50%;
   height: 100%;
-  background-image: url("examHome.svg");
+  background-image: url("/examHome.svg");
   background-repeat: no-repeat;
   background-size: cover;
   background-color: #cfdaf5;
