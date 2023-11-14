@@ -13,6 +13,7 @@ import multicampussa.laams.home.notice.service.NoticeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +32,7 @@ public class DashboardController {
     // 센터별 시험 횟수(한달) 조회
     @ApiOperation(value = "센터별 월 시험 횟수 조회")
     @GetMapping("/exam")
-    public ResponseEntity<Map<String, Object>> getCenterExamMonthCount(@RequestHeader String authorization, @RequestParam int year, @RequestParam int month) {
+    public ResponseEntity<Map<String, Object>> getCenterExamMonthCount(@ApiIgnore @RequestHeader String authorization, @RequestParam int year, @RequestParam int month) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
             String token  = authorization.replace("Bearer ", "");
@@ -54,7 +55,7 @@ public class DashboardController {
     // 센터별 월 응시자 수 조회
     @ApiOperation(value = "센터별 월 응시자 수 조회")
     @GetMapping("/examinee")
-    public ResponseEntity<Map<String, Object>> getCenterExamineeMonthCount(@RequestHeader String authorization, @RequestParam int year, @RequestParam int month) {
+    public ResponseEntity<Map<String, Object>> getCenterExamineeMonthCount(@ApiIgnore @RequestHeader String authorization, @RequestParam int year, @RequestParam int month) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
             String token  = authorization.replace("Bearer ", "");

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ public class RealTimeDashboardController {
 
     @ApiOperation(value = "실시간 시험 진행 현황 대시보드 조회")
     @GetMapping("/exam")
-    public ResponseEntity<Map<String, Object>> getRealTimeExamStatus(@RequestHeader String authorization) {
+    public ResponseEntity<Map<String, Object>> getRealTimeExamStatus(@ApiIgnore @RequestHeader String authorization) {
         Map<String, Object> resutlMap = new HashMap<>();
         try{
             String token = authorization.replace("Bearer ", "");

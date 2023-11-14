@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//빌드용 주석
 @Api(tags = "센터매니저 관련 기능")
 @RestController
 @RequiredArgsConstructor

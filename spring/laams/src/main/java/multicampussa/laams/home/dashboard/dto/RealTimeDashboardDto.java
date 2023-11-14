@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.home.notice.domain.Notice;
 import multicampussa.laams.manager.domain.exam.Exam;
+import multicampussa.laams.manager.dto.ExamDTO;
 
 @Data
 @NoArgsConstructor
@@ -22,15 +23,15 @@ public class RealTimeDashboardDto {
     // 시험 응시 인원
     private int participants;
     // 응시율
-    private float attendanceRate;
+    private double attendanceRate;
 
     // 보상 신청수
     private int compensation;
 
-    public void toEntity(Exam exam, int applicants, int participants, float attendanceRate, int compensation){
-        this.exam = exam.getNo();
-        this.region = exam.getCenter().getRegion();
-        this.center = exam.getCenter().getName();
+    public void toEntity(ExamDTO exam, int applicants, int participants, double attendanceRate, int compensation){
+        this.exam = exam.getExamNo();
+        this.region = exam.getRegion();
+        this.center = exam.getCenter();
         this.applicants = applicants;
         this.participants = participants;
         this.attendanceRate = attendanceRate;
