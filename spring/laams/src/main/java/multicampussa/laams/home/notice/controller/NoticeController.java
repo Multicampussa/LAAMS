@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class NoticeController {
 
     @ApiOperation(value = "공지사항 생성")
     @PostMapping("/notice/create")
-    public ResponseEntity<Map<String, Object>> createNotice(@RequestHeader String authorization, @RequestPart(value = "dto") NoticeCreateDto noticeCreateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
+    public ResponseEntity<Map<String, Object>> createNotice(@ApiIgnore @RequestHeader String authorization, @RequestPart(value = "dto") NoticeCreateDto noticeCreateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
             String token  = authorization.replace("Bearer ", "");
@@ -63,7 +64,7 @@ public class NoticeController {
 
     @ApiOperation(value = "공지사항 수정")
     @PutMapping("/notice/update")
-    public ResponseEntity<Map<String, Object>> updateNotice(@RequestHeader String authorization, @RequestPart(value = "dto") NoticeUpdateDto noticeUpdateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
+    public ResponseEntity<Map<String, Object>> updateNotice(@ApiIgnore @RequestHeader String authorization, @RequestPart(value = "dto") NoticeUpdateDto noticeUpdateDto, @RequestPart(value = "file", required = false) MultipartFile file) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
         BaseResultDTO resultDTO = new BaseResultDTO();
@@ -96,7 +97,7 @@ public class NoticeController {
 
     @ApiOperation(value = "공지사항 삭제")
     @PutMapping("/notice/delete/{noticeNo}")
-    public ResponseEntity<Map<String, Object>> deleteNotice(@RequestHeader String authorization, @PathVariable Long noticeNo) {
+    public ResponseEntity<Map<String, Object>> deleteNotice(@ApiIgnore @RequestHeader String authorization, @PathVariable Long noticeNo) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try{
             String token  = authorization.replace("Bearer ", "");
