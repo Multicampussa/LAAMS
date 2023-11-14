@@ -7,6 +7,7 @@ import multicampussa.laams.manager.domain.center.CenterRepository;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamRepository;
 import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
+import multicampussa.laams.manager.dto.ExamDTO;
 import multicampussa.laams.manager.dto.dashboard.response.DashboardErrorReport;
 import org.springframework.stereotype.Service;
 
@@ -31,18 +32,19 @@ public class RealtimeDashboardService {
         List<RealTimeDashboardDto> realTimeDashboards = new ArrayList<>();
 
         // 현재 진행중인 시험 리스트 조회
-        List<Exam> exams = examRepository.findOngoingExam();
-
+        List<ExamDTO> exams = examRepository.findOngoingExam();
+        System.out.println("exams.size() = " + exams.size());
         // exams 순회하면서 쿼리 3번 호출
-        for(Exam exam : exams) {
+        for (ExamDTO exam : exams) {
+            System.out.println("exam = " + exam);
             // 해당 시험 접수인원 조회
-            int applicants = examExamineeRepository.getTheNumberOfApplicants(exam.getNo());
+            int applicants = examExamineeRepository.getTheNumberOfApplicants(exam.getExamNo());
             // 해당 시험 응시인원 조회
-            int participants = examExamineeRepository.getTheNumberOfParticipants(exam.getNo());
+            int participants = examExamineeRepository.getTheNumberOfParticipants(exam.getExamNo());
             // 해당 시험 응시율
-            float attendanceRate = Math.round(participants / applicants);
+            double attendanceRate = Math.round(participants / (applicants * 1.0) * 1000)  / 10.0;
             // 해당 시험 보상 신청수
-            int compensation = examExamineeRepository.getTheNumberOfCompensation(exam.getNo());
+            int compensation = examExamineeRepository.getTheNumberOfCompensation(exam.getExamNo());
 
             RealTimeDashboardDto realTimeDashboard = new RealTimeDashboardDto();
             realTimeDashboard.toEntity(exam, applicants, participants, attendanceRate, compensation);
@@ -51,7 +53,6 @@ public class RealtimeDashboardService {
         }
 
         return realTimeDashboards;
-
 
 
     }

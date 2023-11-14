@@ -2,6 +2,7 @@ package multicampussa.laams.manager.domain.exam;
 
 import multicampussa.laams.home.dashboard.dto.DashboardExamDto;
 import multicampussa.laams.home.dashboard.dto.DashboardExamineeDto;
+import multicampussa.laams.manager.dto.ExamDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -82,9 +83,9 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
     List<Exam> findByDirectorIdToday(String directorId, LocalDateTime startOfToday, LocalDateTime endOfToday);
 
     // 현재 DB 시간 기준으로 진행중인 시험 리스트 조회
-    @Query(value="SELECT c.name as center, c.region, e.exam_date, e.running_time, e.no as examNo \n" +
+    @Query(value="SELECT c.name as `center`, c.region, e.exam_date as `date`, e.running_time as `runningTime`, e.no as `examNo`\n" +
             "from exam e\n" +
             "left join center c on e.center_no = c.no\n" +
             "where DATE_ADD(e.exam_date, INTERVAL e.running_time MINUTE) > DATE_ADD(NOW(), INTERVAL 9 HOUR) and DATE_ADD(NOW(), INTERVAL 9 HOUR) > e.exam_date", nativeQuery = true)
-    List<Exam> findOngoingExam();
+    List<ExamDTO> findOngoingExam();
 }
