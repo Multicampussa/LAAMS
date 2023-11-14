@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from "styled-components";
+import ExamCamera from '../../Components/Modal/ExamCamera';
 
 const ExamWaiting = () => {
+    const [isShow,setIsShow] = useState(true);
   return (
     <Wrap>
+        {isShow?<ExamCamera setIsShow={setIsShow}/>:null}
         <Container>
             <Title>SSAPIc</Title>
             <InfoText>테스트 페이지</InfoText>
@@ -15,13 +18,13 @@ const ExamWaiting = () => {
                 </BtnBox>
                 <TestText>1. '녹음시작' 버튼을 눌러 녹음을 해주세요 <br /> <br />2. '재생' 버튼을 눌러 녹음된 음성을 확인해주세요
                 </TestText>
-                
                 <NextBtn>다음</NextBtn>
             </TestBox>
         </Container>
     </Wrap>
   )
 }
+
 const Wrap = styled.div`
     width: 100%;
     height: 100vh;

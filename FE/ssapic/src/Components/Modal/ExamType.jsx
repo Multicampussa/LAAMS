@@ -1,34 +1,48 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { styled } from 'styled-components';
+import ExamLanguage from './ExamLanguage';
 
 const ExamType = ({setIsShowModal,setData,data,setMain}) => {
+  const [examType,setExamType] = useState("SSAPIc L&R");
+  const handleSelect = useCallback((mode)=>{
+    setMain(<ExamLanguage setIsShowModal={setIsShowModal} setData={setData} data={data} setMain={setMain} mode={mode} />);
+  },[setIsShowModal,setData,data,setMain]);
   return (
     <Wrap>
       <TitleBox>
-        <Title>시험신청</Title>
+        <Title>SSAPIc 시험신청</Title>
         <BtnClose onClick={()=>setIsShowModal(false)}>X</BtnClose>
       </TitleBox>
       <QuickArea>
         <QuickAreaTitle>시험 종류 선택</QuickAreaTitle>
         <QuickAreaConent>
           <li>응시하고자 하는 시험의 종류를 선택하시기 바랍니다.</li>
-          <li>2개 이상의 시험 선택 시 패키지 할인으로 접수됩니다.<br/>( 하단 ‘패키지 할인 접수 안내’ 참고)</li>
         </QuickAreaConent>
       </QuickArea>
       <QuickArea2>
-        <CheckboxLabel>
-          <Checkbox type="checkbox"/>
-          SSAPIc L&R
-        </CheckboxLabel>
-        <CheckboxLabel>
-          <Checkbox type="checkbox"/>
-          SSAPIc Listening
-        </CheckboxLabel>
-        <CheckboxLabel>
-          <Checkbox type="checkbox"/>
-          SSAPIc Writing
-        </CheckboxLabel>
+        <div>
+          <CheckboxLabel onClick={()=>setExamType("SSAPIc L&R")}>
+            <CheckboxBg $checked={examType==="SSAPIc L&R"}/>
+            <p>SSAPIc L&R</p>
+          </CheckboxLabel>
+          <CheckboxLabel onClick={()=>setExamType("SSAPIc Listening")}>
+            <CheckboxBg $checked={examType==="SSAPIc Listening"}/>
+            SSAPIc Listening
+          </CheckboxLabel>
+          <CheckboxLabel onClick={()=>setExamType("SSAPIc Writing")}>
+            <CheckboxBg $checked={examType==="SSAPIc Writing"}/>
+            SSAPIc Writing
+          </CheckboxLabel>
+        </div>
+        <div>
+          <Btn onClick={()=>handleSelect("center")}>센터 먼저 선택</Btn>
+          <Btn onClick={()=>handleSelect("date")}>날짜 먼저 선택</Btn>
+        </div>
       </QuickArea2>
+      <StepBox>
+        <p>시험 신청 절차</p>
+        <img src='step_bg.png' alt='시험 신청 절차' width="100%" />
+      </StepBox>
     </Wrap>
   )
 }
@@ -100,24 +114,55 @@ const QuickArea2 = styled.div`
   background: none;
   background-color: #f2f2f2;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  & div{
+    display: flex;
+    gap: 10px;
+  }
 `
 
-const CheckboxLabel = styled.label`
-  background-image: url("checkbox.png");
-  -webkit-background-size: 20px;
-  background-size: 20px;
-  background-repeat: no-repeat;
-  /* background-position: 0 -19px; */
-  background-position: 0 11px;
-  padding: 0 10px 0 30px;
+const CheckboxLabel = styled.div`
+  padding-right: 10px;
   font-size: 21px;
   height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `
 
-const Checkbox = styled.input`
-  display: none;
+const CheckboxBg = styled.div`
+  width: 20px;
+  height: 20px;
+  background-image: url("checkbox.png");
+  -webkit-background-size: 20px;
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: ${props=>props.$checked ? "0 -20px" : "0 1px"};
+`
+
+const Btn = styled.button`
+  background-color: #2768b2;
+  color: #FFFFFF;
+  width: 195px;
+  height: 50px;
+  font-size: 20px;
+  line-height: 50px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+`
+
+const StepBox = styled.div`
+  width: auto;
+  margin: 0 40px 30px 40px;
+  font-size: 21px;
+  font-weight: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `
 export default ExamType
