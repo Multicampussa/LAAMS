@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from "styled-components";
 import Header from '../../Components/Header/Header';
 import Slider from '../../Components/Slider/Slider';
@@ -6,23 +6,34 @@ import Nav from '../../Components/Nav/Nav';
 import Schedule from '../../Components/Schedule/Schedule';
 import News from '../../Components/News/News';
 import Notice from '../../Components/Notice/Notice';
-import Footer from '../../Components/Footer/Footer';
+import Modal from '../../Components/Modal/Modal';
 const Home = () => {
+  const [isShowModal,setIsShowModal] = useState(false);
   return (
     <Wrap>
+      {
+        isShowModal? <Modal setIsShowModal={setIsShowModal} /> : null
+      }
       <Header/>
       <Slider/>
       <Nav/>
       <Area1>
-        <Schedule/>
+        <Schedule setIsShowModal={setIsShowModal}/>
       </Area1>
       <Area2>
         <News/>
         <Notice/>
       </Area2>
-      <Banner/>
-      <Guide src='guide_pic.gif' alt=''/>
-      <Footer/>
+      <Banner>
+        <img src='banner1.jpg' alt='배너1' />
+        <img src='banner-main.png' alt='배너2' />
+        <img src='new-link1.jpg' alt='배너3' />
+        <img src='new-link2.jpg' alt='배너2' />
+      </Banner>
+      <GuideBox>
+        <GuideTitle src='guide_tit.gif' />
+        <Guide src='guide_pic.gif' alt='가이드'/>
+      </GuideBox>
     </Wrap>
   )
 }
@@ -45,15 +56,31 @@ const Area2 = styled.div`
 `
 
 const Banner = styled.div`
-  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 980px;
   height: 172px;
   margin-top: 10px;
-  background-color: skyblue;
+`
+
+const GuideBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f5f5f9;
+  padding: 28px 0 24px;
+  gap: 8px;
+  margin-top: 20px;
 `
 
 const Guide = styled.img`
   margin-top: 10px;
-  width: 100%;
+  width: 980px;
+`
+const GuideTitle = styled.img`
+  
 `
 
 export default Home
