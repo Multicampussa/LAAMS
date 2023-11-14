@@ -42,30 +42,40 @@ public class DirectorController {
 //    }
 
     //이미지 업로드
-    @PostMapping(value = "/examinees/upload",
+    @ApiOperation(value = "추가 서류 등 업로드")
+    @PostMapping(
+            value = "/examinees/upload",
             consumes = "multipart/form-data")
     public String uploadImages(
+            @ApiIgnore @RequestHeader String authorization,
             @RequestPart(value = "files") List<MultipartFile> files,
             @RequestParam("imageReason") String imageReason,
             @RequestParam("examNo") Long examNo,
             @RequestParam("examineeNo") Long examineeNo
     ) {
-        try {
-            for (MultipartFile file : files) {
-                byte[] imageBytes = file.getBytes();
-                String imageName = file.getOriginalFilename();
-                imageUploadService.uploadImageToS3(file, imageBytes, imageName, examNo, examineeNo, imageReason);
-            }
+        String token = authorization.replace("Bearer", "");
+        String authority = jwtTokenProvider.getAuthority(token);
 
-            return "이미지 업로드 및 저장 성공!";
-        } catch (IOException e) {
-            // 파일 데이터를 읽어오는 과정에서 오류가 발생한 경우의 처리
-            e.printStackTrace(); // 또는 로깅 등을 활용하여 예외를 기록
-            return "이미지 업로드 실패: 파일 데이터를 읽어오는 도중 오류 발생";
-        } catch (Exception e) {
-            // 그 외의 예외 상황에 대한 처리
-            e.printStackTrace(); // 또는 로깅 등을 활용하여 예외를 기록
-            return "이미지 업로드 실패: " + e.getMessage();
+        if (authority.equals("ROLE_DIRECTOR")) {
+            try {
+                for (MultipartFile file : files) {
+                    byte[] imageBytes = file.getBytes();
+                    String imageName = file.getOriginalFilename();
+                    imageUploadService.uploadImageToS3(file, imageBytes, imageName, examNo, examineeNo, imageReason);
+                }
+
+                return "이미지 업로드 및 저장 성공!";
+            } catch (IOException e) {
+                // 파일 데이터를 읽어오는 과정에서 오류가 발생한 경우의 처리
+                e.printStackTrace(); // 또는 로깅 등을 활용하여 예외를 기록
+                return "이미지 업로드 실패: 파일 데이터를 읽어오는 도중 오류 발생";
+            } catch (Exception e) {
+                // 그 외의 예외 상황에 대한 처리
+                e.printStackTrace(); // 또는 로깅 등을 활용하여 예외를 기록
+                return "이미지 업로드 실패: " + e.getMessage();
+            }
+        } else {
+            throw new CustomExceptions.UnauthorizedException("접근 권한이 없습니다.");
         }
     }
 
