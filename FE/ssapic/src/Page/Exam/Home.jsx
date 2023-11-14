@@ -1,9 +1,32 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
+import axios from "axios";
 
 const Home = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
+  const [userData, setUserData] = useState({});
+  const userLogin = useCallback(()=>{
+    axios({
+      method: 'post',
+      url: `${process.env.REACT_APP_SPRING_URL}/api/v1/member/login/examinee`,
+      data:{
+        birth: userData['birth'],
+        examineeCode: userData['examineeCode']
+      }
+    })
+    .then(({data})=>{
+      // 더미 데이터 없어서 테스트 해봐야 함
+      const newUserData = [...userData];
+      newUserData['accessToken'] = data.accessToken
+      setUserData(newUserData)
+      navigate('/exam/wait', {state: {...userData}})
+    })
+    .catch((err)=>{
+      console.log(err)
+      alert("로그인 정보를 확인해주세요")
+    })
+  },[userData,navigate])
   return (
     <Wrap>
       <LoginImg></LoginImg>
@@ -12,13 +35,24 @@ const Home = () => {
         <LoginBox>
           <CodeLabel>
             <CodeLabelText>수험번호</CodeLabelText>
-            <CodeInput placeholder='수험번호를 입력해주세요'></CodeInput>
+            <CodeInput placeholder='수험번호 8자를 입력해주세요' 
+              onChange={(e)=>{
+              userData['examineeCode'] = e.target.value;
+              }}>
+            </CodeInput>
           </CodeLabel>
           <BirthLabel>
             <BirthLabelText>비밀번호</BirthLabelText> 
-            <BirthInput placeholder='생년월일을 입력해주세요'></BirthInput>
+            <BirthInput placeholder='생년월일 8자를 입력해주세요'
+              onChange={(e)=>{
+                userData['birth'] = e.target.value;
+                }}
+            ></BirthInput>
           </BirthLabel>
-          <LoginBtn onClick={()=>navigate("/exam/wait")}>시험 입장</LoginBtn>
+          <LoginBtn 
+          onClick={()=>{
+            userLogin();
+          }}>시험 입장</LoginBtn>
         </LoginBox>
       </LoginContainer>
     </Wrap>
