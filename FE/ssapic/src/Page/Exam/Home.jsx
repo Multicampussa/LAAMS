@@ -20,7 +20,6 @@ const Home = () => {
       const newUserData = [...userData];
       newUserData['accessToken'] = data.accessToken
       setUserData(newUserData)
-      localStorage.setItem('accessToken', data.accessToken)
       navigate('/exam/wait', {state: {...userData}})
     })
     .catch((err)=>{
