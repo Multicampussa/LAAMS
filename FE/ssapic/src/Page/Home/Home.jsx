@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from "styled-components";
 import Header from '../../Components/Header/Header';
 import Slider from '../../Components/Slider/Slider';
@@ -6,14 +6,19 @@ import Nav from '../../Components/Nav/Nav';
 import Schedule from '../../Components/Schedule/Schedule';
 import News from '../../Components/News/News';
 import Notice from '../../Components/Notice/Notice';
+import Modal from '../../Components/Modal/Modal';
 const Home = () => {
+  const [isShowModal,setIsShowModal] = useState(false);
   return (
     <Wrap>
+      {
+        isShowModal? <Modal setIsShowModal={setIsShowModal} /> : null
+      }
       <Header/>
       <Slider/>
       <Nav/>
       <Area1>
-        <Schedule/>
+        <Schedule setIsShowModal={setIsShowModal}/>
       </Area1>
       <Area2>
         <News/>
