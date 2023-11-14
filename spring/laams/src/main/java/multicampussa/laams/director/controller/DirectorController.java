@@ -122,7 +122,9 @@ public class DirectorController {
 
     @ApiOperation(value = "시험 월별 조회 및 일별 조회 (캘린더용)")
     @GetMapping("/{directorNo}/exams")
-    public ResponseEntity<Map<String, Object>> getExamMonthDayList(@RequestHeader String authorization, @PathVariable Long directorNo, @RequestParam int year, @RequestParam int month, @RequestParam(value = "day", defaultValue = "0") int day){
+    public ResponseEntity<Map<String, Object>> getExamMonthDayList(@ApiIgnore @RequestHeader String authorization,
+                                                                   @PathVariable Long directorNo,
+                                                                   @RequestParam int year, @RequestParam int month, @RequestParam(value = "day", defaultValue = "0") int day){
         Map<String, Object> resultMap = new HashMap<>();
         try{
             String token  = authorization.replace("Bearer ", "");
@@ -142,7 +144,7 @@ public class DirectorController {
 
     @ApiOperation(value = "시험 상세정보 조회")
     @GetMapping("/exams/{examNo}")
-    public ResponseEntity<Map<String, Object>> getExamInformation(@RequestHeader String authorization, @PathVariable Long examNo){
+    public ResponseEntity<Map<String, Object>> getExamInformation(@ApiIgnore @RequestHeader String authorization, @PathVariable Long examNo){
         Map<String, Object> resultMap = new HashMap<>();
         try{
             String token  = authorization.replace("Bearer ", "");
@@ -165,7 +167,7 @@ public class DirectorController {
 
     @ApiOperation(value = "시험 응시자 목록 조회")
     @GetMapping("/exams/{examNo}/examinees")
-    public ResponseEntity<Map<String, Object>> getExamExamineeList(@RequestHeader String authorization, @PathVariable Long examNo) {
+    public ResponseEntity<Map<String, Object>> getExamExamineeList(@ApiIgnore @RequestHeader String authorization, @PathVariable Long examNo) {
         Map<String, Object> resultMap = new HashMap<>();
         try{
             String token  = authorization.replace("Bearer ", "");
@@ -186,7 +188,7 @@ public class DirectorController {
 
     @ApiOperation(value = "시험 응시자 상세 조회")
     @GetMapping("/exams/{examNo}/examinees/{examineeNo}")
-    public ResponseEntity<Map<String, Object>> getExamExaminee(@RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo){
+    public ResponseEntity<Map<String, Object>> getExamExaminee(@ApiIgnore @RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo){
         Map<String, Object> resultMap = new HashMap<>();
         try{
             String token  = authorization.replace("Bearer ", "");
@@ -210,7 +212,7 @@ public class DirectorController {
 
     @ApiOperation(value = "시험 응시자 현황 조회")
     @GetMapping("/exams/{examNo}/status")
-    public ResponseEntity<Map<String, Object>> getExamStatus(@RequestHeader String authorization, @PathVariable Long examNo){
+    public ResponseEntity<Map<String, Object>> getExamStatus(@ApiIgnore @RequestHeader String authorization, @PathVariable Long examNo){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String token  = authorization.replace("Bearer ", "");
@@ -234,7 +236,7 @@ public class DirectorController {
 
     @ApiOperation(value = "출석 확인")
     @PutMapping("/exams/{examNo}/examinees/{examineeNo}/attendance")
-    public ResponseEntity<Map<String, Object>> checkAttendance(@RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo){
+    public ResponseEntity<Map<String, Object>> checkAttendance(@ApiIgnore @RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String token = authorization.replace("Bearer", "");
@@ -256,7 +258,7 @@ public class DirectorController {
 
     @ApiOperation(value = "서류 제출 확인")
     @PutMapping ("/exams/{examNo}/examinees/{examineeNo}/document")
-    public ResponseEntity<Map<String, Object>> checkDocument(@RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo, @RequestBody DocumentRequestDto documentRequestDto) {
+    public ResponseEntity<Map<String, Object>> checkDocument(@ApiIgnore @RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo, @RequestBody DocumentRequestDto documentRequestDto) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String token = authorization.replace("Bearer", "");
@@ -278,7 +280,7 @@ public class DirectorController {
 
     @ApiOperation(value = "감독관 시험 배정 요청", notes = "로우 추가")
     @PostMapping("/exams/request")
-    public ResponseEntity<Map<String, Object>> requestExamAssignment(@RequestHeader String authorization, @RequestBody Map<String, Long> examNo){
+    public ResponseEntity<Map<String, Object>> requestExamAssignment(@ApiIgnore @RequestHeader String authorization, @RequestBody Map<String, Long> examNo){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String token = authorization.replace("Bearer", "");
@@ -302,7 +304,7 @@ public class DirectorController {
 
     @ApiOperation(value = "보상 신청", notes = "컬럼 업데이트")
     @PostMapping("/exams/{examNo}/examinees/{examineeNo}/applyCompensation")
-    public ResponseEntity<Map<String, Object>> applyCompensation(@RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo, @RequestBody CompensationApplyDto compensationApplyDto){
+    public ResponseEntity<Map<String, Object>> applyCompensation(@ApiIgnore @RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long examineeNo, @RequestBody CompensationApplyDto compensationApplyDto){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String token = authorization.replace("Bearer", "");
@@ -324,7 +326,7 @@ public class DirectorController {
 
     @ApiOperation(value = "감독관 센터 도착 인증")
     @PostMapping("/exams/{examNo}/{directorNo}/attendance")
-    public ResponseEntity<Map<String, Object>> attendacneDirector(@RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long directorNo, @RequestBody DirectorAttendanceRequestDto directorAttendacneRequestDto){
+    public ResponseEntity<Map<String, Object>> attendacneDirector(@ApiIgnore @RequestHeader String authorization, @PathVariable Long examNo, @PathVariable Long directorNo, @RequestBody DirectorAttendanceRequestDto directorAttendacneRequestDto){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String token = authorization.replace("Bearer", "");
@@ -346,7 +348,7 @@ public class DirectorController {
 
     @ApiOperation(value = "감독관 센터 도착 인증 (홈화면)")
     @PostMapping("/exams/attendance/home")
-    public ResponseEntity<Map<String, Object>> attendanceDirectorHome(@RequestHeader String authorization, @RequestBody DirectorAttendanceRequestDto directorAttendacneRequestDto){
+    public ResponseEntity<Map<String, Object>> attendanceDirectorHome(@ApiIgnore @RequestHeader String authorization, @RequestBody DirectorAttendanceRequestDto directorAttendacneRequestDto){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String token = authorization.replace("Bearer ", "");
@@ -368,7 +370,8 @@ public class DirectorController {
 
     @ApiOperation(value = "신청 안 한 시험과 승인 안 된 시험 목록 조회", notes = "내가 속한 센터 시험 중 내가 아직 신청 요청 안 보내고, 꽉 차지 않은 시험 + 내가 신청했지만 승인 안된 시험 목록")
     @GetMapping("/exams/unapproved")
-    public ResponseEntity<Map<String, Object>> UnappliedAndUnapprovedExamList(@RequestHeader String authorization, @RequestParam int year, @RequestParam int month, @RequestParam(value = "day", defaultValue = "0") int day) {
+    public ResponseEntity<Map<String, Object>> UnappliedAndUnapprovedExamList(@ApiIgnore @RequestHeader String authorization,
+                                                                              @RequestParam int year, @RequestParam int month, @RequestParam(value = "day", defaultValue = "0") int day) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String token  = authorization.replace("Bearer ", "");
@@ -390,7 +393,8 @@ public class DirectorController {
 
     @ApiOperation(value = "신청 가능한 시험 목록 조회", notes = "내가 속한 센터 시험 중 신청하지 않았고 신청이 가능한 (꽉 차지 않은) 시험 목록")
     @GetMapping("/exams/possibleApply")
-    public ResponseEntity<Map<String, Object>> possibleToApplyExamList(@RequestHeader String authorization, @RequestParam int year, @RequestParam int month, @RequestParam(value = "day", defaultValue = "0") int day){
+    public ResponseEntity<Map<String, Object>> possibleToApplyExamList(@ApiIgnore @RequestHeader String authorization,
+                                                                       @RequestParam int year, @RequestParam int month, @RequestParam(value = "day", defaultValue = "0") int day){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String token  = authorization.replace("Bearer ", "");
