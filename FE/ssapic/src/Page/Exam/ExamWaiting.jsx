@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
+import React from 'react'
+import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import ExamCamera from '../../Components/Modal/ExamCamera';
 
 const ExamWaiting = () => {
     const [isShow,setIsShow] = useState(true);
+    const location = useLocation();
   return (
     <Wrap>
         {isShow?<ExamCamera setIsShow={setIsShow}/>:null}
@@ -78,7 +81,7 @@ const UserImg = styled.div`
 const RecordingBtn = styled.button`
     width: 49%;
     height: 6rem;
-    background-color: #eac953;
+    background-color: #fad551;
     font-size: 3rem;
     border-radius: 1rem;
     text-align: center;
@@ -96,7 +99,7 @@ const PlayBtn = styled.button`
     width: 49%;
     height: 6rem;
     align-self: flex-end;
-    background-color: #eac953;
+    background-color: #fad551;
     white-space: nowrap;
     font-size: 3rem;
     text-align: center;
