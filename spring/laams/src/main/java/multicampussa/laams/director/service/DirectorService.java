@@ -67,8 +67,8 @@ public class DirectorService {
 
         try {
             // 스프링부트에서 장고 API 호출
-//            String djangoApiUrl = "https://k9d101.p.ssafy.io/opencv/api/v1/comparison";
-            String djangoApiUrl = "http://localhost:8000/api/v1/comparison";
+            String djangoApiUrl = "https://k9d101.p.ssafy.io/opencv/api/v1/comparison";
+//            String djangoApiUrl = "http://localhost:8000/api/v1/comparison";
 
             // 필요한 헤더 설정 등 필요에 따라 커스터마이징
             HttpHeaders headers = new HttpHeaders();
