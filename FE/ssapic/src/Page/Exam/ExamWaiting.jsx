@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import React from 'react'
 import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import ExamCamera from '../../Components/Modal/ExamCamera';
@@ -7,25 +6,6 @@ import ExamCamera from '../../Components/Modal/ExamCamera';
 const ExamWaiting = () => {
     const [isShow,setIsShow] = useState(true);
     const location = useLocation();
-<<<<<<< HEAD
-    return (
-        <Wrap>
-            <Container>
-                <Title>SSAPIc</Title>
-                <InfoText>테스트 페이지</InfoText>
-                <TestBox>
-                    <UserImg></UserImg>
-                    <BtnBox>
-                        <RecordingBtn>녹음 시작</RecordingBtn>
-                        <PlayBtn>재생</PlayBtn>
-                    </BtnBox>
-                    <TestText>1. '녹음시작' 버튼을 눌러 녹음을 해주세요 <br /> <br />2. '재생' 버튼을 눌러 녹음된 음성을 확인해주세요
-                    </TestText>
-                    <NextBtn>다음</NextBtn>
-                </TestBox>
-            </Container>
-        </Wrap>
-=======
   return (
     <Wrap>
         {isShow?<ExamCamera setIsShow={setIsShow}/>:null}
@@ -44,7 +24,6 @@ const ExamWaiting = () => {
             </TestBox>
         </Container>
     </Wrap>
->>>>>>> 4943423ee9983f90dc9fc2f1ca06d8616949e5d3
   )
 }
 
