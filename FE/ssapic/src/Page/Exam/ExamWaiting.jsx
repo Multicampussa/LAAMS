@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import React from 'react'
 import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import ExamCamera from '../../Components/Modal/ExamCamera';
