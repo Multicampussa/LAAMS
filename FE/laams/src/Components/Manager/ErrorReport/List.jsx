@@ -8,11 +8,12 @@ const List = () => {
 
   useEffect(()=>{
     api.get("manager/errorreport")
-      .then(({data})=>setErrorReport(data))
+      .then(({data})=>setErrorReport(data.data))
       .catch((err)=>console.log(err.response));
   },[api]);
 
   const errorReportItems = useMemo(()=>{
+    console.log(errorReport)
     return errorReport.map((e,idx)=>{
       const errorTime = new Date(e.errorTime);
       return <Link key={idx} to={`/manager/error-report/${e.errorReportNo}`}>

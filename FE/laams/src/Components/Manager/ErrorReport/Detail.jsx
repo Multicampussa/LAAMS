@@ -12,7 +12,7 @@ const Detail = () => {
     if(!errorreportNo) return;
     api.get(`manager/errorreport/${errorreportNo}`)
       .then(({data})=>{
-        setData(data);
+        setData(data.data);
       })
       .catch(err=>console.log(err));
   },[api,errorreportNo]);
