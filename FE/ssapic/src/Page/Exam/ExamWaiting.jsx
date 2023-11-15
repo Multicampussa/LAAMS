@@ -8,7 +8,7 @@ const ExamWaiting = () => {
     const location = useLocation();
   return (
     <Wrap>
-        {isShow?<ExamCamera setIsShow={setIsShow} accessToken={location.state} />:null}
+        {isShow?<ExamCamera setIsShow={setIsShow} accessToken={location.state.accessToken} />:null}
         <Container>
             <Title>SSAPIc</Title>
             <InfoText>테스트 페이지</InfoText>
