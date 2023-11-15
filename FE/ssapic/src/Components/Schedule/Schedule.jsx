@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
 
-const Schedule = () => {
+const Schedule = ({setIsShowModal}) => {
   const [mode,setMode] = useState("SSAPIc L&R")
   return (
     <Wrap>
@@ -30,35 +30,35 @@ const Schedule = () => {
             <ExamItem2>{`2023.10.14(토) ~ 2023.11.13(월)`}</ExamItem2>
             <ExamItem3>{`2023.11.15(수)`}</ExamItem3>
             <ExamItem4>{`2023.11.20(월)`}</ExamItem4>
-            <ExamItem5><ExamApplyBtn><div className='hidden_txt'>신청하기</div></ExamApplyBtn></ExamItem5>
+            <ExamItem5><ExamApplyBtn onClick={()=>setIsShowModal(true)}><div className='hidden_txt'>신청하기</div></ExamApplyBtn></ExamItem5>
           </Exam>
           <Exam>
             <ExamItem1>D-1</ExamItem1>
             <ExamItem2>{`2023.10.14(토) ~ 2023.11.13(월)`}</ExamItem2>
             <ExamItem3>{`2023.11.15(수)`}</ExamItem3>
             <ExamItem4>{`2023.11.20(월)`}</ExamItem4>
-            <ExamItem5><ExamApplyBtn><div className='hidden_txt'>신청하기</div></ExamApplyBtn></ExamItem5>
+            <ExamItem5><ExamApplyBtn onClick={()=>setIsShowModal(true)}><div className='hidden_txt'>신청하기</div></ExamApplyBtn></ExamItem5>
           </Exam>
           <Exam>
             <ExamItem1>D-2</ExamItem1>
             <ExamItem2>{`2023.10.14(토) ~ 2023.11.13(월)`}</ExamItem2>
             <ExamItem3>{`2023.11.15(수)`}</ExamItem3>
             <ExamItem4>{`2023.11.20(월)`}</ExamItem4>
-            <ExamItem5><ExamApplyBtn><div className='hidden_txt'>신청하기</div></ExamApplyBtn></ExamItem5>
+            <ExamItem5><ExamApplyBtn onClick={()=>setIsShowModal(true)}><div className='hidden_txt'>신청하기</div></ExamApplyBtn></ExamItem5>
           </Exam>
           <Exam>
             <ExamItem1>D-3</ExamItem1>
             <ExamItem2>{`2023.10.14(토) ~ 2023.11.13(월)`}</ExamItem2>
             <ExamItem3>{`2023.11.15(수)`}</ExamItem3>
             <ExamItem4>{`2023.11.20(월)`}</ExamItem4>
-            <ExamItem5><ExamApplyBtn><div className='hidden_txt'>신청하기</div></ExamApplyBtn></ExamItem5>
+            <ExamItem5><ExamApplyBtn onClick={()=>setIsShowModal(true)}><div className='hidden_txt'>신청하기</div></ExamApplyBtn></ExamItem5>
           </Exam>
           <Exam>
             <ExamItem1>D-4</ExamItem1>
             <ExamItem2>{`2023.10.14(토) ~ 2023.11.13(월)`}</ExamItem2>
             <ExamItem3>{`2023.11.15(수)`}</ExamItem3>
             <ExamItem4>{`2023.11.20(월)`}</ExamItem4>
-            <ExamItem5><ExamApplyBtn><div className='hidden_txt'>신청하기</div></ExamApplyBtn></ExamItem5>
+            <ExamItem5><ExamApplyBtn onClick={()=>setIsShowModal(true)}><div className='hidden_txt'>신청하기</div></ExamApplyBtn></ExamItem5>
           </Exam>
         </ExamBox>
         <BtnScheMore/>
