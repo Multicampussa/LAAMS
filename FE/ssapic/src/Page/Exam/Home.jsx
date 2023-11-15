@@ -16,11 +16,7 @@ const Home = () => {
       }
     })
     .then(({data})=>{
-      // 더미 데이터 없어서 테스트 해봐야 함
-      const newUserData = [...userData];
-      newUserData['accessToken'] = data.accessToken
-      setUserData(newUserData)
-      navigate('/exam/wait', {state: {...userData}})
+      navigate('/exam/wait', {state: {accessToken : data.accessToken}})
     })
     .catch((err)=>{
       console.log(err)
@@ -37,7 +33,7 @@ const Home = () => {
             <CodeLabelText>수험번호</CodeLabelText>
             <CodeInput placeholder='수험번호 8자를 입력해주세요' 
               onChange={(e)=>{
-              userData['examineeCode'] = e.target.value;
+              setUserData(prevState => ({...prevState,examineeCode: e.target.value}));
               }}>
             </CodeInput>
           </CodeLabel>
@@ -45,7 +41,7 @@ const Home = () => {
             <BirthLabelText>비밀번호</BirthLabelText> 
             <BirthInput placeholder='생년월일 8자를 입력해주세요'
               onChange={(e)=>{
-                userData['birth'] = e.target.value;
+                setUserData(prevState => ({...prevState, birth: e.target.value}));
                 }}
             ></BirthInput>
           </BirthLabel>

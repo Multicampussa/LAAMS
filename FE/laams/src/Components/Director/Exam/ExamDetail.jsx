@@ -3,7 +3,7 @@ import useApi from '../../../Hook/useApi';
 import { useParams } from 'react-router-dom';
 import { setModalShow, setModalType } from './../../../redux/actions/modalAction';
 import { useDispatch, useSelector } from 'react-redux';
-import { setExamineeNo } from '../../../redux/actions/examineeDetailAction';
+import { setExamineeName, setExamineeNo } from '../../../redux/actions/examineeDetailAction';
 import { setExamNo } from '../../../redux/actions/managerExamDetailAction';
 import { useGeoLocation } from './../../../Hook/useGeolocation';
 
@@ -128,9 +128,10 @@ const ExamDetail = () => {
   },[dispatch])
 
   //TODO : 응시자 추가 서류 모달 띄우기
-  const handleDocsModal = useCallback((examineeNo,examNo)=>{
+  const handleDocsModal = useCallback((examineeNo,examNo, examineeName)=>{
     dispatch(setExamineeNo(examineeNo));
     dispatch(setExamNo(examNo));
+    dispatch(setExamineeName(examineeName))
     dispatch(setModalShow(true));
     dispatch(setModalType("exam-docs"));
   },[dispatch])
@@ -303,7 +304,7 @@ const ExamDetail = () => {
           </button>
           <button  
             className='director-examinees-list-items-btn'
-            onClick={()=>handleDocsModal(examinee.examineeNo, params['no'])}>
+            onClick={()=>handleDocsModal(examinee.examineeNo, params['no'],examinee.examineeName)}>
               추가 서류
           </button>
         </li> 
