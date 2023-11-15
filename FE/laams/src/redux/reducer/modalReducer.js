@@ -1,8 +1,8 @@
 /* 리덕스에서 관리 할 상태 정의 */
-// 이후 원상태로 돌려놔야함 빈값, false,
+
 const init = {
-  type:"exam-docs",
-  show:true  
+  type:"",
+  show: false
 };
 
 const userReducer = (state = init, action)=>{
