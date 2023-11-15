@@ -3,8 +3,9 @@ import { styled } from 'styled-components'
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import * as blazeface from '@tensorflow-models/blazeface';
+import axios from "axios";
 
-const ExamCamera = ({setIsShow}) => {
+const ExamCamera = ({setIsShow, accessToken}) => {
   const videoRef = useRef();
   const canvasRef = useRef();
   const timer = useRef();
@@ -115,10 +116,17 @@ const ExamCamera = ({setIsShow}) => {
       timer2.current=null;
       timer.current=null;
       //FIXME : 출결 API 쏘기
-      //FIXME : 출결성공시 창닫기
-      setIsShow(false);
+      axios({
+        method: 'post',
+        url: `${process.env.REACT_APP_SPRING_URL}/api/v1/examinee/attendance`,
+        headers: {Authorization: "Bearer "+ accessToken,},
+      })
+      .then(()=>{
+        setIsShow(false);
+      })
+      .catch((err)=>console.log(err))
     }
-  },[time,setIsShow])
+  },[time,setIsShow,accessToken])
 
   return (
     <Wrap>

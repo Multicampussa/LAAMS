@@ -16,7 +16,7 @@ const Home = () => {
       }
     })
     .then(({data})=>{
-      // 더미 데이터 없어서 테스트 해봐야 함
+      // FIXME : 더미 데이터 없어서 테스트 해봐야 함
       const newUserData = [...userData];
       newUserData['accessToken'] = data.accessToken
       setUserData(newUserData)
