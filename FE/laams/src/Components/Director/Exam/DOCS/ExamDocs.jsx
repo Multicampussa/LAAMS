@@ -3,6 +3,7 @@ import Capture from './Capture';
 import { useDispatch, useSelector } from 'react-redux';
 import useApi from '../../../../Hook/useApi';
 import { setModalShow, setModalType } from '../../../../redux/actions/modalAction';
+import Select from './Select';
 
 const ExamDocs = () => {
   const dispatch = useDispatch();
@@ -69,6 +70,7 @@ const ExamDocs = () => {
   return (
     <section className='exam-docs'>
       <div className={`exam-docs-${mode}`}>
+        <Select setMode={setMode} images={images} imageFiles={imageFiles}></Select>
         <div className='exam-docs-container'>
           <div className='exam-docs-container-title'>
             추가 서류 제출
@@ -90,7 +92,10 @@ const ExamDocs = () => {
               <button onClick={()=>setAddMode("open")} className='exam-docs-article'><div className='hidden-text'>사진추가</div></button>
             </div>
           </div>
-          <button onClick={handleSubmit} className='exam-docs-btn'>추가서류 제출</button>
+          <div className='exam-docs-btn-container'>
+            <button onClick={handleSubmit} className='exam-docs-submit-btn'>추가서류 제출</button>
+            <button onClick={()=>setMode("slider-select")} className='exam-docs-compare-btn'> 사진 비교 </button>
+          </div>
         </div>
         <Capture mode={mode} setImages={setImages} slideMaxIdx={slideMaxIdx} setMode={setMode} setImageFiles={setImageFiles} />
       </div>
