@@ -27,8 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ErrorReportController {
 
-    private ErrorReportService errorReportService;
-    private JwtTokenProvider jwtTokenProvider;
+    private final ErrorReportService errorReportService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 에러 리포트 목록 조회
     @ApiOperation("에러리포트 목록 조회")
