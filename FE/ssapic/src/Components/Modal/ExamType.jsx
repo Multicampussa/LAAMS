@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { styled } from 'styled-components';
 import ExamLanguage from './ExamLanguage';
 
@@ -7,6 +7,7 @@ const ExamType = ({setIsShowModal,setData,data,setMain}) => {
   const handleSelect = useCallback((mode)=>{
     setMain(<ExamLanguage setIsShowModal={setIsShowModal} setData={setData} data={data} setMain={setMain} mode={mode} />);
   },[setIsShowModal,setData,data,setMain]);
+  useEffect(()=>{data.examType=examType;},[examType])
   return (
     <Wrap>
       <TitleBox>
