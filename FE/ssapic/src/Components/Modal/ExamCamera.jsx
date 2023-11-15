@@ -105,7 +105,7 @@ const ExamCamera = ({setIsShow, accessToken}) => {
 
   useEffect(()=>{
     const temp = setInterval(() => {drawToCanvas();console.log(temp)}, [200]);
-    timer.cuurent = temp;
+    timer.current = temp;
     return ()=>clearInterval(temp);
   },[drawToCanvas])
 
