@@ -19,7 +19,7 @@ const Detail = () => {
     const getData = async (no)=>{
       try{
         const {data} = await api.get(`manager/exam/${no}`);
-        setData(data);
+        setData(data.data);
       }catch(err){
         console.log(err.response);
       }
