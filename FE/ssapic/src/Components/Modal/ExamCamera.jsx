@@ -91,9 +91,13 @@ const ExamCamera = ({ accessToken}) => {
 
             const ratio = leftLine/rightLine;
             if(ratio < 0.7){
+              setTime(-1);
               alert(`왼쪽으로 고개를 돌렸습니다! : ${ratio}`);
+              setTime(0);
             }else if(ratio > 1.7){
+              setTime(-1);
               alert(`오른쪽으로 고개를 돌렸습니다! : ${ratio}`);
+              setTime(0);
             }
           }
         }
