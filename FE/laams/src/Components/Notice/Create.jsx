@@ -13,21 +13,33 @@ const Create = () => {
   const api = useApi();
   const [title,setTitle] = useState();
   const navigate = useNavigate();
+  const [file, setFile] = useState(null);
+
   const onUploadImage = async (blob, callback) => {
-    alert("이미지 업로드 구현중입니다");
-    // const url = await uploadImage(blob);
-    // callback(, 'alt text');
+    const file = new File([blob], "image.jpg"); 
+    setFile(file); 
+    callback(URL.createObjectURL(file), 'alt text'); 
     return false;
   };
+
   const handleCreate = useCallback(() => {
-    api.post("notice/create",{
+    const formData = new FormData();
+    if(file) {
+      formData.append('file', file); // 파일 추가
+    }
+    formData.append('dto', new Blob([JSON.stringify({ // JSON 데이터 추가
       "content": editorRef.current.getInstance().getHTML(),
-      "memberId": localStorage.getItem("id"),
       "title": title
+    })], { type: 'application/json' }));
+
+    api.post("notice/create", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
     }).then(({data})=>{
       navigate("/notice");
     })
-  },[api,title,navigate]);
+  },[api,title,navigate,file]);
 
   return (
     <div className='notice-create'>

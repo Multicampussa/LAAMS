@@ -117,8 +117,8 @@ const CenterHome = () => {
       return noticeListData.map((notice, index) => {
         const createTime = new Date(notice.createdAt);
         const year = createTime.getFullYear();
-        const month = createTime.getMonth()<10? '0'+createTime.getMonth():createTime.getMonth();
-        const day = createTime.getDay() <10? '0' + createTime.getDay():createTime.getDay();
+        const month = createTime.getMonth()+1 <10? '0'+ (createTime.getMonth()+1):createTime.getMonth()+1;
+        const day = createTime.getDate() <10? '0' + createTime.getDate():createTime.getDate();
         const hours = createTime.getHours() <10? '0'+createTime.getHours():createTime.getHours();
         const min = createTime.getMinutes() <10? '0'+createTime.getMinutes():createTime.getMinutes(); 
         
