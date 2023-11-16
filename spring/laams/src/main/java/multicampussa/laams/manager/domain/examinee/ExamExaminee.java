@@ -114,7 +114,8 @@ public class ExamExaminee extends BaseTimeEntity {
     }
 
     // 응시자 출석
-    public void setAttendance(boolean attendacne) {
+    public void setAttendance(boolean attendacne, LocalDateTime attendanceTime) {
         this.attendance = attendacne;
+        this.attendanceTime = attendanceTime;
     }
 }
