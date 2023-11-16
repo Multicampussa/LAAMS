@@ -7,6 +7,9 @@ COPY requirements.txt ./
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
+## Run database migrations
+RUN python manage.py migrate
+
 ## Copy all src files
 COPY . .
 
