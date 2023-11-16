@@ -121,6 +121,7 @@ const ExamCamera = ({ accessToken}) => {
       })
       .then(()=>{
         isLogin.current=true;
+        alert('출석 완료했습니다')
       })
       .catch((err)=>console.log(err))
     }
