@@ -10,10 +10,10 @@ const Notice = () => {
       </TapBox>
       <ListBox>
         <ListItemNew><FlexRow><p>[공지] 개인정보처리방침 변경 사전 안내 (2023.11.20일 시행)</p><img src='ico_new.gif' alt='new' /></FlexRow></ListItemNew>
-        <ListItemNew><FlexRow><p>[Waiver]시험성적이 아쉽다면? 지금바로 오픽신청하세요!</p><img src='ico_new.gif' alt='new' /></FlexRow></ListItemNew>
-        <ListItem><p>OPIc 채점기준 및 학습방법 안내</p></ListItem>
+        <ListItemNew><FlexRow><p>[Waiver]시험성적이 아쉽다면? 지금바로 싸픽신청하세요!</p><img src='ico_new.gif' alt='new' /></FlexRow></ListItemNew>
+        <ListItem><p>SSAPIc 채점기준 및 학습방법 안내</p></ListItem>
         <ListItem><p>평가장 내 마스크 착용 안내</p></ListItem>
-        <ListItem><p>OPIc 취소정책 및 규정변경 고지</p></ListItem>
+        <ListItem><p>SSAPIc 취소정책 및 규정변경 고지</p></ListItem>
         <ListItem><p>동대문구, 미취업청년 자격취득 활동비 지원</p></ListItem>
       </ListBox>
     </Wrap>
