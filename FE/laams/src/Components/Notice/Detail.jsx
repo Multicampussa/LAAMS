@@ -10,8 +10,18 @@ const Detail = () => {
   const [data,setData] = useState();
   useEffect(()=>{
     if(!noticeNo) return;
-    api.get(`app/notice/detail/${noticeNo}`)
-      .then(({data})=>{setData(data.data)})
+    api.get(`notice/detail/${noticeNo}`)
+    .then(({data})=>{
+      const content = data.data.content;
+
+      // <img> 태그의 src 속성을 찾아서 변경
+      const updatedContent = content.replace(/<img src="blob:[^"]*"/g, `<img src="${data.data.attachFile}"`);
+
+      setData({
+        ...data.data,
+        content: updatedContent, // 변경된 content를 저장
+      });
+    })
       .catch(err=>console.log(err.response));
   },[api,noticeNo]);
 
