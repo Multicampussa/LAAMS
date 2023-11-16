@@ -5,13 +5,13 @@ import '@tensorflow/tfjs-backend-webgl';
 import * as blazeface from '@tensorflow-models/blazeface';
 import axios from "axios";
 
-const ExamCamera = ({setIsShow, accessToken}) => {
+const ExamCamera = ({ accessToken}) => {
   const videoRef = useRef();
   const canvasRef = useRef();
   const timer = useRef();
-  const timer2 = useRef();
   const model = useRef();
   const [time,setTime] = useState(5);
+  const isLogin = useRef(false);
 
   //TODO : 모델을 초기화
   useEffect(() => {
@@ -21,7 +21,7 @@ const ExamCamera = ({setIsShow, accessToken}) => {
       model.current = await blazeface.load();
       if(model.current){
         temp = setInterval(()=>{setTime(e=>e-1)},[1000])
-        timer2.current = temp;
+        timer.current = temp;
       }
     }
     initFD();
@@ -73,7 +73,7 @@ const ExamCamera = ({setIsShow, accessToken}) => {
         if(!preds) {
           return;
         }
-        if(preds.length===0){
+        if(!isLogin.current&&preds.length===0){
           alert("화면 밖으로 나갔습니다");
           setTime(5);
           return;
@@ -91,9 +91,9 @@ const ExamCamera = ({setIsShow, accessToken}) => {
 
             const ratio = leftLine/rightLine;
             if(ratio < 0.7){
-              // alert(`왼쪽으로 고개를 돌렸습니다! : ${ratio}`);
+              alert(`왼쪽으로 고개를 돌렸습니다! : ${ratio}`);
             }else if(ratio > 1.7){
-              // alert(`오른쪽으로 고개를 돌렸습니다! : ${ratio}`);
+              alert(`오른쪽으로 고개를 돌렸습니다! : ${ratio}`);
             }
           }
         }
@@ -104,32 +104,30 @@ const ExamCamera = ({setIsShow, accessToken}) => {
   },[estimateCanvas])
 
   useEffect(()=>{
-    const temp = setInterval(() => {drawToCanvas();console.log(temp)}, [200]);
-    timer.current = temp;
+    const temp = setInterval(() => {drawToCanvas();}, [200]);
     return ()=>clearInterval(temp);
   },[drawToCanvas])
 
   useEffect(()=>{
     if(time===0){
-      clearInterval(timer2.current);
       clearInterval(timer.current);
-      timer2.current=null;
       timer.current=null;
-      //FIXME : 출결 API 쏘기
+
+      // FIXME : 출결 API 쏘기
       axios({
         method: 'post',
         url: `${process.env.REACT_APP_SPRING_URL}/api/v1/examinee/attendance`,
         headers: {Authorization: "Bearer "+ accessToken,},
       })
       .then(()=>{
-        setIsShow(false);
+        isLogin.current=true;
       })
       .catch((err)=>console.log(err))
     }
-  },[time,setIsShow,accessToken])
+  },[time,accessToken])
 
   return (
-    <Wrap>
+    <Wrap $isHidden={time===0}>
       <Count>{time}초 뒤에 자동 출석됩니다<br/> 화면에서 나갈시 카운트가 초기화됩니다</Count>
       <Modal>
         <Video ref={videoRef} autoPlay/>
@@ -163,6 +161,7 @@ const Wrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  visibility: ${props=>props.$isHidden?"hidden":"none"};
 `
 const Modal = styled.div`
   position: relative;

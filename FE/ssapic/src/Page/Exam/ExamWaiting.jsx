@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import ExamCamera from '../../Components/Modal/ExamCamera';
 
 const ExamWaiting = () => {
-    const [isShow,setIsShow] = useState(true);
     const location = useLocation();
   return (
     <Wrap>
-        {isShow?<ExamCamera setIsShow={setIsShow} accessToken={location.state.accessToken} />:null}
+        <ExamCamera accessToken={location.state.accessToken} />
         <Container>
             <Title>SSAPIc</Title>
             <InfoText>테스트 페이지</InfoText>

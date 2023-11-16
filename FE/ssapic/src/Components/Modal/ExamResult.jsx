@@ -5,7 +5,7 @@ const ExamResult = ({setIsShowModal,setData,data,setMain}) => {
   const handleBtnSubmit = useCallback(()=>{
     alert("시험이 신청되었습니다!");
     setIsShowModal(false);
-  },[]);
+  },[setIsShowModal]);
   const [pay,setPay] = useState();
   return (
     <Wrap>
