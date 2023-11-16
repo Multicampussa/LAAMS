@@ -37,7 +37,7 @@ const Wrap = styled.div`
   background-color: rgba(0,0,0,0.6);
 `
 const ModalMain = styled.article`
-  width: 1024px;
+  width: 60%;
   height: 90%;
   background-color: #FFFFFF;
 `

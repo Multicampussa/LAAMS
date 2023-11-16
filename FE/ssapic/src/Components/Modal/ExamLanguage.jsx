@@ -1,12 +1,20 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import ExamSelect from './ExamSelect';
+import ExamDate from './ExamDate';
 
 const ExamLanguage = ({setIsShowModal,setData,data,setMain,mode}) => {
   const [lng,setLng] = useState("영어");
   const handleBtnNext = useCallback(()=>{
-    setMain(<ExamSelect mode={mode} setIsShowModal={setIsShowModal} setData={setData} data={data} />)
+    if(mode === "center"){
+      setMain(<ExamSelect setMain={setMain} setIsShowModal={setIsShowModal} setData={setData} data={data} />)
+    }else{
+      setMain(<ExamDate setMain={setMain} setIsShowModal={setIsShowModal} setData={setData} data={data} />)
+    }
   },[setIsShowModal,setData,data,setMain,mode])
+  useEffect(()=>{
+    data.lng = lng;
+  },[lng,data]);
   return (
     <Wrap>
       <TitleBox>
@@ -23,31 +31,31 @@ const ExamLanguage = ({setIsShowModal,setData,data,setMain,mode}) => {
         <LanguageBox>
           <LanguageItem>
             <img height="128px" src='img_english.png' alt='영어' />
-            <label onClick={()=>setLng("영어")}><LngRadioBtn  $selected={lng==="영어" ? "ok":"no"} type="radio" name="lng"/>영어</label>
+            <label onClick={()=>{setLng("영어");}}><LngRadioBtn  $selected={lng==="영어" ? "ok":"no"} type="radio" name="lng"/>영어</label>
           </LanguageItem>
           <LanguageItem>
             <img height="128px" src='img_chinese.png' alt='중국어' />
-            <label onClick={()=>setLng("중국어")}><LngRadioBtn  $selected={lng==="중국어" ? "ok":"no"} type="radio" name="lng"/>중국어</label>
+            <label onClick={()=>{setLng("중국어");}}><LngRadioBtn  $selected={lng==="중국어" ? "ok":"no"} type="radio" name="lng"/>중국어</label>
           </LanguageItem>
           <LanguageItem>
             <img height="128px" src='img_japan.png' alt='일본어' />
-            <label onClick={()=>setLng("일본어")}><LngRadioBtn  $selected={lng==="일본어" ? "ok":"no"} type="radio" name="lng"/>일본어</label>
+            <label onClick={()=>{setLng("일본어");}}><LngRadioBtn  $selected={lng==="일본어" ? "ok":"no"} type="radio" name="lng"/>일본어</label>
           </LanguageItem>
           <LanguageItem>
             <img height="128px" src='img_spanish.png' alt='스페인어' />
-            <label onClick={()=>setLng("스페인어")}><LngRadioBtn  $selected={lng==="스페인어" ? "ok":"no"} type="radio" name="lng"/>스페인어</label>
+            <label onClick={()=>{setLng("스페인어");}}><LngRadioBtn  $selected={lng==="스페인어" ? "ok":"no"} type="radio" name="lng"/>스페인어</label>
           </LanguageItem>
           <LanguageItem>
             <img height="128px" src='img_russian.png' alt='러시아어' />
-            <label onClick={()=>setLng("러시아어")}><LngRadioBtn  $selected={lng==="러시아어" ? "ok":"no"} type="radio" name="lng"/>러시아어</label>
+            <label onClick={()=>{setLng("러시아어");}}><LngRadioBtn  $selected={lng==="러시아어" ? "ok":"no"} type="radio" name="lng"/>러시아어</label>
           </LanguageItem>
           <LanguageItem>
             <img height="128px" src='img_korean.png' alt='한국어' />
-            <label onClick={()=>setLng("한국어")}><LngRadioBtn  $selected={lng==="한국어" ? "ok":"no"} type="radio" name="lng"/>한국어</label>
+            <label onClick={()=>{setLng("한국어");}}><LngRadioBtn  $selected={lng==="한국어" ? "ok":"no"} type="radio" name="lng"/>한국어</label>
           </LanguageItem>
           <LanguageItem>
             <img height="128px" src='img_vietnam.png' alt='베트남어' />
-            <label onClick={()=>setLng("베트남어")}><LngRadioBtn  $selected={lng==="베트남어" ? "ok":"no"} type="radio" name="lng"/>베트남어</label>
+            <label onClick={()=>{setLng("베트남어");}}><LngRadioBtn  $selected={lng==="베트남어" ? "ok":"no"} type="radio" name="lng"/>베트남어</label>
           </LanguageItem>
         </LanguageBox>
       </SelectBox>
@@ -59,7 +67,7 @@ const Btn = styled.button`
   font-size: 21px;
   display: block;
   width: 90%;
-  margin-left: 5%;
+  margin: 0 10px 10px 5%;
   border: 0 none;
   background-color: #3fa0ee;
   text-align: center;
@@ -69,7 +77,6 @@ const Btn = styled.button`
   color: #ffffff;
   cursor: pointer;
 `
-
 const LanguageItem = styled.li`
   display: flex;
   flex-direction: column;

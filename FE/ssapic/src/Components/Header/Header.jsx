@@ -11,7 +11,7 @@ const Header = () => {
       <Links>
         <div>회원가입</div>
         <div>&nbsp;|&nbsp;</div>
-        <div>로그인</div>
+        <div>로그아웃</div>
         <div>&nbsp;|&nbsp;</div>
         <div>FAQ</div>
         <div>&nbsp;|&nbsp;</div>
