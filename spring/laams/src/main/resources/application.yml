@@ -3,7 +3,7 @@ spring:
     driver-class-name: ENC(sjlqxCVFpyNWKD/vjlhrtpateI8ptocSVOba6EJtiqYf/C6V1vRwOw==)
     url: ENC(QhZoF+5/4nRzDpCPQWIHdXnkA4vcgaRu1gtDGvTQi/a7ZPaF25XCTw==)
     username: ENC(cYB2Olb6VXWi5jHFUIsl4w==)
-    password: ENC(9cdu1LZgayPrMOBofUI9yg==)
+    password: ENC(cSkqY0BMWBNnLuCwCD1IGLQ/0rOlscnml0m0Ge+enF0=)
     hikari:
       maximumPoolSize: 3
 
