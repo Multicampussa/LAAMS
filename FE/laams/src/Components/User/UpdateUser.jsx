@@ -1,5 +1,4 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
-import axios from 'axios';
 import useApi from '../../Hook/useApi';
 import { useSelector } from 'react-redux';
 

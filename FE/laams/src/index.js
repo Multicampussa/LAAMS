@@ -9,6 +9,10 @@ import rootReducer from "./redux/reducer";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const store = createStore(rootReducer);
 
+console.log = function no_console() {};
+console.warn = function no_console() {}; 
+console.error = function () {}; 
+
 root.render(
   <Provider store={store}>
     <App />

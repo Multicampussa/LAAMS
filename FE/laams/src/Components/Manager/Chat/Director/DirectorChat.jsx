@@ -44,7 +44,6 @@ const DirectorChat = ({room}) => {
   const handleSend = useCallback((e)=>{
     ws.current.send("/app/chat/message",{'Authorization': `Bearer ${accessToken}`}, JSON.stringify({type:'TALK', roomId:room.roomId, sender:null, roomName: room.roomName,message}));
     setMessage("");
-    chatBox.current.scrollTop = 0;
   },[message,accessToken,room]);
 
   //TODO : 지난 메시지 내역 조회
@@ -63,11 +62,15 @@ const DirectorChat = ({room}) => {
 
   //TODO : 메시지 li 생성
   const messageItems = useMemo(()=>{
-    return [...messageList].reverse().map((e,idx)=><li key={idx} className='manager-chat-noticeitem'>
+    return messageList.map((e,idx)=><li key={idx} className='manager-chat-noticeitem'>
       <div className='manager-chat-noticeitem-sender'>{e.sender}</div>
       <div className='manager-chat-noticeitem-message'>{e.message}</div>
     </li>);
   },[messageList]);
+
+  useEffect(()=>{
+    chatBox.current.scrollTop = chatBox.current.scrollHeight;
+  },[messageItems])
   
   return (
     <div className='manager-chat-director'>
