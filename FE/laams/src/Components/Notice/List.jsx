@@ -13,14 +13,14 @@ const List = () => {
   const navigate = useNavigate();
   //TODO : 페이지 총 개수 저장
   useEffect(()=>{
-    api.get("app/notice/count")
+    api.get("notice/count")
       .then(({data})=>setTotal(data.data.count))
       .catch(err=>console.log(err.response));
   },[api]);
 
   //TODO : 공지사항 목록 호출 및 저장
   useEffect(()=>{
-    api.get(`app/notice/list?count=${count}&page=${page}`)
+    api.get(`notice/list?count=${count}&page=${page}`)
       .then(({data})=>{
         setNoticeData(data.data);
       })

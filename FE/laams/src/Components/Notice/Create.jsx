@@ -20,7 +20,7 @@ const Create = () => {
     return false;
   };
   const handleCreate = useCallback(() => {
-    api.post("app/notice/create",{
+    api.post("notice/create",{
       "content": editorRef.current.getInstance().getHTML(),
       "memberId": localStorage.getItem("id"),
       "title": title

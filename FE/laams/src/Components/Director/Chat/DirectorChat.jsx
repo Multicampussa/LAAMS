@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { useEffect } from 'react';
 import useApi from '../../../Hook/useApi';
 import Notice from './Notice/Notice';

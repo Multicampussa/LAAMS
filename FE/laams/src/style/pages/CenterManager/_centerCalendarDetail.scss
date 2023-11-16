@@ -188,7 +188,7 @@
 
 @include mobile{
     .modal-item-active-full, .modal-item-deactive-full, .modal-item-active-notFull,.modal-item-deactive-notFull{
-        text-align: start;
+        text-align: left;
         padding-left: 1rem;
     }
     .center-calendar-detail{

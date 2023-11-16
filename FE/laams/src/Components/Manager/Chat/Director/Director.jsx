@@ -10,8 +10,8 @@ import useCenter from '../../../../Hook/useCenter';
 const Director = ({reset}) => {
   const api = useApi();
   const [room,setRoom] = useState([]);
-  const [isNow,setIsNow] = useState(false);
-  const [directorId,setDirectorId] = useState("");
+  const [isNow,] = useState(false);
+  const [directorId,] = useState("");
   const [main,setMain]=useState(null);
   const centerData = useCenter();
   const [center,setCenter] = useState();

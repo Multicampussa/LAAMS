@@ -37,14 +37,14 @@ const List = () => {
     if(!centerData || !location) return [];
     if(location==="전국") return [<option>전국</option>];
     if(!centerData[location]) return [];
-    return centerData[location].map((e,idx)=><option key={idx}>{e.centerName}</option>);
+    return centerData[location].map((e,idx)=><option key={idx+400}>{e.centerName}</option>);
   },[location,centerData]);
 
   //TODO : 지역 Option List 호출
   const locationItems = useMemo(()=>{
     if(!locationData || locationData.length === 0) return [];
     setLocation(locationData[0]);
-    return locationData.map((e,idx)=><option key={idx}>{e}</option>)
+    return locationData.map((e,idx)=><option key={idx+300}>{e}</option>)
   },[locationData])
 
   //TODO : Date를 YYYY-MM-dd형식으로 변환
@@ -59,7 +59,7 @@ const List = () => {
   //TODO : 시험일정을 불러옴
   const getExamList = useCallback(async(date)=>{
     await api.get(`manager/exam/daily?year=${date.getFullYear()}&month=${date.getMonth()+1}&day=${date.getDate()}`)
-    .then(({data})=>setData(data)).catch(err=>`console.log`(err.response));
+    .then(({data})=>setData(data)).catch(err=>console.log(err.response));
   },[api]);
 
 
@@ -73,19 +73,20 @@ const List = () => {
   //TODO : 시험목록데이터를 불러와 Div를 반환
   const examItems = useMemo(()=>{
     const res = [];
+    console.log(data);
     data.forEach((e,idx)=>{
       if(center === "전국") {
         const curDate = new Date(e.examDate);
-        res.push(<li onClick={()=>handleExamItem(e.no)} key={idx} className='manager-exam-list-item'>
+        res.push(<li onClick={()=>handleExamItem(e.no)} key={idx+100} className='manager-exam-list-item'>
           <div>{e.no}</div>
           <div>{e.examType} {e.examLanguage}</div>
           <div>{e.centerName}</div>
           <div>{curDate.getHours()}:{curDate.getMinutes()}</div>
         </li>);
       }else{
-        if(e.centerName === center){
+        if(e.centerName === center.centerName){
           const curDate = new Date(e.examDate);
-          res.push(<li onClick={()=>handleExamItem(e.no)} key={idx} className='manager-exam-list-item'>
+          res.push(<li onClick={()=>handleExamItem(e.no)} key={idx+200} className='manager-exam-list-item'>
             <div>{e.no}</div>
             <div>{e.examType} {e.examLanguage}</div>
             <div>{e.centerName}</div>

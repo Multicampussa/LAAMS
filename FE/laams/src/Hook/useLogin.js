@@ -21,7 +21,6 @@ const useLogin = ()=> {
         dispatch(setMemberId(id));
         localStorage.setItem("refreshTokenExpireTime",new Date(data.refreshTokenExpireTime).toString());
         localStorage.setItem("refreshToken",data.refreshToken);
-        console.log(data);
         setIsLogin(true);
         if(data.authority === "ROLE_DIRECTOR"){
           axios.post(`${process.env.REACT_APP_SPRING_URL}/api/v1/chat/room`,{},
