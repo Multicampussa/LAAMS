@@ -1,0 +1,153 @@
+.director-calendar-detail{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+    &-date{
+        width: 90%;
+        font-size: 2rem;
+        position: absolute;
+        top:1rem;
+        font-weight: 500;
+        display: flex;
+        gap: 1rem;
+    }
+    &-tab{
+        width: 100%;
+        height: 4rem;
+        display: flex;
+        font-size: 2rem;
+        text-align: center;
+        line-height: 4rem;
+        font-weight: 500;
+        &-true{
+            width: 50%;
+            background-color: $color-blue;
+            color: $color-white;
+        }
+        &-false{
+            width: 50%;
+            background-color: rgb(208, 208, 208);
+            color: rgb(147, 147, 147);
+        }
+    }
+    &-box{
+        width: 100%;
+        border: 0.1rem solid $color-gray-light;
+        flex: 1;
+        border-radius: 0.5rem;
+        overflow-y: auto;
+        &-true-task{
+            display: block;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            text-align: center;
+            height: 3.5rem;
+            line-height: 3.5rem;
+            font-size: 1.5rem;
+            background-color: $color-black-light;
+            border-radius: 0.5rem 0.5rem 0 0;
+            color: white;
+        }
+        &-true-request{
+            display: block;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            text-align: center;
+            height: 3rem;
+            line-height: 3rem;
+            font-size: 1.5rem;
+            background-color: $color-black-light;
+            border-radius: 0.5rem 0.5rem 0 0;
+            color: white;
+        }
+        &-true-label{
+            font-size: 1.2rem;
+            font-weight: 400;
+            padding-top: 1rem;
+            box-sizing: border-box;
+        }
+        &-false-task, &-false-request, &-false-label{
+            display: none;
+        }
+        &-task-items{
+            font-size: 1.5rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            text-align: center;
+            padding: 0.5rem 0;
+            box-sizing: border-box;
+            border-bottom: 0.1rem solid $color-gray-light;
+            &-title:hover{
+                cursor: pointer;
+                color: $color-blue
+            }
+        }
+        &-task-none{
+            font-size: 2rem;
+            text-align: center;
+        }
+        &-request-items{
+            text-align: center;
+            font-size: 1.5rem;
+            display: grid;
+            padding: 0.5rem 0;
+            box-sizing: border-box;
+            border-bottom: 0.1rem solid $color-gray-light;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            &-btn-true{
+                width: 60%;
+                text-align: center;
+                background-color: $color-blue;
+                color: white;
+                border-radius: 0.5rem;
+                height: 2rem;
+                font-size: 1.2rem;
+                justify-self: center;
+            }
+            &-btn-false{
+                display: none;
+            }
+        }
+        &-input{
+            appearance: auto;
+        }
+    }
+}
+
+@include mobile{
+    .director-calendar-detail{
+        &-tab-true, &-tab-false{
+            font-size: 1.5rem;
+        }
+        &-box{
+            white-space: nowrap;
+            overflow: hidden;
+                text-overflow: ellipsis;
+            &-request{
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                &-items{
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    font-size: 1rem;
+                    &-btn-true{
+                        font-size: 0.8rem;
+                        height: 1.5rem;
+                    }
+                }
+            }
+            &-true-request{
+                font-size: 1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    
+    
+    }
+}

@@ -1,0 +1,133 @@
+.user{
+    width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &-container{
+        box-sizing: border-box;
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+    }
+    &-logo{
+        width: 40%;
+    }
+    &-id-box{
+        width: 100%;
+        border: 0.1rem solid $color-gray-light;
+        height: 4rem;
+        background-color: lightgray;
+        color: black;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding-left: 1rem;
+        display:flex;
+        align-items: center;
+        border-radius: 0.5rem;
+        
+    }
+    &-box{
+        width: 80%;
+        padding: 5rem 0rem;
+        background-color: rgb(255, 255, 255);
+        box-sizing: border-box;
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        &-title{
+            font-size: 3rem;
+            font-weight: 700;
+        }
+    }
+    &-input{
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        gap: 0.5rem;
+        &-title{
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        &-email{
+            display: flex;
+            gap: 1rem;
+        }
+        &-box{
+            box-sizing: border-box;
+            width: 100%;
+            height: 4rem;
+            font-size: 1.5rem;
+            padding-left: 1rem;
+            border: 0.1rem solid $color-gray-light;
+            border-radius: 0.5rem;
+            &-email{
+                border: 0.1rem solid $color-gray-light;
+                width: 80%;
+                border-radius: 0.5rem;
+                height: 4rem;
+                padding-left: 1rem;
+                font-size: 1.5rem;
+            }
+            &-button{
+                width: 16%;
+                height: 4rem;
+                font-weight: 900;
+                font-size: 1rem;
+                background-color: $color-blue;
+                border-radius: 0.5rem;
+                color: white;
+            }
+        }
+    }
+    &-input-phone{
+        color: $color-gray-light;
+    }
+    &-input-tag{
+        color: red;
+    }
+    &-btn{
+        width: 80%;
+        height: 9rem;
+        background-color: $color-blue;
+        color: white;
+        font-size: 4rem;
+        font-weight: 600;
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    @mixin mobile-user{
+        &-container{
+            width: 90%;
+        }
+        &-box{
+            width: 100%;
+        }
+        &-input{
+            width: 90%;
+        }
+        &-btn{
+            width: 100%;
+        }
+    }
+
+    @include mobile{
+        @include mobile-user();
+    }
+
+    @include tablet{
+        @include mobile-user();
+        &-input{
+            width: 60%;
+        }
+    }
+}
