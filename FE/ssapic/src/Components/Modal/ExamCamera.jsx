@@ -15,17 +15,15 @@ const ExamCamera = ({ accessToken}) => {
 
   //TODO : 모델을 초기화
   useEffect(() => {
-    let temp = null;
     const initFD = async () => {
       await tf.setBackend('webgl');
       model.current = await blazeface.load();
       if(model.current){
-        temp = setInterval(()=>{setTime(e=>e-1)},[1000])
+        const temp = setInterval(()=>{setTime(e=>e-1)},[1000])
         timer.current = temp;
       }
     }
     initFD();
-    return ()=>clearInterval(temp);
   }, [])
 
   const estimateCanvas = useCallback( async (canvasRef) => {
@@ -90,14 +88,14 @@ const ExamCamera = ({ accessToken}) => {
             const rightLine = Math.sqrt((p.landmarks[1][0]-p.landmarks[2][0])*(p.landmarks[1][0]-p.landmarks[2][0])+(p.landmarks[1][1]-p.landmarks[2][1])*(p.landmarks[1][1]-p.landmarks[2][1]));
 
             const ratio = leftLine/rightLine;
-            if(ratio < 0.7){
-              setTime(-1);
-              alert(`왼쪽으로 고개를 돌렸습니다! : ${ratio}`);
-              setTime(0);
-            }else if(ratio > 1.7){
-              setTime(-1);
-              alert(`오른쪽으로 고개를 돌렸습니다! : ${ratio}`);
-              setTime(0);
+            if(isLogin.current){
+              if(ratio < 0.7){
+                setTime(-1);
+                alert(`왼쪽으로 고개를 돌렸습니다! : ${ratio}`);
+              }else if(ratio > 1.7){
+                setTime(-1);
+                alert(`오른쪽으로 고개를 돌렸습니다! : ${ratio}`);
+              }
             }
           }
         }
@@ -113,10 +111,9 @@ const ExamCamera = ({ accessToken}) => {
   },[drawToCanvas])
 
   useEffect(()=>{
-    if(time===0){
+    if(time===-2){
       clearInterval(timer.current);
       timer.current=null;
-
       // FIXME : 출결 API 쏘기
       axios({
         method: 'post',
@@ -133,7 +130,9 @@ const ExamCamera = ({ accessToken}) => {
 
   return (
     <Wrap $isHidden={time===0}>
-      <Count>{time}초 뒤에 자동 출석됩니다<br/> 화면에서 나갈시 카운트가 초기화됩니다</Count>
+      {
+        time >= 0 ? <Count>{time}초 뒤에 자동 출석됩니다<br/> 화면에서 나갈시 카운트가 초기화됩니다</Count> : null
+      }
       <Modal>
         <Video ref={videoRef} autoPlay/>
         <CanvasVideo ref={canvasRef}/>
