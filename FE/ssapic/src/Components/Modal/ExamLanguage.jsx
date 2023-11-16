@@ -14,7 +14,7 @@ const ExamLanguage = ({setIsShowModal,setData,data,setMain,mode}) => {
   },[setIsShowModal,setData,data,setMain,mode])
   useEffect(()=>{
     data.lng = lng;
-  },[lng]);
+  },[lng,data]);
   return (
     <Wrap>
       <TitleBox>

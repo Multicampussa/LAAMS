@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { styled } from 'styled-components';
 import ExamCurrent from './ExamCurrent';
 import ExamDate from './ExamDate';
+import ExamResult from './ExamResult';
 
 const ExamSelect = ({setIsShowModal,setData,data,setMain}) => {
   const [center,setCenter] = useState();
@@ -284,8 +285,12 @@ const ExamSelect = ({setIsShowModal,setData,data,setMain}) => {
   const handleBtnNext = useCallback(()=>{
     data.center = center;
     data.region = region;
-    setMain(<ExamDate setIsShowModal={setIsShowModal} setData={setData} data={data} />)
-  },[center,region,setMain]);
+    if(data.date){
+      setMain(<ExamResult setMain={setMain} setIsShowModal={setIsShowModal} setData={setData} data={data} />)
+    }else{
+      setMain(<ExamDate setIsShowModal={setIsShowModal} setData={setData} data={data} />)
+    }
+  },[center,region,setMain,data,setData,setIsShowModal]);
 
   return (
     <Wrap>
@@ -519,5 +524,6 @@ const Header = styled.header`
   line-height: 60px;
   border-bottom: 1px solid #296ebc;
 `
+
 
 export default ExamSelect

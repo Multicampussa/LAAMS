@@ -1,11 +1,119 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { styled } from 'styled-components';
 import ExamCurrent from './ExamCurrent';
+import ExamResult from './ExamResult';
+import ExamSelect from './ExamSelect';
 
 const ExamDate = ({setIsShowModal,setData,data,setMain}) => {
-
+  const [time,setTime] = useState();
+  const [date,setDate] = useState();
   const handleBtnNext = useCallback(()=>{
+    date.setHours(time.getHours());
+    date.setMinutes(time.getMinutes());
+    data.date = date;
+    const endDate = new Date();
+    endDate.setMinutes(date.getMinutes()+80);
+    data.endDate = endDate;
+    if(data.center){
+      setMain(<ExamResult setMain={setMain} setIsShowModal={setIsShowModal} setData={setData} data={data} />)
+    }else{
+      setMain(<ExamSelect setMain={setMain} setIsShowModal={setIsShowModal} setData={setData} data={data} />)
+    }
+  },[time,date,data,setData,setIsShowModal,setMain]);
+
+
+  useEffect(()=>{
+    const temp = new Date();
+    temp.setDate(temp.getDate()+2);
+    temp.setHours(10);
+    temp.setMinutes(0);
+    setTime(temp);
+    setDate(temp);
   },[]);
+
+  const dateItems = useMemo(()=>{
+    if(!date)return[];
+    const weekList = ["일","월","화","수","목","금","토"];
+    let curYear = date.getFullYear();
+    let curMonth = date.getMonth();
+    let curDay = date.getDate();
+    let curWeek = weekList[date.getDay()];
+    const temp = [];
+    const curDate = new Date();
+    curDate.setDate(curDate.getDate()+2);
+    for(let i = 0; i < 30; i++){
+      let year = curDate.getFullYear();
+      let month = curDate.getMonth();
+      let day = curDate.getDate();
+      let week = weekList[curDate.getDay()];
+      if(curYear===year && curMonth===month && curDay === day && curWeek === week){
+        temp.push(<ListItemActive key={i}>
+          {`${year}.${month+1}.${day}(${week})`}
+        </ListItemActive>)
+      }
+      else if(i%2===0){
+        temp.push(<ListItem1 onClick={()=>setTime(new Date(year,month,day))} key={i}>
+          {`${year}.${month+1}.${day}(${week})`}
+        </ListItem1>)
+      }else{
+        temp.push(<ListItem2 onClick={()=>setTime(new Date(year,month,day))} key={i}>
+          {`${year}.${month+1}.${day}(${week})`}
+        </ListItem2>)
+      }
+      curDate.setDate(curDate.getDate()+1);
+    }
+    return temp;
+  },[date]);
+
+  const timeItems = useMemo(()=>{
+    if(!time)return [];
+    const temp = [];
+    const curHour = time.getHours();
+    const curMinutes = time.getMinutes();
+    let start = new Date();
+    start.setHours(10);
+    start.setMinutes(0);
+    let end = new Date();
+    end.setHours(10);
+    end.setMinutes(70);
+    for(let i = 0; i < 7; i++){ 
+      const sh = start.getHours();
+      const sm = start.getMinutes();
+      if(sh===curHour&&sm===curMinutes){
+        temp.push(<ListItemActive key={i}>
+          {`${start.getHours() < 10 ? "0"+start.getHours():start.getHours()}:${start.getMinutes()<10 ? "0"+start.getMinutes() :start.getMinutes()}`}
+          ~
+          {`${end.getHours() < 10 ? "0"+end.getHours():end.getHours()}:${end.getMinutes()<10 ? "0"+end.getMinutes() :end.getMinutes()}`}
+        </ListItemActive>)
+      }
+      else if(i%2===0){
+        temp.push(<ListItem2 onClick={()=>{
+          const cur = new Date();
+          cur.setHours(sh);
+          cur.setMinutes(sm);
+          setTime(cur);
+        }} key={i}>
+          {`${start.getHours() < 10 ? "0"+start.getHours():start.getHours()}:${start.getMinutes()<10 ? "0"+start.getMinutes() :start.getMinutes()}`}
+          ~
+          {`${end.getHours() < 10 ? "0"+end.getHours():end.getHours()}:${end.getMinutes()<10 ? "0"+end.getMinutes() :end.getMinutes()}`}
+        </ListItem2>)
+      }else{
+        temp.push(<ListItem3 onClick={()=>{
+          const cur = new Date();
+          cur.setHours(sh);
+          cur.setMinutes(sm);
+          setTime(cur);
+        }} key={i}>
+          {`${start.getHours() < 10 ? "0"+start.getHours():start.getHours()}:${start.getMinutes()<10 ? "0"+start.getMinutes() :start.getMinutes()}`}
+          ~
+          {`${end.getHours() < 10 ? "0"+end.getHours():end.getHours()}:${end.getMinutes()<10 ? "0"+end.getMinutes() :end.getMinutes()}`}
+        </ListItem3>)
+      }
+      start.setMinutes(start.getMinutes()+80);
+      end.setMinutes(end.getMinutes()+80);
+    }
+    return temp;
+  },[time]);
 
   return (
     <Wrap>
@@ -24,8 +132,8 @@ const ExamDate = ({setIsShowModal,setData,data,setMain}) => {
         </DateSelectBtn>
         <MainArea>
           <Header>날짜선택</Header>
-          <RegionArea></RegionArea>
-          <CenterArea></CenterArea>
+          <RegionArea>{dateItems}</RegionArea>
+          <CenterArea>{timeItems}</CenterArea>
         </MainArea>
         <ExamCurrent data={data} />
       </MainContainer>
@@ -176,7 +284,7 @@ const RegionArea = styled.ul`
 const ListItem1 = styled.li`
   width: 100%;
   height: 60px;
-  font-size: 16px;
+  font-size: 18px;
   box-sizing: border-box;
   padding-left: 10px;
   font-weight: 900;
@@ -188,7 +296,7 @@ const ListItem1 = styled.li`
 const ListItem2 = styled.li`
   width: 100%;
   height: 60px;
-  font-size: 16px;
+  font-size: 18px;
   box-sizing: border-box;
   padding-left: 10px;
   font-weight: 900;
@@ -201,7 +309,7 @@ const ListItem2 = styled.li`
 const ListItem3 = styled.li`
   width: 100%;
   height: 60px;
-  font-size: 16px;
+  font-size: 18px;
   box-sizing: border-box;
   padding-left: 10px;
   font-weight: 900;
@@ -214,7 +322,7 @@ const ListItem3 = styled.li`
 const ListItemActive = styled.li`
   width: 100%;
   height: 60px;
-  font-size: 16px;
+  font-size: 18px;
   box-sizing: border-box;
   padding-left: 10px;
   display: flex;

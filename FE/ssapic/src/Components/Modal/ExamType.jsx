@@ -7,7 +7,7 @@ const ExamType = ({setIsShowModal,setData,data,setMain}) => {
   const handleSelect = useCallback((mode)=>{
     setMain(<ExamLanguage setIsShowModal={setIsShowModal} setData={setData} data={data} setMain={setMain} mode={mode} />);
   },[setIsShowModal,setData,data,setMain]);
-  useEffect(()=>{data.examType=examType;},[examType])
+  useEffect(()=>{data.examType=examType;},[data,examType])
   return (
     <Wrap>
       <TitleBox>

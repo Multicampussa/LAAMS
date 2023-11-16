@@ -2,6 +2,7 @@ import React from 'react'
 import { styled } from 'styled-components'
 
 const ExamCurrent = ({data}) => {
+  const weekList = ["일","월","화","수","목","금","토"];
   return (
     <Wrap>
       <div>
@@ -12,6 +13,11 @@ const ExamCurrent = ({data}) => {
         data.center&&data.region?<div>
           <p>{`[${data.region}]`}</p>
           <p>{data.center}</p>
+        </div>:null
+      }
+      {
+        data.date?<div>
+          <p>{`${data.date.getFullYear()}.${data.date.getMonth()+1}.${data.date.getDate()}(${weekList[data.date.getDay()]}) ${data.date.getHours() < 10 ? "0"+data.date.getHours() : data.date.getHours()}:${data.date.getMinutes() < 10 ? "0"+data.date.getMinutes() : data.date.getMinutes()} ~ ${data.endDate.getHours() < 10 ? "0"+data.endDate.getHours() : data.endDate.getHours()}:${data.endDate.getMinutes() < 10 ? "0"+data.endDate.getMinutes() : data.endDate.getMinutes()}`} </p>
         </div>:null
       }
     </Wrap>
