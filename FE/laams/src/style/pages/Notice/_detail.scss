@@ -1,0 +1,70 @@
+.notice-detail{
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  height: 100%;
+  position: relative;
+  box-sizing: border-box;
+  @include desktop{
+    padding: 3rem 15%;
+  }
+  @include tablet{
+    padding: 2rem 10%;
+  }
+  @include mobile{
+    padding: 1rem 0;
+  }
+
+  &-title{
+    height: 5rem;
+    box-sizing: border-box;
+    padding: 1rem;
+    background-color: $color-white;
+    font-size: 1.5rem;
+    font-weight: 900;
+    width: 100%;
+    border: 0.1rem solid $color-gray-light;
+    display: flex;
+    justify-content: space-between;
+    &>:last-child{
+      color: $color-gray-light;
+    }
+  }
+
+  &-wrap{
+    flex: 1;
+    border: 0.1rem solid $color-gray-light;
+    background-color: $color-white;
+    box-sizing: border-box;
+    padding: 2rem;
+    & *{
+      white-space: pre-line;
+    }
+  }
+  &-btn{
+    border-radius: 0.5rem;
+    background-color: #0A6EBD;
+    color: #FFFFFF;
+    box-sizing: border-box;
+    white-space: nowrap;
+    text-align: center;
+    font-weight: 900;
+    height: 4rem;
+    font-size: 2rem;
+    @include desktop{
+      position: absolute;
+      right: 15%;
+      width: 10rem;
+    }
+    @include tablet{
+      position: absolute;
+      right: 10%;
+      width: 10rem;
+    }
+    @include mobile{
+      position: static;
+      width: 90%;
+      margin-left: 5%;
+    }
+  }
+}

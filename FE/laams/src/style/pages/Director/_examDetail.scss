@@ -1,0 +1,315 @@
+.exam-detail{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    &-aside{
+        width: 20%;
+        height: 100%;
+        background-color: white;
+        border-right: 0.1rem solid $color-gray-light;
+        display: flex;
+        justify-content: center;
+        &-box{
+            width: 95%;
+            padding-top: 2rem;
+            display: flex;
+            gap: 2rem;
+            flex-direction: column;
+        }
+        &-title{
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: $color-blue;
+            
+            &-box{
+                font-size: 1.5rem;
+                border: 0.1rem solid $color-gray-light;
+                border-radius: 0.5rem;
+                text-align: center;
+                padding: 1rem 0rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                font-weight: 600;
+                &-true{
+                    color: $color-blue;
+                }
+                &-false{
+                    color: $color-red;
+                }
+            }
+        }
+        &-btn{
+            background-color: $color-blue;
+            font-size: 1.6rem;
+            font-weight: 600;
+            height: 4rem;
+            color: white;
+            border-radius: 1rem;
+
+        }
+    }
+
+    &-examinees{
+        width: 80%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &-box{
+            width: 90%;
+            height: 85%;
+            background-color: white;
+            border-radius: 2rem;
+            border: 0.1rem solid $color-gray-light;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding-bottom: 2rem;
+            justify-content: center;
+            align-items: center;
+        }
+        &-list{
+            width: 98%;
+            flex: 1;
+            overflow-y: auto;
+            -ms-overflow-style: none;
+        }
+        &-list::-webkit-scrollbar{
+            display:none;
+        }
+        &-show{
+            display: none;
+        }
+    }
+}
+.director-examinees-list{
+    &-title{
+        width: 100%;
+        display: grid;
+        text-align: center;
+        grid-template-columns: repeat(7,1fr);
+        font-size: 2rem;
+        height: 4rem;
+        line-height: 3rem;
+        border-bottom: 0.1rem solid $color-gray-light;
+        box-sizing: border-box;
+        padding: 0.5rem 1%;
+        background-color: $color-black-light;
+        color: $color-white;
+        border-radius: 1rem 1rem 0 0;
+    }
+    &-items{
+        width: 100%;
+        display: grid;
+        text-align: center;
+        grid-template-columns: repeat(7,1fr);
+        font-size: 2rem;
+        height: 3rem;
+        line-height: 3rem;
+        border-bottom: 0.1rem solid $color-gray-light;
+        padding: 0.5rem 0rem;
+        &-code:hover, &-name:hover{
+            cursor: pointer;
+            color: $color-blue;
+        }
+        &-select{
+            width: 80%;
+            height: 3rem;
+            justify-self: center;
+            
+        }
+        &-btn{
+            width: 80%;
+            height: 3rem;
+            background-color: $color-blue;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 0.2rem 0rem;
+            justify-self: center;
+            box-sizing: border-box;
+            flex-direction: column;
+            align-items: center;
+            line-height: 2.5rem;
+            &-show{
+                width: 80%;
+                height: 3rem;
+                border-radius: 0.5rem;
+                color: white;
+                font-size: 1.5rem;
+                font-weight: 600;
+                padding: 0.2rem 0rem;
+                justify-self: center;
+                box-sizing: border-box;
+                flex-direction: column;
+                align-items: center;
+                line-height: 2.5rem;
+                background-color: $color-blue;
+            }
+            &-hidden{
+                width: 80%;
+                height: 3rem;
+                background-color: $color-gray-light;
+                border-radius: 0.5rem;
+                color: white;
+                font-size: 1.5rem;
+                font-weight: 600;
+                padding: 0.2rem 0rem;
+                justify-self: center;
+                box-sizing: border-box;
+                flex-direction: column;
+                align-items: center;
+                line-height: 2.5rem;
+                cursor: default;
+            }
+        }
+    }
+    &-mobile{
+        display: none;
+    }
+}
+@include tablet{
+    .exam-detail{
+        &-aside{
+            &-title{
+                font-size: 2rem;
+                &-box{
+                    font-size: 1.2rem;
+                }
+            }
+            &-btn{
+                font-size: 1.2rem;
+                height: 3rem;
+                border-radius: 0.5rem;
+            }
+        }
+
+    }
+    .director-examinees-list{
+        &-items{
+            font-size: 1.4rem;
+            &-btn{
+                height: 3rem;
+                font-size: 1.2rem;             
+            }
+        }  
+    }
+}
+
+@include mobile{
+    .exam-detail{
+        height: auto;
+        overflow-y: auto;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        &-aside{
+            width: 100%;
+            height: 45rem;
+            &-title{
+                font-size: 2rem;
+                &-box{
+                    font-size: 1.5rem;
+                }
+            }
+            &-btn{
+                height: 4rem;
+                font-size: 2rem;             
+            }
+        }
+        &-examinees{
+            width: 100%;
+            font-size: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            &-show{
+                display: block;
+                font-size: 2rem;
+                font-weight: 600;
+                color: $color-blue;
+                padding: 2rem 1rem;
+            }
+            &-box{
+                width: 95%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border-radius: 1rem;
+            }
+            &-list{
+                overflow-y: hidden;
+                
+            }
+        }
+
+    }
+    .director-examinees-list{
+        &-title{
+            display: none;
+        }
+        &-items{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            justify-content: space-around;
+            height: 15rem;
+            &-code{
+                order: 1;
+                width: 30%;
+                height: 3rem;
+                font-size: 1.5rem;
+                font-weight: 600;
+                padding: 0;
+                text-align: start;
+            }
+            &-name{
+                order: 2;
+                width: 30%;
+                height: 3rem;
+                font-size: 1.5rem;
+                font-weight: 600;
+                padding: 0;
+                text-align: start;
+            }
+            &-btn-show, &-btn-hidden{
+                order: 7;
+                width: 97%;
+            }
+            &-select{
+                order: 4;
+                width: 97%;
+                
+            }
+            &-btn:nth-of-type(2){
+                order: 5;
+                width: 47%;
+
+            }
+            &-btn:nth-of-type(3){
+                order: 6;
+                width: 47%;
+            }
+            
+        }
+        &-time{
+            height: 3rem;
+            width: 30%;
+            order: 3;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: flex-end;
+            padding: 0;
+            
+        }
+        
+    }
+}
+

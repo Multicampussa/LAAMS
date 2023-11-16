@@ -1,0 +1,66 @@
+:root{
+  font-size: 62.5%;
+}
+body,
+input {
+  font-family: "Lato", sans-serif;
+}
+body {
+  margin: 0;
+  color: $color-black;
+}
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  padding-inline-start: 0;
+}
+h1 {
+  font-weight: normal;
+  margin: 0;
+}
+dl,
+dd,
+p {
+  margin: 0;
+}
+button,
+input {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+	border-radius: 0;
+}
+button {
+  cursor: pointer;
+}
+em {
+  font-style: normal;
+}
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+a:hover,
+a:focus {
+  text-decoration: none;
+}
+img {
+  vertical-align: top;
+}
+fieldset {
+  border: 0 none;
+  margin: 0;
+  padding: 0;
+}
+
+h1,h2,h3,h4,h5{
+  margin: 0;
+  padding: 0;
+}
