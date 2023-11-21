@@ -14,37 +14,37 @@ Language Assessment Attendance Management System <br>
 <table>
     <tr>
       <td align="center">
-        <h5>한승현</h5>
+        <h5><a href="https://github.com/SeungHyunH">한승현</a></h5>
       </td>
       <td align="center">
-        <h5>정예원</h5>
+        <h5><a href="https://github.com/yewon830">정예원</a></h5>
       </td>
       <td align="center">
-        <h5>장성운</h5>
+        <h5><a href="https://github.com/seong-un">장성운</a></h5>
       </td>
       <td align="center">
-        <h5>공익규</h5>
+        <h5><a href="https://github.com/Going9">공익규</a></h5>
       </td>
       <td align="center">
-        <h5>김현지</h5>
+        <h5><a href="https://github.com/hjhj-kk">김현지</a></h5>
       </td>
       <td align="center">
-        <h5>박단비</h5>
+        <h5><a href="https://github.com/pdanbi00">박단비</a></h5>
       </td>
     </tr>
     <tr>
-        <td height="140px" align="center"> <a href="https://github.com/SeungHyunH">
-            <img src="https://avatars.githubusercontent.com/SeungHyunH" width="140px" /> <br>Team Leader, FE</a></td>
-        <td height="140px" align="center"> <a href="https://github.com/yewon830">
-            <img src="https://avatars.githubusercontent.com/yewon830" width="140px" /> <br>FE</a></td>
-        <td height="140px" align="center"> <a href="https://github.com/seong-un">
-            <img src="https://avatars.githubusercontent.com/seong-un" width="140px" /> <br>BE</a></td>
-        <td height="140px" align="center"> <a href="https://github.com/Going9">
-            <img src="https://avatars.githubusercontent.com/Going9" width="140px" /> <br>BE</a></td>
-        <td height="140px" align="center"> <a href="https://github.com/hjhj-kk">
-            <img src="https://avatars.githubusercontent.com/hjkasd" width="140px" /> <br>BE</a></td>
-        <td height="140px" align="center"> <a href="https://github.com/pdanbi00">
-            <img src="https://avatars.githubusercontent.com/pdanbi00" width="140px" /> <br>BE</a></td>        
+        <td height="140px" align="center">
+            <img src="https://avatars.githubusercontent.com/SeungHyunH" width="140px" /> <br>Team Leader, FE</td>
+        <td height="140px" align="center">
+            <img src="https://avatars.githubusercontent.com/yewon830" width="140px" /> <br>FE</td>
+        <td height="140px" align="center">
+            <img src="https://avatars.githubusercontent.com/seong-un" width="140px" /> <br>BE</td>
+        <td height="140px" align="center">
+            <img src="https://avatars.githubusercontent.com/Going9" width="140px" /> <br>BE</td>
+        <td height="140px" align="center">
+            <img src="https://avatars.githubusercontent.com/hjkasd" width="140px" /> <br>BE</td>
+        <td height="140px" align="center">
+            <img src="https://avatars.githubusercontent.com/pdanbi00" width="140px" /> <br>BE</td>        
     </tr>
     <tr>
       <td align="center" style="padding: 0px">
