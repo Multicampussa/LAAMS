@@ -1,5 +1,5 @@
 # LAAMS
-![Logo.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ff2c16f8-90c0-45c4-a8bb-51a77b465f91/cfd5c3ed-1aae-4335-8bbe-0496d4b8c40c/Logo.png)
+![Logo](https://github.com/Going9/LAAMS/assets/105552606/646666cf-7094-494b-8e1f-3b7d3b580b73)
 # 🔥 프로젝트 개요
 
 프로젝트 기간: 2023.10.09 ~ 2023.11.17 <br> 
