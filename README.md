@@ -41,7 +41,7 @@ Language Assessment Attendance Management System <br>
             <img src="https://avatars.githubusercontent.com/seong-un" width="140px" /> <br>BE</a></td>
         <td height="140px" align="center"> <a href="https://github.com/Going9">
             <img src="https://avatars.githubusercontent.com/Going9" width="140px" /> <br>BE</a></td>
-        <td height="140px" align="center"> <a href="https://github.com/hjkasd">
+        <td height="140px" align="center"> <a href="https://github.com/hjhj-kk">
             <img src="https://avatars.githubusercontent.com/hjkasd" width="140px" /> <br>BE</a></td>
         <td height="140px" align="center"> <a href="https://github.com/pdanbi00">
             <img src="https://avatars.githubusercontent.com/pdanbi00" width="140px" /> <br>BE</a></td>        
