@@ -48,10 +48,10 @@ Language Assessment Attendance Management System <br>
     </tr>
     <tr>
       <td align="center" style="padding: 0px">
-        React 기초 설정<br>Login<br>운영자 및 감독관 페이지<br>Face Detection<br>채팅 구현
+        React 기초 설정<br>Login<br>운영자 페이지, 응시자 홈<br>Face Detection<br>채팅 구현
       </td>
       <td align="center">
-        인프라 구축<br>모든 페이지 반응형 적용
+        인프라 구축<br>감독관 및 센터담당자 페이지, 응시자 시험 페이지
       </td>
       <td align="center">
         jwt를 이용한 Login<br>채팅 구현<br>멤버 기능 관리
