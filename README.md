@@ -90,7 +90,7 @@ Face-Detection을 이용해 기존의 번거롭고 관리가 힘들었던 출결
 
 # 🌊 erd
 
-![LAAMS_ERD.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ff2c16f8-90c0-45c4-a8bb-51a77b465f91/5b69e323-e73d-412a-abf6-8cfc3aef3564/LAAMS_ERD.png)
+![LAAMS_ERD](https://github.com/Going9/LAAMS/assets/105552606/716bf142-b567-4236-9081-f6fed1c6203b)
 
 <br>
 <br>
