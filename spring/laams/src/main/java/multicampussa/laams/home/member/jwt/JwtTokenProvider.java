@@ -6,15 +6,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.centerManager.domain.CenterManager;
-import multicampussa.laams.director.domain.director.Director;
+import multicampussa.laams.home.member.domain.Member;
 import multicampussa.laams.home.member.exception.JwtAuthenticationException;
-import multicampussa.laams.home.member.repository.MemberDirectorRepository;
-import multicampussa.laams.home.member.repository.MemberManagerRepository;
+import multicampussa.laams.home.member.repository.MemberRepository;
 import multicampussa.laams.home.member.service.UserDetailsServiceImpl;
 import multicampussa.laams.centerManager.domain.CenterManagerRepository;
 import multicampussa.laams.manager.domain.center.Center;
 import multicampussa.laams.manager.domain.center.CenterRepository;
-import multicampussa.laams.manager.domain.manager.Manager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,8 +26,7 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private final UserDetailsServiceImpl userDetailsService;
-    private final MemberDirectorRepository memberDirectorRepository;
-    private final MemberManagerRepository memberManagerRepository;
+    private final MemberRepository memberRepository;
     private final CenterManagerRepository centerManagerRepository;
     private final CenterRepository centerRepository;
 
@@ -176,15 +173,15 @@ public class JwtTokenProvider {
         String authority = "";
         Long memberNo = null;
         // 발급된 리프레시 토큰에 담겨있는 ID로 DB에 저장된 리프레시 토큰 받아오기.
-        if (memberDirectorRepository.existsById(id)) {
-            Director director = memberDirectorRepository.findById(id).get();
-            storedRefreshToken = director.getRefreshToken();
-            memberNo = director.getNo();
+        if (memberRepository.existsById(id)) {
+            Member member = memberRepository.findById(id).get();
+            storedRefreshToken = member.getRefreshToken();
+            memberNo = member.getNo();
             authority = "ROLE_DIRECTOR";
-        } else if (memberManagerRepository.existsById(id)) {
-            Manager manager = memberManagerRepository.findById(id).get();
-            storedRefreshToken = manager.getRefreshToken();
-            memberNo = manager.getNo();
+        } else if (memberRepository.existsById(id)) {
+            Member member = memberRepository.findById(id).get();
+            storedRefreshToken = member.getRefreshToken();
+            memberNo = member.getNo();
             authority = "ROLE_MANAGER";
         } else if (centerManagerRepository.existsById(id)) {
             CenterManager centerManager = centerManagerRepository.findById(id).get();

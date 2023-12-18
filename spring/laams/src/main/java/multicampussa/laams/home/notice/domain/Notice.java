@@ -4,13 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
+import multicampussa.laams.home.member.domain.Member;
 import multicampussa.laams.home.notice.dto.NoticeCreateDto;
 import multicampussa.laams.home.notice.dto.NoticeUpdateDto;
-import multicampussa.laams.manager.domain.manager.Manager;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
@@ -39,14 +37,14 @@ public class Notice extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="manager_no")
-    private Manager manager;
+    private Member member;
 
     private boolean isDelete = false;
 
-    public void toEntity(NoticeCreateDto noticeCreateDto, Manager manager) {
+    public void toEntity(NoticeCreateDto noticeCreateDto, Member member) {
         this.title = noticeCreateDto.getTitle();
         this.content = noticeCreateDto.getContent();
-        this.manager = manager;
+        this.member = member;
     }
 
     public void update(NoticeUpdateDto noticeUpdateDto) {

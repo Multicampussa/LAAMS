@@ -20,7 +20,7 @@ public class ErrorReportDetailResponse {
         this.content = errorReport.getContent();
         this.errorType = errorReport.getType();
         this.errorTime = errorReport.getErrorTime();
-        this.directorName = errorReport.getDirector().getName();
+        this.directorName = errorReport.getMember().getName();
         this.createdTime = errorReport.getCreatedAt();
     }
 }

@@ -1,25 +1,30 @@
-package multicampussa.laams.director.domain.director;
+package multicampussa.laams.home.member.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import multicampussa.laams.director.domain.errorReport.ErrorReport;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.home.member.dto.MemberDto;
 import multicampussa.laams.home.member.dto.MemberSignUpDto;
 import multicampussa.laams.home.member.dto.MemberUpdateDto;
+import multicampussa.laams.home.notice.domain.Notice;
 import multicampussa.laams.manager.domain.center.Center;
+import multicampussa.laams.manager.domain.exam.ExamDirector;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Director extends BaseTimeEntity {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "director_no")
+    @Column(name = "member_no")
     private Long no;
 
     @Column(unique = true)
@@ -34,10 +39,20 @@ public class Director extends BaseTimeEntity {
     private String refreshToken;
     private String verificationCode;
     private Boolean isVerified;
+    private String role;
 
     @ManyToOne
     @JoinColumn(name = "center_no")
     private Center center;
+
+    @OneToMany(mappedBy = "member")
+    private List<ExamDirector> examDirectors = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<ErrorReport> errorReports = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Notice> notices = new ArrayList<>();
 
     public void update(MemberSignUpDto memberSignUpDto, String encodedPassword) {
         this.name = memberSignUpDto.getName();
@@ -58,14 +73,14 @@ public class Director extends BaseTimeEntity {
         this.isVerified = isVerified;
     }
 
-    public static MemberDto toMemberDto(Director director) {
+    public static MemberDto toMemberDto(Member member) {
         return MemberDto.builder()
-                .memberNo(director.getNo())
-                .name(director.getName())
-                .email(director.getEmail())
-                .phone(director.getPhone())
-                .createdAt(director.getCreatedAt())
-                .updatedAt(director.getUpdatedAt())
+                .memberNo(member.getNo())
+                .name(member.getName())
+                .email(member.getEmail())
+                .phone(member.getPhone())
+                .createdAt(member.getCreatedAt())
+                .updatedAt(member.getUpdatedAt())
                 .build();
     }
 

@@ -2,7 +2,7 @@ package multicampussa.laams.home.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import multicampussa.laams.director.domain.director.Director;
+import multicampussa.laams.home.member.domain.Member;
 
 import java.time.LocalDateTime;
 
@@ -20,11 +20,11 @@ public class MemberUserDto {
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime updatedAt;
 
-    public MemberUserDto(Director director) {
-        this.email = director.getEmail();
-        this.name = director.getName();
-        this.phone = director.getPhone();
-        this.createdAt = director.getCreatedAt();
-        this.updatedAt = director.getUpdatedAt();
+    public MemberUserDto(Member member) {
+        this.email = member.getEmail();
+        this.name = member.getName();
+        this.phone = member.getPhone();
+        this.createdAt = member.getCreatedAt();
+        this.updatedAt = member.getUpdatedAt();
     }
 }

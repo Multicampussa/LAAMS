@@ -1,14 +1,14 @@
 package multicampussa.laams.manager.service.exam;
 
+import multicampussa.laams.home.member.domain.Member;
+import multicampussa.laams.home.member.repository.MemberRepository;
 import multicampussa.laams.manager.domain.exam.ExamDirectorRepository;
 import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
-import multicampussa.laams.manager.domain.manager.Manager;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamRepository;
 import multicampussa.laams.manager.domain.center.Center;
 import multicampussa.laams.manager.domain.center.CenterRepository;
-import multicampussa.laams.manager.domain.manager.ManagerRepository;
 import multicampussa.laams.manager.dto.director.response.DirectorListResponse;
 import multicampussa.laams.manager.dto.exam.request.ExamCreateRequest;
 import multicampussa.laams.manager.dto.exam.request.ExamUpdateRequest;
@@ -27,14 +27,14 @@ public class ExamService {
 
     private final ExamRepository examRepository;
     private final CenterRepository centerRepository;
-    private final ManagerRepository managerRepository;
+    private final MemberRepository memberRepository;
     private final ExamExamineeRepository examExamineeRepository;
     private final ExamDirectorRepository examDirectorRepository;
 
-    public ExamService(ExamRepository examRepository, CenterRepository centerRepository, ManagerRepository managerRepository, ExamExamineeRepository examExamineeRepository, ExamDirectorRepository examDirectorRepository) {
+    public ExamService(ExamRepository examRepository, CenterRepository centerRepository, MemberRepository memberRepository, ExamExamineeRepository examExamineeRepository, ExamDirectorRepository examDirectorRepository) {
         this.examRepository = examRepository;
         this.centerRepository = centerRepository;
-        this.managerRepository = managerRepository;
+        this.memberRepository = memberRepository;
         this.examExamineeRepository = examExamineeRepository;
         this.examDirectorRepository = examDirectorRepository;
     }
@@ -46,9 +46,9 @@ public class ExamService {
         Center existingCenter = centerRepository.findByName(request.getCenterName())
                 .orElseThrow(() -> new CustomExceptions.CenterNotFoundException(request.getCenterName() + " 이름의 센터는 존재하지 않습니다."));
         // 입력 받은 매니저 번호로 시험 담당 매니저 호출
-        Manager responsibleManager = managerRepository.findById(request.getManagerNo())
+        Member responsibleMember = memberRepository.findById(request.getManagerNo())
                 .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getManagerNo() + "번 매니저는 존재하지 않습니다."));
-        examRepository.save(new Exam(existingCenter, request.getExamDate(), responsibleManager,
+        examRepository.save(new Exam(existingCenter, request.getExamDate(), responsibleMember,
                 request.getRunningTime(), request.getExamType(), request.getExamLanguage(), request.getMaxDirector()));
 
         return ResponseEntity.ok("시험이 성공적으로 생성되었습니다");
@@ -97,7 +97,7 @@ public class ExamService {
 
         // 시험 번호로 ExamDirector 조회하고 다시 DirectorListResponse 생성
         List<DirectorListResponse> directorListResponseList = examDirectorRepository.findByExam(exam).stream()
-                .map(examDirector -> new DirectorListResponse(examDirector.getDirector(), examDirector))
+                .map(examDirector -> new DirectorListResponse(examDirector.getMember(), examDirector))
                 .collect(Collectors.toList());
 
         return new ExamDetailResponse(center, exam, examineeNum, attendanceNum, compensationNum, directorListResponseList);
@@ -133,10 +133,10 @@ public class ExamService {
                 .orElseThrow(() -> new CustomExceptions.ExamNotFoundException(examNo + "번 시험은 존재하지 않습니다."));
         Center existingCenter = centerRepository.findByName(request.getNewCenterName())
                 .orElseThrow(() -> new CustomExceptions.CenterNotFoundException(request.getNewCenterName() + " 이름의 센터는 존재하지 않습니다."));
-        Manager manager = managerRepository.findById(request.getNewManagerNo())
+        Member member = memberRepository.findById(request.getNewManagerNo())
                 .orElseThrow(() -> new CustomExceptions.ManagerNotFoundException(request.getNewManagerNo() + "번 매니저는 존재하지 않습니다."));
 
-        existingExam.updateExamInfo(existingCenter, request.getNewExamDate(), manager, request.getNewRunningTime(),
+        existingExam.updateExamInfo(existingCenter, request.getNewExamDate(), member, request.getNewRunningTime(),
                 request.getNewExamType(), request.getNewMaxDirector());
     }
 

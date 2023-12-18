@@ -24,7 +24,7 @@ public class NoticeListResDto {
 
     public void toEntity(Notice notice){
         this.noticeNo = notice.getNo();
-        this.managerNo = notice.getManager().getNo();
+        this.managerNo = notice.getMember().getNo();
         this.title = notice.getTitle();
 //        this.content = notice.getContent();
         this.createdAt = notice.getCreatedAt();

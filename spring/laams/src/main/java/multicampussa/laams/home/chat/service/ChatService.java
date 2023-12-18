@@ -2,20 +2,16 @@ package multicampussa.laams.home.chat.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.home.chat.domain.ChatRoom;
 import multicampussa.laams.home.chat.domain.PrivateChatRoom;
-import multicampussa.laams.home.chat.dto.CreateChatRoomDto;
 import multicampussa.laams.home.chat.repository.ChatRepository;
 import multicampussa.laams.home.chat.repository.PrivateChatRepository;
-import multicampussa.laams.home.member.repository.MemberDirectorRepository;
-import multicampussa.laams.home.member.repository.MemberManagerRepository;
+import multicampussa.laams.home.member.domain.Member;
+import multicampussa.laams.home.member.repository.MemberRepository;
 import multicampussa.laams.manager.domain.center.Center;
 import multicampussa.laams.manager.domain.center.CenterRepository;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -29,7 +25,7 @@ import java.util.stream.Collectors;
 public class ChatService {
 
     private final ChatRepository chatRepository;
-    private final MemberDirectorRepository memberDirectorRepository;
+    private final MemberRepository memberRepository;
     private final CenterRepository centerRepository;
     private final ExamRepository examRepository;
     private final PrivateChatRepository privateChatRepository;
@@ -46,9 +42,9 @@ public class ChatService {
 
         if (centerName != null) {
             Long centerNo = centerRepository.findByName(centerName).get().getNo();
-            List<Director> directors = memberDirectorRepository.findByCenterNo(centerNo);
-            for (Director director : directors) {
-                result.add(chatRepository.findByRoomName(director.getId()));
+            List<Member> members = memberRepository.findByCenterNo(centerNo);
+            for (Member member : members) {
+                result.add(chatRepository.findByRoomName(member.getId()));
             }
         } else if (directorId != null) {
             result = chatRepository.findByRoomNameContaining(directorId);
@@ -88,14 +84,14 @@ public class ChatService {
             return privateChatRepository.findByRoomName(directorId);
         }
 
-        if (memberDirectorRepository.existsById(directorId)) {
+        if (memberRepository.existsById(directorId)) {
             roomName = directorId;
         } else {
             throw new IllegalArgumentException("해당 유저는 없습니다.");
         }
 
         PrivateChatRoom privateChatRoom = PrivateChatRoom.create(roomName);
-        privateChatRoom.setDirectorName(memberDirectorRepository.findById(directorId).get().getName());
+        privateChatRoom.setDirectorName(memberRepository.findById(directorId).get().getName());
         privateChatRepository.save(privateChatRoom);
 
         return privateChatRoom;

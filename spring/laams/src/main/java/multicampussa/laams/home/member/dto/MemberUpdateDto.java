@@ -1,7 +1,7 @@
 package multicampussa.laams.home.member.dto;
 
 import lombok.*;
-import multicampussa.laams.director.domain.director.Director;
+import multicampussa.laams.home.member.domain.Member;
 
 @Getter
 @Setter
@@ -14,8 +14,8 @@ public class MemberUpdateDto {
     private String phone;
     private String email;
 
-    public MemberUpdateDto(Director director) {
-        this.name = director.getName();
-        this.phone = director.getPhone();
+    public MemberUpdateDto(Member member) {
+        this.name = member.getName();
+        this.phone = member.getPhone();
     }
 }

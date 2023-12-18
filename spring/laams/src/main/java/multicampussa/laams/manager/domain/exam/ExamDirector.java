@@ -2,9 +2,9 @@ package multicampussa.laams.manager.domain.exam;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.director.dto.director.DirectorAttendanceDto;
 import multicampussa.laams.global.BaseTimeEntity;
+import multicampussa.laams.home.member.domain.Member;
 
 import javax.persistence.*;
 
@@ -22,8 +22,8 @@ public class ExamDirector extends BaseTimeEntity {
     private Exam exam;
 
     @ManyToOne
-    @JoinColumn(name = "director_no")
-    private Director director;
+    @JoinColumn(name = "member_no")
+    private Member member;
 
     private Boolean directorAttendance = false;
 
@@ -36,9 +36,9 @@ public class ExamDirector extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Confirm confirm = Confirm.대기;
 
-    public void setExam(Exam exam, Director director) {
+    public void setExam(Exam exam, Member member) {
         this.exam = exam;
-        this.director = director;
+        this.member = member;
     }
 
     public void updateAttendance(DirectorAttendanceDto directorAttendanceDto) {

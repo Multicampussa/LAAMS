@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
 import multicampussa.laams.home.member.dto.MemberDto;
 import multicampussa.laams.home.member.dto.MemberUpdateDto;
-import multicampussa.laams.manager.domain.center.Center;
-import multicampussa.laams.manager.domain.manager.Manager;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
