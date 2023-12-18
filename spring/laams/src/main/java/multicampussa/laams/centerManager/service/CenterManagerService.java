@@ -2,7 +2,6 @@ package multicampussa.laams.centerManager.service;
 
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.centerManager.dto.CenterExamDto;
-import multicampussa.laams.centerManager.dto.CenterExamListDto;
 import multicampussa.laams.centerManager.dto.ConfirmDirectorRequest;
 import multicampussa.laams.centerManager.dto.DirectorAssignmentRequestListResponse;
 import multicampussa.laams.global.CustomExceptions;
@@ -81,7 +80,7 @@ public class CenterManagerService {
             List<CenterExamDto> centerExamDtos = new ArrayList<>();
             Exam exam = examRepository.findByNo(examNo);
             if (exam != null) {
-                boolean isCenterManagerExists = exam.getCenter().getCenterManager().getId().equals(centerManagerId);
+                boolean isCenterManagerExists = exam.getCenter().getMember().getId().equals(centerManagerId);
                 if (isCenterManagerExists) {
                     List<ExamDirector> examDirectors = exam.getExamDirector();
                     for (ExamDirector examDirector : examDirectors) {

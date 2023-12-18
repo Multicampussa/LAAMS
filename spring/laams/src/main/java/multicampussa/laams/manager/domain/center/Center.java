@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
-import multicampussa.laams.centerManager.domain.CenterManager;
 import multicampussa.laams.home.member.domain.Member;
 
 import javax.persistence.*;
@@ -22,7 +21,7 @@ public class Center extends BaseTimeEntity {
 
     @OneToOne
     @JoinColumn(name = "center_manager_no")
-    private CenterManager centerManager;
+    private Member member;
 
     private String name;
 
@@ -32,7 +31,4 @@ public class Center extends BaseTimeEntity {
 
     @Column(length = 200)
     private String region;
-
-    @OneToMany(mappedBy = "center")
-    private List<Member> member = new ArrayList<>();
 }

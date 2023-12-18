@@ -6,8 +6,6 @@ import multicampussa.laams.home.member.domain.Member;
 import multicampussa.laams.home.member.dto.*;
 import multicampussa.laams.home.member.jwt.JwtTokenProvider;
 import multicampussa.laams.home.member.repository.MemberRepository;
-import multicampussa.laams.centerManager.domain.CenterManager;
-import multicampussa.laams.centerManager.domain.CenterManagerRepository;
 import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
 import org.springframework.http.HttpStatus;
@@ -26,31 +24,20 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final JavaMailSender javaMailSender;
-    private final CenterManagerRepository centerManagerRepository;
+    private final MemberRepository memberRepository;
     private final RedisUtil redisUtil;
     private final ExamExamineeRepository examExamineeRepository;
     private final Random random = new SecureRandom();
 
     // 회원가입
     public ResponseEntity<String> signUp(MemberSignUpDto memberSignUpDto) {
-        boolean centerManagerBoolean = false;
-        List<CenterManager> centerManagers = centerManagerRepository.findAll();
-        for (CenterManager centerManager : centerManagers) {
-            if (centerManager.getCode().equals(memberSignUpDto.getCenterManagerCode())) {
-                centerManagerBoolean = true;
-            }
-        }
+        List<Member> members = memberRepository.findAll();
 
         if (memberSignUpDto.getCenterManagerCode().equals("")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("센터 담당자 코드를 입력하세요.");
-        }
-
-        if (!centerManagerBoolean) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("센터 담당자 코드가 일치하지 않습니다.");
         }
 
         if ((memberRepository.existsByEmail(memberSignUpDto.getEmail()) && !memberRepository.findByEmail(memberSignUpDto.getEmail()).get().getIsDelete())
@@ -100,7 +87,7 @@ public class MemberService {
             throw new IllegalArgumentException("409: 이미 존재하는 이메일입니다.");
         }
 
-        Member member = new Member();
+        multicampussa.laams.home.member.domain.Member member = new multicampussa.laams.home.member.domain.Member();
         member.updateVerificationCode(email, code);
         redisUtil.set(email, member, 10);
 
@@ -129,7 +116,7 @@ public class MemberService {
 
     // 이메일 인증코드 확인
     public void confirmEmailVerification(String email, String code) {
-        Member member = redisUtil.get(email, Member.class);
+        multicampussa.laams.home.member.domain.Member member = redisUtil.get(email, multicampussa.laams.home.member.domain.Member.class);
 
         if (member == null) {
             throw new RuntimeException("인증 시간이 초과되었습니다.");
@@ -160,7 +147,7 @@ public class MemberService {
 
     // 운영자 정보 불러오기
     public MemberDto ManagerInfo(String id) {
-        return Member.toMemberDto(memberRepository.findById(id).get());
+        return multicampussa.laams.home.member.domain.Member.toMemberDto(memberRepository.findById(id).get());
     }
 
     // 센터담당자 정보 불러오기
@@ -171,9 +158,9 @@ public class MemberService {
     // 로그인 및 토큰 발급
     public ResponseEntity<Map<String, Object>> signIn(LoginRequestDto loginRequestDto, String refreshToken) {
         Map<String, Object> response = new HashMap<>();
-        Optional<Member> directorOptional;
-        Optional<Member> managerOptional;
-        Optional<CenterManager> centerManagerOptional;
+        Optional<multicampussa.laams.home.member.domain.Member> directorOptional;
+        Optional<multicampussa.laams.home.member.domain.Member> managerOptional;
+        Optional<Member> centerManagerOptional;
 
         if (loginRequestDto.getAuthority().equals("ROLE_DIRECTOR")) {
             if (memberRepository.existsById(loginRequestDto.getId())) {
@@ -183,7 +170,7 @@ public class MemberService {
 
                 if (!directorOptional.get().getIsDelete()) {
                     if (directorOptional.isPresent()) {
-                        Member member = directorOptional.get();
+                        multicampussa.laams.home.member.domain.Member member = directorOptional.get();
                         if (passwordEncoder.matches(loginRequestDto.getPw(), member.getPw())) {
                             response.put("message", "로그인에 성공하였습니다.");
                             return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -209,7 +196,7 @@ public class MemberService {
                 managerOptional.get().updateRefreshToken(refreshToken);
                 memberRepository.save(managerOptional.get());
                 if (managerOptional.isPresent()) {
-                    Member member = managerOptional.get();
+                    multicampussa.laams.home.member.domain.Member member = managerOptional.get();
                     if (passwordEncoder.matches(loginRequestDto.getPw(), member.getPw())) {
                         response.put("message", "로그인에 성공하였습니다.");
                         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -226,13 +213,13 @@ public class MemberService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
         } else if (loginRequestDto.getAuthority().equals("ROLE_CENTER_MANAGER")) {
-            if (centerManagerRepository.existsById(loginRequestDto.getId())) {
-                centerManagerOptional = centerManagerRepository.findById(loginRequestDto.getId());
+            if (memberRepository.existsById(loginRequestDto.getId())) {
+                centerManagerOptional = memberRepository.findById(loginRequestDto.getId());
                 centerManagerOptional.get().updateRefreshToken(refreshToken);
-                centerManagerRepository.save(centerManagerOptional.get());
+                memberRepository.save(centerManagerOptional.get());
                 if (centerManagerOptional.isPresent()) {
-                    CenterManager centerManager = centerManagerOptional.get();
-                    if (passwordEncoder.matches(loginRequestDto.getPw(), centerManager.getPw())) {
+                    Member member = centerManagerOptional.get();
+                    if (passwordEncoder.matches(loginRequestDto.getPw(), member.getPw())) {
                         response.put("message", "로그인에 성공하였습니다.");
                         return ResponseEntity.status(HttpStatus.OK).body(response);
                     } else {
@@ -256,11 +243,11 @@ public class MemberService {
     // 운영자가 감독관 또는 운영자 또는 센터담당자의 정보를 조회하는 서비스
     public MemberDto UserInfo(String memberId) {
         if (memberRepository.existsById(memberId)) {
-            return Member.toMemberDto(memberRepository.findById(memberId).get());
+            return multicampussa.laams.home.member.domain.Member.toMemberDto(memberRepository.findById(memberId).get());
+        } else if (memberRepository.existsById(memberId)) {
+            return multicampussa.laams.home.member.domain.Member.toMemberDto(memberRepository.findById(memberId).get());
         } else if (memberRepository.existsById(memberId)) {
             return Member.toMemberDto(memberRepository.findById(memberId).get());
-        } else if (centerManagerRepository.existsById(memberId)) {
-            return CenterManager.toMemberDto(centerManagerRepository.findById(memberId).get());
         } else {
             throw new IllegalArgumentException("해당 아이디는 존재하지 않습니다.");
         }
@@ -269,9 +256,9 @@ public class MemberService {
     // 회원 정보를 수정하는 서비스
     public ResponseEntity<Map<String, Object>> updateMemberByUser(String id, String authority, MemberUpdateDto memberUpdateDto) {
         Map<String, Object> response = new HashMap<>();
-        Member oldMember;
-        Member member;
-        CenterManager centerManager;
+        multicampussa.laams.home.member.domain.Member oldMember;
+        multicampussa.laams.home.member.domain.Member member;
+        Member centerManager;
 
         // DB에 없는 ID를 검색하려고 하면 IllegalArgumentException
         try {
@@ -285,12 +272,12 @@ public class MemberService {
                         return ResponseEntity.ok(response);
                     }
 
-                    Member newMember = redisUtil.get(memberUpdateDto.getEmail(), Member.class);
+                    multicampussa.laams.home.member.domain.Member newMember = redisUtil.get(memberUpdateDto.getEmail(), multicampussa.laams.home.member.domain.Member.class);
 
                     if (!oldMember.getEmail().equals(memberUpdateDto.getEmail()) &&
                             (memberRepository.existsByEmail(memberUpdateDto.getEmail()) ||
                                     memberRepository.existsByEmail(memberUpdateDto.getEmail()) ||
-                                    centerManagerRepository.existsByEmail(memberUpdateDto.getEmail()))) {
+                                    memberRepository.existsByEmail(memberUpdateDto.getEmail()))) {
                         response.put("message", "이미 존재하는 이메일입니다.");
                         response.put("status", HttpStatus.BAD_REQUEST.value());
 
@@ -333,7 +320,7 @@ public class MemberService {
                     if (!member.getEmail().equals(memberUpdateDto.getEmail()) &&
                             (memberRepository.existsByEmail(memberUpdateDto.getEmail()) ||
                                     memberRepository.existsByEmail(memberUpdateDto.getEmail()) ||
-                                    centerManagerRepository.existsByEmail(memberUpdateDto.getEmail()))) {
+                                    memberRepository.existsByEmail(memberUpdateDto.getEmail()))) {
                         response.put("message", "이미 존재하는 이메일입니다.");
                         response.put("status", HttpStatus.BAD_REQUEST.value());
 
@@ -361,7 +348,7 @@ public class MemberService {
                     if (!oldMember.getEmail().equals(memberUpdateDto.getEmail()) &&
                             (memberRepository.existsByEmail(memberUpdateDto.getEmail()) ||
                                     memberRepository.existsByEmail(memberUpdateDto.getEmail()) ||
-                                    centerManagerRepository.existsByEmail(memberUpdateDto.getEmail()))) {
+                                    memberRepository.existsByEmail(memberUpdateDto.getEmail()))) {
                         response.put("message", "이미 존재하는 이메일입니다.");
                         response.put("status", HttpStatus.BAD_REQUEST.value());
 
@@ -376,7 +363,7 @@ public class MemberService {
                     response.put("status", "success");
 
                     return ResponseEntity.ok(response);
-                } else if (centerManagerRepository.existsById(memberUpdateDto.getId())) {
+                } else if (memberRepository.existsById(memberUpdateDto.getId())) {
                     response.put("message", "접근 권한이 없습니다.");
                     response.put("code", HttpStatus.UNAUTHORIZED.value());
 
@@ -406,7 +393,7 @@ public class MemberService {
                     if (!oldMember.getEmail().equals(memberUpdateDto.getEmail()) &&
                             (memberRepository.existsByEmail(memberUpdateDto.getEmail()) ||
                                     memberRepository.existsByEmail(memberUpdateDto.getEmail()) ||
-                                    centerManagerRepository.existsByEmail(memberUpdateDto.getEmail()))) {
+                                    memberRepository.existsByEmail(memberUpdateDto.getEmail()))) {
                         response.put("message", "이미 존재하는 이메일입니다.");
                         response.put("status", HttpStatus.BAD_REQUEST.value());
 
@@ -421,7 +408,7 @@ public class MemberService {
                     response.put("status", "success");
 
                     return ResponseEntity.ok(response);
-                } else if (centerManagerRepository.existsById(memberUpdateDto.getId())) {
+                } else if (memberRepository.existsById(memberUpdateDto.getId())) {
                     if (!memberUpdateDto.getId().equals(id)) {
                         response.put("message", "접근 권한이 없습니다.");
                         response.put("status", HttpStatus.UNAUTHORIZED.value());
@@ -429,12 +416,12 @@ public class MemberService {
                         return ResponseEntity.ok(response);
                     }
 
-                    centerManager = centerManagerRepository.findById(id).get();
+                    centerManager = memberRepository.findById(id).get();
 
                     if (!centerManager.getEmail().equals(memberUpdateDto.getEmail()) &&
                             (memberRepository.existsByEmail(memberUpdateDto.getEmail()) ||
                                     memberRepository.existsByEmail(memberUpdateDto.getEmail()) ||
-                                    centerManagerRepository.existsByEmail(memberUpdateDto.getEmail()))) {
+                                    memberRepository.existsByEmail(memberUpdateDto.getEmail()))) {
                         response.put("message", "이미 존재하는 이메일입니다.");
                         response.put("status", HttpStatus.BAD_REQUEST.value());
 
@@ -442,7 +429,7 @@ public class MemberService {
                     }
 
                     centerManager.update(memberUpdateDto);
-                    centerManagerRepository.save(centerManager);
+                    memberRepository.save(centerManager);
 
                     response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
                     response.put("code", HttpStatus.OK.value());
@@ -471,12 +458,23 @@ public class MemberService {
     // 비밀번호 변경
     public void changePassword(MemberUpdatePasswordDto requestDto) {
         if (memberRepository.existsById(requestDto.getId())) {
-            Member member = memberRepository.findById(requestDto.getId())
+            multicampussa.laams.home.member.domain.Member member = memberRepository.findById(requestDto.getId())
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
 
             if (member.getIsDelete()) {
                 throw new IllegalArgumentException("해당 계정은 삭제되었습니다.");
             }
+
+            // 기존 비밀번호 안맞으면 Exception
+            if (!passwordEncoder.matches(requestDto.getOldPassword(), member.getPw())) {
+                throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
+            }
+
+            member.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
+            memberRepository.save(member);
+        } else if (memberRepository.existsById(requestDto.getId())) {
+            multicampussa.laams.home.member.domain.Member member = memberRepository.findById(requestDto.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
 
             // 기존 비밀번호 안맞으면 Exception
             if (!passwordEncoder.matches(requestDto.getOldPassword(), member.getPw())) {
@@ -496,17 +494,6 @@ public class MemberService {
 
             member.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
             memberRepository.save(member);
-        } else if (centerManagerRepository.existsById(requestDto.getId())) {
-            CenterManager centerManager = centerManagerRepository.findById(requestDto.getId())
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
-
-            // 기존 비밀번호 안맞으면 Exception
-            if (!passwordEncoder.matches(requestDto.getOldPassword(), centerManager.getPw())) {
-                throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
-            }
-
-            centerManager.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
-            centerManagerRepository.save(centerManager);
         } else {
             throw new IllegalArgumentException("authority를 다시 입력해주세요.");
         }
@@ -514,7 +501,7 @@ public class MemberService {
 
     // 회원 탈퇴
     public void deleteMember(String id) {
-        Member member = memberRepository.findById(id)
+        multicampussa.laams.home.member.domain.Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(id + "인 ID는 존재하지 않습니다."));
 
         if (member.getIsDelete()) {
@@ -528,9 +515,9 @@ public class MemberService {
     // 아이디 찾기
     public MemberInfoDto findId(String email, String memberName) {
         MemberInfoDto responseDto = new MemberInfoDto();
-        Member member;
-        Member manager;
-        CenterManager centerManager;
+        multicampussa.laams.home.member.domain.Member member;
+        multicampussa.laams.home.member.domain.Member manager;
+        Member centerManager;
 
         if (memberRepository.existsByEmail(email)) {
             member = memberRepository.findByEmail(email).get();
@@ -544,8 +531,8 @@ public class MemberService {
                 throw new IllegalArgumentException("이름과 이메일이 일치하지 않습니다.");
             }
             return responseDto.fromEntityByManager(manager);
-        } else if (centerManagerRepository.existsByEmail(email)) {
-            centerManager = centerManagerRepository.findByEmail(email).get();
+        } else if (memberRepository.existsByEmail(email)) {
+            centerManager = memberRepository.findByEmail(email).get();
             if (!centerManager.getName().equals(memberName)) {
                 throw new IllegalArgumentException("이름과 이메일이 일치하지 않습니다.");
             }
@@ -558,9 +545,9 @@ public class MemberService {
     // 비밀번호 찾기
     public void findPassword(FindPasswordDto findPasswordDto) {
         String tempPassword = UUID.randomUUID().toString().split("-")[0];
-        Member member;
-        Member manager;
-        CenterManager centerManager;
+        multicampussa.laams.home.member.domain.Member member;
+        multicampussa.laams.home.member.domain.Member manager;
+        Member centerManager;
 
         if (memberRepository.existsById(findPasswordDto.getId())) {
             member = memberRepository.findById(findPasswordDto.getId()).get();
@@ -578,14 +565,14 @@ public class MemberService {
 
             manager.updatePassword(passwordEncoder.encode(tempPassword));
             memberRepository.save(manager);
-        } else if (centerManagerRepository.existsById(findPasswordDto.getId())) {
-            centerManager = centerManagerRepository.findById(findPasswordDto.getId()).get();
+        } else if (memberRepository.existsById(findPasswordDto.getId())) {
+            centerManager = memberRepository.findById(findPasswordDto.getId()).get();
             if (!centerManager.getEmail().equals(findPasswordDto.getEmail())) {
                 throw new IllegalArgumentException("아이디와 이메일이 일치하지 않습니다.");
             }
 
             centerManager.updatePassword(passwordEncoder.encode(tempPassword));
-            centerManagerRepository.save(centerManager);
+            memberRepository.save(centerManager);
         } else {
             throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
         }
@@ -606,7 +593,7 @@ public class MemberService {
 
     // 해당 아이디가 있는지 확인하는 로직
     public boolean isPresentId(String id) {
-        return memberRepository.existsById(id) || memberRepository.existsById(id) || centerManagerRepository.existsById(id);
+        return memberRepository.existsById(id) || memberRepository.existsById(id) || memberRepository.existsById(id);
     }
 
     // 응시자 정보가 일치하는지 확인하는 로직
@@ -622,7 +609,7 @@ public class MemberService {
     // 모든 감독관의 ID를 뽑아오는 로직
     public List<String> getDirectors() {
         List<String> directors = new ArrayList<>();
-        for (Member member : memberRepository.findAll()) {
+        for (multicampussa.laams.home.member.domain.Member member : memberRepository.findAll()) {
             directors.add(member.getId());
         }
         return directors;
