@@ -2,6 +2,7 @@ package multicampussa.laams.centerManager.service;
 
 import lombok.RequiredArgsConstructor;
 import multicampussa.laams.centerManager.dto.CenterExamDto;
+import multicampussa.laams.centerManager.dto.CenterExamListDto;
 import multicampussa.laams.centerManager.dto.ConfirmDirectorRequest;
 import multicampussa.laams.centerManager.dto.DirectorAssignmentRequestListResponse;
 import multicampussa.laams.global.CustomExceptions;
@@ -59,20 +60,20 @@ public class CenterManagerService {
     }
 
 
-//    @Transactional
-//    public List<CenterExamListDto> getCenterExamList(String centerManagerId, int year, int month, int day, String authority){
-//        if(authority.equals("ROLE_CENTER_MANAGER")){
-//            List<CenterExamListDto> centerExamListDtos = new ArrayList<>();
-//            List<Exam> exams = centerRepository.findAllByCenterManagerIdContainingMonthAndDay(centerManagerId, year, month, day);
-//            for(Exam exam : exams){
-//                int cntConfirmDirector = examDirectorRepository.countByConfirm(exam.getNo());
-//                centerExamListDtos.add(new CenterExamListDto(exam, cntConfirmDirector));
-//            }
-//            return centerExamListDtos;
-//        } else {
-//            throw new IllegalArgumentException("접근 권한이 없습니다.");
-//        }
-//    }
+    @Transactional
+    public List<CenterExamListDto> getCenterExamList(String centerManagerId, int year, int month, int day, String authority){
+        if(authority.equals("ROLE_CENTER_MANAGER")){
+            List<CenterExamListDto> centerExamListDtos = new ArrayList<>();
+            List<Exam> exams = centerRepository.findAllByCenterManagerIdContainingMonthAndDay(centerManagerId, year, month, day);
+            for(Exam exam : exams){
+                int cntConfirmDirector = examDirectorRepository.countByConfirm(exam.getNo());
+                centerExamListDtos.add(new CenterExamListDto(exam, cntConfirmDirector));
+            }
+            return centerExamListDtos;
+        } else {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+    }
 
     @Transactional
     public List<CenterExamDto> getCenterExam(String centerManagerId, Long examNo, String authority) {
