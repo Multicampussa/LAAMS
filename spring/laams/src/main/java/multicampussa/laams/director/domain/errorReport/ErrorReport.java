@@ -3,9 +3,9 @@ package multicampussa.laams.director.domain.errorReport;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.director.dto.errorReport.ErrorReportCreateDto;
 import multicampussa.laams.global.BaseTimeEntity;
+import multicampussa.laams.home.member.domain.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ public class ErrorReport extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "director_no")
-    private Director director;
+    private Member member;
 
     private String title;
 
@@ -32,11 +32,11 @@ public class ErrorReport extends BaseTimeEntity {
     private String type;
     private LocalDateTime errorTime;
 
-    public void toEntity(ErrorReportCreateDto errorReportCreateDto, Director director) {
+    public void toEntity(ErrorReportCreateDto errorReportCreateDto, Member member) {
         this.title = errorReportCreateDto.getTitle();
         this.content = errorReportCreateDto.getContent();
         this.type = errorReportCreateDto.getType();
         this.errorTime = errorReportCreateDto.getErrorTime();
-        this.director = director;
+        this.member = member;
     }
 }

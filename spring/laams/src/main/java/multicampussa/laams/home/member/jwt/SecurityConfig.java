@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://k9d101.p.ssafy.io", "https://ssapicofficial.netlify.app"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "[서버주소]", "https://ssapicofficial.netlify.app"));
         configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);

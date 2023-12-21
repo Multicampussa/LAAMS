@@ -24,7 +24,7 @@ public class ExamDetailResponse {
 
     public ExamDetailResponse(Center center, Exam exam, int examineeNum, int attendanceNum, int compensationNum, List<DirectorListResponse> directors) {
         this.centerName = center.getName();
-        this.centerManagerName = center.getCenterManager().getName();
+        this.centerManagerName = center.getMember().getName();
         this.examType = exam.getExamType();
         this.examLanguage = exam.getExamLanguage();
         this.examDate = exam.getExamDate();

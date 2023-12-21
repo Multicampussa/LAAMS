@@ -1,0 +1,252 @@
+.director-home{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &-calendar-title{
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2.5rem;
+        font-weight: 900;
+        gap: 2rem;
+        top: -5.5rem;
+        right: 0rem;
+        
+    }
+    &-calendar-prev{
+        width: 3rem;
+        height: 3rem;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-image: url("../../../assets/images/iconamoon_arrow-left-2-duotone.svg");
+    }
+    &-calendar-next{
+        width: 3rem;
+        height: 3rem;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-image: url("../../../assets/images/iconamoon_arrow-right-2-duotone.svg");
+    }
+    &-container{
+        width: 80%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding-bottom: 5rem;
+        box-sizing: border-box;
+    }
+    &-task{
+        width: 60%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        &-title{
+            height: 7rem;
+            box-sizing: border-box;
+            font-size: 3rem;
+            font-weight: 700;
+            padding: 1rem 0rem 2rem 0rem;
+        }
+        &-calendar{
+            flex: 1;
+            position: relative;
+        }
+    }
+    &-todo{
+        width: 35%;
+        height: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        &-title{
+            height: 7rem;
+            box-sizing: border-box;
+            font-size: 3rem;
+            font-weight: 700;
+            padding: 1rem 0rem 2rem 0rem;
+        }
+        &-box{
+            width: 100%;
+            flex: 1;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 1rem;
+            box-sizing: border-box;
+            padding: 1rem 2rem;
+            gap:1rem;
+            &-btn{
+                width: 100%;
+                height: 5rem;
+                background-color: $color-blue;
+                color: white;
+                font-size: 2rem;
+                border-radius: 1rem;
+                font-weight: 600;
+            }
+            &-items{
+                width: 100%;
+                height: 3rem;
+                line-height: 3rem;
+                border-bottom: 0.1rem solid $color-gray-light;
+                display: flex;
+                justify-content: space-between;
+            &-text:hover{
+                cursor: pointer;
+                color: $color-blue;
+            }
+            &-text{
+                width: 70%;
+                font-size: 1.5rem;
+                font-weight: 600;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                &-region{
+                    width: 25%;
+                    font-size: 1.3rem;
+                    text-align: end;
+                }
+                &-none{
+                    font-size: 2rem;
+                }
+            }
+            }
+
+
+        }
+
+    }
+    &-notice{
+        width: 35%;
+        height: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        &-flex{
+            height: 7rem;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0rem 2rem 0rem;
+            align-items: flex-end;
+            &-title{
+                font-size: 3rem;
+                font-weight: 700;
+                text-overflow: ellipsis;
+            }
+            &-additional{
+                font-size: 2rem;
+                font-weight: 600;
+            }
+            &-additional:hover{
+                cursor: pointer;
+                color: $color-blue;
+            }
+        }
+        &-box{
+            width: 100%;
+            flex: 1;
+            background-color: white;
+            display: flex;
+            overflow-y: auto;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 1rem;
+            box-sizing: border-box;
+            padding: 1rem 2rem;
+            gap: 1rem;
+            &-items{
+                width: 100%;
+                height: 3rem;
+                line-height: 3rem;
+                border-bottom: 0.1rem solid $color-gray-light;
+                display: flex;
+                
+                justify-content: space-between;
+                box-sizing: border-box;
+            &-title{
+                width: 65%;
+                font-size: 1.5rem;
+                font-weight: 600;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                
+            }
+            &-title:hover{
+                cursor: pointer;
+                color: $color-blue;
+            }
+            &-time{
+                width: 35%;
+                font-size: 1.1rem;
+                text-align: end;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            }
+        }
+    }
+    &-btn-hidden{
+        display: none;
+    }
+}
+
+@include tablet{
+    .director-home-todo-box-btn{
+        font-size: 1.5rem;
+    }
+    .director-home-container{
+        width: 98%;
+    }
+}
+
+@include mobile{
+    .director-home{
+        overflow-y: hidden;
+        padding: 0;
+        &-container{
+            width: 95%;
+            gap:1rem
+        }
+        &-calendar-title{
+            font-size: 2rem;
+            top: -4rem;
+            font-weight: 700;
+        }
+        &-calendar-prev, &-calendar-next{
+            width: 2rem;
+            height: 2rem;
+        }
+        &-task{
+            width: 100%;
+            height: 90%;
+            &-title{
+                font-size: 2rem;
+                padding: 1rem 0 0 0;
+                height: 5rem;
+            }
+        }
+        &-btn-hidden{
+            display: inline;
+            width: 100%;
+            height: 4rem;
+            background-color: $color-blue;
+            color: white;
+            font-size: 2rem;
+            border-radius: 1rem;
+            font-weight: 600;
+        }
+        &-notice,&-todo{
+            display: none;
+        }
+    }
+}

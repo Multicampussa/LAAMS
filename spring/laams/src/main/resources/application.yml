@@ -57,7 +57,7 @@ spring:
   redis:
     host: ENC(fQWwlcv7RQvGG3JDBL9NDchSFa5g13j/)
     port: ENC(v1zBzKJHhtr3Vigt8qnxRQ==)
-    password: END(so/mouY4p4lkQV0jvBhjuw32MFr3LR0P)
+    password: ENC(so/mouY4p4lkQV0jvBhjuw32MFr3LR0P)
 
   servlet:
     multipart:

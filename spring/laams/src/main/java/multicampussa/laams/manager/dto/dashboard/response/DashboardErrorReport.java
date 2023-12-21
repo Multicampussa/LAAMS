@@ -13,8 +13,8 @@ public class DashboardErrorReport {
 
     public DashboardErrorReport(ErrorReport errorReport) {
         this.errorReportNo = errorReport.getNo();
-        this.directorNo = errorReport.getDirector().getNo();
-        this.directorName = errorReport.getDirector().getName();
+        this.directorNo = errorReport.getMember().getNo();
+        this.directorName = errorReport.getMember().getName();
         this.title = errorReport.getTitle();
         this.errorType = errorReport.getType();
     }

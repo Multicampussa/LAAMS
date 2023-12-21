@@ -1,0 +1,148 @@
+.calendar{
+  box-sizing: border-box;
+  background-color: $color-white;
+  border-radius: 1rem;
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  &-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: 900;
+    gap: 2rem;
+  }
+  &-prev{
+    width: 2rem;
+    height: 2rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("../../assets/images/Prev.svg");
+  }
+  &-next{
+    width: 2rem;
+    height: 2rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("../../assets/images/Next.svg");
+  }
+  &-date{
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    font-size: 1.5rem;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    border-radius: 1rem 1rem 0 0;
+    grid-column-gap: 0.1rem;
+    overflow: hidden;
+    &-item{
+      background-color: $color-black-light;
+      color: $color-white;
+    }
+  }
+  &-week{
+    &-title{
+      color: $color-red;
+      font-size: 1.5rem;
+      font-weight: 900;
+    }
+  }
+  &-day{
+    border: 1px solid $color-gray-light;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    display: flex;
+    @include desktop{
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    @include tablet{
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    @include mobile{
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    &-title{
+      font-size: 1.5rem;
+      font-weight: 900;
+    }
+    &-icons{
+      display: flex;
+      @include desktop{
+        flex-direction: row;
+      }
+      @include tablet{
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      @include mobile{
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+    }
+    &-errorreport{
+      width: 2rem;
+      height: 1.7rem;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../../assets/images/errorreport.svg");
+    }
+    &-assignment{
+      width: 2rem;
+      height: 1.7rem;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../../assets/images/assignment.svg");
+    }
+    &-compensation{
+      width: 2rem;
+      height: 1.7rem;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../../assets/images/compensation.svg");
+    }
+  }
+  &-content-4{
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    grid-template-rows: repeat(4,1fr);
+  }
+  &-content-5{
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    grid-template-rows: repeat(5,1fr);
+  }
+  &-content-6{
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    grid-template-rows: repeat(6,1fr);
+  }
+}
+
+@include mobile{
+  .calendar{
+    padding: 1rem;
+    &-title{
+      font-size: 1.5rem;
+    }
+  }
+}

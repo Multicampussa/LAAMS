@@ -1,0 +1,290 @@
+.header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5rem;
+  background-color: $color-black-light;
+  color: $color-white;
+  box-sizing: border-box;
+  padding: 0 1rem;
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding-right: 5rem;
+
+  &-home{
+    display: block;
+    width: 10rem;
+    height: 100%;
+    background-image: url("../../assets/images/Logo-white.svg");
+    background-repeat: no-repeat;
+  }
+  &-btn{
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  &-bell{
+    position: fixed;
+    right: 0;
+    z-index: 999;
+    width: 5rem;
+    height: 5rem;
+    background-image: url("../../assets/images/Bell-white.svg");
+    background-repeat: no-repeat;
+    background-size: 4rem;
+    background-position: center;
+    background-color: $color-black-light;
+    &-btn{
+      cursor: pointer;
+      width: 100%;
+      height: 3rem;
+      font-size: 1.5rem;
+      border-radius: 0.5rem;
+      background-color: $color-blue;
+      color: $color-white;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    &-boxclose{
+      position: absolute;
+      z-index: 1;
+      top: 5rem;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.3s;
+      transition-timing-function: ease-out;
+      transform: translateY(calc(-100% - 3rem));
+
+      background-color: $color-white;
+      box-sizing: border-box;
+      padding: 0 1rem 1rem 1rem;
+      border-radius: 0 0 1rem 1rem;
+      border: 0.1rem solid $color-gray-light;
+
+      max-height: 20rem;
+      overflow-y: auto;
+    }
+    &-boxopen{
+      position: absolute;
+      top: 5rem;
+      right: 0;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      max-height: 20rem;
+      overflow-y: auto;
+
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.3s;
+      transition-timing-function: ease-out;
+      transform: translateY(0);
+
+      background-color: $color-white;
+      box-sizing: border-box;
+      padding: 0 1rem 1rem 1rem;
+      border-radius: 0 0 1rem 1rem;
+      border: 0.1rem solid $color-gray-light;
+    }
+    &-item{
+      @include desktop{
+        width: 30vw;
+      }
+      @include tablet{
+        width: 40vw;
+      }
+      @include mobile{
+        width: 50vw;
+      }
+      flex-shrink: 0;
+      font-size: 1.5rem;
+      height: 4rem;
+      line-height: 4rem;
+      font-weight: 900;
+      background-color: $color-white;
+      box-sizing: border-box;
+      padding-left: 1rem;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      word-break: break-all;
+    }
+  }
+  &-menu-box{
+    &-close{
+      position: absolute;
+      z-index: 998;
+      border: 0.1rem solid $color-gray-light;
+      border-radius: 0 0 1rem 1rem;
+      overflow: hidden;
+
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.3s;
+      transition-timing-function: ease-out;
+      transform: translateY(calc(-100% - 5rem));
+    }
+    &-open{
+      z-index: 998;
+      position: absolute;
+      border: 0.1rem solid $color-gray-light;
+      border-radius: 0 0 1rem 1rem;
+      overflow: hidden;
+      top: 5rem;
+
+      will-change: transform;
+      transition-property: transform;
+      transition-duration: 0.3s;
+      transition-timing-function: ease-out;
+      transform: translateY(0);
+    }
+    &-item{
+      cursor: pointer;
+      display: block;
+      height: 9rem;
+      font-size: 2rem;
+      text-align: center;
+      line-height: 9rem;
+      background-color: $color-white;
+      color: $color-black;
+    }
+    &-item:active,&-item:hover{
+      color: $color-black;
+    }
+  }
+  &-menu-close::before,::after{
+    width: 2rem;
+    height: 0.3rem;
+    background-color: $color-white;
+  }
+  &-menu-close{
+    width: 5rem;
+    height: 5rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+
+    &::before{
+      margin-top: -1rem;
+    }
+    &::after{
+      margin-top: 1rem;
+    }
+    &::before,&::after{
+      position: absolute;
+      content: "";
+      width: 3rem;
+      height: 0.3rem;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background-color: $color-white;
+
+      will-change: transform, margin-top;
+      transition-property: transform, margin-top;
+      transition-duration: 150ms;
+      transition-timing-function: ease-out;
+      transform: translate(-50%, -50%) rotateZ(0);
+    }
+    & span{
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+
+      width: 3rem;
+      height: 0.3rem;
+      background-color: $color-white;
+    }
+  }
+  &-menu-open{
+    width: 5rem;
+    height: 5rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    &::before{
+      transform: translate(-50%, -50%) rotateZ(45deg);
+    }
+    &::after{
+      transform: translate(-50%, -50%) rotateZ(-45deg);
+    }
+    &::before,&::after{
+      position: absolute;
+      content: "";
+      width: 3rem;
+      height: 0.3rem;
+      left: 50%;
+      top: 50%;
+      background-color: $color-white;
+
+      will-change: transform, margin-top;
+      transition-property: transform, margin-top;
+      transition-duration: 150ms;
+      transition-timing-function: ease-out;
+    }
+    & span{
+      width: 0;
+    }
+  }
+}
+
+@include mobile {
+  .header{
+    &-menu-box{
+      width: 100%;
+      &-item{
+        width: 100%;
+      }
+      &-open{
+        width: 100%;
+      }
+      &-close{
+        width: 100%;
+      }
+    }
+  }
+}
+
+@include tablet {
+  .header{
+    &-menu-box{
+      width: 100%;
+      &-item{
+        width: 100%;
+      }
+      &-open{
+        width: 100%;
+      }
+      &-close{
+        width: 100%;
+      }
+    }
+  }
+}
+
+@include desktop {
+  .header{
+    &-menu-box{
+      width: 19rem;
+      &-item{
+        width: 100%;
+      }
+      &-close{
+        right: 5rem;
+        width: 19rem;
+      }
+      &-open{
+        right: 5rem;
+        width: 19rem;
+      }
+    }
+  }
+}

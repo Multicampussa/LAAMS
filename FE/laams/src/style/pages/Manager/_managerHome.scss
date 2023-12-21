@@ -1,0 +1,15 @@
+.manager-home{
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  @include desktop{
+    padding: 2% 20%;
+  }
+  @include tablet{
+    padding: 2% 10%;
+  }
+  @include mobile{
+    padding: 0;
+  }
+}
+

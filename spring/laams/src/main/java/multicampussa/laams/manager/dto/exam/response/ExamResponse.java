@@ -21,8 +21,8 @@ public class ExamResponse {
         this.no = exam.getNo();
         this.centerName = exam.getCenter().getName();
         this.examDate = exam.getExamDate();
-        this.managerNo = exam.getManager().getNo();
-        this.managerName = exam.getManager().getName();
+        this.managerNo = exam.getMember().getNo();
+        this.managerName = exam.getMember().getName();
         this.examType = exam.getExamType();
         this.examLanguage = exam.getExamLanguage();
         this.maxDirector = exam.getMaxDirector();
