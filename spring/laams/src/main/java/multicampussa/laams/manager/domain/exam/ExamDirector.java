@@ -22,7 +22,7 @@ public class ExamDirector extends BaseTimeEntity {
     private Exam exam;
 
     @ManyToOne
-    @JoinColumn(name = "member_no")
+    @JoinColumn(name = "director_no")
     private Member member;
 
     private Boolean directorAttendance = false;
