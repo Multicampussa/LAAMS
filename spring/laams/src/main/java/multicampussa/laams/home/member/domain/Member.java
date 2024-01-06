@@ -61,6 +61,7 @@ public class Member extends BaseTimeEntity {
         this.pw = encodedPassword;
         this.isDelete = false;
         this.id = memberSignUpDto.getId();
+        this.role = memberSignUpDto.getRole();
     }
 
     public void updateVerificationCode(String email, String code) {
