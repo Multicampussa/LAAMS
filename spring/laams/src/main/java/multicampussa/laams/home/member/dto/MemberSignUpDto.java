@@ -13,7 +13,6 @@ public class MemberSignUpDto {
     private String name;
     private String pw;
     private String phone;
-    private String centerManagerCode;
 
 //    public MemberSignUpDto(Member member) {
 //        this.email = member.getEmail();

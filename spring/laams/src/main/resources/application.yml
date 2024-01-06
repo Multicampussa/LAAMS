@@ -24,7 +24,7 @@ spring:
     host: ENC(d6WPZJ8tU+jagrMsobC8dyb+Y4lIXhpT)
     port: ENC(rz5xBjOa42ZQgmh49IJ3lQ==)
     username: ENC(rL5BS6PCrTZ5IAJqBlXEEKI1HmjeXEoIiiyG56bix18=)
-    password: ENC(+FD8zxyH8mWCMPdtQOLqL7P6TFhDqjSLlPI//XQelNo=)
+    password: ENC(6UCsQl19a0eez8Qh/y1WTBbTblS/C0vY5uJPkOcvv/o=)
     properties:
       mail:
         smtp:

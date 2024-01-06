@@ -11,8 +11,8 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<multicampussa.laams.home.member.domain.Member, Long> {
     boolean existsByEmail(String email);
     boolean existsById(String id);
-    Optional<multicampussa.laams.home.member.domain.Member> findById(String id);
-    Optional<multicampussa.laams.home.member.domain.Member> findByEmail(String email);
+    Optional<Member> findById(String id);
+    Optional<Member> findByEmail(String email);
 
     List<Member> findByCenterNo(Long centerNo);
 }
