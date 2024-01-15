@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class MemberDto {
     private Long memberNo;
-
+    private String id;
     private String email;
     private String name;
     private String phone;
@@ -21,15 +21,18 @@ public class MemberDto {
     private LocalDateTime createdAt;
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime updatedAt;
+    private String role;
 
     @Builder
     public MemberDto(Member member) {
         this.memberNo = member.getNo();
         this.email = member.getEmail();
         this.name = member.getName();
+        this.id = member.getId();
         this.phone = member.getPhone();
         this.createdAt = member.getCreatedAt();
         this.updatedAt = member.getUpdatedAt();
+        this.role = member.getRole();
     }
 
     public static MemberDto fromEntityByDirector(Member member) {
