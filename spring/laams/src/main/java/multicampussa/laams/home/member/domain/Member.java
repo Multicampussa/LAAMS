@@ -82,6 +82,7 @@ public class Member extends BaseTimeEntity {
                 .phone(member.getPhone())
                 .createdAt(member.getCreatedAt())
                 .updatedAt(member.getUpdatedAt())
+                .role(member.getRole())
                 .build();
     }
 

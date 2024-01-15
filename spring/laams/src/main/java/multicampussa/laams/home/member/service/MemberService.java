@@ -151,80 +151,24 @@ public class MemberService {
     // 로그인 및 토큰 발급
     public ResponseEntity<Map<String, Object>> signIn(LoginRequestDto loginRequestDto, String refreshToken) {
         Map<String, Object> response = new HashMap<>();
-        Optional<Member> directorOptional;
-        Optional<Member> managerOptional;
-        Optional<Member> centerManagerOptional;
+        Optional<Member> memberOptional;
 
-        if (loginRequestDto.getAuthority().equals("ROLE_DIRECTOR")) {
-            if (memberRepository.existsById(loginRequestDto.getId())) {
-                directorOptional = memberRepository.findById(loginRequestDto.getId());
-                directorOptional.get().updateRefreshToken(refreshToken);
-                memberRepository.save(directorOptional.get());
+        if (memberRepository.existsById(loginRequestDto.getId())) {
+            memberOptional = memberRepository.findById(loginRequestDto.getId());
+            memberOptional.get().updateRefreshToken(refreshToken);
+            memberRepository.save(memberOptional.get());
 
-                if (!directorOptional.get().getIsDelete()) {
-                    if (directorOptional.isPresent()) {
-                        Member member = directorOptional.get();
-                        if (passwordEncoder.matches(loginRequestDto.getPw(), member.getPw())) {
-                            response.put("message", "로그인에 성공하였습니다.");
-                            return ResponseEntity.status(HttpStatus.OK).body(response);
-                        } else {
-                            response.put("message", "비밀번호가 일치하지 않습니다.");
-                            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-                        }
-                    } else {
-                        response.put("message", "사용자를 찾을 수 없습니다.");
-                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-                    }
+            if (!memberOptional.get().getIsDelete()) {
+                Member member = memberOptional.get();
+                if (passwordEncoder.matches(loginRequestDto.getPw(), member.getPw())) {
+                    response.put("message", "로그인에 성공하였습니다.");
+                    return ResponseEntity.status(HttpStatus.OK).body(response);
                 } else {
-                    response.put("message", "탈퇴한 유저입니다.");
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                    response.put("message", "비밀번호가 일치하지 않습니다.");
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
                 }
             } else {
-                response.put("message", "사용자를 찾을 수 없습니다.");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            }
-        } else if (loginRequestDto.getAuthority().equals("ROLE_MANAGER")) {
-            if (memberRepository.existsById(loginRequestDto.getId())) {
-                managerOptional = memberRepository.findById(loginRequestDto.getId());
-                managerOptional.get().updateRefreshToken(refreshToken);
-                memberRepository.save(managerOptional.get());
-                if (managerOptional.isPresent()) {
-                    Member member = managerOptional.get();
-                    if (passwordEncoder.matches(loginRequestDto.getPw(), member.getPw())) {
-                        response.put("message", "로그인에 성공하였습니다.");
-                        return ResponseEntity.status(HttpStatus.OK).body(response);
-                    } else {
-                        response.put("message", "비밀번호가 일치하지 않습니다.");
-                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-                    }
-                } else {
-                    response.put("message", "사용자를 찾을 수 없습니다.");
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-                }
-            } else {
-                response.put("message", "사용자를 찾을 수 없습니다.");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            }
-        } else if (loginRequestDto.getAuthority().equals("ROLE_CENTER_MANAGER")) {
-            if (memberRepository.existsById(loginRequestDto.getId())) {
-                centerManagerOptional = memberRepository.findById(loginRequestDto.getId());
-                centerManagerOptional.get().updateRefreshToken(refreshToken);
-                memberRepository.save(centerManagerOptional.get());
-                if (centerManagerOptional.isPresent()) {
-                    Member member = centerManagerOptional.get();
-                    if (passwordEncoder.matches(loginRequestDto.getPw(), member.getPw())) {
-                        response.put("message", "로그인에 성공하였습니다.");
-                        return ResponseEntity.status(HttpStatus.OK).body(response);
-                    } else {
-                        response.put("message", "비밀번호가 일치하지 않습니다.");
-                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-                    }
-                } else {
-                    response.put("message", "사용자를 찾을 수 없습니다.");
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-                }
-            } else {
-                response.put("message", "사용자를 찾을 수 없습니다.");
+                response.put("message", "탈퇴한 유저입니다.");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
         } else {
@@ -236,10 +180,6 @@ public class MemberService {
     // 운영자가 감독관 또는 운영자 또는 센터담당자의 정보를 조회하는 서비스
     public MemberDto UserInfo(String memberId) {
         if (memberRepository.existsById(memberId)) {
-            return Member.toMemberDto(memberRepository.findById(memberId).get());
-        } else if (memberRepository.existsById(memberId)) {
-            return Member.toMemberDto(memberRepository.findById(memberId).get());
-        } else if (memberRepository.existsById(memberId)) {
             return Member.toMemberDto(memberRepository.findById(memberId).get());
         } else {
             throw new IllegalArgumentException("해당 아이디는 존재하지 않습니다.");

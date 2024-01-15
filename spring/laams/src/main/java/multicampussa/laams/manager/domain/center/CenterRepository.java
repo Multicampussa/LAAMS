@@ -21,7 +21,7 @@ public interface CenterRepository extends JpaRepository<Center, Long> {
             "ORDER BY e.examDate asc")
     List<Exam> findAllByCenterManagerIdContainingMonthAndDay(String centerManagerId, int year, int month, int day);
 
-    @Query(value = "SELECT c FROM Center c JOIN c.member d WHERE d.id = :id")
+    @Query(value = "SELECT c FROM Center c JOIN c.member m WHERE m.id = :id")
     Center findByDirectorId(@Param("id") String id);
 
     List<Center> findByRegion(String region);
