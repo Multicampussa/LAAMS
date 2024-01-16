@@ -6,10 +6,11 @@
   align-items: center;
   box-sizing: border-box;
   overflow-y: auto;
+  background-image: url("../../../assets/images/wave-1638292_1920.jpg");
+  background-size: cover;
   .login{
-
     &-container{
-      width: 80%;
+      width: 90%;
       height: 100%;
       box-sizing: border-box;
       display:flex;
@@ -17,23 +18,27 @@
     }
     &-box{
       box-sizing: border-box;
-      width: 50%;
-      height: 40rem;
-      background-color: $color-white;
-      border-radius: 2rem;
+      width: 45%;
+      height: 60rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 1rem;
       .login-input{
+        box-sizing: border-box;
         border: 0.1rem solid $color-gray-light;
-        width: 97.5%;
+        background-color: white;
+        width: 100%;
         padding-left: 1rem;
-        height: 4rem;
+        height: 6rem;
         border-radius: 0.7rem;
       }
 
+    }
+    &-title{
+      font-weight: 700;
+      font-size: 7rem;
+      height: 15rem;
+      line-height: 15rem;
     }
     &-tab{
       display: flex;
@@ -80,27 +85,23 @@
       gap: 2rem;
 
     }
-    &-title{
-      font-size: 4rem;
-      height: 7rem;
-    }
     &-logo{
-      width: 50%;
+      width: 55%;
       height: 90%;
       background-image: url("../../../assets/images/logo.svg");
       background-repeat: no-repeat;
       background-position: center;
-      background-size: contain;
+      background-size: 70%;
     }
     &-input::placeholder{
       font-size: 2rem;
     }
     &-btn{
       width: 100%;
-      height: 5rem;
+      height: 6rem;
       background-color: $color-blue;
       border-radius: 0.7rem;
-      font-size: 2rem;
+      font-size: 2.5rem;
       color: $color-white;
     }
     &-checkbox{
@@ -139,16 +140,30 @@
   @mixin mobile-home{
     .login{
       &-container{
-        width: 100%;
+        width: 98%;
         height: 80%;
         flex-direction: column;
         align-items:center;
         gap: 2rem;
       }
       &-logo{
-        width: 70%;
+        width: 98%;
+      }
+      &-form{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        flex-direction: column;
+      }
+      &-title{
+        font-size: 3rem;
+        font-weight: 800;
+        height: 6rem;
+        line-height: 6rem;
       }
       &-box{
+        border-radius: 0.7rem;
         width: 90%;
         height: 40rem;
       }
@@ -156,6 +171,7 @@
         width: 100%;
       }
       &-checkbox{
+        color: white;
         padding: 1rem 0rem 2rem 0.5rem;
       }
       &-btn{
@@ -165,8 +181,9 @@
         font-size: 1.2rem;
       }
       &-text{
+        color: white;
         box-sizing: border-box;
-        width:70%;
+        width:100%;
         display:flex; 
         padding: 1rem 0rem 2rem 0rem;
         justify-content:space-between; 
