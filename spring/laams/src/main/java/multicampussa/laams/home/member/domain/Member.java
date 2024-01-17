@@ -40,6 +40,7 @@ public class Member extends BaseTimeEntity {
     private String verificationCode;
     private Boolean isVerified;
     private String role;
+    private String code;
 
     @ManyToOne
     @JoinColumn(name = "center_no")
