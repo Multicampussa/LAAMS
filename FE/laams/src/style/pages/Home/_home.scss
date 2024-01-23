@@ -95,6 +95,7 @@
     }
     &-input::placeholder{
       font-size: 2rem;
+      font-family: "SCDream";
     }
     &-btn{
       width: 100%;
@@ -102,6 +103,7 @@
       background-color: $color-blue;
       border-radius: 0.7rem;
       font-size: 2.5rem;
+      font-weight: 600;
       color: $color-white;
     }
     &-checkbox{
