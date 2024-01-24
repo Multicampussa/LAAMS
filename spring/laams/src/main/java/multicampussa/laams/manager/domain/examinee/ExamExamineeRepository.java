@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface ExamExamineeRepository extends JpaRepository<ExamExaminee, Long> {
 
     // 페이징 처리
-    @Query("SELECT ee FROM ExamExaminee ee WHERE ee.compensationStatus = :status")
+    @Query("SELECT ee FROM ExamExaminee ee WHERE ee.compensationStatus = :status AND  ee.compensation = true")
     Page<ExamExaminee> findAllByStatus(@Param("status") ExamExaminee.CompensationValue status, Pageable pageable);
 
     // 시험_응시자 엔티티에서 시험 no에 해당하는 응시자 전체 조회

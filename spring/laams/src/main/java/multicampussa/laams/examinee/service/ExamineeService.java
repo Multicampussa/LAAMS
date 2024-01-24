@@ -14,6 +14,7 @@ import multicampussa.laams.manager.domain.examinee.Examinee;
 import multicampussa.laams.manager.domain.examinee.ExamineeRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +86,8 @@ public class ExamineeService {
             ExamExaminee examExaminee = examExamineeRepository.findByExamineeCode(examineeCode).orElse(null);
             if(examExaminee != null) {
                 boolean attendacne = true;
-                examExaminee.setAttendance(attendacne);
+                LocalDateTime attendanceTime = LocalDateTime.now();
+                examExaminee.setAttendance(attendacne, attendanceTime);
                 examExamineeRepository.save(examExaminee);
             } else {
                 throw new IllegalArgumentException("없는 응시자 코드입니다.");

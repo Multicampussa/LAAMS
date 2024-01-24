@@ -10,6 +10,6 @@ public class MongoConfig {
 
     @Bean
     public MongoTemplate mongoTemplate(MongoClient mongoClient) {
-        return new MongoTemplate(mongoClient, "ssafy");
+        return new MongoTemplate(mongoClient, "[DBName]");
     }
 }
