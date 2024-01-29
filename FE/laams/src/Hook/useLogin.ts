@@ -3,11 +3,13 @@ import {setAccessToken,setAccessTokenExpireTime,setAuthority, setMemberId} from 
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 
-const useLogin = ()=> {
+type loginType = (id : string,password : string,isChecked:boolean) => void
+
+const useLogin = () :[boolean,loginType]=> {
   const [isLogin,setIsLogin] = useState(false);
   const dispatch = useDispatch();
 
-  const login = useCallback((id,password,isChecked)=>{
+  const login :loginType= useCallback((id : string,password : string,isChecked:boolean)=>{
     axios.post(`${process.env.REACT_APP_SPRING_URL}/api/v1/member/login`,{id,pw :password})
       .then( ({data})=>{
         if(isChecked){
