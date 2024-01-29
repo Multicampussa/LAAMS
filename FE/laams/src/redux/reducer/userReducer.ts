@@ -8,7 +8,7 @@ const init = {
 
 
 
-const userReducer = (state = init, action: { type: string; payload: string | null | boolean; })=>{
+const userReducer = (state = init, action: { type: string; payload: string | boolean; })=>{
   switch (action.type) {
     case "accessToken":
       return { ...state, accessToken: action.payload};

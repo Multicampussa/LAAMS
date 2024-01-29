@@ -1,10 +1,10 @@
 
 export interface RootState {
     User: {
-      accessToken: string | null;
-      accessTokenExpireTime: string | null;
-      authority: string | null;
-      memberId: string | null;
-      userClear: boolean | null;
+      accessToken: string;
+      accessTokenExpireTime: string;
+      authority: string;
+      memberId: string;
+      userClear: boolean;
     };
   }
