@@ -2,18 +2,19 @@ import React, { useCallback, useEffect, useState } from 'react'
 import useLogin from '../../Hook/useLogin'
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { RootState } from '../../models/ReduxRootState';
 
-const Home = () => {
+const Home:React.FC = () => {
   const [loginData,] = useState({id:localStorage.getItem("id")? localStorage.getItem("id") : "", password:"", authority:"ROLE_DIRECTOR"});
   const [isChecked, setChecked] = useState(localStorage.getItem("id")? true : false); 
   const [, login] = useLogin();
-  const user = useSelector(state=>state.User);
+  const user = useSelector((state :RootState)=>state.User);
   const navigate = useNavigate();
-  const isLogin = useSelector(state=>state.User.accessToken);
+  const isLogin = useSelector((state :RootState)=>state.User.accessToken);
 
   // TODO: id, password 확인 및 로그인
   const loginButtonClick = useCallback(() => {
-    if(loginData["id"] === ""){
+    if(!loginData["id"] || loginData["id"] === ""){
       alert("아이디를 입력해 주세요");
       return
     }
@@ -60,7 +61,7 @@ const Home = () => {
               <input 
                 className='login-input'
                 placeholder='ID'
-                defaultValue={loginData['id']}
+                defaultValue={loginData['id']? loginData["id"]:""}
                 onChange={e=>{
                   loginData['id'] = e.target.value
                 }}

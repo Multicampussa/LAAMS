@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes,Route } from 'react-router-dom';
-import Home from "../Home/Home.jsx"
+import Home from "../Home/Home.tsx"
 import DirectorHome from "../Director/Home/DirectorHome.jsx"
 import PrivateRoute from './PrivateRoute.jsx';
 import PublicRoute from './PublicRoute.jsx';

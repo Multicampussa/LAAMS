@@ -6,7 +6,9 @@ const init = {
   memberId:null
 };
 
-const userReducer = (state = init, action)=>{
+
+
+const userReducer = (state = init, action: { type: string; payload: string | boolean; })=>{
   switch (action.type) {
     case "accessToken":
       return { ...state, accessToken: action.payload};
