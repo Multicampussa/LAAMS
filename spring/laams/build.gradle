@@ -74,3 +74,7 @@ tasks.named('test') {
 	systemProperty 'jasypt.encryptor.password', findProperty("jasypt.encryptor.password")
 }
 
+compileJava.options.encoding = 'UTF-8'
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}

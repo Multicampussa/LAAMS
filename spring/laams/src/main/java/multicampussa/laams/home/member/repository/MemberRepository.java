@@ -1,6 +1,6 @@
 package multicampussa.laams.home.member.repository;
 
-import multicampussa.laams.director.domain.director.Director;
+import multicampussa.laams.home.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MemberDirectorRepository extends JpaRepository<Director, Long> {
+public interface MemberRepository extends JpaRepository<multicampussa.laams.home.member.domain.Member, Long> {
     boolean existsByEmail(String email);
     boolean existsById(String id);
-    Optional<Director> findById(String id);
-    Optional<Director> findByEmail(String email);
+    Optional<Member> findById(String id);
+    Optional<Member> findByEmail(String email);
 
-    List<Director> findByCenterNo(Long centerNo);
+    List<Member> findByCenterNo(Long centerNo);
 }

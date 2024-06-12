@@ -3,21 +3,19 @@ package multicampussa.laams.director.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.director.domain.director.Director;
 import multicampussa.laams.director.domain.errorReport.ErrorReport;
 import multicampussa.laams.director.dto.director.*;
 import multicampussa.laams.director.dto.errorReport.ErrorReportCreateDto;
 import multicampussa.laams.director.repository.DirectorRepository;
 import multicampussa.laams.director.repository.errorReport.ErrorReportRepository;
-import multicampussa.laams.global.ApiResponse;
 import multicampussa.laams.global.CustomExceptions;
+import multicampussa.laams.home.member.domain.Member;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamDirector;
 import multicampussa.laams.manager.domain.exam.ExamDirectorRepository;
 import multicampussa.laams.manager.domain.exam.ExamRepository;
 import multicampussa.laams.manager.domain.examinee.ExamExaminee;
 import multicampussa.laams.manager.domain.examinee.ExamExamineeRepository;
-import org.joda.time.LocalTime;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
@@ -26,18 +24,14 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
-import multicampussa.laams.director.service.LocationDistance;
+
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-
-import static org.joda.time.LocalTime.*;
 
 @Service
 @RequiredArgsConstructor
@@ -146,7 +140,7 @@ public class DirectorService {
             if (exam.isPresent()) {
                 List<ExamDirector> examDirectors = exam.get().getExamDirector();
                 boolean isDirectorExists = examDirectors.stream()
-                        .anyMatch(examDirector -> examDirector.getDirector().getId().equals(directorId));
+                        .anyMatch(examDirector -> examDirector.getMember().getId().equals(directorId));
                 if(isDirectorExists){
                     return new ExamInformationDto(exam.get());
                 }else {
@@ -169,7 +163,7 @@ public class DirectorService {
             if(exam.isPresent()){
                 List<ExamDirector> examDirectors = exam.get().getExamDirector();
                 boolean isDirectorExists = examDirectors.stream()
-                        .anyMatch(examDirector -> examDirector.getDirector().getId().equals(directorId));
+                        .anyMatch(examDirector -> examDirector.getMember().getId().equals(directorId));
                 if(isDirectorExists){
                     List<ExamExamineeListDto> examExamineeListDtos = new ArrayList<>();
                     List<ExamExaminee> examExaminees = examExamineeRepository.findByExamNo(examNo);
@@ -197,7 +191,7 @@ public class DirectorService {
             if(exam.isPresent()){
                 List<ExamDirector> examDirectors = exam.get().getExamDirector();
                 boolean isDirectorExists = examDirectors.stream()
-                        .anyMatch(examDirector -> examDirector.getDirector().getId().equals(directorId));
+                        .anyMatch(examDirector -> examDirector.getMember().getId().equals(directorId));
                 if(isDirectorExists){
                     Optional<ExamExaminee> examExaminee = Optional.ofNullable(examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo));
                     if(examExaminee.isEmpty()){
@@ -247,7 +241,7 @@ public class DirectorService {
             if(exam.isPresent()){
                 List<ExamDirector> examDirectors = exam.get().getExamDirector();
                 boolean isDirectorExists = examDirectors.stream()
-                        .anyMatch(examDirector -> examDirector.getDirector().getId().equals(directorId));
+                        .anyMatch(examDirector -> examDirector.getMember().getId().equals(directorId));
                 if(isDirectorExists){
                     Optional<ExamExaminee> examExaminee = Optional.ofNullable(examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo));
                     if(examExaminee.isEmpty()){
@@ -300,7 +294,7 @@ public class DirectorService {
             if(exam.isPresent()){
                 List<ExamDirector> examDirectors = exam.get().getExamDirector();
                 boolean isDirectorExists = examDirectors.stream()
-                        .anyMatch(examDirector -> examDirector.getDirector().getId().equals(directorId));
+                        .anyMatch(examDirector -> examDirector.getMember().getId().equals(directorId));
                 if(isDirectorExists){
                     Optional<ExamExaminee> examExaminee = Optional.ofNullable(examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo));
                     if(examExaminee.isEmpty()){
@@ -355,7 +349,7 @@ public class DirectorService {
         if(authority.equals("ROLE_DIRECTOR")){
             // 자기 센터 시험만 신청 가능하니까
             List<Exam> exams = examRepository.findByCenterNo(centerNo);
-            Director director = directorRepository.findById(directorId);
+            Member member = directorRepository.findById(directorId);
             if(exams == null) {
                 throw new IllegalArgumentException("현재 센터에 시험이 없습니다.");
             }else {
@@ -366,7 +360,7 @@ public class DirectorService {
                         int assignedExamDirector = examDirectorRepository.findByExamNoAndDirectorId(examNo, directorId);
                         if(assignedExamDirector == 0){
                             ExamDirector examDirector = new ExamDirector();
-                            examDirector.setExam(exam, director);
+                            examDirector.setExam(exam, member);
                             examDirectorRepository.save(examDirector);
                             examFound = true;
                             break;
@@ -395,7 +389,7 @@ public class DirectorService {
             if(exam != null){
                 List<ExamDirector> examDirectors = exam.getExamDirector();
                 boolean isDirectorExists = examDirectors.stream()
-                        .anyMatch(examDirector -> examDirector.getDirector().getId().equals(directorId));
+                        .anyMatch(examDirector -> examDirector.getMember().getId().equals(directorId));
                 if(isDirectorExists){
                     ExamExaminee examExaminee = examExamineeRepository.findByExamNoAndExamineeNo(examNo, examineeNo);
                     if(examExaminee != null){
@@ -428,9 +422,9 @@ public class DirectorService {
         if(authority.equals("ROLE_DIRECTOR")) {
             ErrorReport errorReport = new ErrorReport();
             if(directorRepository.existsById(directorNo)){
-                Director director = directorRepository.findById(directorNo).get();
+                Member member = directorRepository.findById(directorNo).get();
 
-                errorReport.toEntity(errorReportCreateDto, director);
+                errorReport.toEntity(errorReportCreateDto, member);
                 errorReportRepository.save(errorReport);
             }else {
                 throw new IllegalArgumentException(directorNo + "가 없습니다.");
@@ -448,11 +442,11 @@ public class DirectorService {
             if(exam != null){
                 List<ExamDirector> examDirectors = exam.getExamDirector();
                 boolean isDirectorExists = examDirectors.stream()
-                        .anyMatch(examDirector -> examDirector.getDirector().getId().equals(directorId));
+                        .anyMatch(examDirector -> examDirector.getMember().getId().equals(directorId));
                 // 자신이 감독하는 시험인지
                 if(isDirectorExists){
                     ExamDirector currentExamDirector = examDirectors.stream()
-                            .filter(examDirector -> examDirector.getDirector().getNo() == directorNo)
+                            .filter(examDirector -> examDirector.getMember().getNo() == directorNo)
                             .findFirst()
                             .orElse(null);
 

@@ -47,30 +47,30 @@ public class MemberController {
             if (!memberService.isPresentId(id)) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("message", "존재하지 않는 아이디입니다.");
-                response.put("code", HttpStatus.UNAUTHORIZED.value());
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+                response.put("code", HttpStatus.NOT_FOUND.value());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
+
             // 아이디와 비밀번호 인증
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, loginRequestDto.getPw()));
-
             MemberDto userInfo = memberService.UserInfo(id);
 
             // 토큰 발급
             Long memberId = userInfo.getMemberNo();
+            String authority = userInfo.getRole();
             String accessToken;
             try {
-                accessToken = jwtTokenProvider.createAccessToken(id, loginRequestDto.getAuthority(), memberId);
+                accessToken = jwtTokenProvider.createAccessToken(id, authority, memberId);
             } catch (Exception e) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("message", e.getMessage());
                 response.put("code", HttpStatus.NOT_FOUND.value());
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
+
             String refreshToken = jwtTokenProvider.createRefreshToken(id);
             ResponseEntity<Map<String, Object>> signInResponse = memberService.signIn(loginRequestDto, refreshToken);
             Map<String, Object> response = signInResponse.getBody();
-            String authority = jwtTokenProvider.getAuthority(accessToken);
-
             try {
                 if (signInResponse.getStatusCodeValue() == 200) {
                     response.put("accessToken", accessToken);

@@ -75,11 +75,11 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
     List<Exam> findByCenterNoContainingDate(Long centerNo, int year, int month, int day);
 
     // 감독관 아이디로 현재 감독하는 시험들 찾기
-    @Query("select ed.exam from ExamDirector ed where ed.director.id = :directorId and ed.confirm = '승인'")
+    @Query("select ed.exam from ExamDirector ed where ed.member.id = :directorId and ed.confirm = '승인'")
     List<Exam> findByDirectorId(@Param("directorId") String directorId);
 
     // 감독관 아이디로 현재 감독하는 시험들 중 오늘 시험 찾기
-    @Query("select e from Exam e where e.examDate >= :startOfToday AND e.examDate < :endOfToday and e.no in (select ed.exam.no from ExamDirector ed where ed.director.id = :directorId)")
+    @Query("select e from Exam e where e.examDate >= :startOfToday AND e.examDate < :endOfToday and e.no in (select ed.exam.no from ExamDirector ed where ed.member.id = :directorId)")
     List<Exam> findByDirectorIdToday(String directorId, LocalDateTime startOfToday, LocalDateTime endOfToday);
 
     // 현재 DB 시간 기준으로 진행중인 시험 리스트 조회

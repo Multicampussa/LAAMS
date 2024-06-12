@@ -3,11 +3,11 @@ package multicampussa.laams.manager.domain.exam;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.global.BaseTimeEntity;
+import multicampussa.laams.home.member.domain.Member;
 import multicampussa.laams.manager.domain.center.Center;
-import multicampussa.laams.manager.domain.manager.Manager;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,7 +25,7 @@ public class Exam extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "manager_no")
-    private Manager manager;
+    private Member member;
 
     private LocalDateTime examDate;
 
@@ -40,20 +40,20 @@ public class Exam extends BaseTimeEntity {
 
     private int maxDirector = 2;
 
-    public Exam(Center center, LocalDateTime examDate, Manager manager, int runningTime, String examType, String examLanguage, int maxDirector) {
+    public Exam(Center center, LocalDateTime examDate, Member member, int runningTime, String examType, String examLanguage, int maxDirector) {
         this.center = center;
         this.examDate = examDate;
-        this.manager = manager;
+        this.member = member;
         this.runningTime = runningTime;
         this.examType = examType;
         this.examLanguage = examLanguage;
         this.maxDirector = maxDirector;
     }
 
-    public void updateExamInfo(Center center, LocalDateTime examDate, Manager manager, int runningTime, String examType, int maxDirector) {
+    public void updateExamInfo(Center center, LocalDateTime examDate, Member member, int runningTime, String examType, int maxDirector) {
         this.center = center;
         this.examDate = examDate;
-        this.manager = manager;
+        this.member = member;
         this.runningTime = runningTime;
         this.examType = examType;
         this.maxDirector = maxDirector;

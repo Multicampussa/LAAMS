@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import multicampussa.laams.manager.domain.exam.ExamDirector;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Builder
 @AllArgsConstructor
@@ -19,7 +17,7 @@ public class CenterExamDto {
     private ExamDirector.Confirm confirm;
 
     public CenterExamDto(ExamDirector examDirector) {
-        this.examDirectorName = examDirector.getDirector().getName();
+        this.examDirectorName = examDirector.getMember().getName();
         this.confirm = examDirector.getConfirm();
     }
 }

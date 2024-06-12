@@ -11,8 +11,8 @@ public class UnprocessedAssignment {
     String examLanguage;
 
     public UnprocessedAssignment(ExamDirector examDirector) {
-        this.directorNo = examDirector.getDirector().getNo();
-        this.directorName = examDirector.getDirector().getName();
+        this.directorNo = examDirector.getMember().getNo();
+        this.directorName = examDirector.getMember().getName();
         this.examType = examDirector.getExam().getExamType();
         this.examLanguage = examDirector.getExam().getExamLanguage();
     }

@@ -12,8 +12,8 @@ public class DirectorAssignmentRequestListResponse {
 
     public DirectorAssignmentRequestListResponse(ExamDirector examDirector) {
         this.examNo = examDirector.getExam().getNo();
-        this.directorNo = examDirector.getDirector().getNo();
-        this.directorName = examDirector.getDirector().getName();
+        this.directorNo = examDirector.getMember().getNo();
+        this.directorName = examDirector.getMember().getName();
         this.isConfirm = examDirector.getConfirm();
     }
 }

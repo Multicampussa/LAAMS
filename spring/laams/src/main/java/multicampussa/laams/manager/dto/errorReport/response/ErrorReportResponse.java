@@ -17,7 +17,7 @@ public class ErrorReportResponse {
     public ErrorReportResponse(ErrorReport errorReport) {
         this.errorReportNo = errorReport.getNo();
         this.title = errorReport.getTitle();
-        this.directorName = errorReport.getDirector().getName();
+        this.directorName = errorReport.getMember().getName();
         this.errorType = errorReport.getType();
         this.errorTime = errorReport.getErrorTime();
     }

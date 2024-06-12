@@ -1,15 +1,11 @@
 package multicampussa.laams.centerManager.service;
 
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.centerManager.domain.CenterManager;
-import multicampussa.laams.centerManager.domain.CenterManagerRepository;
 import multicampussa.laams.centerManager.dto.CenterExamDto;
 import multicampussa.laams.centerManager.dto.CenterExamListDto;
 import multicampussa.laams.centerManager.dto.ConfirmDirectorRequest;
 import multicampussa.laams.centerManager.dto.DirectorAssignmentRequestListResponse;
-import multicampussa.laams.director.dto.director.ExamMonthDayListDto;
 import multicampussa.laams.global.CustomExceptions;
-import multicampussa.laams.manager.domain.center.Center;
 import multicampussa.laams.manager.domain.center.CenterRepository;
 import multicampussa.laams.manager.domain.exam.Exam;
 import multicampussa.laams.manager.domain.exam.ExamDirector;
@@ -32,7 +28,7 @@ public class CenterManagerService {
     @Transactional
     public void confirmDirector(ConfirmDirectorRequest request) {
         ExamDirector examDirector =
-                examDirectorRepository.findByExamNoAndDirectorNo(request.getExamNo(), request.getDirectorNo());
+                examDirectorRepository.findByExamNoAndMemberNo(request.getExamNo(), request.getDirectorNo());
         if (examDirector == null) {
             throw new CustomExceptions.ExamDirectorNotFoundException("해당 시험을 신청한 감독관이 없습니다.");
         }
@@ -42,7 +38,7 @@ public class CenterManagerService {
     @Transactional
     public void denyDirector(ConfirmDirectorRequest request) {
         ExamDirector examDirector =
-                examDirectorRepository.findByExamNoAndDirectorNo(request.getExamNo(), request.getDirectorNo());
+                examDirectorRepository.findByExamNoAndMemberNo(request.getExamNo(), request.getDirectorNo());
         if (examDirector == null) {
             throw new CustomExceptions.ExamDirectorNotFoundException("해당 시험을 신청한 감독관이 없습니다.");
         }
@@ -85,7 +81,7 @@ public class CenterManagerService {
             List<CenterExamDto> centerExamDtos = new ArrayList<>();
             Exam exam = examRepository.findByNo(examNo);
             if (exam != null) {
-                boolean isCenterManagerExists = exam.getCenter().getCenterManager().getId().equals(centerManagerId);
+                boolean isCenterManagerExists = exam.getCenter().getMember().getId().equals(centerManagerId);
                 if (isCenterManagerExists) {
                     List<ExamDirector> examDirectors = exam.getExamDirector();
                     for (ExamDirector examDirector : examDirectors) {

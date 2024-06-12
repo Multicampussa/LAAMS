@@ -1,21 +1,17 @@
 package multicampussa.laams.home.notice.service;
 
 import lombok.RequiredArgsConstructor;
-import multicampussa.laams.home.member.repository.MemberManagerRepository;
+import multicampussa.laams.home.member.domain.Member;
+import multicampussa.laams.home.member.repository.MemberRepository;
 import multicampussa.laams.home.notice.domain.Notice;
 import multicampussa.laams.home.notice.dto.*;
 import multicampussa.laams.home.notice.repository.NoticeRepository;
-import multicampussa.laams.manager.domain.manager.Manager;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -31,7 +27,7 @@ public class NoticeService {
     private final S3Service s3Service;
 
     public final NoticeRepository noticeRepository;
-    public final MemberManagerRepository managerRepository;
+    public final MemberRepository memberRepository;
 
     @Transactional
     public boolean createNotice(NoticeCreateDto noticeCreateDto, Long memberNo, String authority, MultipartFile file) {
@@ -66,10 +62,10 @@ public class NoticeService {
             String parsedString = parts[1];
             fileName = parsedString;
         }
-        Optional<Manager> findMangerById = managerRepository.findById(memberNo);
+        Optional<Member> findMangerById = memberRepository.findById(memberNo);
 
-        Manager manager = findMangerById.get();
-        notice.toEntity(noticeCreateDto, manager);
+        Member member = findMangerById.get();
+        notice.toEntity(noticeCreateDto, member);
         notice.setAttachFileUrl(attachFileUrl);
         notice.setFileName(fileName);
         noticeRepository.save(notice);
