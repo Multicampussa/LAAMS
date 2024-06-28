@@ -52,7 +52,8 @@ const Home:React.FC = () => {
   return (
     <section className='home'>
       <div className='login-container'>
-        <div className='login-logo'></div>
+      <link rel="preload" className='login-logo' href="https://laams.s3.ap-northeast-2.amazonaws.com/logo.svg" as="image"></link>
+        <div className='login-logo' ></div>
           <article className='login-box'>
           <div className='login-title'>Login</div>
       
