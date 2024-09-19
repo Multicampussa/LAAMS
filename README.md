@@ -197,7 +197,7 @@ Face-Detection을 이용해 기존의 번거롭고 관리가 힘들었던 출결
 
 ### 🖱️DB
 
-+ MariaDB
++ MySql
 + MongoDB
 + Redis
 
