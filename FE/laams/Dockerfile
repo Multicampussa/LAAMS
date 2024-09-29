@@ -18,7 +18,7 @@ COPY ./fullchain.pem /etc/letsencrypt/live/laams.o-r.kr/fullchain.pem
 COPY ./privkey.pem /etc/letsencrypt/live/laams.o-r.kr/privkey.pem
 
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY ./Nginx.conf /etc/nginx/nginx.conf
 
 COPY --from=builder /app/build /usr/share/nginx/html
 
