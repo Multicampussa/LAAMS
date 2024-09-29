@@ -52,8 +52,7 @@ const Home:React.FC = () => {
   return (
     <section className='home'>
       <div className='login-container'>
-      <link rel="preload" className='login-logo' href="https://laams.s3.ap-northeast-2.amazonaws.com/logo.svg" as="image"></link>
-        <div className='login-logo' ></div>
+        <div className='login-logo'><img src="https://laams.s3.ap-northeast-2.amazonaws.com/logo.svg" className='login-logo-img' alt="" /></div>
           <article className='login-box'>
           <div className='login-title'>Login</div>
       
@@ -113,8 +112,8 @@ const Home:React.FC = () => {
               >회원가입</div>
             </div>
             <div className="login-text-right">
-              <div>아이디 찾기</div>
-              <div>비밀번호 찾기</div>
+              {/* <div>아이디 찾기</div>
+              <div>비밀번호 찾기</div> */}
             </div>
           </div>
         </article>
