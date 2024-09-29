@@ -64,7 +64,7 @@ const Home:React.FC = () => {
   return (
     <section className='home'>
       <div className='login-container'>
-        <div className='login-logo'><img src="../../../public/logo.svg" className='login-logo-img' alt="" /></div>
+        <div className='login-logo'><img src="/logo.svg" className='login-logo-img' alt="" /></div>
           <article className='login-box'>
           <div className='login-title'>Login</div>
       
