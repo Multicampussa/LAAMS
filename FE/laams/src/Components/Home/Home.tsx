@@ -47,24 +47,24 @@ const Home:React.FC = () => {
     }
   },[isLogin, navigate ,user])
 
-  useEffect(() => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.href = 'https://d2o57paek0bu8s.cloudfront.net/logo.svg';
-    link.as = 'image';
-    document.head.appendChild(link);
+  // useEffect(() => {
+  //   const link = document.createElement('link');
+  //   link.rel = 'preload';
+  //   link.href = 'https://d2o57paek0bu8s.cloudfront.net/logo.svg';
+  //   link.as = 'image';
+  //   document.head.appendChild(link);
 
-    return () => {
-        document.head.removeChild(link);
-    };
-  }, []);
+  //   return () => {
+  //       document.head.removeChild(link);
+  //   };
+  // }, []);
 
   
 
   return (
     <section className='home'>
       <div className='login-container'>
-        <div className='login-logo'><img src="https://d2o57paek0bu8s.cloudfront.net/logo.svg" className='login-logo-img' alt="" /></div>
+        <div className='login-logo'><img src="/logo.svg" className='login-logo-img' alt="" /></div>
           <article className='login-box'>
           <div className='login-title'>Login</div>
       
