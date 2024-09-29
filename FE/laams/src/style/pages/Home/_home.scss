@@ -6,7 +6,7 @@
   align-items: center;
   box-sizing: border-box;
   overflow-y: auto;
-  background-image: url("https://laams.s3.ap-northeast-2.amazonaws.com/White+and+Blue+Professional+Modern+Technology+Pitch+Deck+Presentation+(1).png");
+  background-image: url("https://d2o57paek0bu8s.cloudfront.net/White+and+Blue+Professional+Modern+Technology+Pitch+Deck+Presentation+(1).png");
   background-size: cover;
   .login{
     &-container{
@@ -94,6 +94,7 @@
       justify-content: center;
       width: 50%;
       &-img{
+        width: 80%;
         height: 20rem;
       }
     }
@@ -149,9 +150,6 @@
   }
 
   @mixin mobile-home{
-    .home{
-      background-image: url("https://laams.s3.ap-northeast-2.amazonaws.com/wave-mobile-min.jpg");
-    }
     .login{
       &-container{
         width: 98%;
