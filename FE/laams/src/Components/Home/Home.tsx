@@ -47,12 +47,24 @@ const Home:React.FC = () => {
     }
   },[isLogin, navigate ,user])
 
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.href = 'https://d2o57paek0bu8s.cloudfront.net/logo.svg';
+    link.as = 'image';
+    document.head.appendChild(link);
+
+    return () => {
+        document.head.removeChild(link);
+    };
+  }, []);
+
   
 
   return (
     <section className='home'>
       <div className='login-container'>
-        <div className='login-logo'></div>
+        <div className='login-logo'><img src="https://d2o57paek0bu8s.cloudfront.net/logo.svg" className='login-logo-img' alt="" /></div>
           <article className='login-box'>
           <div className='login-title'>Login</div>
       
@@ -112,8 +124,8 @@ const Home:React.FC = () => {
               >회원가입</div>
             </div>
             <div className="login-text-right">
-              <div>아이디 찾기</div>
-              <div>비밀번호 찾기</div>
+              {/* <div>아이디 찾기</div>
+              <div>비밀번호 찾기</div> */}
             </div>
           </div>
         </article>

@@ -6,39 +6,43 @@
   align-items: center;
   box-sizing: border-box;
   overflow-y: auto;
-  background-image: url("../../../assets/images/wave-1638292_1920.jpg");
+  background-image: url("https://d2o57paek0bu8s.cloudfront.net/White+and+Blue+Professional+Modern+Technology+Pitch+Deck+Presentation+(1).png");
   background-size: cover;
   .login{
     &-container{
       width: 90%;
-      height: 100%;
+      height: 90%;
       box-sizing: border-box;
       display:flex;
       align-items:center;
+      justify-content: space-around;
     }
     &-box{
+      background-color: white;
       box-sizing: border-box;
-      width: 45%;
-      height: 60rem;
+      width: 40%;
+      height: 40rem;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      border-radius: 1rem;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
       .login-input{
         box-sizing: border-box;
-        border: 0.1rem solid $color-gray-light;
+        border-bottom: 0.1rem solid $color-gray-light;
         background-color: white;
         width: 100%;
         padding-left: 1rem;
-        height: 6rem;
-        border-radius: 0.7rem;
+        height: 4.5rem;
+        font-size: 1.5rem;
       }
 
     }
     &-title{
-      font-weight: 700;
-      font-size: 7rem;
-      height: 15rem;
-      line-height: 15rem;
+      font-weight: 500;
+      font-size: 3.5rem;
     }
     &-tab{
       display: flex;
@@ -86,20 +90,26 @@
 
     }
     &-logo{
-      width: 55%;
-      height: 90%;
-      background-image: url("../../../assets/images/logo.svg");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 70%;
+      display: flex;
+      justify-content: center;
+      width: 50%;
+      &-img{
+        width: 80%;
+        height: 20rem;
+      }
     }
     &-input::placeholder{
-      font-size: 2rem;
+      font-size: 1.7rem;
+      color: rgb(219, 219, 219);
       font-family: "SCDream";
+    }
+    &-input:focus {
+      border-color: $color-blue; /* 클릭했을 때 변경할 border 색상 */
+      outline: none; /* 기본 outline 제거 (선택 사항) */
     }
     &-btn{
       width: 100%;
-      height: 6rem;
+      height: 5rem;
       background-color: $color-blue;
       border-radius: 0.7rem;
       font-size: 2.5rem;
@@ -152,7 +162,7 @@
         width: 98%;
       }
       &-form{
-        width: 100%;
+        width: 80%;
         display: flex;
         justify-content: center;
         align-content: center;
@@ -160,7 +170,6 @@
       }
       &-title{
         font-size: 3rem;
-        font-weight: 800;
         height: 6rem;
         line-height: 6rem;
       }
@@ -173,7 +182,6 @@
         width: 100%;
       }
       &-checkbox{
-        color: white;
         padding: 1rem 0rem 2rem 0.5rem;
       }
       &-btn{
@@ -183,9 +191,8 @@
         font-size: 1.2rem;
       }
       &-text{
-        color: white;
         box-sizing: border-box;
-        width:100%;
+        width:80%;
         display:flex; 
         padding: 1rem 0rem 2rem 0rem;
         justify-content:space-between; 
@@ -201,7 +208,7 @@
     @include mobile-home()
 
   }
-  @include tablet{
-    @include mobile-home()
-  }
+  // @include tablet{
+  //   @include mobile-home()
+  // }
 }
