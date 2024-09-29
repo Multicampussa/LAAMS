@@ -147,11 +147,7 @@ const Join = () => {
   return (
     <section className='join'>
         <div className='join-container'>
-            <img 
-              src="logo.svg" 
-              className='join-logo' 
-              alt="로고" 
-            />
+        <img src="https://laams.s3.ap-northeast-2.amazonaws.com/logo.svg" alt="" />
             <article className='join-box'>
               <label className='join-input'>
                 <div className='join-input-title'>이름</div>

@@ -48,11 +48,13 @@
         }
         &-box{
             box-sizing: border-box;
+            border-bottom: 0.1rem solid $color-gray-light;
             width: 100%;
             height: 4rem;
             font-size: 1.5rem;
             padding-left: 1rem;
             &-email{
+                border-bottom: 0.1rem solid $color-gray-light;
                 width: 80%;
                 height: 4rem;
                 padding-left: 1rem;
@@ -77,10 +79,10 @@
     }
     &-btn{
         width: 80%;
-        height: 9rem;
+        height: 6rem;
         background-color: $color-blue;
         color: white;
-        font-size: 4rem;
+        font-size: 3rem;
         font-weight: 600;
         border-radius: 1rem;
         margin-bottom: 2rem;
